@@ -1,0 +1,4 @@
+#+TITLE: Dotfiles
+
+* Dotfiles
+Configuration worth saving.
