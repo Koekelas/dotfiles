@@ -1,4 +1,3 @@
 #+TITLE: Dotfiles
 
-* Dotfiles
-Configuration worth saving.
+[[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
