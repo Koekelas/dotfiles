@@ -1,0 +1,46 @@
+#+TITLE: General
+
+* Header
+Enable lexical binding. When visiting the tangled file, make the
+buffer read only.
+
+#+BEGIN_SRC emacs-lisp
+  ;;; 50-general.el --- General configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+
+  ;;; Commentary:
+
+  ;; General configuration, part of Koekelas' Emacs configuration.
+
+  ;;; Code:
+
+  (require 'no-littering)
+#+END_SRC
+
+* recentf - Recent files
+#+BEGIN_SRC emacs-lisp
+  (use-package recentf
+    :config
+    (mapc (apply-partially #'add-to-list 'recentf-exclude)
+          (list no-littering-etc-directory no-littering-var-directory))
+    (recentf-mode))
+#+END_SRC
+
+* Auto save files
+Save auto-save files in ~/.emacs.d/var/auto-save/.
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+#+END_SRC
+
+* Cursor blink
+Disable cursor blink.
+
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode 0)
+#+END_SRC
+
+* Footer
+#+BEGIN_SRC emacs-lisp
+  ;;; 50-general.el ends here
+#+END_SRC
