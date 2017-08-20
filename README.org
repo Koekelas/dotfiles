@@ -1,3 +1,15 @@
 #+TITLE: Dotfiles
 
 [[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
+
+* Dependencies
+
+** Emacs
+- [[https://git-scm.com/][Git]]
+- [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+
+On Arch Linux, run:
+
+#+BEGIN_SRC sh
+  pacman -S git adobe-source-code-pro-fonts
+#+END_SRC

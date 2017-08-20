@@ -16,7 +16,42 @@ buffer read only.
   (require 'no-littering)
 #+END_SRC
 
-* recentf - Recent files
+* Files
+
+** projectile - Projects
+[[https://github.com/bbatsov/projectile][projectile (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode)
+    :diminish projectile-mode)
+#+END_SRC
+
+** magit - Git
+[[https://github.com/magit/magit][magit (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-c f g" . magit-status))
+#+END_SRC
+
+** ediff - File comparison
+#+BEGIN_SRC emacs-lisp
+  (use-package ediff
+    :bind
+    (("C-c f d" . ediff-files)
+     ("C-c f b" . ediff-current-file))
+    :config
+    (declare-function ediff-setup-windows-plain "ediff-wind")
+    (setq ediff-window-setup-function #'ediff-setup-windows-plain)
+    (setq ediff-split-window-function #'split-window-horizontally))
+#+END_SRC
+
+** recentf - Recent files
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
     :config
@@ -25,7 +60,7 @@ buffer read only.
     (recentf-mode))
 #+END_SRC
 
-* Auto save files
+** Auto save files
 Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 #+BEGIN_SRC emacs-lisp
@@ -33,11 +68,293 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+END_SRC
 
-* Cursor blink
-Disable cursor blink.
+* Editor
+
+** flycheck - Checker front end
+[[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :diminish flycheck-mode)
+#+END_SRC
+
+* Windows
+
+** eyebrowse - Workspaces
+[[https://github.com/wasamasa/eyebrowse][eyebrowse (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eyebrowse
+    :ensure t
+    :bind
+    (("C-c w 0" . eyebrowse-switch-to-window-config-0)
+     ("C-c w 1" . eyebrowse-switch-to-window-config-1)
+     ("C-c w 2" . eyebrowse-switch-to-window-config-2)
+     ("C-c w 3" . eyebrowse-switch-to-window-config-3)
+     ("C-c w 4" . eyebrowse-switch-to-window-config-4)
+     ("C-c w 5" . eyebrowse-switch-to-window-config-5)
+     ("C-c w 6" . eyebrowse-switch-to-window-config-6)
+     ("C-c w 7" . eyebrowse-switch-to-window-config-7)
+     ("C-c w 8" . eyebrowse-switch-to-window-config-8)
+     ("C-c w 9" . eyebrowse-switch-to-window-config-9)
+     ("C-c w k" . eyebrowse-close-window-config))
+    :config
+    (setq eyebrowse-mode-line-style 'hide)
+    (eyebrowse-mode))
+#+END_SRC
+
+* Languages
+Enable flycheck in modes that derive from prog-mode.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook #'flycheck-mode)
+#+END_SRC
+
+* Appearance
+Maximize frames.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+END_SRC
+
+Show file name in title bar.
+
+#+BEGIN_SRC emacs-lisp
+  (setq frame-title-format
+        '((:eval
+           (let ((file-name (buffer-file-name)))
+             (cond
+              ((and (projectile-project-p) file-name)
+               (format "~%s/%s"
+                       (projectile-project-name)
+                       (file-relative-name file-name (projectile-project-root))))
+              (file-name
+               (abbreviate-file-name file-name))
+              (t
+               "%b"))))
+          " - Emacs"))
+#+END_SRC
+
+Disable menu bar, tool bar and scroll bars.
+
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode 0)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0)
+#+END_SRC
+
+Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] theme.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t
+    :config
+    (load-theme 'sanityinc-tomorrow-night 'no-confirm))
+#+END_SRC
+
+Set default font to [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
+
+#+BEGIN_SRC emacs-lisp
+  (let ((family "Source Code Pro"))
+    (when (x-list-fonts (format "*-%s-*" family))
+      (set-face-attribute 'default nil :family family)))
+#+END_SRC
+
+Disable cursor blink, instead, highlight line.
 
 #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode 0)
+  (global-hl-line-mode)
+#+END_SRC
+
+Show:
+
+- memory full
+- function arguments
+- edit depth
+- input name
+- workspace names
+- project name, buffer name and buffer state
+- narrow, percentage buffer above first visible line, line number and
+  column number
+- version control name and branch name
+- checker name, number of errors and number of warnings
+- major name and minor names
+
+in mode line.
+
+#+BEGIN_SRC emacs-lisp
+  (defconst koek-ml/alt-mode-names
+    '((emacs-lisp-mode . "El"))
+    "Alist of mode symbol to alternative mode name pairs.")
+
+  (defun koek-ml/update-current-mode-name ()
+    "Update mode name of current to its alternative mode name."
+    (when-let (name (cdr (assoc major-mode koek-ml/alt-mode-names)))
+      (setq mode-name name)))
+
+  (add-hook 'after-change-major-mode-hook #'koek-ml/update-current-mode-name)
+
+  (declare-function eyebrowse--get "eyebrowse")
+
+  (defun koek-ml/workspaces ()
+    "Return workspaces of current frame."
+    (eyebrowse--get 'window-configs))
+
+  (defun koek-ml/current-workspace-id ()
+    "Return workspace id of current frame."
+    (eyebrowse--get 'current-slot))
+
+  (defun koek-ml/workspace-id (workspace)
+    "Return id of WORKSPACE."
+    (car workspace))
+
+  (defun koek-ml/workspace-name (workspace)
+    "Return name of WORKSPACE."
+    (let ((name (nth 2 workspace)))
+      (unless (equal name "")
+        name)))
+
+  (defconst koek-ml/roman-numerals
+    '((9 . "IX")
+      (5 . "V")
+      (4 . "IV")
+      (1 . "I"))
+    "Alist of sorted Arabic numeral to Roman numeral pairs.")
+
+  (defun koek-ml/arabic-to-roman (n &optional roman-numerals)
+    "Convert Arabic number N to Roman number.
+  N is an integer greater than zero.  Optional ROMAN-NUMERALS is an
+  alist of sorted Arabic numeral to Roman numeral pairs and
+  defaults to `koek-ml/roman-numerals'."
+    (unless roman-numerals
+      (setq roman-numerals koek-ml/roman-numerals))
+    (when (> n 0)
+      (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
+        (if (>= n arabic)
+            (concat roman (koek-ml/arabic-to-roman (- n arabic) roman-numerals))
+          (koek-ml/arabic-to-roman n (cdr roman-numerals))))))
+
+  (defun koek-ml/workspace-label (workspace)
+    "Return label of WORKSPACE.
+  A label is made of a workspace id and name."
+    (let ((id (or (koek-ml/arabic-to-roman (koek-ml/workspace-id workspace))
+                  ;; Romans didn't have a numeral for zero, they used
+                  ;; the word nulla
+                  "N"))
+          (name (koek-ml/workspace-name workspace)))
+      (if name
+          (format "%s:%s" id name)
+        id)))
+
+  (defconst koek-ml/checker-names
+    '((emacs-lisp . "El")
+      (emacs-lisp-checkdoc . "Checkdoc"))
+    "Alist of checker symbol to checker name pairs.")
+
+  (declare-function flycheck-get-checker-for-buffer "flycheck")
+
+  (defun koek-ml/current-checker-name ()
+    "Return checker name of current."
+    (when-let (checker (flycheck-get-checker-for-buffer))
+      (or (cdr (assoc checker koek-ml/checker-names))
+          "Checker")))
+
+  (defconst koek-ml/separator
+    "   "
+    "Mode line group separator.")
+
+  (defconst koek-ml/left
+    '(" "
+      (memory-full
+       ("Memory Full!" koek-ml/separator))
+      (eldoc-mode-line-string
+       ("" eldoc-mode-line-string koek-ml/separator))
+      (:eval
+       (let ((depth (- (recursion-depth) (minibuffer-depth))))
+         (when (> depth 0)
+           (format "[%d]%s" depth koek-ml/separator))))
+      (current-input-method
+       ("" current-input-method-title koek-ml/separator))
+      (:eval
+       (when eyebrowse-mode
+         (let ((workspaces (koek-ml/workspaces)))
+           (when (> (length workspaces) 1)
+             (let ((current-id (koek-ml/current-workspace-id)))
+               (format
+                "[%s]%s"
+                (mapconcat
+                 (lambda (workspace)
+                   (let ((label (koek-ml/workspace-label workspace)))
+                     (when (equal (koek-ml/workspace-id workspace) current-id)
+                       (setq label
+                             (propertize label
+                                         'face 'eyebrowse-mode-line-active)))
+                     label))
+                 workspaces " ")
+                koek-ml/separator))))))
+      ((:eval
+        (when (projectile-project-p)
+          (format "%s/" (projectile-project-name))))
+       (:propertize "%b" face mode-line-buffer-id)
+       " %*%+"))
+    "List of mode line constructs shown left.")
+
+  (defconst koek-ml/right
+    '(((:eval
+        (when (buffer-narrowed-p)
+          "Narrowed "))
+       "%p"
+       " %l,%c"
+       koek-ml/separator)
+      (:eval
+       (when vc-mode
+         (let ((status (substring-no-properties vc-mode)))
+           (string-match (rx (submatch-n 1 (one-or-more alphanumeric))
+                             (zero-or-one ":" (one-or-more alphanumeric))
+                             (any "-:@!?")
+                             (submatch-n 2 (one-or-more alphanumeric)))
+                         status)
+           (format "%s %s%s"
+                   (match-string 1 status) (match-string 2 status)
+                   koek-ml/separator))))
+      (:eval
+       (when flycheck-mode
+         (concat (pcase flycheck-last-status-change
+                   (`running
+                    (format "%s - -" (koek-ml/current-checker-name)))
+                   (`finished
+                    (let-alist (flycheck-count-errors flycheck-current-errors)
+                      (format "%s %d %d"
+                              (koek-ml/current-checker-name)
+                              (or .error 0) (or .warning 0))))
+                   (`,status
+                    (capitalize (replace-regexp-in-string "-" " "
+                                                          (symbol-name status)))))
+                 koek-ml/separator)))
+      ("(" mode-name minor-mode-alist ")")
+      " ")
+    "List of mode line constructs shown right.")
+
+  (setq-default mode-line-format
+                '(;; Prevent eldoc from modifying mode-line-format
+                  (eldoc-mode-line-string
+                   nil)
+                  (:eval
+                   (let ((right (format-mode-line koek-ml/right)))
+                     `((;; Brakes when mode-line-format is modified, see
+                        ;; ediff and eldoc
+                        ,(max 0 (- (window-total-width) (string-width right)))
+                        ("" koek-ml/left koek-ml/separator))
+                       ;; Escape %'s
+                       ,(replace-regexp-in-string "%" "%%" right))))))
+#+END_SRC
+
+Disable startup screen.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
 #+END_SRC
 
 * Footer
