@@ -343,8 +343,8 @@ in mode line.
                    nil)
                   (:eval
                    (let ((right (format-mode-line koek-ml/right)))
-                     `((;; Brakes when mode-line-format is modified, see
-                        ;; ediff and eldoc
+                     `((;; FIXME: When mode-line-format is modified, pad
+                        ;; width is wrong. See ediff and eldoc.
                         ,(max 0 (- (window-total-width) (string-width right)))
                         ("" koek-ml/left koek-ml/separator))
                        ;; Escape %'s
