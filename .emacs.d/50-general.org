@@ -76,6 +76,8 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
+    :init
+    (add-hook 'prog-mode-hook #'flycheck-mode)
     :diminish flycheck-mode)
 #+END_SRC
 
@@ -102,13 +104,6 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     :config
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
-#+END_SRC
-
-* Languages
-Enable flycheck in modes that derive from prog-mode.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook #'flycheck-mode)
 #+END_SRC
 
 * Appearance
