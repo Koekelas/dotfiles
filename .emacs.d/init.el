@@ -15,8 +15,10 @@
         (lambda ()
           "Reset `gc-cons-threshold' to its original value."
           (setq gc-cons-threshold cons-threshold))))
-(setq gc-cons-threshold (* gc-cons-threshold 128))
+
 (declare-function koek/reset-gc-cons-threshold "init")
+
+(setq gc-cons-threshold (* gc-cons-threshold 128))
 (add-hook 'after-init-hook #'koek/reset-gc-cons-threshold)
 
 ;;; package - Package manager
