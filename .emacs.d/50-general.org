@@ -26,7 +26,7 @@ buffer read only.
     :ensure t
     :config
     (projectile-mode)
-    :diminish projectile-mode)
+    :delight)
 #+END_SRC
 
 ** magit - Git
@@ -79,7 +79,7 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     :ensure t
     :init
     (add-hook 'prog-mode-hook #'flycheck-mode)
-    :diminish flycheck-mode)
+    :delight)
 #+END_SRC
 
 ** whitespace - White space visualization
@@ -96,7 +96,7 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
             (space-mark ?\xA0 [?¤])
             (tab-mark ?\t [?⇥ ?\t])
             (newline-mark ?\n [?↵ ?\n])))
-    :diminish whitespace-mode)
+    :delight)
 #+END_SRC
 
 * Windows
@@ -122,6 +122,15 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     :config
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
+#+END_SRC
+
+* Languages
+
+** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+  (use-package elisp-mode
+    :mode ((rx ".el" string-end) . emacs-lisp-mode)
+    :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
 * Appearance
@@ -256,17 +265,6 @@ Show:
 in mode line.
 
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-ml/alt-mode-names
-    '((emacs-lisp-mode . "El"))
-    "Alist of mode symbol to alternative mode name pairs.")
-
-  (defun koek-ml/update-current-mode-name ()
-    "Update mode name of current to its alternative mode name."
-    (when-let (name (cdr (assoc major-mode koek-ml/alt-mode-names)))
-      (setq mode-name name)))
-
-  (add-hook 'after-change-major-mode-hook #'koek-ml/update-current-mode-name)
-
   (declare-function eyebrowse--get "eyebrowse")
 
   (defun koek-ml/workspaces ()
@@ -413,7 +411,8 @@ in mode line.
                   (eldoc-mode-line-string
                    nil)
                   (:eval
-                   (let ((right (format-mode-line koek-ml/right)))
+                   (let* ((inhibit-mode-name-delight nil) ; Bound dynamically
+                          (right (format-mode-line koek-ml/right)))
                      `((;; FIXME: When mode-line-format is modified, pad
                         ;; width is wrong. See ediff and eldoc.
                         ,(max 0 (- (window-total-width) (string-width right)))
