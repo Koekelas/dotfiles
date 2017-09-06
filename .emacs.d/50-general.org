@@ -39,7 +39,7 @@ buffer read only.
     ("C-c f g" . magit-status))
 #+END_SRC
 
-** ediff - File comparison
+** ediff - Compare files
 #+BEGIN_SRC emacs-lisp
   (use-package ediff
     :bind
@@ -71,7 +71,7 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 * Editor
 
-** White space
+** Whitespace
 Indent with spaces instead of tabs.
 
 #+BEGIN_SRC emacs-lisp
@@ -90,7 +90,7 @@ End a file with an empty line.
   (setq require-final-newline t)
 #+END_SRC
 
-** whitespace - White space cleanup & visualization
+** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
     :init
@@ -108,7 +108,7 @@ End a file with an empty line.
     :delight)
 #+END_SRC
 
-** flycheck - Checker front end
+** flycheck - Check for & show errors
 [[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
