@@ -71,18 +71,26 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 * Editor
 
-** flycheck - Checker front end
-[[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
+** White space
+Indent with spaces instead of tabs.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :init
-    (add-hook 'prog-mode-hook #'flycheck-mode)
-    :delight)
+  (setq-default indent-tabs-mode nil)
 #+END_SRC
 
-** whitespace - White space visualization
+End a sentence with a single space instead of a double space.
+
+#+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+#+END_SRC
+
+End a file with an empty line.
+
+#+BEGIN_SRC emacs-lisp
+  (setq require-final-newline t)
+#+END_SRC
+
+** whitespace - White space cleanup & visualization
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
     :init
@@ -92,10 +100,22 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
           '(space-mark tab-mark newline-mark
             face spaces tabs newline trailing empty lines-tail))
     (setq whitespace-display-mappings
-          '((space-mark ?\  [?·])
-            (space-mark ?\xA0 [?¤])
-            (tab-mark ?\t [?⇥ ?\t])
-            (newline-mark ?\n [?↵ ?\n])))
+          '((space-mark   ?\    [?·])
+            (space-mark   ?\xA0 [?¤])
+            (tab-mark     ?\t   [?⇥ ?\t])
+            (newline-mark ?\n   [?↵ ?\n])))
+    (add-hook 'before-save-hook #'whitespace-cleanup)
+    :delight)
+#+END_SRC
+
+** flycheck - Checker front end
+[[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook #'flycheck-mode)
     :delight)
 #+END_SRC
 
