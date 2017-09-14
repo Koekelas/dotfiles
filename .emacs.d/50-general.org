@@ -71,6 +71,49 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 * Editor
 
+** subword - Recognize words in camel case words
+#+BEGIN_SRC emacs-lisp
+  (use-package subword
+    :init
+    (add-hook 'prog-mode-hook #'subword-mode)
+    :delight)
+#+END_SRC
+
+** Word motion commands
+Complement =forward-word= and =backward-word=. Unlike =forward-to-word= and
+=backward-to-word=, =koek-mtn/next-word= and =koek-mtn/previous-word=
+recognize [[*subword - Recognize words in camel case words][subwords]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek-mtn/next-word (&optional arg)
+    "Move point to the beginning of next word, repeat ARG times.
+  Optional ARG is an integer and defaults to one.  When negative,
+  move point to the ending of previous word."
+    (interactive "p")
+    (unless arg
+      (setq arg 1))
+    (let ((step (/ arg (abs arg))))
+      (when (or (and (> step 0) (looking-at (rx word)))
+                (and (< step 0)
+                     (looking-back (rx word) (max (1- (point)) (point-min)))))
+        (forward-word step))
+      (forward-word (- arg step))
+      (when (re-search-forward (rx word) nil 'no-error step)
+        (backward-word step))))
+
+  (defun koek-mtn/previous-word (&optional arg)
+    "Move point to the ending of previous word, repeat ARG times.
+  Optional ARG is an integer and defaults to one.  When negative,
+  move point to the beginning of next word."
+    (interactive "p")
+    (unless arg
+      (setq arg 1))
+    (koek-mtn/next-word (- arg)))
+
+  (bind-key "M-F" #'koek-mtn/next-word)
+  (bind-key "M-B" #'koek-mtn/previous-word)
+#+END_SRC
+
 ** Whitespace
 Indent with spaces instead of tabs.
 
@@ -217,7 +260,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
         koek-thm/set-bg set-face-background)))
 
     (defun koek-thm/mix (color1 color2 &optional ratio)
-      "Mix COLOR1 with COLOR2.
+      "Mix COLOR1 with COLOR2 according to RATIO.
   COLOR1 and COLOR2 are lists of RGB components, see
   `color-name-to-rgb'.  Optional RATIO is a float from zero to one
   and defaults to one half.  Zero means mix zero units of COLOR1
