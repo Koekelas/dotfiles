@@ -92,14 +92,15 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (interactive "p")
     (unless arg
       (setq arg 1))
-    (let ((step (/ arg (abs arg))))
-      (when (or (and (> step 0) (looking-at (rx word)))
-                (and (< step 0)
-                     (looking-back (rx word) (max (1- (point)) (point-min)))))
-        (forward-word step))
-      (forward-word (- arg step))
-      (when (re-search-forward (rx word) nil 'no-error step)
-        (backward-word step))))
+    (unless (= arg 0)
+      (let ((step (/ arg (abs arg))))
+        (when (or (and (> step 0) (looking-at (rx word)))
+                  (and (< step 0)
+                       (looking-back (rx word) (max (1- (point)) (point-min)))))
+          (forward-word step))
+        (forward-word (- arg step))
+        (when (re-search-forward (rx word) nil 'no-error step)
+          (backward-word step)))))
 
   (defun koek-mtn/previous-word (&optional arg)
     "Move point to the ending of previous word, repeat ARG times.
