@@ -99,7 +99,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                        (looking-back (rx word) (max (1- (point)) (point-min)))))
           (forward-word step))
         (forward-word (- arg step))
-        (when (re-search-forward (rx word) nil 'no-error step)
+        (when (forward-word step)
           (backward-word step)))))
 
   (defun koek-mtn/previous-word (&optional arg)
