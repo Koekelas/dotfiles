@@ -80,7 +80,7 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 #+END_SRC
 
 ** Word motion commands
-Complement =forward-word= and =backward-word=. Unlike =forward-to-word= and
+Complement word motion commands. Unlike =forward-to-word= and
 =backward-to-word=, =koek-mtn/next-word= and =koek-mtn/previous-word=
 recognize [[*subword - Recognize words in camel case words][subwords]].
 
