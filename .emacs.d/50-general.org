@@ -111,8 +111,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
       (setq arg 1))
     (koek-mtn/next-word (- arg)))
 
-  (bind-key "M-F" #'koek-mtn/next-word)
-  (bind-key "M-B" #'koek-mtn/previous-word)
+  (bind-key "M-n" #'koek-mtn/next-word)
+  (bind-key "M-p" #'koek-mtn/previous-word)
 #+END_SRC
 
 ** Whitespace
