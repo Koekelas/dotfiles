@@ -115,6 +115,43 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (bind-key "M-p" #'koek-mtn/previous-word)
 #+END_SRC
 
+** smartparens - Manage pairs & expressions
+[[https://github.com/Fuco1/smartparens][smartparens (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t
+    :bind
+    (:map smartparens-mode-map
+     ("C-M-f" . sp-forward-sexp)
+     ("C-M-b" . sp-backward-sexp)
+     ("C-M-n" . sp-next-sexp)
+     ("C-M-p" . sp-previous-sexp)
+     ("C-M-a" . sp-beginning-of-sexp)
+     ("C-M-e" . sp-end-of-sexp)
+     ("C-M-d" . sp-down-sexp)
+     ("C-M-u" . sp-backward-up-sexp)
+     ("C-S-d" . sp-backward-down-sexp)
+     ("C-S-u" . sp-up-sexp)
+     ("C-M-<right>" . sp-forward-slurp-sexp)
+     ("C-M-<left>"  . sp-forward-barf-sexp)
+     ("C-S-<left>"  . sp-backward-slurp-sexp)
+     ("C-S-<right>" . sp-backward-barf-sexp)
+     ("C-M-<down>"  . sp-unwrap-sexp)
+     ("C-M-t" . sp-transpose-sexp)
+     ("C-M-w" . sp-copy-sexp)
+     ("C-M-k" . sp-kill-sexp))
+    :init
+    (bind-key "C-M-{" #'beginning-of-defun)
+    (bind-key "C-M-}" #'end-of-defun)
+    (bind-key "C-S-w" #'append-next-kill)
+    (add-hook 'prog-mode-hook #'smartparens-mode)
+    :config
+    (require 'smartparens-config)
+    (add-hook 'smartparens-mode-hook #'show-smartparens-mode)
+    :delight)
+#+END_SRC
+
 ** Whitespace
 Indent with spaces instead of tabs.
 

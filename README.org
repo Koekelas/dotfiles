@@ -13,3 +13,14 @@ On Arch Linux, run:
 #+BEGIN_SRC sh
   pacman -S git adobe-source-code-pro-fonts
 #+END_SRC
+
+* Issues
+
+** Emacs and GNOME Shell keybindings conflict
+Run:
+
+#+BEGIN_SRC sh
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>Page_Down']"
+#+END_SRC
