@@ -12,8 +12,14 @@ buffer read only.
   ;; General configuration, part of Koekelas' Emacs configuration.
 
   ;;; Code:
+#+END_SRC
 
-  (require 'no-littering)
+Declare variables and functions setup by [[file:init.el][init.el]].
+
+#+BEGIN_SRC emacs-lisp
+  (defvar no-littering-etc-directory)
+  (defvar no-littering-var-directory)
+  (declare-function no-littering-expand-var-file-name "no-littering")
 #+END_SRC
 
 * Files
