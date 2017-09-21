@@ -159,19 +159,19 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+END_SRC
 
 ** Whitespace
-Indent with spaces instead of tabs.
+Indent with spaces, not tabs.
 
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
 #+END_SRC
 
-End a sentence with a single space instead of a double space.
+End sentences with a single space, not a double space.
 
 #+BEGIN_SRC emacs-lisp
   (setq sentence-end-double-space nil)
 #+END_SRC
 
-End a file with an empty line.
+End files with an empty line.
 
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
