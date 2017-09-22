@@ -225,6 +225,7 @@ End files with an empty line.
      ("C-c w 7" . eyebrowse-switch-to-window-config-7)
      ("C-c w 8" . eyebrowse-switch-to-window-config-8)
      ("C-c w 9" . eyebrowse-switch-to-window-config-9)
+     ("C-c w w" . eyebrowse-last-window-config)
      ("C-c w k" . eyebrowse-close-window-config))
     :config
     (setq eyebrowse-mode-line-style 'hide)
