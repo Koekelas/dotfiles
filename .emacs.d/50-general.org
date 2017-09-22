@@ -206,7 +206,7 @@ End files with an empty line.
     :delight)
 #+END_SRC
 
-* Windows
+* Windows & buffers
 
 ** eyebrowse - Workspaces
 [[https://github.com/wasamasa/eyebrowse][eyebrowse (GitHub)]]
@@ -230,6 +230,27 @@ End files with an empty line.
     :config
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
+#+END_SRC
+
+** ibuffer - list-buffers replacement
+#+BEGIN_SRC emacs-lisp
+  (use-package ibuffer
+    :bind
+    ([remap list-buffers] . ibuffer))
+#+END_SRC
+
+** Buffer commands
+Bury buffers, don't kill them. Computers have more than enough memory.
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek-buff/bury-current (&optional arg)
+    "Bury current, kill with prefix argument ARG.
+  When it can't be killed, bury it."
+    (interactive "P")
+    (unless (and arg (kill-buffer))
+      (bury-buffer)))
+
+  (bind-key [remap kill-buffer] #'koek-buff/bury-current)
 #+END_SRC
 
 * Languages
