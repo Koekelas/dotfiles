@@ -245,7 +245,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 #+BEGIN_SRC emacs-lisp
   (defun koek-buff/bury-current (&optional arg)
     "Bury current, kill with prefix argument ARG.
-  When it can't be killed, bury it."
+  When current can't be killed, bury."
     (interactive "P")
     (unless (and arg (kill-buffer))
       (bury-buffer)))
