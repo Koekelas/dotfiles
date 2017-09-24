@@ -127,7 +127,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (delight 'auto-fill-function nil 'emacs)
 #+END_SRC
 
-** smartparens - Manage pairs & expressions
+** smartparens - Pairs & expressions
 [[https://github.com/Fuco1/smartparens][smartparens (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -201,7 +201,7 @@ End files with an empty line.
     :delight)
 #+END_SRC
 
-** flycheck - Check for & show errors
+** flycheck - Show syntax & style errors
 [[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
