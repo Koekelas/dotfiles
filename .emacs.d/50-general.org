@@ -93,8 +93,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+BEGIN_SRC emacs-lisp
   (defun koek-mtn/next-word (&optional arg)
     "Move point to the beginning of next word, repeat ARG times.
-  Optional ARG is an integer and defaults to one.  When negative,
-  move point to the ending of previous word."
+  Optional ARG is an integer and defaults to one.  When ARG is
+  negative, move point to the ending of previous word."
     (interactive "p")
     (unless arg
       (setq arg 1))
@@ -110,8 +110,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
   (defun koek-mtn/previous-word (&optional arg)
     "Move point to the ending of previous word, repeat ARG times.
-  Optional ARG is an integer and defaults to one.  When negative,
-  move point to the beginning of next word."
+  Optional ARG is an integer and defaults to one.  When ARG is
+  negative, move point to the beginning of next word."
     (interactive "p")
     (unless arg
       (setq arg 1))
@@ -251,7 +251,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 #+BEGIN_SRC emacs-lisp
   (defun koek-buff/bury-current (&optional arg)
     "Bury current, kill with prefix argument ARG.
-  When current can't be killed, bury."
+  When current can't be killed, bury current."
     (interactive "P")
     (unless (and arg (kill-buffer))
       (bury-buffer)))
