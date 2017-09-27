@@ -123,7 +123,18 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 ** auto-fill-mode - Break long sentences
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'text-mode-hook #'auto-fill-mode)
+  (defconst koek-af/exclude-modes
+    '(snippet-mode)
+    "List of major mode symbols, see `koek-af/maybe-enable'.")
+
+  (defun koek-af/maybe-enable ()
+    "Enable `auto-fill-mode' conditionally.
+  Unless current major mode is a member of `koek-af/exclude-modes',
+  enable `auto-fill-mode'."
+    (unless (memq major-mode koek-af/exclude-modes)
+      (auto-fill-mode)))
+
+  (add-hook 'text-mode-hook #'koek-af/maybe-enable)
   (delight 'auto-fill-function nil 'emacs)
 #+END_SRC
 
@@ -181,6 +192,10 @@ End files with an empty line.
 
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
+
+  (defun koek-ws/disable-final-empty-line ()
+    "Disable final empty line for current."
+    (setq-local require-final-newline nil))
 #+END_SRC
 
 ** whitespace - Clean & visualize whitespace
@@ -199,6 +214,25 @@ End files with an empty line.
             (newline-mark ?\n   [?↵ ?\n])))
     (add-hook 'before-save-hook #'whitespace-cleanup)
     :delight)
+#+END_SRC
+
+** yasnippet - Snippets
+[[https://github.com/joaotavora/yasnippet][yasnippet (GitHub)]]
+
+For the major mode, see [[*YASnippet][YASnippet]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :preface
+    (declare-function yas-reload-all "yasnippet")
+    :init
+    (dolist (hook '(text-mode-hook prog-mode-hook))
+      (add-hook hook #'yas-minor-mode))
+    :config
+    (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
+    (yas-reload-all)
+    :delight yas-minor-mode)
 #+END_SRC
 
 ** flycheck - Show syntax & style errors
@@ -276,6 +310,16 @@ Bury buffers, don't kill them. Computers have more than enough memory.
     ;; See https://github.com/jwiegley/use-package/issues/267
     (provide 'text-mode)
     :delight (text-mode "Txt" :major))
+#+END_SRC
+
+** YASnippet
+For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :mode ("/snippets/" . snippet-mode)
+    :config
+    (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line))
 #+END_SRC
 
 * Appearance
