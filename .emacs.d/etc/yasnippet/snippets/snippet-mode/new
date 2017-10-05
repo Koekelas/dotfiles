@@ -1,0 +1,9 @@
+# -*- mode: snippet; -*-
+# name: New snippet file
+# key: new
+# --
+# -*- mode: snippet; -*-
+# name: ${1:Name of snippet}
+# key: ${2:${1:$(koek-ys/name-to-key yas-text)}}
+# --
+$0

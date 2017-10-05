@@ -230,8 +230,26 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (dolist (hook '(text-mode-hook prog-mode-hook))
       (add-hook hook #'yas-minor-mode))
     :config
+    ;;; Snippet functions
+    (defun koek-ys/name-to-key (snippet-name)
+      "Convert SNIPPET-NAME to snippet key.
+  SNIPPET-NAME is a string."
+      (string-match (rx (submatch-n 1 (one-or-more word))) snippet-name)
+      (downcase (match-string 1 snippet-name)))
+
+    ;;; Configuration
+    ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
     (yas-reload-all)
+
+    ;; Set new snippet file snippet
+    (with-temp-buffer
+      (insert-file-contents
+       (expand-file-name "yasnippet/snippets/snippet-mode/new"
+                         no-littering-etc-directory))
+      (setq yas-new-snippet-default
+            (buffer-substring (re-search-forward (rx line-start "# --\n"))
+                              (point-max))))
     :delight yas-minor-mode)
 #+END_SRC
 
@@ -569,10 +587,10 @@ in mode line.
       (:eval
        (when vc-mode
          (let ((status (substring-no-properties vc-mode)))
-           (string-match (rx (submatch-n 1 (one-or-more alphanumeric))
-                             (zero-or-one ":" (one-or-more alphanumeric))
+           (string-match (rx (submatch-n 1 (one-or-more word))
+                             (zero-or-one ":" (one-or-more word))
                              (any "-:@!?")
-                             (submatch-n 2 (one-or-more alphanumeric)))
+                             (submatch-n 2 (one-or-more word)))
                          status)
            (format "%s %s%s"
                    (match-string 1 status) (match-string 2 status)
