@@ -1,0 +1,17 @@
+# -*- mode: snippet; -*-
+# name: New Emacs Lisp file
+# key: new
+# --
+;;; ${1:`(file-name-nondirectory (or (buffer-file-name) "name.el"))`} --- ${2:Short description} -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;; ${3:Long description.}
+
+;;; Code:
+
+$0
+
+(provide '${1:$(replace-regexp-in-string (rx "." (zero-or-more (not (any "."))) line-end) "" yas-text)})
+
+;;; $1 ends here
