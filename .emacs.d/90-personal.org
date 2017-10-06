@@ -1,0 +1,27 @@
+#+TITLE: Personal
+
+* Header
+Enable lexical binding. When visiting the tangled file, make the
+buffer read only.
+
+#+BEGIN_SRC emacs-lisp
+  ;;; 90-personal.el --- Personal configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+
+  ;;; Commentary:
+
+  ;; Personal configuration, me and my computers. Part of Koekelas'
+  ;; Emacs configuration.
+
+  ;;; Code:
+#+END_SRC
+
+* Name & e-mail
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Nicolas De Jaeghere")
+  (setq user-mail-address "nicodeja@gmail.com")
+#+END_SRC
+
+* Footer
+#+BEGIN_SRC emacs-lisp
+  ;;; 90-personal.el ends here
+#+END_SRC
