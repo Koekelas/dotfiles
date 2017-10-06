@@ -4,6 +4,6 @@
 # --
 # -*- mode: snippet; -*-
 # name: ${1:Name of snippet}
-# key: ${2:${1:$(koek-ys/name-to-key yas-text)}}
+# key: ${2:${1:$(progn (string-match (rx (submatch-n 1 (one-or-more word))) yas-text) (downcase (match-string 1 yas-text)))}}
 # --
 $0

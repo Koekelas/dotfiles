@@ -230,14 +230,6 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (dolist (hook '(text-mode-hook prog-mode-hook))
       (add-hook hook #'yas-minor-mode))
     :config
-    ;;; Snippet functions
-    (defun koek-ys/name-to-key (snippet-name)
-      "Convert SNIPPET-NAME to snippet key.
-  SNIPPET-NAME is a string."
-      (string-match (rx (submatch-n 1 (one-or-more word))) snippet-name)
-      (downcase (match-string 1 snippet-name)))
-
-    ;;; Configuration
     ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
     (yas-reload-all)
