@@ -598,8 +598,8 @@ in mode line.
                               (koek-ml/current-checker-name)
                               (or .error 0) (or .warning 0))))
                    (`,status
-                    (capitalize (replace-regexp-in-string "-" " "
-                                                          (symbol-name status)))))
+                    (capitalize
+                     (replace-regexp-in-string "-" " " (symbol-name status)))))
                  koek-ml/separator)))
       ("(" mode-name minor-mode-alist ")")
       " ")
