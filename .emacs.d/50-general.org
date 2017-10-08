@@ -245,6 +245,19 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :delight yas-minor-mode)
 #+END_SRC
 
+** ispell - Spell checker
+#+BEGIN_SRC emacs-lisp
+  (use-package ispell
+    :config
+    (setq ispell-program-name (executable-find "hunspell"))
+    (let ((dictionary-name "en_US"))
+      ;; Hunspell on Windows requires DICTIONARY environment variable to
+      ;; be set
+      (when (eq system-type 'windows-nt)
+        (setenv "DICTIONARY" dictionary-name))
+      (setq ispell-dictionary dictionary-name)))
+#+END_SRC
+
 ** flycheck - Show syntax & style errors
 [[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
 

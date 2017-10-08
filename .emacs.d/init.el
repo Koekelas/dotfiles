@@ -34,7 +34,7 @@ PACKAGE-NAME is a symbol."
        '(("gnu"   . "https://elpa.gnu.org/packages/")
          ("melpa" . "https://melpa.org/packages/")
          ("org"   . "http://orgmode.org/elpa/"))))
-  ;; HTTPS locations require GnuTLS
+  ;; HTTPS locations require GnuTLS to be available
   (unless (gnutls-available-p)
     (setq archives
           (mapcar (pcase-lambda (`(,id . ,location))
