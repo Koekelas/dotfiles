@@ -432,7 +432,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
         (seq-reduce (pcase-lambda (colors `(,name . ,color))
                       (puthash name (color-name-to-rgb color) colors)
                       colors)
-                    (cdr (assoc 'eighties color-theme-sanityinc-tomorrow-colors))
+                    (alist-get 'eighties color-theme-sanityinc-tomorrow-colors)
                     (make-hash-table))
       (let ((alt-color (koek-thm/mix current-line selection)))
         (dolist (face
@@ -539,8 +539,7 @@ in mode line.
   (defun koek-ml/current-checker-name ()
     "Return checker name of current."
     (when-let (checker (flycheck-get-checker-for-buffer))
-      (or (cdr (assoc checker koek-ml/checker-names))
-          "Checker")))
+      (or (alist-get checker koek-ml/checker-names) "Checker")))
 
   (defconst koek-ml/separator
     "   "
