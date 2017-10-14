@@ -384,30 +384,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
     :preface
-    (declare-function color-rgb-to-hex "color")
-
-    ;; koek-thm/fg, koek-thm/bg, koek-thm/set-fg and koek-thm/set-bg are
-    ;; equivalent to face-foreground, face-background,
-    ;; set-face-foreground and set-face-background but return or take a
-    ;; list of RGB components instead of a string
-    (mapc
-     (pcase-lambda (`(,createf . ,pairs))
-       (mapc (pcase-lambda (`(,name ,f))
-               (fset name (funcall createf f)))
-             (seq-partition pairs 2)))
-     `((,(lambda (get-color)
-           (lambda (face &optional frame inherit)
-             (when-let (color (funcall get-color face frame inherit))
-               (color-name-to-rgb color))))
-        koek-thm/fg face-foreground
-        koek-thm/bg face-background)
-       (,(lambda (set-color)
-           (lambda (face color &optional frame)
-             (funcall set-color
-                      face (and color (apply #'color-rgb-to-hex color)) frame)))
-        koek-thm/set-fg set-face-foreground
-        koek-thm/set-bg set-face-background)))
-
     (defun koek-thm/mix (color1 color2 &optional ratio)
       "Mix COLOR1 with COLOR2 according to RATIO.
   COLOR1 and COLOR2 are lists of RGB components, see
@@ -422,27 +398,38 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                     (+ (* component ratio) (* component´ ratio´)))
                   color1 color2)))
     :config
+    (declare-function color-rgb-to-hex "color")
     (declare-function map-elt "map")
-    (declare-function koek-thm/set-fg "50-general")
-    (declare-function koek-thm/set-bg "50-general")
 
     (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
-    (map-let
-        (current-line selection)
-        (seq-reduce (pcase-lambda (colors `(,name . ,color))
-                      (puthash name (color-name-to-rgb color) colors)
-                      colors)
-                    (alist-get 'eighties color-theme-sanityinc-tomorrow-colors)
-                    (make-hash-table))
-      (let ((alt-color (koek-thm/mix current-line selection)))
-        (dolist (face
-                 '(whitespace-space whitespace-hspace
-                   whitespace-tab whitespace-newline))
-          (koek-thm/set-fg face alt-color)
-          (koek-thm/set-bg face nil))
-        (dolist (face '(whitespace-trailing whitespace-empty whitespace-line))
-          (koek-thm/set-fg face nil)
-          (koek-thm/set-bg face selection)))))
+    (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
+           (personal
+            (mapcar
+             (pcase-lambda (`(,name . ,rgb))
+               (cons name (apply #'color-rgb-to-hex rgb)))
+             (map-let
+                 (current-line selection)
+                 (seq-reduce (pcase-lambda (rgbs `(,name . ,hex))
+                               (puthash name (color-name-to-rgb hex) rgbs)
+                               rgbs)
+                             theme (make-hash-table))
+               `((alt . ,(koek-thm/mix current-line selection))))))
+           (spec
+            (map-let (alt selection) (append personal theme)
+              `((whitespace-space   :foreground ,alt :background nil)
+                (whitespace-hspace  :foreground ,alt :background nil)
+                (whitespace-tab     :foreground ,alt :background nil)
+                (whitespace-newline :foreground ,alt :background nil)
+                (whitespace-trailing :foreground nil :background ,selection)
+                (whitespace-empty    :foreground nil :background ,selection)
+                (whitespace-line     :foreground nil :background ,selection)
+                (eyebrowse-mode-line-active :weight normal)))))
+      ;; Adding attributes to a face before the face is defined, fails.
+      ;; Add attributes to the user theme.
+      (apply #'custom-set-faces
+             (mapcar (pcase-lambda (`(,name . ,attribs))
+                       `(,name ((t . ,attribs))))
+                     spec))))
 #+END_SRC
 
 Set default font to [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
