@@ -61,13 +61,15 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     :config
     (declare-function ediff-setup-windows-plain "ediff-wind")
 
-    ;; Restore window layout
+    ;; Setup restore window layout on quit
     (let (last-layout)
-      ;; Store window layout before it's modified
+      ;; Store window layout before it's modified. The control buffer
+      ;; doesn't exist yet.
       (add-hook 'ediff-before-setup-hook
                 (lambda ()
                   (setq last-layout (current-window-configuration))))
-      ;; Store window layout with the local hook
+      ;; Store window layout in a local hook of the control buffer.
+      ;; Current is the control buffer.
       (add-hook 'ediff-mode-hook
                 (lambda ()
                   (let ((layout last-layout))
