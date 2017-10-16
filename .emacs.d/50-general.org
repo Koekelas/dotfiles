@@ -54,26 +54,6 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     :preface
     (declare-function outline-show-all "outline")
 
-    ;; Ugly. When the control buffer is created, the window layout is
-    ;; modified.
-    (defvar koek-diff/layout
-      nil
-      "Last stored window layout.")
-
-    (defun koek-diff/store-layout ()
-      "Store current window layout.
-  Call before the window layout is modified."
-      (setq koek-diff/layout (current-window-configuration)))
-
-    (defun koek-diff/setup-restore-layout-on-quit ()
-      "Setup restore last stored window layout on quit.
-  Call from the control buffer."
-      (let ((layout koek-diff/layout))
-        (add-hook 'ediff-quit-hook
-                  (lambda ()
-                    (set-window-configuration layout))
-                  'append 'local)))
-
     (defun koek-diff/unfold-outline ()
       "Unfold outline in outline and derived modes."
       (when (derived-mode-p 'outline-mode) ; org is derived from outline
@@ -81,10 +61,24 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     :config
     (declare-function ediff-setup-windows-plain "ediff-wind")
 
+    ;; Restore window layout
+    (let (last-layout)
+      ;; Store window layout before it's modified
+      (add-hook 'ediff-before-setup-hook
+                (lambda ()
+                  (setq last-layout (current-window-configuration))))
+      ;; Store window layout with the local hook
+      (add-hook 'ediff-mode-hook
+                (lambda ()
+                  (let ((layout last-layout))
+                    ;; Restore window layout on quit
+                    (add-hook 'ediff-quit-hook
+                              (lambda ()
+                                (set-window-configuration layout))
+                              'append 'local)))))
+
     (setq ediff-window-setup-function #'ediff-setup-windows-plain)
     (setq ediff-split-window-function #'split-window-horizontally)
-    (add-hook 'ediff-before-setup-hook #'koek-diff/store-layout)
-    (add-hook 'ediff-mode-hook #'koek-diff/setup-restore-layout-on-quit)
     (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
 #+END_SRC
 

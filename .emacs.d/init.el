@@ -10,8 +10,8 @@
 ;; Increasing cons threshold makes garbage collection more efficient,
 ;; decreasing it makes garbage collection less noticeable. Increase
 ;; cons threshold during initialization so Emacs starts fast.
-(fset 'koek/reset-gc-cons-threshold
-      (let ((cons-threshold gc-cons-threshold))
+(let ((cons-threshold gc-cons-threshold))
+  (fset 'koek/reset-gc-cons-threshold
         (lambda ()
           "Reset `gc-cons-threshold' to its original value."
           (setq gc-cons-threshold cons-threshold))))
