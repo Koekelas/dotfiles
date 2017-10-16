@@ -54,8 +54,8 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     :preface
     (declare-function outline-show-all "outline")
 
-    (defun koek-diff/expand-outline ()
-      "Expand outline, show every heading body."
+    (defun koek-diff/unfold-outline ()
+      "Unfold outline in outline and derived modes."
       (when (derived-mode-p 'outline-mode) ; org is derived from outline
         (outline-show-all)))
     :config
@@ -63,7 +63,7 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 
     (setq ediff-window-setup-function #'ediff-setup-windows-plain)
     (setq ediff-split-window-function #'split-window-horizontally)
-    (add-hook 'ediff-prepare-buffer-hook #'koek-diff/expand-outline))
+    (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
 #+END_SRC
 
 ** recentf - Recent files
