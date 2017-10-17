@@ -434,12 +434,11 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
             (mapcar
              (pcase-lambda (`(,name . ,rgb))
                (cons name (apply #'color-rgb-to-hex rgb)))
-             (map-let
+             (map-let                     ; How to use let-alist and backquote?
                  (current-line selection)
-                 (seq-reduce (pcase-lambda (rgbs `(,name . ,hex))
-                               (puthash name (color-name-to-rgb hex) rgbs)
-                               rgbs)
-                             theme (make-hash-table))
+                 (mapcar (pcase-lambda (`(,name . ,hex))
+                           (cons name (color-name-to-rgb hex)))
+                         theme)
                `((alt . ,(koek-thm/mix current-line selection))))))
            (spec
             (map-let (alt selection) (append personal theme)
