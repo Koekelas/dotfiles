@@ -1,8 +1,8 @@
 #+TITLE: Personal
 
 * Header
-Enable lexical binding. When visiting the tangled file, make the
-buffer read only.
+Enable lexical binding. When visiting the tangled file, enable read
+only mode.
 
 #+BEGIN_SRC emacs-lisp
   ;;; 90-personal.el --- Personal configuration -*- lexical-binding: t; buffer-read-only: t; -*-

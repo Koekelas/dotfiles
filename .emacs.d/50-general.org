@@ -1,8 +1,8 @@
 #+TITLE: General
 
 * Header
-Enable lexical binding. When visiting the tangled file, make the
-buffer read only.
+Enable lexical binding. When visiting the tangled file, enable read
+only mode.
 
 #+BEGIN_SRC emacs-lisp
   ;;; 50-general.el --- General configuration -*- lexical-binding: t; buffer-read-only: t; -*-
@@ -466,7 +466,7 @@ Set default font to [[https://adobe-fonts.github.io/source-code-pro/][Source Cod
       (set-face-attribute 'default nil :family family)))
 #+END_SRC
 
-Disable cursor blink, instead, highlight line.
+Disable blink cursor mode, instead, enable highlight line mode.
 
 #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode 0)
@@ -534,8 +534,8 @@ in mode line.
     "Return label of WORKSPACE.
   A label is made of a workspace id and name."
     (let ((id (or (koek-ml/arabic-to-roman (koek-ml/workspace-id workspace))
-                  ;; Romans didn't have a numeral for zero, they used
-                  ;; the word nulla
+                  ;; A Roman numeral for zero doesn't exist. N stands
+                  ;; for nulla, which means zero.
                   "N"))
           (name (koek-ml/workspace-name workspace)))
       (if name
