@@ -197,6 +197,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (add-hook 'prog-mode-hook #'smartparens-mode)
     :config
     (require 'smartparens-config)
+    (setq sp-navigate-interactive-always-progress-point t)
     (add-hook 'smartparens-mode-hook #'show-smartparens-mode)
     :delight)
 #+END_SRC
