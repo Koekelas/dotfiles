@@ -54,7 +54,7 @@ PACKAGE-NAME is a symbol."
 
 ;;; use-package - Package configuration macro
 (koek-pkg/ensure 'use-package)
-(koek-pkg/ensure 'delight)              ; optional dependency
+(koek-pkg/ensure 'delight)              ; Optional dependency
 
 ;;; org - Notes, to-do lists and project planning
 ;; Installing latest org after loading builtin org breaks org. Install
