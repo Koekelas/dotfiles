@@ -507,29 +507,28 @@ in mode line.
     "   "
     "Mode line group separator.")
 
-  (defun koek-ml/pluralize (word n)
-    "Pluralize singular WORD to match N.
-  WORD is a string. N is an integer."
-    (if (= n 1)
-        word
-      (concat word "s")))
-
   (defconst koek-ml/ediff
-    '(" "
-      (eldoc-mode-line-string
-       ("" eldoc-mode-line-string koek-ml/separator))
+    '((eldoc-mode-line-string
+       nil)
       (:eval
-       (let ((current-diff ediff-current-difference)
-             (n-diffs ediff-number-of-differences))
-         (cond
-          ((< current-diff 0)
-           (format "Start, %d %s"
-                   n-diffs (koek-ml/pluralize "diff" n-diffs)))
-          ((>= current-diff n-diffs)
-           (format "End, %d %s"
-                   n-diffs (koek-ml/pluralize "diff" n-diffs)))
-          (t
-           (format "Diff %d of %d" (1+ current-diff) n-diffs))))))
+       (let* ((diff-n (1+ ediff-current-difference))
+              (n-diffs ediff-number-of-differences)
+              (right (concat (cond
+                              ((< diff-n 1)
+                               (format "Start -/%d" n-diffs))
+                              ((> diff-n n-diffs)
+                               (format "End -/%d" n-diffs))
+                              (t
+                               (format "%d/%d" diff-n n-diffs)))
+                             koek-ml/separator
+                             "(Ediff) ")))
+         `((,(max 0 (- (window-total-width) (string-width right)))
+            (" "
+             (eldoc-mode-line-string
+              ("" eldoc-mode-line-string koek-ml/separator))
+             (:propertize "%b" face mode-line-buffer-id)
+             koek-ml/separator))
+           ,right))))
     "List of mode line constructs shown in ediff control buffer.")
 
   (defvar-local koek-ml/variant-name
