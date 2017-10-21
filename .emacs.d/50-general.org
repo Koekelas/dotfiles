@@ -442,15 +442,18 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                          theme)
                `((alt . ,(koek-thm/mix current-line selection))))))
            (spec
-            (map-let (alt selection) (append personal theme)
-              `((whitespace-space   :foreground ,alt :background nil)
+            (map-let (alt selection orange) (append personal theme)
+              `((mode-line-emphasis :foreground ,orange :slant unspecified)
+                (whitespace-space   :foreground ,alt :background nil)
                 (whitespace-hspace  :foreground ,alt :background nil)
                 (whitespace-tab     :foreground ,alt :background nil)
                 (whitespace-newline :foreground ,alt :background nil)
                 (whitespace-trailing :foreground nil :background ,selection)
                 (whitespace-empty    :foreground nil :background ,selection)
                 (whitespace-line     :foreground nil :background ,selection)
-                (eyebrowse-mode-line-active :weight normal)))))
+                (eyebrowse-mode-line-active :foreground unspecified
+                                            :weight unspecified
+                                            :inherit mode-line-emphasis)))))
       ;; Adding attributes to a face before the face is defined, fails.
       ;; Add attributes to the user theme.
       (apply #'custom-set-faces
@@ -478,6 +481,7 @@ Show:
 
 - memory full
 - function arguments
+- variant name and diff status
 - edit depth
 - input name
 - workspace names
@@ -486,11 +490,84 @@ Show:
   column number
 - version control name and branch name
 - checker name, number of errors and number of warnings
-- major name and minor names
+- major name, process status and minor names
 
 in mode line.
 
 #+BEGIN_SRC emacs-lisp
+  (defconst koek-ml/separator
+    "   "
+    "Mode line group separator.")
+
+  (defun koek-ml/pluralize (word n)
+    "Pluralize singular WORD to match N.
+  WORD is a string. N is an integer."
+    (if (= n 1)
+        word
+      (concat word "s")))
+
+  (defconst koek-ml/ediff
+    '(" "
+      (eldoc-mode-line-string
+       ("" eldoc-mode-line-string koek-ml/separator))
+      (:eval
+       (let ((current-diff ediff-current-difference)
+             (n-diffs ediff-number-of-differences))
+         (cond
+          ((< current-diff 0)
+           (format "Start, %d %s"
+                   n-diffs (koek-ml/pluralize "diff" n-diffs)))
+          ((>= current-diff n-diffs)
+           (format "End, %d %s"
+                   n-diffs (koek-ml/pluralize "diff" n-diffs)))
+          (t
+           (format "Diff %d of %d" (1+ current-diff) n-diffs))))))
+    "List of mode line constructs shown in ediff control buffer.")
+
+  (defvar-local koek-ml/variant-name
+    nil
+    "Name of variant.")
+
+  (defvar-local koek-ml/diff-status
+    nil
+    "Status of current diff.")
+
+  (defun koek-ml/variants ()
+    "Return variants of current ediff session."
+    (seq-filter (lambda (variant)
+                  (bufferp (cdr variant)))
+                `(("A" . ,ediff-buffer-A)
+                  ("B" . ,ediff-buffer-B)
+                  ("C" . ,ediff-buffer-C)
+                  ("Ancestor" . ,ediff-ancestor-buffer))))
+
+  (defun koek-ml/diff-status ()
+    "Return status of current diff."
+    (let ((status (nth 1 mode-line-format)))
+      (when (symbolp status)
+        (setq status (symbol-value status)))
+      (unless (string= status "")
+        (string-trim status))))
+
+  (define-advice ediff-refresh-mode-lines (:after () koek-ml/update-ediff)
+    (setq mode-line-format koek-ml/ediff)
+    (save-current-buffer
+      (dolist (variant (koek-ml/variants))
+        (set-buffer (cdr variant))
+        (setq koek-ml/variant-name (car variant))
+        (setq koek-ml/diff-status (koek-ml/diff-status))
+        (ediff-strip-mode-line-format))))
+
+  (defun koek-ml/cleanup-ediff ()
+    "Cleanup ediff mode line variables."
+    (save-current-buffer
+      (dolist (variant (koek-ml/variants))
+        (set-buffer (cdr variant))
+        (kill-local-variable 'koek-ml/variant-name)
+        (kill-local-variable 'koek-ml/diff-status))))
+
+  (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-ediff)
+
   (declare-function eyebrowse--get "eyebrowse")
 
   (defun koek-ml/workspaces ()
@@ -508,7 +585,7 @@ in mode line.
   (defun koek-ml/workspace-name (workspace)
     "Return name of WORKSPACE."
     (let ((name (nth 2 workspace)))
-      (unless (equal name "")
+      (unless (string= name "")
         name)))
 
   (defconst koek-ml/roman-numerals
@@ -550,14 +627,10 @@ in mode line.
 
   (declare-function flycheck-get-checker-for-buffer "flycheck")
 
-  (defun koek-ml/current-checker-name ()
-    "Return checker name of current."
+  (defun koek-ml/checker-name ()
+    "Return name of current checker."
     (when-let (checker (flycheck-get-checker-for-buffer))
       (or (alist-get checker koek-ml/checker-names) "Checker")))
-
-  (defconst koek-ml/separator
-    "   "
-    "Mode line group separator.")
 
   (defconst koek-ml/left
     '(" "
@@ -565,6 +638,11 @@ in mode line.
        ("Memory Full!" koek-ml/separator))
       (eldoc-mode-line-string
        ("" eldoc-mode-line-string koek-ml/separator))
+      (koek-ml/variant-name
+       ((:propertize koek-ml/variant-name face mode-line-emphasis)
+        (koek-ml/diff-status
+         (": " koek-ml/diff-status))
+        koek-ml/separator))
       (:eval
        (let ((depth (- (recursion-depth) (minibuffer-depth))))
          (when (> depth 0)
@@ -581,7 +659,7 @@ in mode line.
                 (mapconcat
                  (lambda (workspace)
                    (let ((label (koek-ml/workspace-label workspace)))
-                     (when (equal (koek-ml/workspace-id workspace) current-id)
+                     (when (= (koek-ml/workspace-id workspace) current-id)
                        (setq label
                              (propertize label
                                          'face 'eyebrowse-mode-line-active)))
@@ -617,17 +695,17 @@ in mode line.
        (when flycheck-mode
          (concat (pcase flycheck-last-status-change
                    (`running
-                    (format "%s - -" (koek-ml/current-checker-name)))
+                    (format "%s - -" (koek-ml/checker-name)))
                    (`finished
                     (let-alist (flycheck-count-errors flycheck-current-errors)
                       (format "%s %d %d"
-                              (koek-ml/current-checker-name)
+                              (koek-ml/checker-name)
                               (or .error 0) (or .warning 0))))
                    (`,status
                     (capitalize
                      (replace-regexp-in-string "-" " " (symbol-name status)))))
                  koek-ml/separator)))
-      ("(" mode-name minor-mode-alist ")")
+      ("(" mode-name mode-line-process minor-mode-alist ")")
       " ")
     "List of mode line constructs shown right.")
 
@@ -638,9 +716,7 @@ in mode line.
                   (:eval
                    (let* ((inhibit-mode-name-delight nil) ; Looked up dynamically
                           (right (format-mode-line koek-ml/right)))
-                     `((;; FIXME: When a package (e.g. ediff) wraps
-                        ;; mode-line-format, pad width is wrong
-                        ,(max 0 (- (window-total-width) (string-width right)))
+                     `((,(max 0 (- (window-total-width) (string-width right)))
                         ("" koek-ml/left koek-ml/separator))
                        ;; Escape %'s
                        ,(replace-regexp-in-string "%" "%%" right))))))
