@@ -84,6 +84,14 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
 #+END_SRC
 
+** autorevert - Revert file on external change
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert
+    :config
+    (global-auto-revert-mode)
+    :delight auto-revert-mode)
+#+END_SRC
+
 ** recentf - Recent files
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
