@@ -11,15 +11,15 @@
 ;; decreasing it makes garbage collection less noticeable. Increase
 ;; cons threshold during initialization so Emacs starts fast.
 (let ((cons-threshold gc-cons-threshold))
-  (fset 'koek/reset-gc-cons-threshold
+  (fset 'koek-gc/reset-cons-threshold
         (lambda ()
           "Reset `gc-cons-threshold' to its original value."
           (setq gc-cons-threshold cons-threshold))))
 
-(declare-function koek/reset-gc-cons-threshold "init")
+(declare-function koek-gc/reset-cons-threshold "init")
 
 (setq gc-cons-threshold (* gc-cons-threshold 128))
-(add-hook 'after-init-hook #'koek/reset-gc-cons-threshold)
+(add-hook 'after-init-hook #'koek-gc/reset-cons-threshold)
 
 ;;; package - Package manager
 (require 'package)
