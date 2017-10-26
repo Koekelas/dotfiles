@@ -554,7 +554,9 @@ in mode line.
       (when (symbolp status)
         (setq status (symbol-value status)))
       (unless (string= status "")
-        (string-trim status))))
+        (replace-regexp-in-string (rx (or (and string-start "[")
+                                          (and "] " string-end)))
+                                  "" status))))
 
   (define-advice ediff-refresh-mode-lines (:after () koek-ml/update-ediff)
     (setq mode-line-format koek-ml/ediff)
@@ -648,31 +650,29 @@ in mode line.
       (koek-ml/variant-name
        ((:propertize koek-ml/variant-name face mode-line-emphasis)
         (koek-ml/diff-status
-         (": " koek-ml/diff-status))
+         (" " koek-ml/diff-status))
         koek-ml/separator))
       (:eval
        (let ((depth (- (recursion-depth) (minibuffer-depth))))
          (when (> depth 0)
-           (format "[%d]%s" depth koek-ml/separator))))
+           (format (concat "[%d]" koek-ml/separator) depth))))
       (current-input-method
        ("" current-input-method-title koek-ml/separator))
       (:eval
        (when eyebrowse-mode
-         (let ((workspaces (koek-ml/workspaces)))
-           (when (> (length workspaces) 1)
-             (let ((current-id (koek-ml/current-workspace-id)))
-               (format
-                "[%s]%s"
-                (mapconcat
-                 (lambda (workspace)
-                   (let ((label (koek-ml/workspace-label workspace)))
-                     (when (= (koek-ml/workspace-id workspace) current-id)
-                       (setq label
-                             (propertize label
-                                         'face 'eyebrowse-mode-line-active)))
-                     label))
-                 workspaces " ")
-                koek-ml/separator))))))
+         (let ((workspaces (koek-ml/workspaces))
+               (current-id (koek-ml/current-workspace-id)))
+           (when (or (> (length workspaces) 1) (not (= current-id 1)))
+             (concat
+              (mapconcat
+               (lambda (workspace)
+                 (let ((label (koek-ml/workspace-label workspace)))
+                   (when (= (koek-ml/workspace-id workspace) current-id)
+                     (setq label
+                           (propertize label 'face 'eyebrowse-mode-line-active)))
+                   label))
+               workspaces " ")
+              koek-ml/separator)))))
       ((:eval
         (when (projectile-project-p)
           (format "%s/" (projectile-project-name))))
@@ -695,9 +695,8 @@ in mode line.
                              (any "-:@!?")
                              (submatch-n 2 (one-or-more word)))
                          status)
-           (format "%s %s%s"
-                   (match-string 1 status) (match-string 2 status)
-                   koek-ml/separator))))
+           (format (concat "%s %s" koek-ml/separator)
+                   (match-string 1 status) (match-string 2 status)))))
       (:eval
        (when flycheck-mode
          (concat (pcase flycheck-last-status-change
