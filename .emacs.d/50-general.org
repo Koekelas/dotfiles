@@ -352,6 +352,15 @@ Bury buffers, don't kill them. Computers have more than enough memory.
   (bind-key [remap kill-buffer] #'koek-buff/bury-current)
 #+END_SRC
 
+* Other
+
+** calendar.el - Calendar
+#+BEGIN_SRC emacs-lisp
+  (use-package calendar
+    :config
+    (setq calendar-week-start-day 1))     ; Monday
+#+END_SRC
+
 * Languages
 
 ** Emacs Lisp
