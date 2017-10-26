@@ -21,6 +21,28 @@ only mode.
   (setq user-mail-address "nicodeja@gmail.com")
 #+END_SRC
 
+* Files & directories
+#+BEGIN_SRC emacs-lisp
+  (defconst koek/home-dir
+    (let ((kratos "d:/"))
+      (if (file-exists-p kratos)
+          kratos
+        (expand-file-name "~/")))
+    "File name to Koekelas' home directory.")
+
+  (defconst koek/documents-dir
+    (expand-file-name "20 Documenten/" koek/home-dir)
+    "File name to Koekelas' documents directory.")
+
+  (defconst koek/to-do-file
+    (expand-file-name "Varia/To Do.org" koek/documents-dir)
+    "File name to Koekelas' main to-do file.")
+
+  (defconst koek/projects-dir
+    (expand-file-name "21 Projecten/" koek/home-dir)
+    "File name to Koekelas' projects directory.")
+#+END_SRC
+
 * Footer
 #+BEGIN_SRC emacs-lisp
   ;;; 90-personal.el ends here
