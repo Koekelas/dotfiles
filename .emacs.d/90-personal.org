@@ -25,27 +25,27 @@ only mode.
 #+BEGIN_SRC emacs-lisp
   (defconst koek/home-dir-kratos
     "d:/"
-    "File name to Koekelas' home directory on Kratos.")
+    "File name to home directory on Kratos.")
 
   (defconst koek/home-dir
     (if (file-exists-p koek/home-dir-kratos)
         koek/home-dir-kratos
       (expand-file-name "~/"))
-    "File name to Koekelas' home directory.")
+    "File name to home directory.")
 
   (defconst koek/org-dir
     (expand-file-name "20 Documenten/Varia/" koek/home-dir)
-    "File name to Koekelas' org directory.")
+    "File name to org directory.")
 
   (defconst koek/projects-dir
     (expand-file-name "21 Projecten/" koek/home-dir)
-    "File name to Koekelas' projects directory.")
+    "File name to projects directory.")
 
   (defconst koek/agenda-files
     (mapcar (lambda (file-name)
               (expand-file-name file-name koek/org-dir))
             '("To Do.org" "Afspraken.org"))
-    "List of file names to Koekelas' static agenda files.")
+    "List of file names to static agenda files.")
 #+END_SRC
 
 * Footer
