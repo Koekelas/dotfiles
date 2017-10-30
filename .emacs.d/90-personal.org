@@ -48,6 +48,58 @@ only mode.
     "List of file names to static agenda files.")
 #+END_SRC
 
+* To-do's & agenda
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :preface
+    (defun koek/directories (file-name &optional full)
+      "Return directories below FILE-NAME.
+  When optional FULL is truthy, return absolute file names."
+      (mapcar
+       (lambda (spec)
+         (concat (car spec) "/"))
+       (seq-filter (pcase-lambda (`(,file-name ,type))
+                     (let ((name (file-name-nondirectory file-name)))
+                       (and (eq type t)   ; t means directory
+                            (not (or (string= name ".") (string= name ".."))))))
+                   (directory-files-and-attributes file-name full))))
+
+    (defun koek/agenda-files ()
+      "Return agenda files for active projects.
+  An org file is an agenda file when it's a child of a child
+  directory of `koek/projects-dir' and its name without extension
+  is equal to the name of its parent directory."
+      (seq-filter
+       #'file-exists-p
+       (mapcar (lambda (file-name)
+                 (concat file-name
+                         (file-name-nondirectory (directory-file-name file-name))
+                         ".org"))
+               (koek/directories koek/projects-dir 'full))))
+
+    (defun koek/update-agenda-files ()
+      "Update active agenda files."
+      (setq org-agenda-files
+            (append koek/agenda-files (koek/agenda-files))))
+
+    (define-advice org-refile (:before (&rest _args) koek/update-refile-targets)
+      (koek/update-agenda-files))
+    :config
+    (defvar org-capture-templates)
+
+    (setq org-directory koek/org-dir)
+    (setq org-capture-templates
+          '(("t" "Task" entry (file+olp "To Do.org" "Taken")
+             "* TODO %?"
+             :empty-lines 1)
+            ("a" "Appointment" entry (file "Afspraken.org")
+             "* %?"
+             :empty-lines 1)))
+    (setq org-refile-targets '((nil . (:maxlevel . 3)) ; Current
+                               (org-agenda-files . (:maxlevel . 3))))
+    (add-hook 'org-agenda-mode-hook #'koek/update-agenda-files))
+#+END_SRC
+
 * Footer
 #+BEGIN_SRC emacs-lisp
   ;;; 90-personal.el ends here

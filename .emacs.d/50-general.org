@@ -326,6 +326,10 @@ For the major mode, see [[*YASnippet][YASnippet]].
      ("C-c w w" . eyebrowse-last-window-config)
      ("C-c w k" . eyebrowse-close-window-config))
     :config
+    ;; Prevent conflict with org
+    (setq minor-mode-map-alist
+          (assq-delete-all 'eyebrowse-mode minor-mode-map-alist))
+
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
 #+END_SRC
@@ -368,6 +372,34 @@ Bury buffers, don't kill them. Computers have more than enough memory.
   (use-package elisp-mode
     :mode ((rx ".el" string-end) . emacs-lisp-mode)
     :delight (emacs-lisp-mode "El" :major))
+#+END_SRC
+
+** Org
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :mode ((rx ".org" string-end) . org-mode)
+    :bind
+    (("C-c o c" . org-capture)
+     ("C-c o a" . org-agenda)
+     ("C-c o j" . org-clock-goto)
+     ("C-c o o" . org-clock-out)
+     ("C-c o x" . org-clock-cancel)
+     ("C-c o l" . org-store-link)
+     :map org-mode-map
+     ("C-c o i" . org-clock-in)
+     ("C-M-f" . org-forward-heading-same-level)
+     ("C-M-b" . org-backward-heading-same-level)
+     ("C-M-n" . org-next-visible-heading)
+     ("C-M-p" . org-previous-visible-heading)
+     ("C-M-u" . outline-up-heading)
+     ("C-M-a" . org-previous-block)
+     ("C-M-e" . org-next-block))
+    :config
+    (defvar org-export-headline-levels)
+
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (setq org-export-headline-levels 4))
 #+END_SRC
 
 ** Text
@@ -505,6 +537,7 @@ Show:
 - project name, buffer name and buffer state
 - narrow, percentage buffer above first visible line, line number and
   column number
+- clocked time
 - version control name and branch name
 - checker name, number of errors and number of warnings
 - major name, process status and minor names
@@ -696,6 +729,10 @@ in mode line.
        "%p"
        " %l,%c"
        koek-ml/separator)
+      (:eval
+       (when (org-clock-is-active)
+         (concat (org-duration-from-minutes (org-clock-get-clocked-time))
+                 koek-ml/separator)))
       (:eval
        (when vc-mode
          (let ((status (substring-no-properties vc-mode)))
