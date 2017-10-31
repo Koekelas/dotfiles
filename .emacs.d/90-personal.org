@@ -53,7 +53,7 @@ only mode.
   (use-package org
     :preface
     (defun koek/directories (file-name &optional full)
-      "Return directories below FILE-NAME.
+      "Return directories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names."
       (mapcar
        (lambda (spec)
@@ -66,9 +66,9 @@ only mode.
 
     (defun koek/agenda-files ()
       "Return agenda files for active projects.
-  An org file is an agenda file when it's a child of a child
-  directory of `koek/projects-dir' and its name without extension
-  is equal to the name of its parent directory."
+  An org file is an agenda file when its name without extension is
+  equal to the name of its parent and its parent is a child of
+  `koek/projects-dir'."
       (seq-filter
        #'file-exists-p
        (mapcar (lambda (file-name)
