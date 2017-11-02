@@ -157,15 +157,15 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 ** auto-fill-mode - Break long sentences
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-af/exclude-modes
+  (defconst koek-af/excluded-modes
     '(snippet-mode)
     "List of major mode symbols, see `koek-af/maybe-enable'.")
 
   (defun koek-af/maybe-enable ()
     "Enable `auto-fill-mode' conditionally.
-  Unless current major mode is a member of `koek-af/exclude-modes',
-  enable `auto-fill-mode'."
-    (unless (memq major-mode koek-af/exclude-modes)
+  Unless current major mode is a member of
+  `koek-af/excluded-modes', enable `auto-fill-mode'."
+    (unless (memq major-mode koek-af/excluded-modes)
       (auto-fill-mode)))
 
   (add-hook 'text-mode-hook #'koek-af/maybe-enable)
@@ -395,12 +395,26 @@ Bury buffers, don't kill them. Computers have more than enough memory.
      ("C-M-u" . outline-up-heading)
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block))
+    :preface
+    ;; When editing code blocks, disable certain checkers
+    (defconst koek-org/excluded-checkers
+      '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
+      "Alist of excluded checker pairs.
+  A pair is a cons. Its car is a major mode symbol, its cdr is a
+  list of checker symbols.")
+
+    (defun koek-org/disable-excluded-checkers ()
+      "Disable excluded checkers for current."
+      (dolist (checker (alist-get major-mode koek-org/excluded-checkers))
+        (unless (memq checker flycheck-disabled-checkers)
+          (push checker flycheck-disabled-checkers))))
     :config
     (defvar org-export-headline-levels)
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
-    (setq org-export-headline-levels 4))
+    (setq org-export-headline-levels 4)
+    (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
 #+END_SRC
 
 ** Text
