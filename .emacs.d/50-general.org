@@ -327,7 +327,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
      ("C-c w w" . eyebrowse-last-window-config)
      ("C-c w k" . eyebrowse-close-window-config))
     :config
-    ;; Prevent conflict with org
+    ;; Resolve keybinding conflict with org
     (setq minor-mode-map-alist
           (assq-delete-all 'eyebrowse-mode minor-mode-map-alist))
 
@@ -394,7 +394,10 @@ Bury buffers, don't kill them. Computers have more than enough memory.
      ("C-M-p" . org-previous-visible-heading)
      ("C-M-u" . outline-up-heading)
      ("C-M-a" . org-previous-block)
-     ("C-M-e" . org-next-block))
+     ("C-M-e" . org-next-block)
+     :map org-src-mode-map
+     ("C-c o '" . org-edit-src-exit)
+     ("C-c o k" . org-edit-src-abort))
     :preface
     ;; When editing code blocks, disable certain checkers
     (defconst koek-org/excluded-checkers
@@ -410,6 +413,10 @@ Bury buffers, don't kill them. Computers have more than enough memory.
           (push checker flycheck-disabled-checkers))))
     :config
     (defvar org-export-headline-levels)
+
+    ;; Resolve keybinding conflict with cider
+    (dolist (key '("C-c '" "C-c C-k"))
+      (unbind-key key org-src-mode-map))
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
