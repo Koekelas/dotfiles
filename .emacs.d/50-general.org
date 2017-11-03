@@ -251,6 +251,14 @@ End files with an empty line.
     :delight)
 #+END_SRC
 
+** Complete text around point
+When the line is indented, make the tab key complete the text around
+point.
+
+#+BEGIN_SRC emacs-lisp
+  (setq tab-always-indent 'complete)
+#+END_SRC
+
 ** yasnippet - Snippets
 [[https://github.com/joaotavora/yasnippet][yasnippet (GitHub)]]
 
