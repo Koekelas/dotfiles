@@ -359,7 +359,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 
 * Other
 
-** calendar.el - Calendar
+** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
     :config
