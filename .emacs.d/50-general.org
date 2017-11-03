@@ -420,6 +420,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (setq org-adapt-indentation nil)
     (setq org-export-headline-levels 4)
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
 #+END_SRC
