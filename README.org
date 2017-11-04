@@ -8,11 +8,12 @@
 - [[https://git-scm.com/][Git]]
 - [[https://hunspell.github.io/][Hunspell]]
 - [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+- [[https://www.x.org/][xprop]]
 
 On Arch Linux, run:
 
 #+BEGIN_SRC sh
-  pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts
+  pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts xorg-xprop
 #+END_SRC
 
 * Issues

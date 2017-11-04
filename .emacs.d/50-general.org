@@ -492,6 +492,13 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
     :preface
+    (defun koek-thm/set-dark-wm-theme-variant (frame)
+      "Set window manager theme variant of FRAME to dark."
+      (call-process "xprop" nil nil nil
+                    "-id" (frame-parameter frame 'outer-window-id)
+                    "-f" "_GTK_THEME_VARIANT" "8u"
+                    "-set" "_GTK_THEME_VARIANT" "dark"))
+
     (defun koek-thm/mix (color1 color2 &optional ratio)
       "Mix COLOR1 with COLOR2 according to RATIO.
   COLOR1 and COLOR2 are lists of RGB components, see
@@ -509,6 +516,12 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     (declare-function color-rgb-to-hex "color")
     (declare-function map-elt "map")
 
+    ;; Set frame (i.e. window manager) theme
+    (when (executable-find "xprop")
+      (koek-thm/set-dark-wm-theme-variant (selected-frame))
+      (add-hook 'after-make-frame-functions #'koek-thm/set-dark-wm-theme-variant))
+
+    ;; Set window theme
     (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
     (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
            (personal
