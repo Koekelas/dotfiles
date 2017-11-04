@@ -70,6 +70,6 @@ PACKAGE-NAME is a symbol."
 ;; directory-files returns a sorted list so 00-*.org loads before
 ;; 10-*.org, 10-*.org before 20-*.org, 20-*.org before 30-*.org, etc.
 (mapc #'org-babel-load-file
-      (directory-files user-emacs-directory 'full "\\.org$"))
+      (directory-files user-emacs-directory 'full (rx ".org" line-end)))
 
 ;;; init.el ends here
