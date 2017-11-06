@@ -5,15 +5,22 @@
 * Dependencies
 
 ** Emacs
-- [[https://git-scm.com/][Git]]
-- [[https://hunspell.github.io/][Hunspell]]
-- [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
-- [[https://www.x.org/][xprop]]
+- General:
+  - [[https://git-scm.com/][Git]]
+  - [[https://hunspell.github.io/][Hunspell]]
+  - [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+  - [[https://www.x.org/][xprop]]
+- Org:
+  - [[https://www.latex-project.org/][LaTeX]]
 
 On Arch Linux, run:
 
 #+BEGIN_SRC sh
+  # General
   pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts xorg-xprop
+
+  # Org
+  pacman -S texlive-core texlive-latexextra
 #+END_SRC
 
 * Issues
