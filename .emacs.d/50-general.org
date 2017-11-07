@@ -769,7 +769,7 @@ in mode line.
   (defconst koek-ml/right
     '(((:eval
         (when (buffer-narrowed-p)
-          "Narrowed "))
+          (concat (propertize "Narrowed" 'face 'mode-line-emphasis) " ")))
        "%p"
        " %l,%c"
        koek-ml/separator)
