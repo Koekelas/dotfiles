@@ -615,7 +615,7 @@ in mode line.
              (:propertize "%b" face mode-line-buffer-id)
              koek-ml/separator))
            ,right))))
-    "List of mode line constructs shown in ediff control buffer.")
+    "List of mode line constructs for the ediff control buffer.")
 
   (defvar-local koek-ml/variant-name
     nil
