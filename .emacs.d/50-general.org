@@ -111,6 +111,25 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 * Editor
 
+** Jump to recent mark positions
+When popping mark, skip consecutive identical marks.
+
+#+BEGIN_SRC emacs-lisp
+  (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
+    (let ((start (point))
+          (n (length mark-ring))) ; mark-ring doesn't contain the last popped mark
+      (funcall f)
+      (while (and (= (point) start) (> n 0))
+        (funcall f)
+        (setq n (1- n)))))
+#+END_SRC
+
+When the last command was pop mark, press ~C-@~ to repeat it.
+
+#+BEGIN_SRC emacs-lisp
+  (setq set-mark-command-repeat-pop t)
+#+END_SRC
+
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
@@ -251,8 +270,8 @@ End files with an empty line.
     :delight)
 #+END_SRC
 
-** Complete text around point
-When the line is indented, make the tab key complete the text around
+** Complete text
+When the line is indented, press ~TAB~ to complete the text before
 point.
 
 #+BEGIN_SRC emacs-lisp
