@@ -124,7 +124,7 @@ When popping mark, skip consecutive identical marks.
         (setq n (1- n)))))
 #+END_SRC
 
-When the last command was pop mark, press ~C-@~ to repeat it.
+When the last command was pop mark, press ~C-SPC~ to repeat it.
 
 #+BEGIN_SRC emacs-lisp
   (setq set-mark-command-repeat-pop t)
@@ -227,6 +227,16 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (setq sp-navigate-interactive-always-progress-point t)
     (add-hook 'smartparens-mode-hook #'show-smartparens-mode)
     :delight)
+#+END_SRC
+
+** expand-region - Mark increasingly larger unit
+[[https://github.com/magnars/expand-region.el][expand-region (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind
+    ("C-S-SPC" . er/expand-region))
 #+END_SRC
 
 ** Whitespace
