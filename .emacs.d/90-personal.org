@@ -83,8 +83,7 @@ only mode.
             (append koek/agenda-files (koek/agenda-files))))
 
     (define-advice
-        org-agenda-redo-all
-        (:before (&rest _args) koek/update-agenda-files)
+        org-agenda-redo-all (:before (&rest _args) koek/update-agenda-files)
       (koek/update-agenda-files))
 
     (define-advice org-refile (:before (&rest _args) koek/update-refile-targets)
