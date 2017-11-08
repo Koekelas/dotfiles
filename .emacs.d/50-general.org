@@ -818,12 +818,6 @@ in mode line.
                        ,(replace-regexp-in-string "%" "%%" right))))))
 #+END_SRC
 
-Disable startup screen.
-
-#+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-screen t)
-#+END_SRC
-
 * Footer
 #+BEGIN_SRC emacs-lisp
   ;;; 50-general.el ends here

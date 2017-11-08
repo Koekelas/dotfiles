@@ -104,6 +104,20 @@ only mode.
     (add-hook 'org-agenda-mode-hook #'koek/update-agenda-files))
 #+END_SRC
 
+* Initial buffer
+Show agenda.
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek/initial-buffer ()
+    "Return initial buffer."
+    (org-agenda-list)
+    ;; Hide agenda so scratch is replaced
+    (delete-window)
+    (get-buffer "*Org Agenda*"))
+
+  (setq initial-buffer-choice #'koek/initial-buffer)
+#+END_SRC
+
 * Footer
 #+BEGIN_SRC emacs-lisp
   ;;; 90-personal.el ends here
