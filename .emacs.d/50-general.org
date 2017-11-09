@@ -576,7 +576,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (eyebrowse-mode-line-active :foreground unspecified
                                             :weight unspecified
                                             :inherit mode-line-emphasis)))))
-      ;; Adding attributes to a face before it's is defined, fails. Add
+      ;; Adding attributes to a face before it's defined, fails. Add
       ;; attributes to the user theme.
       (apply #'custom-set-faces
              (mapcar (pcase-lambda (`(,name . ,attribs))
