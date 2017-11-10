@@ -115,6 +115,16 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 
 * Editor
 
+** swiper - isearch replacement
+[[https://github.com/abo-abo/swiper][swiper (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :bind
+    ([remap isearch-forward] . swiper))
+#+END_SRC
+
 ** Jump to recent mark positions
 When popping mark, skip consecutive identical marks.
 
@@ -407,7 +417,8 @@ Bury buffers, don't kill them. Computers have more than enough memory.
   (use-package ivy
     :ensure t
     :config
-    (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+    (setq ivy-re-builders-alist '((swiper . ivy--regex-plus)
+                                  (t . ivy--regex-fuzzy)))
     (setq ivy-use-virtual-buffers t)
     (setq ivy-virtual-abbreviate 'full)
     (setq ivy-initial-inputs-alist nil)
