@@ -403,10 +403,6 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 ** ivy - completing-read replacement
 [[https://github.com/abo-abo/swiper][ivy (GitHub)]]
 
-Optional dependencies:
-
-- [[https://github.com/lewang/flx][flx]]: Score candidates
-
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
@@ -419,6 +415,9 @@ Optional dependencies:
     (ivy-mode)
     :delight)
 #+END_SRC
+
+*** flx - Score candidates
+[[https://github.com/lewang/flx][flx (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package flx
