@@ -410,21 +410,49 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 
 * Other
 
+** Minibuffer
+Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) in the minibuffer.
+
+#+BEGIN_SRC emacs-lisp
+  (setq enable-recursive-minibuffers t)
+#+END_SRC
+
 ** ivy - completing-read replacement
 [[https://github.com/abo-abo/swiper][ivy (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
+    :demand t
+    :bind
+    ("C-r" . ivy-resume)
     :config
-    (setq ivy-re-builders-alist '((swiper . ivy--regex-plus)
-                                  (t . ivy--regex-fuzzy)))
+    (setq ivy-re-builders-alist
+          '((swiper . ivy--regex-plus)
+            (counsel-unicode-char . ivy--regex-ignore-order)
+            (t . ivy--regex-fuzzy)))
     (setq ivy-use-virtual-buffers t)
     (setq ivy-virtual-abbreviate 'full)
     (setq ivy-initial-inputs-alist nil)
     (setq ivy-count-format "%d/%d ")
     (ivy-mode)
     :delight)
+#+END_SRC
+
+*** counsel - ivy powered commands
+[[https://github.com/abo-abo/swiper][counsel (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :bind
+    (([remap find-file] . counsel-find-file)
+     ([remap insert-char] . counsel-unicode-char)
+     ([remap yank-pop] . counsel-yank-pop)
+     ([remap execute-extended-command] . counsel-M-x)
+     ([remap describe-variable] . counsel-describe-variable)
+     ([remap describe-function] . counsel-describe-function)
+     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)))
 #+END_SRC
 
 *** flx - Score candidates
@@ -458,11 +486,13 @@ Bury buffers, don't kill them. Computers have more than enough memory.
     :bind
     (("C-c o c" . org-capture)
      ("C-c o a" . org-agenda)
-     ("C-c o j" . org-clock-goto)
+     ("C-c o j" . counsel-org-goto-all)
+     ("C-c o J" . org-clock-goto)
      ("C-c o o" . org-clock-out)
      ("C-c o x" . org-clock-cancel)
      ("C-c o l" . org-store-link)
      :map org-mode-map
+     ([remap org-set-tags-command] . counsel-org-tag)
      ("C-c o i" . org-clock-in)
      ("C-M-f" . org-forward-heading-same-level)
      ("C-M-b" . org-backward-heading-same-level)
@@ -499,6 +529,11 @@ Bury buffers, don't kill them. Computers have more than enough memory.
     (setq org-adapt-indentation nil)
     (setq org-export-headline-levels 4)
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
+
+  (use-package org-agenda
+    :bind
+    (:map org-agenda-mode-map
+     ([remap org-agenda-set-tags] . counsel-org-tag-agenda)))
 #+END_SRC
 
 ** Text
