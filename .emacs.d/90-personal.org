@@ -99,8 +99,9 @@ only mode.
             ("a" "Appointment" entry (file "Afspraken.org")
              "* %?"
              :empty-lines 1)))
-    (setq org-refile-targets '((nil . (:maxlevel . 3)) ; Current
-                               (org-agenda-files . (:maxlevel . 3))))
+    (setq org-refile-targets
+          '((nil . (:maxlevel . 3))       ; Current
+            (org-agenda-files . (:maxlevel . 3))))
     (add-hook 'org-agenda-mode-hook #'koek/update-agenda-files))
 #+END_SRC
 
