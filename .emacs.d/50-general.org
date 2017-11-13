@@ -235,7 +235,10 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (use-package smartparens
     :ensure t
     :bind
-    (:map smartparens-mode-map
+    (("C-M-{" . beginning-of-defun)
+     ("C-M-}" . end-of-defun)
+     ("C-S-w" . append-next-kill)
+     :map smartparens-mode-map
      ("C-M-f" . sp-forward-sexp)
      ("C-M-b" . sp-backward-sexp)
      ("C-M-n" . sp-next-sexp)
@@ -255,9 +258,6 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :init
-    (bind-key "C-M-{" #'beginning-of-defun)
-    (bind-key "C-M-}" #'end-of-defun)
-    (bind-key "C-S-w" #'append-next-kill)
     (add-hook 'prog-mode-hook #'smartparens-mode)
     :config
     (require 'smartparens-config)
@@ -517,8 +517,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ("C-c o x" . org-clock-cancel)
      ("C-c o l" . org-store-link)
      :map org-mode-map
-     ([remap org-set-tags-command] . counsel-org-tag)
-     ("C-c o i" . org-clock-in)
      ("C-M-f" . org-forward-heading-same-level)
      ("C-M-b" . org-backward-heading-same-level)
      ("C-M-n" . org-next-visible-heading)
@@ -526,6 +524,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ("C-M-u" . outline-up-heading)
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block)
+     ([remap org-set-tags-command] . counsel-org-tag)
+     ("C-c o i" . org-clock-in)
      :map org-src-mode-map
      ("C-c o '" . org-edit-src-exit)
      ("C-c o k" . org-edit-src-abort))
