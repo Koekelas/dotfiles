@@ -148,6 +148,16 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     (setq avy-dispatch-alist nil))
 #+END_SRC
 
+*** link-hint - Jump to visible link
+[[https://github.com/noctuid/link-hint.el][link-hint (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package link-hint
+    :ensure t
+    :bind
+    ("C-c j l" . link-hint-open-link))
+#+END_SRC
+
 ** Jump to recent mark positions
 When popping mark, skip consecutive identical marks.
 
