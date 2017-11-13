@@ -122,7 +122,30 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
   (use-package swiper
     :ensure t
     :bind
-    ([remap isearch-forward] . swiper))
+    (([remap isearch-forward] . swiper)
+     :map swiper-map
+     ("C-c j" . swiper-avy)))
+#+END_SRC
+
+** avy - Jump to visible position
+[[https://github.com/abo-abo/avy][avy (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind
+    (("C-c j j" . avy-goto-char-timer)
+     ([remap goto-line] . avy-goto-line)
+     :map org-mode-map
+     ;; Lazy loading requires key to be bound here
+     ("C-c j h" . avy-org-goto-heading-timer))
+    :preface
+    (defvar org-mode-map)
+    :config
+    (setq avy-all-windows nil)
+    (setq avy-all-windows-alt 'all-frames)
+    (setq avy-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
+    (setq avy-dispatch-alist nil))
 #+END_SRC
 
 ** Jump to recent mark positions
@@ -425,7 +448,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :demand t
     :bind
-    ("C-r" . ivy-resume)
+    (("C-r" . ivy-resume)
+     :map ivy-minibuffer-map
+     ("C-c j" . ivy-avy))
     :config
     (setq ivy-re-builders-alist
           '((swiper . ivy--regex-plus)
