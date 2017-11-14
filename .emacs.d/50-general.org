@@ -64,13 +64,13 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 
     ;; Setup restore window layout on quit
     (let (last-layout)
-      ;; Store window layout before it's modified. The control buffer
+      ;; Store window layout before it's modified. Control buffer
       ;; doesn't exist yet.
       (add-hook 'ediff-before-setup-hook
                 (lambda ()
                   (setq last-layout (current-window-configuration))))
-      ;; Store window layout in a local hook of the control buffer.
-      ;; Current is the control buffer.
+      ;; Store window layout in a local hook of control buffer. Current
+      ;; is control buffer.
       (add-hook 'ediff-mode-hook
                 (lambda ()
                   (let ((layout last-layout))
@@ -164,14 +164,14 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
     (let ((start (point))
-          (n (length mark-ring))) ; mark-ring doesn't contain the last popped mark
+          (n (length mark-ring))) ; mark-ring doesn't contain last popped mark
       (funcall f)
       (while (and (= (point) start) (> n 0))
         (funcall f)
         (setq n (1- n)))))
 #+END_SRC
 
-When the last command was pop mark, press ~C-SPC~ to repeat it.
+When last command was pop mark, press ~C-SPC~ to repeat it.
 
 #+BEGIN_SRC emacs-lisp
   (setq set-mark-command-repeat-pop t)
@@ -192,9 +192,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 #+BEGIN_SRC emacs-lisp
   (defun koek-mtn/next-word (&optional arg)
-    "Move point to the beginning of next word, repeat ARG times.
+    "Move point to beginning of next word, repeat ARG times.
   Optional ARG is an integer and defaults to one.  When ARG is
-  negative, move point to the ending of previous word."
+  negative, move point to ending of previous word."
     (interactive "p")
     (unless arg
       (setq arg 1))
@@ -209,9 +209,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
           (backward-word step)))))
 
   (defun koek-mtn/previous-word (&optional arg)
-    "Move point to the ending of previous word, repeat ARG times.
+    "Move point to ending of previous word, repeat ARG times.
   Optional ARG is an integer and defaults to one.  When ARG is
-  negative, move point to the beginning of next word."
+  negative, move point to beginning of next word."
     (interactive "p")
     (unless arg
       (setq arg 1))
@@ -229,8 +229,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
   (defun koek-af/maybe-enable ()
     "Enable `auto-fill-mode' conditionally.
-  Unless current major mode is a member of
-  `koek-af/excluded-modes', enable `auto-fill-mode'."
+  Unless current major mode is member of `koek-af/excluded-modes',
+  enable `auto-fill-mode'."
     (unless (memq major-mode koek-af/excluded-modes)
       (auto-fill-mode)))
 
@@ -293,13 +293,13 @@ Indent with spaces, not tabs.
   (setq-default indent-tabs-mode nil)
 #+END_SRC
 
-End sentences with a single space, not a double space.
+End sentences with single space, not double space.
 
 #+BEGIN_SRC emacs-lisp
   (setq sentence-end-double-space nil)
 #+END_SRC
 
-End files with an empty line.
+End files with empty line.
 
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
@@ -328,8 +328,7 @@ End files with an empty line.
 #+END_SRC
 
 ** Complete text
-When the line is indented, press ~TAB~ to complete the text before
-point.
+When line is indented, press ~TAB~ to complete text before point.
 
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
@@ -444,7 +443,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
 * Other
 
 ** Minibuffer
-Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) in the minibuffer.
+Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) in minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (setq enable-recursive-minibuffers t)
@@ -544,8 +543,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (defconst koek-org/excluded-checkers
       '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
       "Alist of excluded checker pairs.
-  A pair is a cons. Its car is a major mode symbol, its cdr is a
-  list of checker symbols.")
+  Pair is a cons. Its car is a major mode symbol, its cdr is a list
+  of checker symbols.")
 
     (defun koek-org/disable-excluded-checkers ()
       "Disable excluded checkers for current."
@@ -686,7 +685,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                             :weight unspecified
                                             :inherit mode-line-emphasis)))))
       ;; Adding attributes to a face before it's defined, fails. Add
-      ;; attributes to the user theme.
+      ;; attributes to user theme.
       (apply #'custom-set-faces
              (mapcar (pcase-lambda (`(,name . ,attribs))
                        `(,name ((t . ,attribs))))
@@ -753,7 +752,7 @@ in mode line.
              (:propertize "%b" face mode-line-buffer-id)
              koek-ml/separator))
            ,right))))
-    "List of mode line constructs for the ediff control buffer.")
+    "List of mode line constructs for ediff control buffer.")
 
   (defvar-local koek-ml/variant-name
     nil
@@ -843,10 +842,10 @@ in mode line.
 
   (defun koek-ml/workspace-label (workspace)
     "Return label of WORKSPACE.
-  A label is made of a workspace id and name."
+  Label is made of a workspace id and name."
     (let ((id (or (koek-ml/arabic-to-roman (koek-ml/workspace-id workspace))
-                  ;; A Roman numeral for zero doesn't exist. N stands
-                  ;; for nulla, which means zero.
+                  ;; Roman numeral zero doesn't exist. N stands for
+                  ;; nulla, which means zero.
                   "N"))
           (name (koek-ml/workspace-name workspace)))
       (if name
