@@ -41,7 +41,7 @@ only mode.
     (expand-file-name "21 Projecten/" koek/home-dir)
     "File name to projects directory.")
 
-  (defconst koek/agenda-files
+  (defconst koek/static-agenda-files
     (mapcar (lambda (file-name)
               (expand-file-name file-name koek/org-dir))
             '("To Do.org" "Afspraken.org"))
@@ -65,29 +65,21 @@ only mode.
                    (directory-files-and-attributes file-name full))))
 
     (defun koek/agenda-files ()
-      "Return agenda files for active projects.
-  An org file is an agenda file when its name without extension is
-  equal to the name of its parent and its parent is a child of
-  `koek/projects-dir'."
-      (seq-filter
-       #'file-exists-p
-       (mapcar (lambda (file-name)
-                 (concat file-name
-                         (file-name-nondirectory (directory-file-name file-name))
-                         ".org"))
-               (koek/directories koek/projects-dir 'full))))
-
-    (defun koek/update-agenda-files ()
-      "Update active agenda files."
-      (setq org-agenda-files
-            (append koek/agenda-files (koek/agenda-files))))
+      "Return agenda files."
+      (append
+       koek/static-agenda-files
+       (seq-filter
+        #'file-exists-p
+        (mapcar (lambda (file-name)
+                  (concat file-name
+                          (file-name-nondirectory (directory-file-name file-name))
+                          ".org"))
+                (koek/directories koek/projects-dir 'full)))))
 
     (define-advice
-        org-agenda-redo-all (:before (&rest _args) koek/update-agenda-files)
-      (koek/update-agenda-files))
+        org-agenda-files (:before (&rest _args) koek/update-agenda-files)
+      (setq org-agenda-files (koek/agenda-files)))
 
-    (define-advice org-refile (:before (&rest _args) koek/update-refile-targets)
-      (koek/update-agenda-files))
     :config
     (defvar org-capture-templates)
 
@@ -101,8 +93,7 @@ only mode.
              :empty-lines 1)))
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
-            (org-agenda-files . (:maxlevel . 3))))
-    (add-hook 'org-agenda-mode-hook #'koek/update-agenda-files))
+            (koek/agenda-files . (:maxlevel . 3)))))
 #+END_SRC
 
 * Initial buffer
