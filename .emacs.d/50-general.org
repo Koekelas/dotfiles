@@ -373,8 +373,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
       ;; be set
       (when (eq system-type 'windows-nt)
         (setenv "DICTIONARY" dictionary-name))
-      (setq ispell-dictionary dictionary-name))
-    (put 'ispell-dictionary 'safe-local-variable #'stringp))
+      (setq ispell-dictionary dictionary-name)))
 #+END_SRC
 
 ** flycheck - Show syntax & style errors
