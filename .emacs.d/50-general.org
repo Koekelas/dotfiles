@@ -151,8 +151,8 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     :bind
     (("C-c j j" . avy-goto-char-timer)
      ([remap goto-line] . avy-goto-line)
-     :map org-mode-map
      ;; Lazy loading requires key to be bound here
+     :map org-mode-map
      ("C-c j h" . avy-org-goto-heading-timer))
     :preface
     (defvar org-mode-map)

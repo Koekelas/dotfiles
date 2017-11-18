@@ -60,7 +60,7 @@ only mode.
          (concat (car spec) "/"))
        (seq-filter (pcase-lambda (`(,file-name ,type))
                      (let ((name (file-name-nondirectory file-name)))
-                       (and (eq type t)   ; t means directory
+                       (and (eq type t)   ; Directory
                             (not (or (string= name ".") (string= name ".."))))))
                    (directory-files-and-attributes file-name full))))
 
