@@ -43,7 +43,22 @@ Declare variables and functions setup by [[file:init.el][init.el]].
   (use-package magit
     :ensure t
     :bind
-    ("C-c f g" . magit-status))
+    ("C-c f g" . magit-status)
+    :preface
+    (defun koek-git/check-spelling (force)
+      "Check spelling of commit message."
+      (if git-commit-mode
+          (let ((ispell-skip-region-alist ; Looked up dynamically
+                 (cons `(,(rx line-start "#") forward-line) ; Single line comment
+                       ispell-skip-region-alist))
+                (tick (buffer-chars-modified-tick)))
+            (ispell-buffer)
+            (or force
+                (= (buffer-chars-modified-tick) tick) ; No corrections made
+                (y-or-n-p "Spelling checked.  Commit? ")))
+        t))
+    :config
+    (add-hook 'with-editor-finish-query-functions #'koek-git/check-spelling))
 #+END_SRC
 
 ** ediff - Compare files
