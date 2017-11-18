@@ -179,7 +179,8 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
     (let ((start (point))
-          (n (length mark-ring))) ; mark-ring doesn't contain last popped mark
+          (n (length mark-ring)))
+      ;; Try current mark and previous marks in mark ring
       (funcall f)
       (while (and (= (point) start) (> n 0))
         (funcall f)
