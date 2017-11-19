@@ -46,7 +46,8 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     ("C-c f g" . magit-status)
     :preface
     (defun koek-git/check-spelling (force)
-      "Check spelling of commit message."
+      "Check spelling of commit message.
+  When FORCE is truthy, continue commit unconditionally."
       (if git-commit-mode
           (let ((ispell-skip-region-alist ; Looked up dynamically
                  (cons `(,(rx line-start "#") forward-line) ; Single line comment
