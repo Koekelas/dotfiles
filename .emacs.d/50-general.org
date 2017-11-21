@@ -586,6 +586,31 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap org-agenda-set-tags] . counsel-org-tag-agenda)))
 #+END_SRC
 
+** Scheme
+#+BEGIN_SRC emacs-lisp
+  (use-package scheme
+    :mode ((rx ".scm" string-end) . scheme-mode)
+    :delight (scheme-mode "Scm" :major))
+#+END_SRC
+
+*** geiser - Interact with Scheme process
+[[https://github.com/jaor/geiser][geiser (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser
+    :ensure t
+    :after scheme
+    :init
+    (defvar geiser-active-implementations)
+
+    ;; Set implementations before geiser is loaded
+    (setq geiser-active-implementations '(guile)))
+
+  (use-package geiser-autodoc
+    :after geiser
+    :delight geiser-autodoc-mode)
+#+END_SRC
+
 ** Text
 #+BEGIN_SRC emacs-lisp
   (use-package text-mode

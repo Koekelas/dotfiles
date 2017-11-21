@@ -12,6 +12,8 @@
   - [[https://www.x.org/][xprop]]
 - Org:
   - [[https://www.latex-project.org/][LaTeX]]
+- Scheme:
+  - [[https://www.gnu.org/software/guile/][Guile]]
 
 On Arch Linux, run:
 
@@ -21,6 +23,9 @@ On Arch Linux, run:
 
   # Org
   pacman -S texlive-core texlive-latexextra
+
+  # Scheme
+  pacman -S guile
 #+END_SRC
 
 * Issues
