@@ -198,7 +198,8 @@ When last command was pop mark, press ~C-SPC~ to repeat it.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :init
-    (add-hook 'prog-mode-hook #'subword-mode)
+    (dolist (hook '(prog-mode-hook comint-mode-hook))
+      (add-hook hook #'subword-mode))
     :delight)
 #+END_SRC
 
@@ -285,7 +286,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :init
-    (add-hook 'prog-mode-hook #'smartparens-mode)
+    (dolist (hook '(prog-mode-hook comint-mode-hook))
+      (add-hook hook #'smartparens-mode))
     :config
     (require 'smartparens-config)
     (setq sp-navigate-interactive-always-progress-point t)
