@@ -731,7 +731,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                `((alt . ,(koek-thm/mix current-line selection))))))
            (spec
             (map-let (alt selection orange) (append personal theme)
-              `((mode-line-emphasis :foreground ,orange :slant unspecified)
+              `((show-paren-match :foreground unspecified :background ,alt)
+                (mode-line-emphasis :foreground ,orange :slant unspecified)
                 (whitespace-space   :foreground ,alt :background nil)
                 (whitespace-hspace  :foreground ,alt :background nil)
                 (whitespace-tab     :foreground ,alt :background nil)
