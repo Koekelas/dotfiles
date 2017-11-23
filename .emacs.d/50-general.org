@@ -353,6 +353,21 @@ When line is indented, press ~TAB~ to complete text before point.
   (setq tab-always-indent 'complete)
 #+END_SRC
 
+Display tables affect overlays. When showing candidates, suspend
+whitespace mode.
+
+#+BEGIN_SRC emacs-lisp
+  (define-advice
+      completion-in-region
+      (:around (f &rest args) koek-cplt/suspend-whitespace-mode)
+    (let ((resume whitespace-mode))
+      (whitespace-mode 0)
+      (unwind-protect                     ; e.g. keyboard-quit
+          (apply f args)
+        (when resume
+          (whitespace-mode)))))
+#+END_SRC
+
 ** yasnippet - Snippets
 [[https://github.com/joaotavora/yasnippet][yasnippet (GitHub)]]
 
