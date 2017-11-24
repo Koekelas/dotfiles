@@ -733,13 +733,18 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
             (map-let (alt selection orange) (append personal theme)
               `((show-paren-match :foreground unspecified :background ,alt)
                 (mode-line-emphasis :foreground ,orange :slant unspecified)
-                (whitespace-space   :foreground ,alt :background nil)
-                (whitespace-hspace  :foreground ,alt :background nil)
-                (whitespace-tab     :foreground ,alt :background nil)
-                (whitespace-newline :foreground ,alt :background nil)
-                (whitespace-trailing :foreground nil :background ,selection)
-                (whitespace-empty    :foreground nil :background ,selection)
-                (whitespace-line     :foreground nil :background ,selection)
+                ;; whitespace-mode
+                (whitespace-space    :foreground ,alt :background unspecified)
+                (whitespace-hspace   :foreground ,alt :background unspecified)
+                (whitespace-tab      :foreground ,alt :background unspecified)
+                (whitespace-newline  :foreground ,alt :background unspecified)
+                (whitespace-trailing :foreground unspecified
+                                     :background ,selection)
+                (whitespace-empty    :foreground unspecified
+                                     :background ,selection)
+                (whitespace-line     :foreground unspecified
+                                     :background ,selection)
+                ;; eyebrowse-mode
                 (eyebrowse-mode-line-active :foreground unspecified
                                             :weight unspecified
                                             :inherit mode-line-emphasis)))))
