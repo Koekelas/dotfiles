@@ -239,7 +239,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (bind-key "M-p" #'koek-mtn/previous-word)
 #+END_SRC
 
-** auto-fill-mode - Break long sentences
+** auto-fill - Break long sentences
 #+BEGIN_SRC emacs-lisp
   (defconst koek-af/excluded-modes
     '(snippet-mode)
