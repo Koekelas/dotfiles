@@ -204,8 +204,8 @@ When last command was pop mark, press ~C-SPC~ to repeat it.
 #+END_SRC
 
 ** Word motion commands
-Complement word motion commands. Unlike =forward-to-word= and
-=backward-to-word=, =koek-mtn/next-word= and =koek-mtn/previous-word=
+Complement word motion commands. Unlike ~forward-to-word~ and
+~backward-to-word~, ~koek-mtn/next-word~ and ~koek-mtn/previous-word~
 recognize [[*subword - Recognize words in camel case words][subwords]].
 
 #+BEGIN_SRC emacs-lisp
