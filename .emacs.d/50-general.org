@@ -292,6 +292,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
       (add-hook hook #'smartparens-mode))
     :config
     (require 'smartparens-config)
+
     (setq sp-navigate-interactive-always-progress-point t)
     (add-hook 'smartparens-mode-hook #'show-smartparens-mode)
     :delight)
@@ -376,6 +377,35 @@ whitespace mode.
           (apply f args)
         (when resume
           (whitespace-mode)))))
+#+END_SRC
+
+** lsp - Code insight
+[[https://github.com/emacs-lsp/lsp-mode][lsp-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :config
+    (require 'lsp-flycheck)
+    (declare-function lsp--make-stdio-connection "lsp-mode")
+    (declare-function lsp--should-start-p "lsp-methods")
+    (declare-function lsp--start "lsp-methods")
+    (declare-function make-lsp--client "lsp-methods")
+    (declare-function lsp--stdio-send-async "lsp-send")
+    (declare-function lsp--stdio-send-sync "lsp-send")
+    (declare-function projectile-project-p "projectile")
+    (declare-function projectile-project-root "projectile")
+
+    (lsp-define-stdio-client
+     koek-lsp/js
+     "javascript"
+     (lambda ()
+       (expand-file-name
+        (or (locate-dominating-file default-directory "package.json")
+            (and (projectile-project-p) (projectile-project-root))
+            default-directory)))
+     "javascript-typescript-stdio")
+    :delight)
 #+END_SRC
 
 ** yasnippet - Snippets
@@ -542,6 +572,12 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t)
 #+END_SRC
 
+** eldoc - Show documentation
+#+BEGIN_SRC emacs-lisp
+  (use-package eldoc
+    :delight eldoc-mode)
+#+END_SRC
+
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
@@ -558,6 +594,23 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :config
     (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
     :delight (emacs-lisp-mode "El" :major))
+#+END_SRC
+
+** JavaScript
+[[https://github.com/mooz/js2-mode][js2-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :mode (rx ".js" string-end)
+    :interpreter "node"
+    :config
+    (declare-function koek-lsp/js-enable "general")
+
+    (setq js2-mode-show-parse-errors nil)
+    (setq js2-mode-show-strict-warnings nil)
+    (add-hook 'js2-mode-hook #'koek-lsp/js-enable)
+    :delight (js2-mode "JS" :major))
 #+END_SRC
 
 ** Org
@@ -954,7 +1007,8 @@ in mode line.
         id)))
 
   (defconst koek-ml/checker-names
-    '((emacs-lisp . "El")
+    '((lsp . "LSP")
+      (emacs-lisp . "El")
       (emacs-lisp-checkdoc . "Checkdoc"))
     "Alist of checker symbol to checker name pairs.")
 
