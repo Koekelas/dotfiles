@@ -105,6 +105,8 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 #+BEGIN_SRC emacs-lisp
   (use-package autorevert
     :config
+    (declare-function global-auto-revert-mode "autorevert")
+
     (global-auto-revert-mode)
     :delight auto-revert-mode)
 #+END_SRC
@@ -384,12 +386,12 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
-    :preface
-    (declare-function yas-reload-all "yasnippet")
     :init
     (dolist (hook '(text-mode-hook prog-mode-hook))
       (add-hook hook #'yas-minor-mode))
     :config
+    (declare-function yas-reload-all "yasnippet")
+
     ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
     (yas-reload-all)
@@ -502,6 +504,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      :map ivy-minibuffer-map
      ("C-c j" . ivy-avy))
     :config
+    (declare-function ivy-mode "ivy")
+
     (setq ivy-re-builders-alist
           '((swiper . ivy--regex-plus)
             (counsel-unicode-char . ivy--regex-ignore-order)
