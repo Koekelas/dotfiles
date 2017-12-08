@@ -41,9 +41,13 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure t
+    :ensure t)
+
+  (use-package magit-status
     :bind
-    ("C-c f g" . magit-status)
+    ("C-c f g" . magit-status))
+
+  (use-package with-editor
     :preface
     (defun koek-git/check-spelling (force)
       "Check spelling of commit message.
