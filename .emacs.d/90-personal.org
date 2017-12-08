@@ -79,21 +79,21 @@ only mode.
     (define-advice
         org-agenda-files (:before (&rest _args) koek/update-agenda-files)
       (setq org-agenda-files (koek/agenda-files)))
-
     :config
-    (defvar org-capture-templates)
-
     (setq org-directory koek/org-dir)
+    (setq org-refile-targets
+          '((nil . (:maxlevel . 3))       ; Current
+            (koek/agenda-files . (:maxlevel . 3)))))
+
+  (use-package org-capture
+    :config
     (setq org-capture-templates
           '(("t" "Task" entry (file+olp "To Do.org" "Taken")
              "* TODO %?"
              :empty-lines 1)
             ("a" "Appointment" entry (file "Afspraken.org")
              "* %?"
-             :empty-lines 1)))
-    (setq org-refile-targets
-          '((nil . (:maxlevel . 3))       ; Current
-            (koek/agenda-files . (:maxlevel . 3)))))
+             :empty-lines 1))))
 #+END_SRC
 
 * Initial buffer

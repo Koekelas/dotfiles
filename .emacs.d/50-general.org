@@ -153,12 +153,7 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     :ensure t
     :bind
     (("C-c j j" . avy-goto-char-timer)
-     ([remap goto-line] . avy-goto-line)
-     ;; Lazy loading requires key to be bound here
-     :map org-mode-map
-     ("C-c j h" . avy-org-goto-heading-timer))
-    :preface
-    (defvar org-mode-map)
+     ([remap goto-line] . avy-goto-line))
     :config
     (setq avy-all-windows nil)
     (setq avy-all-windows-alt 'all-frames)
@@ -237,8 +232,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
       (setq arg 1))
     (koek-mtn/next-word (- arg)))
 
-  (bind-key "M-n" #'koek-mtn/next-word)
-  (bind-key "M-p" #'koek-mtn/previous-word)
+  (bind-keys
+   ("M-n" . koek-mtn/next-word)
+   ("M-p" . koek-mtn/previous-word))
 #+END_SRC
 
 ** auto-fill - Break long sentences
@@ -562,7 +558,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap execute-extended-command] . counsel-M-x)
      ([remap describe-variable] . counsel-describe-variable)
      ([remap describe-function] . counsel-describe-function)
-     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)))
+     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+     ("C-c o j" . counsel-org-goto-all)))
 #+END_SRC
 
 *** flx - Score candidates
@@ -619,28 +616,64 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package org
     :mode ((rx ".org" string-end) . org-mode)
     :bind
-    (("C-c o c" . org-capture)
-     ("C-c o a" . org-agenda)
-     ("C-c o j" . counsel-org-goto-all)
-     ("C-c o J" . org-clock-goto)
-     ("C-c o o" . org-clock-out)
-     ("C-c o x" . org-clock-cancel)
-     ("C-c o l" . org-store-link)
+    (("C-c o l" . org-store-link)
      :map org-mode-map
      ("C-M-f" . org-forward-heading-same-level)
      ("C-M-b" . org-backward-heading-same-level)
      ("C-M-n" . org-next-visible-heading)
      ("C-M-p" . org-previous-visible-heading)
-     ("C-M-u" . outline-up-heading)
      ("C-M-a" . org-previous-block)
-     ("C-M-e" . org-next-block)
-     ([remap org-set-tags-command] . counsel-org-tag)
-     ("C-c o i" . org-clock-in)
-     :map org-src-mode-map
+     ("C-M-e" . org-next-block))
+    :config
+    (use-package avy
+      :bind
+      (:map org-mode-map
+       ("C-c j h" . avy-org-goto-heading-timer)))
+
+    (use-package counsel
+      :bind
+      (:map org-mode-map
+       ([remap org-set-tags-command] . counsel-org-tag)))
+
+    (use-package org-clock
+      :bind
+      (:map org-mode-map
+       ("C-c o i" . org-clock-in)))
+
+    (use-package outline
+      :bind
+      (:map org-mode-map
+       ("C-M-u" . outline-up-heading)))
+
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (setq org-adapt-indentation nil))
+
+  (use-package org-agenda
+    :bind
+    ("C-c o a" . org-agenda)
+    :config
+    (use-package counsel
+      :bind
+      (:map org-agenda-mode-map
+       ([remap org-agenda-set-tags] . counsel-org-tag-agenda))))
+
+  (use-package org-capture
+    :bind
+    ("C-c o c" . org-capture))
+
+  (use-package org-clock
+    :bind
+    (("C-c o J" . org-clock-goto)
+     ("C-c o o" . org-clock-out)
+     ("C-c o x" . org-clock-cancel)))
+
+  (use-package org-src
+    :bind
+    (:map org-src-mode-map
      ("C-c o '" . org-edit-src-exit)
      ("C-c o k" . org-edit-src-abort))
     :preface
-    ;; When editing code blocks, disable certain checkers
     (defconst koek-org/excluded-checkers
       '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
       "Alist of excluded checker pairs.
@@ -653,22 +686,15 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
         (unless (memq checker flycheck-disabled-checkers)
           (push checker flycheck-disabled-checkers))))
     :config
-    (defvar org-export-headline-levels)
-
     ;; Resolve keybinding conflict with cider
     (dolist (key '("C-c '" "C-c C-k"))
       (unbind-key key org-src-mode-map))
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
-    (setq org-adapt-indentation nil)
-    (setq org-export-headline-levels 4)
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
 
-  (use-package org-agenda
-    :bind
-    (:map org-agenda-mode-map
-     ([remap org-agenda-set-tags] . counsel-org-tag-agenda)))
+  (use-package ox
+    :config
+    (setq org-export-headline-levels 4))
 #+END_SRC
 
 ** Scheme
