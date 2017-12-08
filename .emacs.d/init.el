@@ -13,7 +13,7 @@
 (let ((cons-threshold gc-cons-threshold))
   (fset 'koek-gc/reset-cons-threshold
         (lambda ()
-          "Reset `gc-cons-threshold' to its original value."
+          "Reset `gc-cons-threshold' to its initial value."
           (setq gc-cons-threshold cons-threshold))))
 
 (declare-function koek-gc/reset-cons-threshold "init")
