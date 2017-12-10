@@ -270,10 +270,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (use-package smartparens
     :ensure t
     :bind
-    (("C-M-{" . beginning-of-defun)
-     ("C-M-}" . end-of-defun)
-     ("C-S-w" . append-next-kill)
-     :map smartparens-mode-map
+    (:map smartparens-mode-map
      ("C-M-f" . sp-forward-sexp)
      ("C-M-b" . sp-backward-sexp)
      ("C-M-n" . sp-next-sexp)
@@ -293,6 +290,10 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :init
+    (bind-keys
+     ("C-M-{" . beginning-of-defun)
+     ("C-M-}" . end-of-defun)
+     ("C-S-w" . append-next-kill))
     (dolist (hook '(prog-mode-hook comint-mode-hook))
       (add-hook hook #'smartparens-mode))
     :config
