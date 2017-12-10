@@ -71,7 +71,9 @@ Declare variables and functions setup by [[file:init.el][init.el]].
   (use-package ediff
     :bind
     (("C-c f d" . ediff-files)
-     ("C-c f b" . ediff-current-file))
+     ("C-c f b" . ediff-current-file)))
+
+  (use-package ediff-init
     :preface
     (declare-function outline-show-all "outline")
 
@@ -80,8 +82,6 @@ Declare variables and functions setup by [[file:init.el][init.el]].
       (when (derived-mode-p 'outline-mode) ; org is derived from outline
         (outline-show-all)))
     :config
-    (declare-function ediff-setup-windows-plain "ediff-wind")
-
     ;; Setup restore window layout on quit
     (let (last-layout)
       ;; Store window layout before it's modified. Control buffer
@@ -100,9 +100,14 @@ Declare variables and functions setup by [[file:init.el][init.el]].
                                 (set-window-configuration layout))
                               'append 'local)))))
 
-    (setq ediff-window-setup-function #'ediff-setup-windows-plain)
-    (setq ediff-split-window-function #'split-window-horizontally)
     (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
+
+  (use-package ediff-wind
+    :config
+    (declare-function ediff-setup-windows-plain "ediff-wind")
+
+    (setq ediff-window-setup-function #'ediff-setup-windows-plain)
+    (setq ediff-split-window-function #'split-window-right))
 #+END_SRC
 
 ** autorevert - Revert file on external change
