@@ -385,6 +385,64 @@ whitespace mode.
           (whitespace-mode)))))
 #+END_SRC
 
+** company - Autocomplete code
+[[https://github.com/company-mode/company-mode][company (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :bind
+    (:map company-mode-map
+     ([remap completion-at-point] . company-complete-common)
+     ([remap indent-for-tab-command] . company-indent-or-complete-common)
+     :map company-active-map
+     ("C-n" . company-select-next)
+     ("C-p" . company-select-previous))
+    :preface
+    (defvar-local koek-cpny/resume
+      nil
+      "Whether whitespace-mode should be re-enabled or not.")
+
+    (defun koek-cpny/suspend-whitespace-mode (&rest _args)
+      "Suspend whitespace-mode.
+  Resume with `koek-cpny/resume-whitespace-mode'.  _ARGS is
+  ignored."
+      (setq koek-cpny/resume whitespace-mode)
+      (whitespace-mode 0))
+
+    (defun koek-cpny/resume-whitespace-mode (&rest _args)
+      "Resume whitespace-mode.
+  Suspend with `koek-cpny/suspend-whitespace-mode'.  _ARGS is
+  ignored."
+      (when koek-cpny/resume
+        (whitespace-mode)))
+    :init
+    (add-hook 'prog-mode-hook #'company-mode)
+    :config
+    (setq company-backends
+          '((company-capf company-keywords company-files
+             :with company-yasnippet)))
+    (setq company-show-numbers t)
+    (add-hook 'company-completion-started-hook
+              #'koek-cpny/suspend-whitespace-mode)
+    (add-hook 'company-completion-finished-hook
+              #'koek-cpny/resume-whitespace-mode)
+    (add-hook 'company-completion-cancelled-hook
+              #'koek-cpny/resume-whitespace-mode)
+    :delight)
+#+END_SRC
+
+*** company-flx - Match candidates fuzzily
+[[https://github.com/PythonNut/company-flx][company-flx (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-flx
+    :ensure t
+    :after company
+    :config
+    (company-flx-mode))
+#+END_SRC
+
 ** lsp - Code insight
 [[https://github.com/emacs-lsp/lsp-mode][lsp-mode (GitHub)]]
 
