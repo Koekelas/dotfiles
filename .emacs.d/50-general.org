@@ -19,6 +19,7 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 #+BEGIN_SRC emacs-lisp
   (defvar no-littering-etc-directory)
   (defvar no-littering-var-directory)
+  (defvar koek-js/prefer-lsp)
   (declare-function no-littering-expand-var-file-name "no-littering")
 #+END_SRC
 
@@ -443,6 +444,23 @@ whitespace mode.
     (company-flx-mode))
 #+END_SRC
 
+*** company-tern - Tern backend
+[[https://github.com/proofit404/company-tern][company-tern (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-tern
+    :ensure t
+    :unless koek-js/prefer-lsp
+    :preface
+    (defun koek-cpny/setup-tern-backend ()
+      "Setup tern backend for current."
+      (setq-local company-backends
+                  '((company-tern company-keywords company-files
+                     :with company-yasnippet))))
+    :init
+    (add-hook 'js2-mode-hook #'koek-cpny/setup-tern-backend))
+#+END_SRC
+
 ** lsp - Code insight
 [[https://github.com/emacs-lsp/lsp-mode][lsp-mode (GitHub)]]
 
@@ -469,6 +487,11 @@ whitespace mode.
             (and (projectile-project-p) (projectile-project-root))
             default-directory)))
      "javascript-typescript-stdio")
+
+    (declare-function koek-lsp/js-enable "general")
+
+    (when koek-js/prefer-lsp
+      (add-hook 'js2-mode-hook #'koek-lsp/js-enable))
     :delight)
 #+END_SRC
 
@@ -505,7 +528,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
     :config
-    (setq ispell-program-name (executable-find "hunspell"))
+    (setq ispell-program-name "hunspell")
     (let ((dictionary-name "en_US"))
       ;; Hunspell on Windows requires DICTIONARY environment variable to
       ;; be set
@@ -671,12 +694,23 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :mode (rx ".js" string-end)
     :interpreter "node"
     :config
-    (declare-function koek-lsp/js-enable "general")
-
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
-    (add-hook 'js2-mode-hook #'koek-lsp/js-enable)
     :delight (js2-mode "JS" :major))
+#+END_SRC
+
+*** tern - Code insight
+[[https://github.com/ternjs/tern][tern (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tern
+    :ensure t
+    :unless koek-js/prefer-lsp
+    :init
+    (declare-function tern-mode "tern")
+
+    (add-hook 'js2-mode-hook #'tern-mode)
+    :delight)
 #+END_SRC
 
 ** Org
@@ -774,7 +808,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :delight (scheme-mode "Scm" :major))
 #+END_SRC
 
-*** geiser - Interact with Scheme process
+*** geiser - Interact with process
 [[https://github.com/jaor/geiser][geiser (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp

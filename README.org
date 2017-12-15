@@ -11,8 +11,10 @@
   - [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - [[https://www.x.org/][xprop]]
 - JavaScript:
+  - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]] (when installed, used instead of
+    Tern)
   - [[https://nodejs.org/][Node.js]]
-  - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
+  - [[https://ternjs.net/][Tern]]
 - Org:
   - [[https://www.latex-project.org/][LaTeX]]
 - Scheme:
@@ -26,7 +28,7 @@ On Arch Linux, run:
 
   # JavaScript
   pacman -S nodejs npm python2
-  npm i -g javascript-typescript-langserver
+  npm i -g tern
 
   # Org
   pacman -S texlive-core texlive-latexextra
