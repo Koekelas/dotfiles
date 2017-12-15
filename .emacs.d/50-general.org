@@ -249,8 +249,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 ** auto-fill - Break long sentences
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-af/excluded-modes
-    '(snippet-mode)
+  (defconst koek-af/excluded-modes '(snippet-mode)
     "List of major mode symbols, see `koek-af/maybe-enable'.")
 
   (defun koek-af/maybe-enable ()
@@ -400,8 +399,7 @@ whitespace mode.
      ("C-n" . company-select-next)
      ("C-p" . company-select-previous))
     :preface
-    (defvar-local koek-cpny/resume
-      nil
+    (defvar-local koek-cpny/resume nil
       "Whether whitespace-mode should be re-enabled or not.")
 
     (defun koek-cpny/suspend-whitespace-mode (&rest _args)
@@ -1009,8 +1007,7 @@ Show:
 in mode line.
 
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-ml/separator
-    "   "
+  (defconst koek-ml/separator "   "
     "Mode line group separator.")
 
   (defconst koek-ml/ediff
@@ -1037,12 +1034,10 @@ in mode line.
            ,right))))
     "List of mode line constructs for ediff control buffer.")
 
-  (defvar-local koek-ml/variant-name
-    nil
+  (defvar-local koek-ml/variant-name nil
     "Name of variant.")
 
-  (defvar-local koek-ml/diff-status
-    nil
+  (defvar-local koek-ml/diff-status nil
     "Status of current diff.")
 
   (defun koek-ml/variants ()

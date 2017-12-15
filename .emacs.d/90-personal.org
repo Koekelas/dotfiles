@@ -23,8 +23,7 @@ only mode.
 
 * Files & directories
 #+BEGIN_SRC emacs-lisp
-  (defconst koek/home-dir-kratos
-    "d:/"
+  (defconst koek/home-dir-kratos "d:/"
     "File name to home directory on Kratos.")
 
   (defconst koek/home-dir
@@ -33,12 +32,10 @@ only mode.
       (expand-file-name "~/"))
     "File name to home directory.")
 
-  (defconst koek/org-dir
-    (expand-file-name "20 Documenten/Varia/" koek/home-dir)
+  (defconst koek/org-dir (expand-file-name "20 Documenten/Varia/" koek/home-dir)
     "File name to org directory.")
 
-  (defconst koek/projects-dir
-    (expand-file-name "21 Projecten/" koek/home-dir)
+  (defconst koek/projects-dir (expand-file-name "21 Projecten/" koek/home-dir)
     "File name to projects directory.")
 
   (defconst koek/static-agenda-files
