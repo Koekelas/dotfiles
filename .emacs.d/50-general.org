@@ -19,7 +19,6 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 #+BEGIN_SRC emacs-lisp
   (defvar no-littering-etc-directory)
   (defvar no-littering-var-directory)
-  (defvar koek-js/prefer-lsp)
   (declare-function no-littering-expand-var-file-name "no-littering")
 #+END_SRC
 
@@ -448,15 +447,12 @@ whitespace mode.
 #+BEGIN_SRC emacs-lisp
   (use-package company-tern
     :ensure t
-    :unless koek-js/prefer-lsp
     :preface
     (defun koek-cpny/setup-tern-backend ()
       "Setup tern backend for current."
       (setq-local company-backends
                   '((company-tern company-keywords company-files
-                     :with company-yasnippet))))
-    :init
-    (add-hook 'js2-mode-hook #'koek-cpny/setup-tern-backend))
+                     :with company-yasnippet)))))
 #+END_SRC
 
 ** lsp - Code insight
@@ -485,11 +481,6 @@ whitespace mode.
             (and (projectile-project-p) (projectile-project-root))
             default-directory)))
      "javascript-typescript-stdio")
-
-    (declare-function koek-lsp/js-enable "general")
-
-    (when koek-js/prefer-lsp
-      (add-hook 'js2-mode-hook #'koek-lsp/js-enable))
     :delight)
 #+END_SRC
 
@@ -691,9 +682,22 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :mode (rx ".js" string-end)
     :interpreter "node"
+    :preface
+    (declare-function koek-lsp/js-enable "general")
+
+    (defun koek-js/enable-code-insight ()
+      "Enable code insight.
+  When Tern is configured for current, enable `tern-mode', else,
+  enable `lsp-mode'."
+      (cond
+       ((locate-dominating-file default-directory ".tern-project")
+        (tern-mode))
+       (t
+        (koek-lsp/js-enable))))
     :config
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
+    (add-hook 'js2-mode-hook #'koek-js/enable-code-insight)
     :delight (js2-mode "JS" :major))
 #+END_SRC
 
@@ -703,11 +707,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package tern
     :ensure t
-    :unless koek-js/prefer-lsp
-    :init
-    (declare-function tern-mode "tern")
-
-    (add-hook 'js2-mode-hook #'tern-mode)
+    :config
+    (add-hook 'tern-mode-hook #'koek-cpny/setup-tern-backend)
     :delight)
 #+END_SRC
 

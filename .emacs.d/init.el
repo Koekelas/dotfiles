@@ -63,16 +63,6 @@ PACKAGE-NAME is a symbol."
 ;; org is configured elsewhere.
 
 ;;; cus-edit - Configuration interface
-(defgroup koekelas nil
-  "Tweak Koekelas' Emacs configuration."
-  :group 'emacs)
-
-(defcustom koek-js/prefer-lsp
-  (and (executable-find "javascript-typescript-stdio") t)
-  "Whether LSP is preferred or not for JavaScript."
-  :group 'koekelas
-  :type 'boolean)
-
 (setq custom-file (no-littering-expand-var-file-name "custom.el"))
 (load custom-file 'no-error)
 
