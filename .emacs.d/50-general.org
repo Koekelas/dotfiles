@@ -652,7 +652,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 ** eldoc - Show documentation
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
-    :delight eldoc-mode)
+    :delight)
 #+END_SRC
 
 ** calendar - Calendar
@@ -821,7 +821,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 
   (use-package geiser-autodoc
     :after geiser
-    :delight geiser-autodoc-mode)
+    :delight)
 #+END_SRC
 
 ** Text
