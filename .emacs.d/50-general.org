@@ -638,6 +638,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap describe-variable] . counsel-describe-variable)
      ([remap describe-function] . counsel-describe-function)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+     ("M-s g" . counsel-ag)
      ("C-c o j" . counsel-org-goto-all)))
 #+END_SRC
 
