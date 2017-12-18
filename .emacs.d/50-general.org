@@ -204,8 +204,8 @@ When last command was pop mark, press ~C-SPC~ to repeat it.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :init
-    (dolist (hook '(prog-mode-hook comint-mode-hook))
-      (add-hook hook #'subword-mode))
+    (add-hook 'prog-mode-hook #'subword-mode)
+    (add-hook 'comint-mode-hook #'subword-mode)
     :delight)
 #+END_SRC
 
@@ -293,8 +293,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-{" . beginning-of-defun)
      ("C-M-}" . end-of-defun)
      ("C-S-w" . append-next-kill))
-    (dolist (hook '(prog-mode-hook comint-mode-hook))
-      (add-hook hook #'smartparens-mode))
+
+    (add-hook 'prog-mode-hook #'smartparens-mode)
+    (add-hook 'comint-mode-hook #'smartparens-mode)
     :config
     (require 'smartparens-config)
 
@@ -492,8 +493,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
   (use-package yasnippet
     :ensure t
     :init
-    (dolist (hook '(text-mode-hook prog-mode-hook))
-      (add-hook hook #'yas-minor-mode))
+    (add-hook 'text-mode-hook #'yas-minor-mode)
+    (add-hook 'prog-mode-hook #'yas-minor-mode)
     :config
     (declare-function yas-reload-all "yasnippet")
 
@@ -695,6 +696,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
        (t
         (koek-lsp/js-enable))))
     :config
+    ;; Resolve keybinding conflict with xref-js2
+    (unbind-key "M-." js2-mode-map)
+
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
     (add-hook 'js2-mode-hook #'koek-js/enable-code-insight)
@@ -708,8 +712,27 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package tern
     :ensure t
     :config
+    ;; Resolve keybinding conflict with xref-js2
+    (unbind-key "M-." tern-mode-keymap)
+    (unbind-key "M-," tern-mode-keymap)
+
     (add-hook 'tern-mode-hook #'koek-cpny/setup-tern-backend)
+    (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend)
     :delight)
+#+END_SRC
+
+*** xref-js2 - Jump to definition & references
+[[https://github.com/NicolasPetton/xref-js2][xref-js2 (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package xref-js2
+    :ensure t
+    :preface
+    (defun koek-xref/setup-js2-backend ()
+      "Setup JS2 backend for current."
+      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
+    :config
+    (setq xref-js2-ignored-dirs '("node_modules")))
 #+END_SRC
 
 ** Org
@@ -788,8 +811,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
           (push checker flycheck-disabled-checkers))))
     :config
     ;; Resolve keybinding conflict with cider
-    (dolist (key '("C-c '" "C-c C-k"))
-      (unbind-key key org-src-mode-map))
+    (unbind-key "C-c '" org-src-mode-map)
+    (unbind-key "C-c C-k" org-src-mode-map)
 
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
 
