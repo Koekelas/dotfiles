@@ -200,12 +200,6 @@ When popping mark, skip consecutive identical marks.
         (setq n (1- n)))))
 #+END_SRC
 
-When last command was pop mark, press ~C-SPC~ to repeat it.
-
-#+BEGIN_SRC emacs-lisp
-  (setq set-mark-command-repeat-pop t)
-#+END_SRC
-
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
