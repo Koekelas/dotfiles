@@ -1123,23 +1123,27 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                  (lc-blue   . ,(koek-thm/mix blue background))))))
            (specs
             (map-let
-                (foreground lc-fg lc-bg selection
-                 orange lc-yellow lc-green lc-aqua lc-blue)
+                (foreground selection lc-fg lc-bg
+                 red orange lc-yellow lc-green lc-aqua lc-blue)
                 (append personal theme)
-              `((show-paren-match :foreground ,foreground
-                                  :background unspecified
-                                  :weight bold)
+              `((show-paren-match    :foreground ,foreground
+                                     :background ,selection)
+                (show-paren-mismatch :foreground ,foreground
+                                     :background unspecified
+                                     :underline (:style wave :color ,red))
                 (mode-line-emphasis :foreground ,orange :slant unspecified)
                 ;; rainbow-delimiters-mode
-                (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
-                (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-4-face :foreground ,lc-green)
-                (rainbow-delimiters-depth-5-face :foreground ,lc-blue)
-                (rainbow-delimiters-depth-6-face :foreground ,lc-fg)
-                (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-9-face :foreground ,lc-green)
+                (rainbow-delimiters-depth-1-face   :foreground ,lc-fg)
+                (rainbow-delimiters-depth-2-face   :foreground ,lc-aqua)
+                (rainbow-delimiters-depth-3-face   :foreground ,lc-yellow)
+                (rainbow-delimiters-depth-4-face   :foreground ,lc-green)
+                (rainbow-delimiters-depth-5-face   :foreground ,lc-blue)
+                (rainbow-delimiters-depth-6-face   :foreground ,lc-fg)
+                (rainbow-delimiters-depth-7-face   :foreground ,lc-aqua)
+                (rainbow-delimiters-depth-8-face   :foreground ,lc-yellow)
+                (rainbow-delimiters-depth-9-face   :foreground ,lc-green)
+                (rainbow-delimiters-unmatched-face :foreground unspecified
+                                                   :inherit show-paren-mismatch)
                 ;; whitespace-mode
                 (whitespace-space    :foreground ,lc-bg :background unspecified)
                 (whitespace-hspace   :foreground ,lc-bg :background unspecified)
