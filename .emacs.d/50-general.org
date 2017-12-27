@@ -802,7 +802,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap describe-function] . counsel-describe-function)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
      ("M-s g" . counsel-ag)
-     ("C-c o j" . counsel-org-goto-all)))
+     ("C-c j d" . counsel-imenu)
+     ("C-c j o" . counsel-org-goto-all)))
 #+END_SRC
 
 *** flx - Score candidates
@@ -955,7 +956,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 
   (use-package org-clock
     :bind
-    (("C-c o J" . org-clock-goto)
+    (("C-c j c" . org-clock-goto)
      ("C-c o o" . org-clock-out)
      ("C-c o x" . org-clock-cancel)))
 
