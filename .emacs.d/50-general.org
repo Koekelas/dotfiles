@@ -14,6 +14,12 @@ only mode.
   ;;; Code:
 #+END_SRC
 
+Require libraries.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'subr-x)
+#+END_SRC
+
 Declare variables and functions setup by [[file:init.el][init.el]].
 
 #+BEGIN_SRC emacs-lisp
@@ -322,6 +328,162 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     ("C-S-SPC" . er/expand-region))
 #+END_SRC
 
+** prettify-symbols - Show composed symbols
+#+BEGIN_SRC emacs-lisp
+  (defun koek-ps/baseline-right-left-spec (&rest chars)
+    "Return composition specification for CHARS.
+  Baseline right of previous character is composed with baseline
+  left of next character."
+    (seq-reduce (lambda (spec char)
+                  `(,@spec (Br . Bl) ,char))
+                (cdr chars) (list (car chars))))
+
+  (defconst koek-ps/comp-specs
+    (let ((safe
+           '(("function" . ?ƒ)
+             ("lambda"   . ?λ)))
+          (pragmata
+           (when (x-list-fonts "*-PragmataPro Mono-*")
+             (mapcar
+              (pcase-lambda (`(,symbol . ,char))
+                (cons symbol
+                      ;; Widen char to symbol characters
+                      (apply #'koek-ps/baseline-right-left-spec
+                             `(,@(make-list (1- (length symbol)) ?\s) ,char))))
+              '(("[ERROR]"   . ?\uE380) ("[DEBUG]" . ?\uE381)
+                ("[INFO]"    . ?\uE382) ("[WARN]"  . ?\uE383)
+                ("[WARNING]" . ?\uE384) ("[ERR]"   . ?\uE385)
+                ("[FATAL]"   . ?\uE386) ("[TRACE]" . ?\uE387)
+                ("[FIXME]"   . ?\uE388) ("[TODO]"  . ?\uE389)
+                ("[BUG]"     . ?\uE38A) ("[NOTE]"  . ?\uE38B)
+                ("[HACK]"    . ?\uE38C) ("[MARK]"  . ?\uE38D)
+                ;; !
+                ("!!"  . ?\uE900) ("!="  . ?\uE901) ("!==" . ?\uE902)
+                ("!!!" . ?\uE903) ("!≡"  . ?\uE904) ("!≡≡" . ?\uE905)
+                ("!>"  . ?\uE906) ("!=<" . ?\uE907)
+                ;; #
+                ("#("  . ?\uE920) ("#_" . ?\uE921) ("#{" . ?\uE922)
+                ("#?"  . ?\uE923) ("#>" . ?\uE924) ("##" . ?\uE925)
+                ("#_(" . ?\uE926)
+                ;; %
+                ("%="  . ?\uE930) ("%>" . ?\uE931) ("%>%" . ?\uE932)
+                ("%<%" . ?\uE933)
+                ;; &
+                ("&%" . ?\uE940) ("&&"  . ?\uE941) ("&*" . ?\uE942)
+                ("&+" . ?\uE943) ("&-"  . ?\uE944) ("&/" . ?\uE945)
+                ("&=" . ?\uE946) ("&&&" . ?\uE947) ("&>" . ?\uE948)
+                ;; $
+                ("$>" . ?\uE955)
+                ;; *
+                ("***" . ?\uE960) ("*=" . ?\uE961) ("*/" . ?\uE962)
+                ("*>"  . ?\uE963)
+                ;; +
+                ("++" . ?\uE970) ("+++" . ?\uE971) ("+=" . ?\uE972)
+                ("+>" . ?\uE973) ("++=" . ?\uE974)
+                ;; -
+                ("--"   . ?\uE980) ("-<"  . ?\uE981) ("-<<" . ?\uE982)
+                ("-="   . ?\uE983) ("->"  . ?\uE984) ("->>" . ?\uE985)
+                ("---"  . ?\uE986) ("-->" . ?\uE987) ("-+-" . ?\uE988)
+                ("-\\/" . ?\uE989) ("-|>" . ?\uE98A) ("-<|" . ?\uE98B)
+                ;; .
+                (".." . ?\uE990) ("..." . ?\uE991) ("..<" . ?\uE992)
+                (".>" . ?\uE993) (".~"  . ?\uE994) (".="  . ?\uE995)
+                ;; /
+                ("/*"  . ?\uE9A0) ("//"  . ?\uE9A1) ("/>"  . ?\uE9A2)
+                ("/="  . ?\uE9A3) ("/==" . ?\uE9A4) ("///" . ?\uE9A5)
+                ("/**" . ?\uE9A6)
+                ;; :
+                (":::" . ?\uE9AF) ("::"  . ?\uE9B0) (":="  . ?\uE9B1)
+                (":≡"  . ?\uE9B2) (":>"  . ?\uE9B3) (":=>" . ?\uE9B4)
+                (":("  . ?\uE9B5) (":-(" . ?\uE9B6) (":)"  . ?\uE9B7)
+                (":-)" . ?\uE9B8) (":/"  . ?\uE9B9) (":\\" . ?\uE9BA)
+                (":3"  . ?\uE9BB) (":D"  . ?\uE9BC) (":P"  . ?\uE9BD)
+                (":>:" . ?\uE9BE) (":<:" . ?\uE9BF)
+                ;; <
+                ("<$>"  . ?\uE9C0) ("<*"  . ?\uE9C1) ("<*>"  . ?\uE9C2)
+                ("<+>"  . ?\uE9C3) ("<-"  . ?\uE9C4) ("<<"   . ?\uE9C5)
+                ("<<<"  . ?\uE9C6) ("<<=" . ?\uE9C7) ("<="   . ?\uE9C8)
+                ("<=>"  . ?\uE9C9) ("<>"  . ?\uE9CA) ("<|>"  . ?\uE9CB)
+                ("<<-"  . ?\uE9CC) ("<|"  . ?\uE9CD) ("<=<"  . ?\uE9CE)
+                ("<~"   . ?\uE9CF) ("<~~" . ?\uE9D0) ("<<~"  . ?\uE9D1)
+                ("<$"   . ?\uE9D2) ("<+"  . ?\uE9D3) ("<!>"  . ?\uE9D4)
+                ("<@>"  . ?\uE9D5) ("<#>" . ?\uE9D6) ("<%>"  . ?\uE9D7)
+                ("<^>"  . ?\uE9D8) ("<&>" . ?\uE9D9) ("<?>"  . ?\uE9DA)
+                ("<.>"  . ?\uE9DB) ("</>" . ?\uE9DC) ("<\\>" . ?\uE9DD)
+                ("<\">" . ?\uE9DE) ("<:>" . ?\uE9DF) ("<~>"  . ?\uE9E0)
+                ("<**>" . ?\uE9E1) ("<<^" . ?\uE9E2) ("<!"   . ?\uE9E3)
+                ("<@"   . ?\uE9E4) ("<#"  . ?\uE9E5) ("<%"   . ?\uE9E6)
+                ("<^"   . ?\uE9E7) ("<&"  . ?\uE9E8) ("<?"   . ?\uE9E9)
+                ("<."   . ?\uE9EA) ("</"  . ?\uE9EB) ("<\\"  . ?\uE9EC)
+                ("<\""  . ?\uE9ED) ("<:"  . ?\uE9EE) ("<->"  . ?\uE9EF)
+                ("<!--" . ?\uE9F0) ("<--" . ?\uE9F1) ("<~<"  . ?\uE9F2)
+                ("<==>" . ?\uE9F3) ("<|-" . ?\uE9F4) ("<||"  . ?\uE9F5)
+                ("<<|"  . ?\uE9F6)
+                ;; =
+                ("=<<" . ?\uEA00) ("=="  . ?\uEA01) ("===" . ?\uEA02)
+                ("==>" . ?\uEA03) ("=>"  . ?\uEA04) ("=~"  . ?\uEA05)
+                ("=>>" . ?\uEA06) ("=/=" . ?\uEA07)
+                ;; ≡
+                ("≡≡" . ?\uEA10) ("≡≡≡" . ?\uEA11) ("≡:≡" . ?\uEA12)
+                ;; >
+                (">-"  . ?\uEA20) (">="  . ?\uEA21) (">>"  . ?\uEA22)
+                (">>-" . ?\uEA23) (">>=" . ?\uEA24) (">>>" . ?\uEA25)
+                (">=>" . ?\uEA26) (">>^" . ?\uEA27) (">>|" . ?\uEA28)
+                (">!=" . ?\uEA29)
+                ;; ?
+                ("??" . ?\uEA40) ("?~"  . ?\uEA41) ("?=" . ?\uEA42)
+                ("?>" . ?\uEA43) ("???" . ?\uEA44) ("?." . ?\uEA45)
+                ;; ^
+                ("^="  . ?\uEA48) ("^."  . ?\uEA49) ("^?"  . ?\uEA4A)
+                ("^.." . ?\uEA4B) ("^<<" . ?\uEA4C) ("^>>" . ?\uEA4D)
+                ("^>"  . ?\uEA4E)
+                ;; \
+                ("\\\\" . ?\uEA50) ("\\>" . ?\uEA51) ("\\/-" . ?\uEA52)
+                ;; @
+                ("@>" . ?\uEA57)
+                ;; |
+                ("|="   . ?\uEA60) ("||"  . ?\uEA61) ("|>"   . ?\uEA62)
+                ("|||"  . ?\uEA63) ("|+|" . ?\uEA64) ("|->"  . ?\uEA65)
+                ("|-->" . ?\uEA66) ("|=>" . ?\uEA67) ("|==>" . ?\uEA68)
+                ("|>-"  . ?\uEA69) ("|<<" . ?\uEA6A) ("||>"  . ?\uEA6B)
+                ("|>>"  . ?\uEA6C)
+                ;; ~
+                ("~="  . ?\uEA70) ("~>" . ?\uEA71) ("~~>" . ?\uEA72)
+                ("~>>" . ?\uEA73)
+                ;; [
+                ("[[" . ?\uEA80) ("]]" . ?\uEA81)
+                ;; "
+                ("\">" . ?\uEA90))))))
+      (append pragmata safe))
+    "Alist of pretty symbol to composition specification pairs.")
+
+  (defun koek-ps/make-enable (&rest symbols)
+    "Return function to setup and enable function `prettify-symbols-mode'.
+  SYMBOLS is a list of pretty symbol pairs and/or pretty symbols.
+
+  Pretty symbol pair is a cons. Its car is a string, the symbol to
+  replace. Its cdr is a key in `koek-ps/comp-specs', the symbol to
+  replace it with.
+
+  Pretty symbol is a key in `koek-ps/comp-specs'. Its the symbol to
+  replace and the symbol to replace it with."
+    (let ((specs
+           (seq-reduce
+            (lambda (specs symbol)
+              (unless (consp symbol)
+                (setq symbol (cons symbol symbol)))
+              (pcase-let ((`(,from . ,to) symbol))
+                (when-let (spec (cdr (assoc to koek-ps/comp-specs)))
+                  (push (cons from spec) specs)))
+              specs)
+            symbols ())))
+      (lambda ()
+        (setq prettify-symbols-alist specs)
+        (prettify-symbols-mode))))
+
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+#+END_SRC
+
 ** Whitespace
 Indent with spaces, not tabs.
 
@@ -355,10 +517,10 @@ End files with empty line.
           '(space-mark tab-mark newline-mark
             face spaces tabs newline trailing empty lines-tail))
     (setq whitespace-display-mappings
-          '((space-mark   ?\    [?·])
-            (space-mark   ?\xA0 [?¤])
-            (tab-mark     ?\t   [?⇥ ?\t])
-            (newline-mark ?\n   [?↵ ?\n])))
+          '((space-mark   ?\s     [?·])
+            (space-mark   ?\u00A0 [?¤])   ; No break space
+            (tab-mark     ?\t     [?⇥ ?\t])
+            (newline-mark ?\n     [?↵ ?\n])))
     (add-hook 'before-save-hook #'whitespace-cleanup)
     :delight)
 #+END_SRC
@@ -672,6 +834,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :mode ((rx ".el" string-end) . emacs-lisp-mode)
     :config
     (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
     :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
@@ -701,6 +864,10 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
+    (add-hook 'js2-mode-hook
+              (koek-ps/make-enable "function" "!!" "!=" "!==" "%=" "&&" "&=" "*="
+                                   "++" "+=" "--" "-=" "..." "/=" "<<" "<=" "=="
+                                   "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
     (add-hook 'js2-mode-hook #'koek-js/enable-code-insight)
     :delight (js2-mode "JS" :major))
 #+END_SRC
@@ -801,8 +968,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (defconst koek-org/excluded-checkers
       '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
       "Alist of excluded checker pairs.
-  Pair is a cons. Its car is a major mode symbol, its cdr is a list
-  of checker symbols.")
+  Excluded checker pair is a cons. Its car is a major mode symbol,
+  its cdr is a list of checker symbols.")
 
     (defun koek-org/disable-excluded-checkers ()
       "Disable excluded checkers for current."
@@ -827,6 +994,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :mode ((rx ".scm" string-end) . scheme-mode)
     :config
     (add-hook 'scheme-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'scheme-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
     :delight (scheme-mode "Scm" :major))
 #+END_SRC
 
@@ -836,7 +1004,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
     :ensure t
-    :after scheme
     :init
     (defvar geiser-active-implementations)
 
@@ -844,7 +1011,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (setq geiser-active-implementations '(guile)))
 
   (use-package geiser-autodoc
-    :after geiser
     :delight)
 #+END_SRC
 
@@ -955,7 +1121,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                  (lc-green  . ,(koek-thm/mix green background))
                  (lc-aqua   . ,(koek-thm/mix aqua background))
                  (lc-blue   . ,(koek-thm/mix blue background))))))
-           (spec
+           (specs
             (map-let
                 (foreground lc-fg lc-bg selection
                  orange lc-yellow lc-green lc-aqua lc-blue)
@@ -994,7 +1160,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (apply #'custom-set-faces
              (mapcar (pcase-lambda (`(,name . ,attribs))
                        `(,name ((t . ,attribs))))
-                     spec))))
+                     specs))))
 #+END_SRC
 
 Set default font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
