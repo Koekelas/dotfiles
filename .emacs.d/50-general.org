@@ -203,9 +203,7 @@ When popping mark, skip consecutive identical marks.
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
-    :init
-    (add-hook 'prog-mode-hook #'subword-mode)
-    (add-hook 'comint-mode-hook #'subword-mode)
+    :hook ((prog-mode comint-mode) . subword-mode)
     :delight)
 #+END_SRC
 
@@ -288,19 +286,18 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-t" . sp-transpose-sexp)
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
+    :hook
+    (((prog-mode comint-mode) . smartparens-mode)
+     (smartparens-mode . show-smartparens-mode))
     :init
     (bind-keys
      ("C-M-{" . beginning-of-defun)
      ("C-M-}" . end-of-defun)
      ("C-S-w" . append-next-kill))
-
-    (add-hook 'prog-mode-hook #'smartparens-mode)
-    (add-hook 'comint-mode-hook #'smartparens-mode)
     :config
     (require 'smartparens-config)
 
     (setq sp-navigate-interactive-always-progress-point t)
-    (add-hook 'smartparens-mode-hook #'show-smartparens-mode)
     :delight)
 #+END_SRC
 
@@ -504,8 +501,9 @@ End files with empty line.
 ** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
-    :init
-    (add-hook 'prog-mode-hook #'whitespace-mode)
+    :hook
+    ((prog-mode . whitespace-mode)
+     (before-save . whitespace-cleanup))
     :config
     (setq whitespace-style
           '(space-mark tab-mark newline-mark
@@ -515,7 +513,6 @@ End files with empty line.
             (space-mark   ?\u00A0 [?¤])   ; No break space
             (tab-mark     ?\t     [?⇥ ?\t])
             (newline-mark ?\n     [?↵ ?\n])))
-    (add-hook 'before-save-hook #'whitespace-cleanup)
     :delight)
 #+END_SRC
 
@@ -553,6 +550,7 @@ whitespace mode.
      :map company-active-map
      ("C-n" . company-select-next)
      ("C-p" . company-select-previous))
+    :hook (prog-mode . company-mode)
     :preface
     (defvar-local koek-cpny/resume nil
       "Whether whitespace-mode should be re-enabled or not.")
@@ -570,8 +568,6 @@ whitespace mode.
   ignored."
       (when koek-cpny/resume
         (whitespace-mode)))
-    :init
-    (add-hook 'prog-mode-hook #'company-mode)
     :config
     (setq company-backends
           '((company-capf company-keywords company-files
@@ -648,9 +644,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
-    :init
-    (add-hook 'text-mode-hook #'yas-minor-mode)
-    (add-hook 'prog-mode-hook #'yas-minor-mode)
+    :hook ((text-mode prog-mode) . yas-minor-mode)
     :config
     (declare-function yas-reload-all "yasnippet")
 
@@ -688,8 +682,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    :init
-    (add-hook 'prog-mode-hook #'flycheck-mode)
+    :hook (prog-mode . flycheck-mode)
     :delight)
 #+END_SRC
 
