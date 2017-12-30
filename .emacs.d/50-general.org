@@ -783,7 +783,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :delight)
 #+END_SRC
 
-*** counsel - ivy powered commands
+*** counsel - Ivy powered commands
 [[https://github.com/abo-abo/swiper][counsel (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
