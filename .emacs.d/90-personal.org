@@ -48,6 +48,7 @@ only mode.
 * To-do's & agenda
 #+BEGIN_SRC emacs-lisp
   (use-package org
+    :defer t
     :preface
     (defun koek/directories (file-name &optional full)
       "Return directories in directory FILE-NAME.
@@ -83,6 +84,7 @@ only mode.
             (koek/agenda-files . (:maxlevel . 3)))))
 
   (use-package org-capture
+    :defer t
     :config
     (setq org-capture-templates
           '(("t" "Task" entry (file+olp "To Do.org" "Taken")

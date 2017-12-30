@@ -17,6 +17,7 @@ only mode.
 Require libraries.
 
 #+BEGIN_SRC emacs-lisp
+  (require 'map)
   (require 'subr-x)
 #+END_SRC
 
@@ -47,13 +48,15 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure t)
+    :ensure t
+    :defer t)
 
   (use-package magit-status
     :bind
     ("C-c f g" . magit-status))
 
   (use-package with-editor
+    :defer t
     :preface
     (defun koek-git/check-spelling (force)
       "Check spelling of commit message.
@@ -80,6 +83,7 @@ Declare variables and functions setup by [[file:init.el][init.el]].
      ("C-c f b" . ediff-current-file)))
 
   (use-package ediff-init
+    :defer t
     :preface
     (declare-function outline-show-all "outline")
 
@@ -109,6 +113,7 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
 
   (use-package ediff-wind
+    :defer t
     :config
     (declare-function ediff-setup-windows-plain "ediff-wind")
 
@@ -306,7 +311,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-    :ensure t)
+    :ensure t
+    :commands rainbow-delimiters-mode)
 #+END_SRC
 
 ** expand-region - Mark increasingly larger unit
@@ -599,6 +605,7 @@ whitespace mode.
 #+BEGIN_SRC emacs-lisp
   (use-package company-tern
     :ensure t
+    :after tern
     :preface
     (defun koek-cpny/setup-tern-backend ()
       "Setup tern backend for current."
@@ -613,6 +620,7 @@ whitespace mode.
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
     :ensure t
+    :after js2-mode
     :config
     (require 'lsp-flycheck)
     (declare-function lsp--make-stdio-connection "lsp-mode")
@@ -666,6 +674,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 ** ispell - Spell checker
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
+    :defer t
     :config
     (setq ispell-program-name "hunspell")
     (let ((dictionary-name "en_US"))
@@ -804,12 +813,14 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 ** eldoc - Show documentation
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
+    :commands eldoc-mode
     :delight)
 #+END_SRC
 
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
+    :defer t
     :config
     (setq calendar-week-start-day 1))     ; Monday
 #+END_SRC
@@ -866,6 +877,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package tern
     :ensure t
+    :after js2-mode
     :config
     ;; Resolve keybinding conflict with xref-js2
     (unbind-key "M-." tern-mode-keymap)
@@ -882,6 +894,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package xref-js2
     :ensure t
+    :after js2-mode
     :preface
     (defun koek-xref/setup-js2-backend ()
       "Setup JS2 backend for current."
@@ -972,6 +985,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
 
   (use-package ox
+    :defer t
     :config
     (setq org-export-headline-levels 4))
 #+END_SRC
@@ -992,6 +1006,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
     :ensure t
+    :after scheme
     :init
     (defvar geiser-active-implementations)
 
@@ -999,6 +1014,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (setq geiser-active-implementations '(guile)))
 
   (use-package geiser-autodoc
+    :defer t
     :delight)
 #+END_SRC
 
@@ -1083,7 +1099,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                   color1 color2)))
     :config
     (declare-function color-rgb-to-hex "color")
-    (declare-function map-elt "map")
 
     ;; Set frame (i.e. window manager) theme
     (when (executable-find "xprop")
