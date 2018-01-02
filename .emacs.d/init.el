@@ -33,7 +33,7 @@ PACKAGE-NAME is a symbol."
 (let ((archives
        '(("gnu"   . "https://elpa.gnu.org/packages/")
          ("melpa" . "https://melpa.org/packages/")
-         ("org"   . "http://orgmode.org/elpa/"))))
+         ("org"   . "https://orgmode.org/elpa/"))))
   ;; HTTPS locations require GnuTLS to be available
   (unless (gnutls-available-p)
     (setq archives
