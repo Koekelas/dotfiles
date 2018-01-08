@@ -50,8 +50,8 @@ Run:
 #+END_SRC
 
 ** Spell checking contractions fails
-Open the dictionary's affix file. On Arch Linux, affix files are saved
-in ~/usr/share/hunspell/~. Add:
+Visit the dictionary's affix file. On Arch Linux, affix files are
+saved in ~/usr/share/hunspell/~. Add:
 
 #+BEGIN_SRC fundamental
   ICONV 1
