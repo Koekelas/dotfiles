@@ -1,0 +1,8 @@
+# -*- mode: snippet; -*-
+# name: New browser Tern configuration
+# key: browser
+# --
+{
+    "plugins": {},
+    "libs": ["browser"$0]
+}

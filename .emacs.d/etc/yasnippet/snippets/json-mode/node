@@ -1,0 +1,10 @@
+# -*- mode: snippet; -*-
+# name: New Node.js Tern configuration
+# key: node
+# --
+{
+    "plugins": {
+        "node": {}
+    },
+    "libs": [$0]
+}
