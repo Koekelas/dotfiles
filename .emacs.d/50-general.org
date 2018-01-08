@@ -574,6 +574,12 @@ whitespace mode.
   ignored."
       (when koek-cpny/resume
         (whitespace-mode)))
+
+    (defun koek-cpny/setup-dabbrev-backend ()
+      "Setup dabbrev backend for current."
+      (setq-local company-backends
+                  '((company-dabbrev company-keywords company-files
+                     :with company-yasnippet))))
     :config
     (setq company-backends
           '((company-capf company-keywords company-files
@@ -901,6 +907,17 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
     :config
     (setq xref-js2-ignored-dirs '("node_modules")))
+#+END_SRC
+
+** JSON
+[[https://github.com/joshwnj/json-mode][json-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :ensure t
+    :mode (rx (or ".json" "/.tern-project") string-end)
+    :config
+    (add-hook 'json-mode-hook #'koek-cpny/setup-dabbrev-backend))
 #+END_SRC
 
 ** Org
