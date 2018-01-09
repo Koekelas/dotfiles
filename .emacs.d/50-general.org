@@ -843,7 +843,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 
 #+BEGIN_SRC emacs-lisp
   (use-package flx
-    :ensure t)
+    :ensure t
+    :after ivy)
 #+END_SRC
 
 ** eldoc - Show documentation
