@@ -926,7 +926,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+END_SRC
 
 **** Getting started
-Create file ~.tern-project~ in project home directory. Visit
+Create new file ~.tern-project~ in project home directory. Visit
 ~.tern-project~. Expand snippet ~browser~ or ~node~.
 
 For more information, see [[https://ternjs.net/doc/manual.html#configuration][Project configuration (Tern)]].
