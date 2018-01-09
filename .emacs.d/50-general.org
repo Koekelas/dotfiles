@@ -827,6 +827,17 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ("C-c j o" . counsel-org-goto-all)))
 #+END_SRC
 
+*** counsel-projectile - Ivy powered Projectile commands
+[[https://github.com/ericdanan/counsel-projectile][counsel-projectile (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :ensure t
+    :after projectile
+    :config
+    (counsel-projectile-mode))
+#+END_SRC
+
 *** flx - Score candidates
 [[https://github.com/lewang/flx][flx (GitHub)]]
 
