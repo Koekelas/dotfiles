@@ -677,6 +677,25 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :delight yas-minor-mode)
 #+END_SRC
 
+** undo-tree - Undo & redo replacement
+[[http://melpa.milkbox.net/#/undo-tree][undo-tree (Melpa)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :demand t
+    :bind
+    (:map undo-tree-map
+     ("M-ù"   . undo-tree-redo)
+     ("C-M-ù" . undo-tree-visualize))
+    :init
+    (bind-key "C-ù" #'undo)
+    :config
+    (setq undo-tree-auto-save-history t)
+    (global-undo-tree-mode)
+    :delight)
+#+END_SRC
+
 ** ispell - Spell checker
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
