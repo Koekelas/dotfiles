@@ -822,7 +822,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap describe-variable] . counsel-describe-variable)
      ([remap describe-function] . counsel-describe-function)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-     ("M-s g" . counsel-ag)
+     ("C-M-s" . counsel-ag)
      ("C-c j d" . counsel-imenu)
      ("C-c j o" . counsel-org-goto-all)))
 #+END_SRC
