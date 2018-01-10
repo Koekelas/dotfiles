@@ -691,10 +691,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :demand t
     :bind
     (:map undo-tree-map
-     ("M-ù"   . undo-tree-redo)
-     ("C-M-ù" . undo-tree-visualize))
-    :init
-    (bind-key "C-ù" #'undo)
+     ("M-/" . undo-tree-redo))
     :config
     ;; FIXME: When revisiting then modifying file, history is discarded
     ;; (setq undo-tree-auto-save-history t)
