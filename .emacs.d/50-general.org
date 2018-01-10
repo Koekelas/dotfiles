@@ -696,7 +696,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :init
     (bind-key "C-ù" #'undo)
     :config
-    (setq undo-tree-auto-save-history t)
+    ;; FIXME: When revisiting then modifying file, history is discarded
+    ;; (setq undo-tree-auto-save-history t)
     (global-undo-tree-mode)
     :delight)
 #+END_SRC
