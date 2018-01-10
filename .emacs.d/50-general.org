@@ -592,6 +592,11 @@ whitespace mode.
     (add-hook 'company-completion-cancelled-hook
               #'koek-cpny/resume-whitespace-mode)
     :delight)
+
+  (use-package company-dabbrev
+    :defer t
+    :config
+    (setq company-dabbrev-other-buffers nil))
 #+END_SRC
 
 *** company-flx - Match candidates fuzzily
