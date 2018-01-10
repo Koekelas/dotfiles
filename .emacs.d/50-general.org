@@ -198,8 +198,9 @@ When popping mark, skip consecutive identical marks.
   (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
     (let ((start (point))
           (n (length mark-ring)))
-      ;; Try current mark and previous marks in mark ring
+      ;; Move point to current mark
       (funcall f)
+      ;; Move point to previous marks in mark ring
       (while (and (= (point) start) (> n 0))
         (funcall f)
         (setq n (1- n)))))
