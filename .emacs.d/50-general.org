@@ -191,6 +191,9 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
     ("C-c j l" . link-hint-open-link))
 #+END_SRC
 
+*** Issues
+- Conflicts with [[*prettify-symbols - Show composed symbols][prettify-symbols - Show composed symbols]], see [[https://github.com/abo-abo/avy/issues/103][Issue 103 (GitHub)]].
+
 ** Jump to recent mark positions
 When popping mark, skip consecutive identical marks.
 
