@@ -761,7 +761,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 Bury buffers, don't kill them. Computers have more than enough memory.
 
 #+BEGIN_SRC emacs-lisp
-  (defun koek-buff/bury-current (&optional arg)
+  (defun koek-buff/bury (&optional arg)
     "Bury current.
   With `\\[universal-argument]' prefix argument ARG, kill current."
     (interactive "P")
@@ -769,7 +769,7 @@ Bury buffers, don't kill them. Computers have more than enough memory.
         (kill-buffer)
       (bury-buffer)))
 
-  (bind-key [remap kill-buffer] #'koek-buff/bury-current)
+  (bind-key [remap kill-buffer] #'koek-buff/bury)
 #+END_SRC
 
 * Other
