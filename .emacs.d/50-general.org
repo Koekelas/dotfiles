@@ -578,12 +578,6 @@ whitespace mode.
   ignored."
       (when koek-cpny/resume
         (whitespace-mode)))
-
-    (defun koek-cpny/setup-dabbrev-backend ()
-      "Setup dabbrev backend for current."
-      (setq-local company-backends
-                  '((company-dabbrev company-keywords company-files
-                     :with company-yasnippet))))
     :config
     (setq company-backends
           '((company-capf company-keywords company-files
@@ -599,6 +593,12 @@ whitespace mode.
 
   (use-package company-dabbrev
     :defer t
+    :preface
+    (defun koek-cpny/setup-dabbrev-backend ()
+      "Setup dabbrev backend for current."
+      (setq-local company-backends
+                  '((company-dabbrev company-keywords company-files
+                     :with company-yasnippet))))
     :config
     (setq company-dabbrev-other-buffers nil))
 #+END_SRC
