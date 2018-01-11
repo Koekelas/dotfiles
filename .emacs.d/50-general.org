@@ -1071,7 +1071,13 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     (defvar geiser-active-implementations)
 
     ;; Set implementations before geiser is loaded
-    (setq geiser-active-implementations '(guile)))
+    (setq geiser-active-implementations '(guile))
+    :config
+    (add-hook
+     'geiser-mode-hook
+     (apply-partially #'koek-cpny/set-backends
+                      '((geiser-company-backend company-keywords company-files
+                         :with company-yasnippet)))))
 
   (use-package geiser-autodoc
     :defer t
