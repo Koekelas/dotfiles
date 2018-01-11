@@ -562,6 +562,11 @@ whitespace mode.
      ("C-p" . company-select-previous))
     :hook (prog-mode . company-mode)
     :preface
+    (defun koek-cpny/set-backends (backends)
+      "Set backends of current to BACKENDS.
+  BACKENDS is a list of backends, see `company-backends'."
+      (setq-local company-backends backends))
+
     (defvar-local koek-cpny/resume nil
       "Whether whitespace-mode should be re-enabled or not.")
 
@@ -593,12 +598,6 @@ whitespace mode.
 
   (use-package company-dabbrev
     :defer t
-    :preface
-    (defun koek-cpny/setup-dabbrev-backend ()
-      "Setup dabbrev backend for current."
-      (setq-local company-backends
-                  '((company-dabbrev company-keywords company-files
-                     :with company-yasnippet))))
     :config
     (setq company-dabbrev-other-buffers nil))
 #+END_SRC
@@ -620,13 +619,7 @@ whitespace mode.
 #+BEGIN_SRC emacs-lisp
   (use-package company-tern
     :ensure t
-    :after tern
-    :preface
-    (defun koek-cpny/setup-tern-backend ()
-      "Setup tern backend for current."
-      (setq-local company-backends
-                  '((company-tern company-keywords company-files
-                     :with company-yasnippet)))))
+    :after tern)
 #+END_SRC
 
 ** lsp - Code insight
@@ -927,7 +920,10 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (unbind-key "M-." tern-mode-keymap)
     (unbind-key "M-," tern-mode-keymap)
 
-    (add-hook 'tern-mode-hook #'koek-cpny/setup-tern-backend)
+    (add-hook 'tern-mode-hook
+              (apply-partially #'koek-cpny/set-backends
+                               '((company-tern company-keywords company-files
+                                  :with company-yasnippet))))
     (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend)
     :delight)
 #+END_SRC
@@ -961,7 +957,10 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     :ensure t
     :mode (rx (or ".json" "/.tern-project") string-end)
     :config
-    (add-hook 'json-mode-hook #'koek-cpny/setup-dabbrev-backend))
+    (add-hook 'json-mode-hook
+              (apply-partially #'koek-cpny/set-backends
+                               '((company-dabbrev company-files
+                                  :with company-yasnippet)))))
 #+END_SRC
 
 ** Org
