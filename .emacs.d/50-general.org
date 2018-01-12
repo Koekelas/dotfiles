@@ -636,8 +636,6 @@ whitespace mode.
     (declare-function lsp--should-start-p "lsp-methods")
     (declare-function lsp--start "lsp-methods")
     (declare-function make-lsp--client "lsp-methods")
-    (declare-function lsp--stdio-send-async "lsp-send")
-    (declare-function lsp--stdio-send-sync "lsp-send")
     (declare-function projectile-project-p "projectile")
     (declare-function projectile-project-root "projectile")
 
