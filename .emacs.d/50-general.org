@@ -728,6 +728,17 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
 * Windows & buffers
 
+** winner - Undo & redo window layout changes
+#+BEGIN_SRC emacs-lisp
+  (use-package winner
+    :demand t
+    :bind
+    (("C-c w l" . winner-undo)
+     ("C-c w r" . winner-redo))
+    :config
+    (winner-mode))
+#+END_SRC
+
 ** eyebrowse - Workspaces
 [[https://github.com/wasamasa/eyebrowse][eyebrowse (GitHub)]]
 
