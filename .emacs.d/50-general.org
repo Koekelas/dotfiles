@@ -143,6 +143,13 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     (recentf-mode))
 #+END_SRC
 
+** saveplace - Restore point on revisit
+#+BEGIN_SRC emacs-lisp
+  (use-package saveplace
+    :config
+    (save-place-mode))
+#+END_SRC
+
 ** Auto save files
 Save auto-save files in ~/.emacs.d/var/auto-save/.
 
