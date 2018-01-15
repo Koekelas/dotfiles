@@ -1040,7 +1040,8 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     (unbind-key "C-c '" org-src-mode-map)
     (unbind-key "C-c C-k" org-src-mode-map)
 
-    (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers))
+    (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers)
+    :delight)
 
   (use-package ox
     :defer t
