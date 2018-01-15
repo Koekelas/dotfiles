@@ -767,6 +767,13 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (eyebrowse-mode))
 #+END_SRC
 
+** uniquify - Descriptive buffer names
+#+BEGIN_SRC emacs-lisp
+  (use-package uniquify
+    :config
+    (setq uniquify-buffer-name-style 'forward))
+#+END_SRC
+
 ** ibuffer - list-buffers replacement
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
