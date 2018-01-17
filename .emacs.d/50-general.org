@@ -740,6 +740,22 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
 * Windows & buffers
 
+** ace-window - Jump to window
+[[https://github.com/abo-abo/ace-window][ace-window (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind
+    ([remap other-window] . ace-window)
+    :config
+    (setq aw-swap-invert t)
+    (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
+    (setq aw-dispatch-alist '((?o aw-flip-window)))
+    (setq aw-leading-char-style 'path)
+    (setq aw-background nil))
+#+END_SRC
+
 ** winner - Undo & redo window layout changes
 #+BEGIN_SRC emacs-lisp
   (use-package winner
@@ -1260,6 +1276,9 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                      :background ,selection)
                 (whitespace-line     :foreground unspecified
                                      :background ,selection)
+                ;; ace-window
+                (aw-leading-char-face :foreground unspecified
+                                      :inherit avy-lead-face)
                 ;; eyebrowse-mode
                 (eyebrowse-mode-line-active :foreground unspecified
                                             :weight unspecified
