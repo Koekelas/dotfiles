@@ -483,10 +483,10 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
   Pretty symbol pair is a cons. Its car is a string, the symbol to
   replace. Its cdr is a key in `koek-ps/comp-specs', the symbol to
-  replace it with.
+  replace it with. When both symbols are identical, prefer a pretty
+  symbol.
 
-  Pretty symbol is a key in `koek-ps/comp-specs'. Its the symbol to
-  replace and the symbol to replace it with."
+  Pretty symbol is a key in `koek-ps/comp-specs'."
     (let ((specs
            (seq-reduce
             (lambda (specs symbol)
