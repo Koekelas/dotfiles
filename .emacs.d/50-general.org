@@ -899,10 +899,29 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :after ivy)
 #+END_SRC
 
-** eldoc - Show documentation
+** eldoc - Show docstring
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
     :commands eldoc-mode
+    :delight)
+#+END_SRC
+
+** which-key - Show keybindings
+[[https://github.com/justbur/emacs-which-key][which-key (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-add-key-based-replacements
+      "C-c !" "flycheck"
+      "C-c &" "yasnippet"
+      "C-c f" "files"
+      "C-c j" "jump"
+      "C-c o" "org"
+      "C-c p" "projectile"
+      "C-c w" "windows")
+    (which-key-mode)
     :delight)
 #+END_SRC
 
