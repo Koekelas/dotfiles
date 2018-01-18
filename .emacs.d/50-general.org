@@ -753,7 +753,11 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
     (setq aw-dispatch-alist '((?o aw-flip-window)))
     (setq aw-leading-char-style 'path)
-    (setq aw-background nil))
+    ;; When there are two windows, Ace chooses the other window. When
+    ;; there are three or more windows, Ace asks for a window. Keeping
+    ;; background enabled helps to distinguish above cases.
+    ;; (setq aw-background nil)
+    )
 #+END_SRC
 
 ** winner - Undo & redo window layout changes
@@ -1263,7 +1267,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                  (lc-blue   . ,(koek-thm/mix blue background))))))
            (specs
             (map-let
-                (foreground selection lc-fg lc-bg
+                (foreground background selection lc-fg lc-bg
                  red orange lc-yellow lc-green lc-aqua lc-blue)
                 (append personal theme)
               `((show-paren-match    :foreground ,foreground
@@ -1273,22 +1277,22 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                      :underline (:style wave :color ,red))
                 (mode-line-emphasis :foreground ,orange :slant unspecified)
                 ;; rainbow-delimiters-mode
-                (rainbow-delimiters-depth-1-face   :foreground ,lc-fg)
-                (rainbow-delimiters-depth-2-face   :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-3-face   :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-4-face   :foreground ,lc-green)
-                (rainbow-delimiters-depth-5-face   :foreground ,lc-blue)
-                (rainbow-delimiters-depth-6-face   :foreground ,lc-fg)
-                (rainbow-delimiters-depth-7-face   :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-8-face   :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-9-face   :foreground ,lc-green)
+                (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
+                (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
+                (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
+                (rainbow-delimiters-depth-4-face :foreground ,lc-green)
+                (rainbow-delimiters-depth-5-face :foreground ,lc-blue)
+                (rainbow-delimiters-depth-6-face :foreground ,lc-fg)
+                (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
+                (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
+                (rainbow-delimiters-depth-9-face :foreground ,lc-green)
                 (rainbow-delimiters-unmatched-face :foreground unspecified
                                                    :inherit show-paren-mismatch)
                 ;; whitespace-mode
-                (whitespace-space    :foreground ,lc-bg :background unspecified)
-                (whitespace-hspace   :foreground ,lc-bg :background unspecified)
-                (whitespace-tab      :foreground ,lc-bg :background unspecified)
-                (whitespace-newline  :foreground ,lc-bg :background unspecified)
+                (whitespace-space   :foreground ,lc-bg :background unspecified)
+                (whitespace-hspace  :foreground ,lc-bg :background unspecified)
+                (whitespace-tab     :foreground ,lc-bg :background unspecified)
+                (whitespace-newline :foreground ,lc-bg :background unspecified)
                 (whitespace-trailing :foreground unspecified
                                      :background ,selection)
                 (whitespace-empty    :foreground unspecified
@@ -1298,6 +1302,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 ;; ace-window
                 (aw-leading-char-face :foreground unspecified
                                       :inherit avy-lead-face)
+                (aw-background-face :foreground ,lc-fg :background ,background)
                 ;; eyebrowse-mode
                 (eyebrowse-mode-line-active :foreground unspecified
                                             :weight unspecified
