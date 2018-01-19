@@ -875,8 +875,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap insert-char] . counsel-unicode-char)
      ([remap yank-pop] . counsel-yank-pop)
      ([remap execute-extended-command] . counsel-M-x)
-     ([remap describe-variable] . counsel-describe-variable)
-     ([remap describe-function] . counsel-describe-function)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
      ("C-M-s" . counsel-ag)
      ("C-c j d" . counsel-imenu)
@@ -901,6 +899,19 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package flx
     :ensure t
     :after ivy)
+#+END_SRC
+
+** helpful - Help replacement
+[[https://github.com/Wilfred/helpful][helpful (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helpful
+    :ensure t
+    :bind
+    (([remap describe-variable] . helpful-variable)
+     ([remap describe-function] . helpful-callable)
+     ([remap describe-key] . helpful-key)
+     ("C-c C-d" . helpful-at-point)))
 #+END_SRC
 
 ** eldoc - Show docstring
