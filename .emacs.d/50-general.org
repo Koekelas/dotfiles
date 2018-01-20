@@ -910,8 +910,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :bind
     (([remap describe-variable] . helpful-variable)
      ([remap describe-function] . helpful-callable)
-     ([remap describe-key] . helpful-key)
-     ("C-c C-d" . helpful-at-point)))
+     ([remap describe-key] . helpful-key)))
 #+END_SRC
 
 ** eldoc - Show docstring
@@ -955,6 +954,13 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package elisp-mode
     :mode ((rx ".el" string-end) . emacs-lisp-mode)
     :config
+    (use-package helpful
+      :bind
+      (:map emacs-lisp-mode-map
+       ("C-c C-d" . helpful-at-point)
+       :map lisp-interaction-mode-map
+       ("C-c C-d" . helpful-at-point)))
+
     (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
     (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
     :delight (emacs-lisp-mode "El" :major))
