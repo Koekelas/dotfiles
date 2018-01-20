@@ -913,6 +913,16 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap describe-key] . helpful-key)))
 #+END_SRC
 
+** devdocs - Search DevDocs
+[[https://github.com/xuchunyang/DevDocs.el][devdocs (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package devdocs
+    :ensure t
+    :bind
+    ("C-c d d" . devdocs-search))
+#+END_SRC
+
 ** eldoc - Show docstring
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
@@ -930,6 +940,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (which-key-add-key-based-replacements
       "C-c !" "flycheck"
       "C-c &" "yasnippet"
+      "C-c d" "documentation"
       "C-c f" "files"
       "C-c j" "jump"
       "C-c o" "org"
