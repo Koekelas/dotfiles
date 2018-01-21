@@ -901,7 +901,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :after ivy)
 #+END_SRC
 
-** helpful - Help replacement
+** helpful - Help viewer
 [[https://github.com/Wilfred/helpful][helpful (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -911,6 +911,20 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (([remap describe-variable] . helpful-variable)
      ([remap describe-function] . helpful-callable)
      ([remap describe-key] . helpful-key)))
+#+END_SRC
+
+** info - Info viewer
+#+BEGIN_SRC emacs-lisp
+  (use-package info
+    :bind
+    ("C-c d i" . info-apropos))
+#+END_SRC
+
+** apropos - Search Emacs environment
+#+BEGIN_SRC emacs-lisp
+  (use-package apropos
+    :bind
+    ("C-c d a" . apropos))
 #+END_SRC
 
 ** devdocs - Search DevDocs
