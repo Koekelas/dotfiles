@@ -398,8 +398,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+BEGIN_SRC emacs-lisp
   (defun koek-ps/baseline-right-left-spec (&rest chars)
     "Return composition specification for CHARS.
-  Baseline right of previous character is composed with baseline
-  left of next character."
+  CHARS are two or more characters.  Baseline right of previous
+  character is composed with baseline left of next character."
     (seq-reduce (lambda (spec char)
                   `(,@spec (Br . Bl) ,char))
                 (cdr chars) (list (car chars))))
@@ -525,7 +525,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
   (defun koek-ps/make-enable (&rest symbols)
     "Return function to setup and enable function `prettify-symbols-mode'.
-  SYMBOLS is a list of pretty symbol pairs and/or pretty symbols.
+  SYMBOLS are one or more pretty symbol pairs and/or pretty
+  symbols.
 
   Pretty symbol pair is a cons. Its car is a string, the symbol to
   replace. Its cdr is a key in `koek-ps/comp-specs', the symbol to
