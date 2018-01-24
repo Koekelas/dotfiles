@@ -381,7 +381,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure t
-    :commands rainbow-delimiters-mode)
+    :hook ((emacs-lisp-mode scheme-mode) . rainbow-delimiters-mode))
 #+END_SRC
 
 ** expand-region - Mark increasingly larger unit
@@ -548,6 +548,12 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
         (prettify-symbols-mode))))
 
   (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
+  (add-hook 'js2-mode-hook
+            (koek-ps/make-enable
+             "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
+             "..." "/=" "<<" "<=" "==" "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
+  (add-hook 'scheme-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
 #+END_SRC
 
 ** Whitespace
@@ -571,6 +577,8 @@ End files with empty line.
   (defun koek-ws/disable-final-empty-line ()
     "Disable final empty line for current."
     (setq-local require-final-newline nil))
+
+  (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
 ** whitespace - Clean & visualize whitespace
@@ -654,6 +662,18 @@ whitespace mode.
           '((company-capf company-keywords company-files
              :with company-yasnippet)))
     (setq company-show-numbers t)
+    (add-hook 'tern-mode-hook
+              (koek-cpny/make-setup-backends
+               '((company-tern company-keywords company-files
+                  :with company-yasnippet))))
+    (add-hook 'json-mode-hook
+              (koek-cpny/make-setup-backends
+               '((company-dabbrev company-files
+                  :with company-yasnippet))))
+    (add-hook 'geiser-mode-hook
+              (koek-cpny/make-setup-backends
+               '((geiser-company-backend company-keywords company-files
+                  :with company-yasnippet))))
     (add-hook 'company-completion-started-hook
               #'koek-cpny/suspend-whitespace-mode)
     (add-hook 'company-completion-finished-hook
@@ -1031,9 +1051,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
        ("C-c C-d" . helpful-at-point)
        :map lisp-interaction-mode-map
        ("C-c C-d" . helpful-at-point)))
-
-    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-    (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
     :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
@@ -1063,10 +1080,6 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
-    (add-hook 'js2-mode-hook
-              (koek-ps/make-enable "function" "!!" "!=" "!==" "%=" "&&" "&=" "*="
-                                   "++" "+=" "--" "-=" "..." "/=" "<<" "<=" "=="
-                                   "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
     (add-hook 'js2-mode-hook #'koek-js/enable-code-insight)
     :delight (js2-mode "JS" :major))
 #+END_SRC
@@ -1077,17 +1090,11 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package tern
     :ensure t
-    :after js2-mode
+    :commands tern-mode
     :config
     ;; Resolve keybinding conflict with xref-js2
     (unbind-key "M-." tern-mode-keymap)
     (unbind-key "M-," tern-mode-keymap)
-
-    (add-hook
-     'tern-mode-hook
-     (koek-cpny/make-setup-backends '((company-tern company-keywords company-files
-                                       :with company-yasnippet))))
-    (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend)
     :delight)
 #+END_SRC
 
@@ -1103,13 +1110,14 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package xref-js2
     :ensure t
-    :after js2-mode
+    :after tern
     :preface
     (defun koek-xref/setup-js2-backend ()
       "Setup JS2 backend for current."
       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
     :config
-    (setq xref-js2-ignored-dirs '("node_modules")))
+    (setq xref-js2-ignored-dirs '("node_modules"))
+    (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend))
 #+END_SRC
 
 ** JSON
@@ -1118,11 +1126,7 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
-    :mode (rx (or ".json" "/.tern-project") string-end)
-    :config
-    (add-hook 'json-mode-hook
-              (koek-cpny/make-setup-backends '((company-dabbrev company-files
-                                                :with company-yasnippet)))))
+    :mode (rx (or ".json" "/.tern-project") string-end))
 #+END_SRC
 
 ** Org
@@ -1217,9 +1221,6 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package scheme
     :mode ((rx ".scm" string-end) . scheme-mode)
-    :config
-    (add-hook 'scheme-mode-hook #'rainbow-delimiters-mode)
-    (add-hook 'scheme-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
     :delight (scheme-mode "Scm" :major))
 #+END_SRC
 
@@ -1234,13 +1235,7 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     (defvar geiser-active-implementations)
 
     ;; Set implementations before geiser is loaded
-    (setq geiser-active-implementations '(guile))
-    :config
-    (add-hook
-     'geiser-mode-hook
-     (koek-cpny/make-setup-backends
-      '((geiser-company-backend company-keywords company-files
-         :with company-yasnippet)))))
+    (setq geiser-active-implementations '(guile)))
 
   (use-package geiser-autodoc
     :defer t
@@ -1262,9 +1257,7 @@ For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :mode ("/snippets/" . snippet-mode)
-    :config
-    (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line))
+    :mode ("/snippets/" . snippet-mode))
 #+END_SRC
 
 * Appearance
