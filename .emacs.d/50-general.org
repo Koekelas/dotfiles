@@ -211,7 +211,9 @@ Save auto-save files in ~/.emacs.d/var/auto-save/.
 #+END_SRC
 
 *** Issues
-- Conflicts with [[*prettify-symbols - Show composed symbols][prettify-symbols - Show composed symbols]], see [[https://github.com/abo-abo/avy/issues/103][Issue 103 (GitHub)]].
+
+**** Avy and Prettify Symbols conflict
+See [[https://github.com/abo-abo/avy/issues/103][Issue 103 (GitHub)]].
 
 ** Jump to recent mark positions
 When popping mark, skip consecutive identical marks.
@@ -775,11 +777,18 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (:map undo-tree-map
      ("M-/" . undo-tree-redo))
     :config
-    ;; FIXME: When revisiting then modifying file, history is discarded
-    ;; (setq undo-tree-auto-save-history t)
     (global-undo-tree-mode)
     :delight)
 #+END_SRC
+
+*** Issues
+
+**** Restoring history fails
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq undo-tree-auto-save-history t)
+#+END_SRC
+
+When revisiting then modifying file, history is discarded.
 
 ** ispell - Spell checker
 #+BEGIN_SRC emacs-lisp
@@ -1030,6 +1039,15 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     (which-key-mode)
     :delight)
 #+END_SRC
+
+*** Issues
+
+**** Sorting on description fails
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq which-key-sort-order 'which-key-description-order)
+#+END_SRC
+
+Prefix map ~projectile~ is sorted before prefix map ~documentation~.
 
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
