@@ -320,31 +320,49 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (((prog-mode comint-mode) . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
+    (declare-function sp--get-context "smartparens")
+    (declare-function sp-get-pair "smartparens")
     (declare-function sp-local-pair "smartparens")
 
-    (defun koek-sp/separate-sexp (_open-delimiter action context)
+    (defun koek-sp/separate-sexp (open-delimiter action _context)
       "Separate just inserted sexp from next sexp.
-  ACTION and CONTEXT are symbols, see `sp-pair'.  _OPEN-DELIMITER
-  is ignored."
-      (when (and (eq action 'insert) (eq context 'code))
+  OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
+  symbol, the action performed, see `sp-pair'.  _CONTEXT is
+  ignored."
+      (when (and (eq action 'insert)
+                 ;; Outer context, _context is inner context
+                 (eq (sp--get-context
+                      (save-excursion
+                        (search-backward open-delimiter)))
+                     'code))
         (save-excursion
-          (sp-up-sexp)
+          (search-backward open-delimiter)
+          (unless (looking-back (rx (or blank "(" "[" "{" line-start))
+                                (max (1- (point)) (point-min)))
+            (insert " "))
+          (search-forward open-delimiter)
+          (search-forward (sp-get-pair open-delimiter :close))
           (unless (looking-at (rx (or blank ")" "]" "}" line-end)))
             (insert " ")))))
 
     (defun koek-sp/setup-separate-sexp-handler (mode &rest open-delimiters)
       "Setup separate-sexp handler in MODE for OPEN-DELIMITERS.
   MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
-  strings, the delimiters to open pairs."
+  strings."
       (dolist (open-delimiter open-delimiters)
         (sp-local-pair mode open-delimiter nil
                        :post-handlers '(:add koek-sp/separate-sexp))))
 
-    (defun koek-sp/format-c-block (_open-delimiter action context)
+    (defun koek-sp/format-c-block (open-delimiter action _context)
       "Format just inserted multiple line C block.
-  ACTION and CONTEXT are symbols, see `sp-pair'.  _OPEN-DELIMITER
-  is ignored."
-      (when (and (eq action 'insert) (eq context 'code))
+  OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
+  symbol, the action performed, see `sp-pair'.  _CONTEXT is
+  ignored."
+      (when (and (eq action 'insert)
+                 (eq (sp--get-context
+                      (save-excursion
+                        (search-backward open-delimiter)))
+                     'code))
         (save-excursion
           (insert "\n")
           (indent-according-to-mode))
@@ -355,7 +373,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
         (mode &rest open-delimiters)
       "Setup format-c-block handler in MODE for OPEN-DELIMITERS.
   MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
-  strings, the delimiters to open pairs."
+  strings."
       (dolist (open-delimiter open-delimiters)
         (sp-local-pair mode open-delimiter nil
                        ;; For event names, see `single-key-description'
@@ -370,8 +388,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
     (setq sp-navigate-interactive-always-progress-point t)
     (setq sp-navigate-reindent-after-up ())
-    (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(")
-    (koek-sp/setup-separate-sexp-handler 'scheme-mode "(")
+    (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
+    (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
     :delight)
