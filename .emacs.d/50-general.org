@@ -337,12 +337,12 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                      'code))
         (save-excursion
           (search-backward open-delimiter)
-          (unless (looking-back (rx (or blank "(" "[" "{" line-start))
+          (unless (looking-back (rx (or (any "#'`,~@([{" blank) line-start))
                                 (max (1- (point)) (point-min)))
             (insert " "))
           (search-forward open-delimiter)
           (search-forward (sp-get-pair open-delimiter :close))
-          (unless (looking-at (rx (or blank ")" "]" "}" line-end)))
+          (unless (looking-at (rx (or (any ")]}" blank) line-end)))
             (insert " ")))))
 
     (defun koek-sp/setup-separate-sexp-handler (mode &rest open-delimiters)
