@@ -325,7 +325,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (declare-function sp-local-pair "smartparens")
 
     (defun koek-sp/separate-sexp (open-delimiter action _context)
-      "Separate just inserted sexp from next sexp.
+      "Separate just inserted sexp from previous and/or next sexp.
   OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
   symbol, the action performed, see `sp-pair'.  _CONTEXT is
   ignored."
