@@ -11,6 +11,9 @@
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://www.x.org/][xprop]]
+- Clojure:
+  - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+  - [[https://leiningen.org/][Leiningen]]
 - JavaScript:
   - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
   - [[https://nodejs.org/][Node.js]]
@@ -26,6 +29,10 @@ On Arch Linux, run:
   # General
   pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts
   pacman -S the_silver_searcher xorg-xprop
+
+  # Clojure
+  pacman -S jdk9-openjdk
+  # leiningen (AUR)
 
   # JavaScript
   pacman -S nodejs npm python2

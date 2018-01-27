@@ -233,7 +233,7 @@ When popping mark, skip consecutive identical marks.
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
-    :hook ((prog-mode comint-mode) . subword-mode)
+    :hook ((prog-mode comint-mode cider-repl-mode) . subword-mode)
     :delight)
 #+END_SRC
 
@@ -317,7 +317,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode comint-mode) . smartparens-mode)
+    (((prog-mode comint-mode cider-repl-mode) . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (declare-function sp--get-context "smartparens")
@@ -388,6 +388,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
     (setq sp-navigate-interactive-always-progress-point t)
     (setq sp-navigate-reindent-after-up ())
+    (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
     (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
     (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
@@ -401,7 +402,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure t
-    :hook ((emacs-lisp-mode scheme-mode) . rainbow-delimiters-mode))
+    :hook ((clojure-mode emacs-lisp-mode scheme-mode) . rainbow-delimiters-mode))
 #+END_SRC
 
 ** expand-region - Mark increasingly larger unit
@@ -569,6 +570,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
         (prettify-symbols-mode))))
 
   (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (add-hook 'clojure-mode-hook
+            (koek-ps/make-enable "lambda" "->" "->>" "<=" ">="))
   (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
   (add-hook 'js2-mode-hook
             (koek-ps/make-enable
@@ -1076,6 +1079,26 @@ Prefix map ~projectile~ is sorted before prefix map ~documentation~.
 #+END_SRC
 
 * Languages
+
+** Clojure
+[[https://github.com/clojure-emacs/clojure-mode][clojure-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :ensure t
+    :mode (rx ".clj" string-end)
+    :delight (clojure-mode "Clj" :major))
+#+END_SRC
+
+*** cider - Interact with process
+[[https://github.com/clojure-emacs/cider][cider (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
+    :ensure t
+    :after clojure-mode
+    :delight " CIDER")
+#+END_SRC
 
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
