@@ -990,8 +990,11 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ([remap execute-extended-command] . counsel-M-x)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
      ("C-M-s" . counsel-ag)
+     ("C-c f l" . counsel-find-library)
      ("C-c j d" . counsel-imenu)
-     ("C-c j o" . counsel-org-goto-all)))
+     ("C-c j o" . counsel-org-goto-all)
+     :map minibuffer-local-map
+     ("C-r" . counsel-minibuffer-history)))
 #+END_SRC
 
 *** counsel-projectile - Ivy powered Projectile commands
