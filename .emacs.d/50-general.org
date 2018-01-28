@@ -697,7 +697,7 @@ whitespace mode.
              :with company-yasnippet)))
     (setq company-show-numbers t)
 
-    ;; Setup specific backends
+    ;; Setup mode specific backends
     (add-hook 'tern-mode-hook
               (koek-cpny/make-setup-backends
                '((company-tern company-keywords company-files
