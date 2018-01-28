@@ -1116,6 +1116,9 @@ Prefix map ~projectile~ is sorted before prefix map ~documentation~.
     :delight " CIDER")
 #+END_SRC
 
+**** Jacking in to a Luminus project
+Run ~M-x~ ~cider-jack-in~ then, from the REPL, run ~(start)~.
+
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
   (use-package elisp-mode
