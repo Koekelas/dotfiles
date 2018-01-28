@@ -1673,7 +1673,8 @@ in mode line.
        (when eyebrowse-mode
          (let ((workspaces (koek-ml/workspaces))
                (current-id (koek-ml/current-workspace-id)))
-           (when (or (> (length workspaces) 1) (not (= current-id 1)))
+           (when (and workspaces
+                      (or (> (length workspaces) 1) (not (= current-id 1))))
              (concat
               (mapconcat
                (lambda (workspace)
