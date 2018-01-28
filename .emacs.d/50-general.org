@@ -654,17 +654,26 @@ whitespace mode.
     :ensure t
     :bind
     (:map company-mode-map
-     ([remap indent-for-tab-command] . company-indent-or-complete-common)
+     ;; Why does [remap indent-for-tab-command] only work in prog-mode?
+     ("TAB" . company-indent-or-complete-common)
      :map company-active-map
      ("C-n" . company-select-next)
      ("C-p" . company-select-previous))
-    :hook (prog-mode . company-mode)
+    :hook ((prog-mode comint-mode cider-repl-mode) . company-mode)
     :preface
     (defun koek-cpny/make-setup-backends (backends)
       "Return function to setup backends for current.
   BACKENDS is a list of backends, see `company-backends'."
       (lambda ()
         (setq-local company-backends backends)))
+
+    ;; Prevent geiser from modifying company-backends
+    (define-advice
+        geiser-company--setup-company
+        (:around (f &rest args) koek-cpny/disable-setup-backends)
+      (let ((backends company-backends))
+        (apply f args)
+        (setq company-backends backends)))
 
     (defvar-local koek-cpny/resume nil
       "Whether whitespace-mode should be re-enabled or not.")
@@ -687,6 +696,8 @@ whitespace mode.
           '((company-capf company-keywords company-files
              :with company-yasnippet)))
     (setq company-show-numbers t)
+
+    ;; Setup specific backends
     (add-hook 'tern-mode-hook
               (koek-cpny/make-setup-backends
                '((company-tern company-keywords company-files
@@ -695,10 +706,14 @@ whitespace mode.
               (koek-cpny/make-setup-backends
                '((company-dabbrev company-files
                   :with company-yasnippet))))
-    (add-hook 'geiser-mode-hook
-              (koek-cpny/make-setup-backends
-               '((geiser-company-backend company-keywords company-files
-                  :with company-yasnippet))))
+    (let ((setup-backends
+           (koek-cpny/make-setup-backends
+            '((geiser-company-backend company-keywords company-files
+               :with company-yasnippet)))))
+      (add-hook 'geiser-mode-hook setup-backends)
+      (add-hook 'geiser-repl-mode-hook setup-backends))
+
+    ;; Setup suspend whitespace-mode on complete
     (add-hook 'company-completion-started-hook
               #'koek-cpny/suspend-whitespace-mode)
     (add-hook 'company-completion-finished-hook
