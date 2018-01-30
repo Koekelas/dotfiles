@@ -15,13 +15,19 @@ only mode.
   ;;; Code:
 #+END_SRC
 
+Require libraries.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'subr-x)
+#+END_SRC
+
 * Name & e-mail
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Nicolas De Jaeghere")
   (setq user-mail-address "nicodeja@gmail.com")
 #+END_SRC
 
-* Files & directories
+* File & directory names
 #+BEGIN_SRC emacs-lisp
   (defconst koek/home-dir-kratos "d:/"
     "File name to home directory on Kratos.")
@@ -43,6 +49,20 @@ only mode.
               (expand-file-name file-name koek/org-dir))
             '("To Do.org" "Afspraken.org"))
     "List of file names to static agenda files.")
+
+  (use-package erlang
+    :defer t
+    :config
+    ;; On Windows, executable-find finds the erlc shim. Shadow
+    ;; c:/ProgramData/chocolatey/bin/.
+    (when-let
+        (erlc-program-name
+         ;; Assume only one version is installed
+         (car (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" 'full)))
+      (push (file-name-directory erlc-program-name) exec-path))
+    (when-let (erlc-program-name (executable-find "erlc"))
+      (setq erlang-root-dir
+            (locate-dominating-file (file-truename erlc-program-name) "bin"))))
 #+END_SRC
 
 * To-do's & agenda

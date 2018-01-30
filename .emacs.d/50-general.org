@@ -574,6 +574,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (add-hook 'clojure-mode-hook
             (koek-ps/make-enable "lambda" "->" "->>" "<=" ">="))
   (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
+  (add-hook 'erlang-mode-hook (koek-ps/make-enable "->" '("=<" . "<=") ">="))
   (add-hook 'js2-mode-hook
             (koek-ps/make-enable
              "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
@@ -834,8 +835,8 @@ When revisiting then modifying file, history is discarded.
     :config
     (setq ispell-program-name "hunspell")
     (let ((dictionary-name "en_US"))
-      ;; Hunspell on Windows requires DICTIONARY environment variable to
-      ;; be set
+      ;; On Windows, Hunspell requires DICTIONARY environment variable
+      ;; to be set
       (when (eq system-type 'windows-nt)
         (setenv "DICTIONARY" dictionary-name))
       (setq ispell-dictionary dictionary-name)))
@@ -1134,6 +1135,16 @@ Run ~M-x~ ~cider-jack-in~ then, from the REPL, run ~(start)~.
        :map lisp-interaction-mode-map
        ("C-c C-d" . helpful-at-point)))
     :delight (emacs-lisp-mode "El" :major))
+#+END_SRC
+
+** Erlang
+[[https://github.com/erlang/otp][erlang (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package erlang
+    :ensure t
+    :mode ((rx ".erl" string-end) . erlang-mode)
+    :delight (erlang-mode "Erl" :major))
 #+END_SRC
 
 ** JavaScript
@@ -1642,7 +1653,8 @@ in mode line.
   (defconst koek-ml/checker-names
     '((lsp . "LSP")
       (emacs-lisp . "El")
-      (emacs-lisp-checkdoc . "Checkdoc"))
+      (emacs-lisp-checkdoc . "Checkdoc")
+      (erlang . "Erlc"))
     "Alist of checker symbol to checker name pairs.")
 
   (declare-function flycheck-get-checker-for-buffer "flycheck")
