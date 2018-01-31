@@ -43,6 +43,13 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     (setq dired-listing-switches "-lah"))
 #+END_SRC
 
+** Trash
+Move deleted files to trash.
+
+#+BEGIN_SRC emacs-lisp
+  (setq delete-by-moving-to-trash t)
+#+END_SRC
+
 ** projectile - Projects
 [[https://github.com/bbatsov/projectile][projectile (GitHub)]]
 
