@@ -1076,7 +1076,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
       "C-c j" "jump"
       "C-c o" "org"
       "C-c p" "projectile"
-      "C-c w" "windows")
+      "C-c w" "windows"
+      "C-c x" "other")
     (which-key-mode)
     :delight)
 #+END_SRC
@@ -1089,6 +1090,23 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+END_SRC
 
 Prefix map ~projectile~ is sorted before prefix map ~documentation~.
+
+** compile - Run asynchronous processes
+#+BEGIN_SRC emacs-lisp
+  (use-package compile
+    :bind
+    (("C-c x c" . compile)
+     ("C-c x r" . recompile))
+    :preface
+    (declare-function ansi-color-apply-on-region "ansi-color")
+
+    (defun koek-cmpl/style-output ()
+      "Style output of process.
+  Output is between compilation-filter-start and point."
+      (ansi-color-apply-on-region compilation-filter-start (point)))
+    :config
+    (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
+#+END_SRC
 
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
