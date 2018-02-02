@@ -1142,7 +1142,7 @@ Prefix map ~projectile~ is sorted before prefix map ~documentation~.
   (use-package cider
     :ensure t
     :after clojure-mode
-    :delight " CIDER")
+    :delight)
 #+END_SRC
 
 **** Jacking in to a Luminus project
@@ -1339,7 +1339,13 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package scheme
     :mode ((rx ".scm" string-end) . scheme-mode)
-    :delight (scheme-mode "Scm" :major))
+    :delight
+    (scheme-mode
+     (:eval
+      (if geiser-impl--implementation
+          (capitalize (symbol-name geiser-impl--implementation))
+        "Scm"))
+     :major))
 #+END_SRC
 
 *** geiser - Interact with process
@@ -1353,7 +1359,9 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     (defvar geiser-active-implementations)
 
     ;; Set implementations before geiser is loaded
-    (setq geiser-active-implementations '(guile)))
+    (setq geiser-active-implementations '(guile))
+    ;; Package name is geiser but feature name is geiser-mode
+    :delight (geiser-mode nil geiser-mode))
 
   (use-package geiser-autodoc
     :defer t
