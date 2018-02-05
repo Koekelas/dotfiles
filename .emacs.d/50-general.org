@@ -684,7 +684,7 @@ whitespace mode.
         (setq company-backends backends)))
 
     (defvar-local koek-cpny/resume nil
-      "Whether whitespace-mode should be re-enabled or not.")
+      "Whether whitespace-mode should be re-enabled.")
 
     (defun koek-cpny/suspend-whitespace-mode (&rest _args)
       "Suspend whitespace-mode.
@@ -875,8 +875,8 @@ When revisiting then modifying file, history is discarded.
     (setq aw-dispatch-alist '((?o aw-flip-window)))
     (setq aw-leading-char-style 'path)
     ;; When there are two windows, Ace chooses the other window. When
-    ;; there are three or more windows, Ace asks for a window. Keeping
-    ;; background enabled helps to distinguish above cases.
+    ;; there are three or more windows, Ace asks for a window. Enabling
+    ;; background (default) differentiates both cases.
     ;; (setq aw-background nil)
     )
 #+END_SRC
@@ -1371,6 +1371,35 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
   (use-package geiser-mode
     :defer t
     :delight)
+#+END_SRC
+
+** SQL
+#+BEGIN_SRC emacs-lisp
+  (use-package sql
+    :mode ((rx ".sql" string-end) . sql-mode)
+    :preface
+    ;; When SQL dialect is setup, whitespace-mode faces are overridden
+    (define-advice sql-mode (:around (f) koek-sql/defer-whitespace-mode)
+      (let ((prog-mode-hook               ; Looked up dynamically
+             (remq 'whitespace-mode prog-mode-hook)))
+        (funcall f)))
+
+    (define-advice
+        sql-highlight-product (:around (f) koek-sql/re-enable-whitespace-mode)
+      (whitespace-mode 0)
+      (funcall f)
+      (whitespace-mode))
+
+    ;; When SQL dialect is setup, mode-name is overridden (i.e. delight
+    ;; is undone)
+    (define-advice sql-highlight-product (:after () koek-sql/update-mode-name)
+      (setq mode-name
+            '(:eval
+              ;; When mode-name is evaluated outside mode line,
+              ;; inhibit-mode-name-delight is truthy
+              (if (or inhibit-mode-name-delight (eq sql-product 'ansi))
+                  "SQL"
+                (sql-get-product-feature sql-product :name))))))
 #+END_SRC
 
 ** Text
