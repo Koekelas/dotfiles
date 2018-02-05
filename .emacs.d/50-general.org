@@ -81,14 +81,18 @@ Move deleted files to trash.
       "Check spelling of commit message.
   When FORCE is truthy, continue commit unconditionally."
       (if git-commit-mode
-          (let ((ispell-skip-region-alist ; Looked up dynamically
-                 (cons `(,(rx line-start "#") forward-line) ; Single line comment
-                       ispell-skip-region-alist))
-                (tick (buffer-chars-modified-tick)))
-            (ispell-buffer)
+          (let* ((ispell-skip-region-alist ; Looked up dynamically
+                  (cons `(,(rx line-start "#") forward-line) ; Single line comment
+                        ispell-skip-region-alist))
+                 (tick (buffer-chars-modified-tick))
+                 (result (ispell-buffer)))
             (or force
-                (= (buffer-chars-modified-tick) tick) ; No corrections made
-                (y-or-n-p "Spelling checked.  Commit? ")))
+                ;; When spell check was completed, result is truthy
+                (and result
+                     ;; When nothing was corrected,
+                     ;; buffer-chars-modified-tick isn't incremented
+                     (or (= (buffer-chars-modified-tick) tick)
+                         (y-or-n-p "Spelling checked.  Commit? ")))))
         t))
     :config
     (add-hook 'with-editor-finish-query-functions #'koek-git/check-spelling))
