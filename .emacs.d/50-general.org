@@ -89,8 +89,8 @@ Move deleted files to trash.
             (or force
                 ;; When spell check was completed, result is truthy
                 (and result
-                     ;; When nothing was corrected,
-                     ;; buffer-chars-modified-tick isn't incremented
+                     ;; When nothing was corrected, character tick
+                     ;; counter is unchanged
                      (or (= (buffer-chars-modified-tick) tick)
                          (y-or-n-p "Spelling checked.  Commit? ")))))
         t))
