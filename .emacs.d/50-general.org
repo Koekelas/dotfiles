@@ -863,6 +863,15 @@ When revisiting then modifying file, history is discarded.
     :delight)
 #+END_SRC
 
+*** flycheck-jslint - JSLint checker
+[[https://github.com/Koekelas/jslint-cli][flycheck-jslint (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-jslint
+    :load-path "lisp/jslint-cli/"
+    :after js2-mode)
+#+END_SRC
+
 * Windows & buffers
 
 ** ace-window - Jump to window
@@ -1725,7 +1734,8 @@ in mode line.
     '((lsp . "LSP")
       (emacs-lisp . "El")
       (emacs-lisp-checkdoc . "Checkdoc")
-      (erlang . "Erlc"))
+      (erlang . "Erlc")
+      (javascript-jslint . "JSLint"))
     "Alist of checker symbol to checker name pairs.")
 
   (declare-function flycheck-get-checker-for-buffer "flycheck")

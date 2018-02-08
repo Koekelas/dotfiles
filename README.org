@@ -2,7 +2,16 @@
 
 [[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
 
-* Dependencies
+* Getting started
+To get started, run:
+
+#+BEGIN_SRC sh
+  git clone --recurse-submodules https://github.com/Koekelas/dotfiles.git
+#+END_SRC
+
+Then copy the contents of this directory to your home directory.
+
+* Installing dependencies
 
 ** Emacs
 - General:
@@ -25,7 +34,7 @@
 - Scheme:
   - [[https://www.gnu.org/software/guile/][Guile]]
 
-On Arch Linux, run:
+To install dependencies on Arch Linux, run:
 
 #+BEGIN_SRC sh
   # General
@@ -42,6 +51,8 @@ On Arch Linux, run:
   # JavaScript
   pacman -S nodejs npm python2
   npm i -g javascript-typescript-langserver tern
+  cd ~/.emacs.d/lisp/jslint-cli/
+  npm i -g
 
   # Org
   pacman -S texlive-core texlive-latexextra

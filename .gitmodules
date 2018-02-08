@@ -1,0 +1,3 @@
+[submodule "jslint-cli"]
+	path = .emacs.d/lisp/jslint-cli
+	url = https://github.com/Koekelas/jslint-cli.git
