@@ -869,7 +869,7 @@ When revisiting then modifying file, history is discarded.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-jslint
     :load-path "lisp/jslint-cli/"
-    :after js2-mode)
+    :after (:any js2-mode json-mode))
 #+END_SRC
 
 * Windows & buffers
