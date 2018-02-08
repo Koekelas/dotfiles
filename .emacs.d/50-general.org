@@ -174,7 +174,7 @@ Move deleted files to trash.
 #+END_SRC
 
 ** Auto save files
-Save auto-save files in ~/.emacs.d/var/auto-save/.
+Save auto-save files in =~/.emacs.d/var/auto-save/=.
 
 #+BEGIN_SRC emacs-lisp
   (setq auto-save-file-name-transforms
@@ -637,7 +637,7 @@ End files with empty line.
 #+END_SRC
 
 ** Complete text
-When line is indented, press ~TAB~ to complete text before point.
+When line is indented, press =TAB= to complete text before point.
 
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
@@ -1109,7 +1109,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (setq which-key-sort-order 'which-key-description-order)
 #+END_SRC
 
-Prefix map ~projectile~ is sorted before prefix map ~documentation~.
+Prefix map =projectile= is sorted before prefix map =documentation=.
 
 ** compile - Run asynchronous processes
 #+BEGIN_SRC emacs-lisp
@@ -1162,7 +1162,7 @@ Prefix map ~projectile~ is sorted before prefix map ~documentation~.
 #+END_SRC
 
 **** Jacking in to a Luminus project
-Run ~M-x~ ~cider-jack-in~ then, from the REPL, run ~(start)~.
+Run =M-x= ~cider-jack-in~ then, from the REPL, run ~(start)~.
 
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
@@ -1233,8 +1233,8 @@ Run ~M-x~ ~cider-jack-in~ then, from the REPL, run ~(start)~.
 #+END_SRC
 
 **** Getting started
-Create then visit file ~.tern-project~ in project home directory.
-Expand snippet ~browser~ or ~node~.
+Create then visit file =.tern-project= in project home directory.
+Expand snippet =browser= or =node=.
 
 For more information, see [[https://ternjs.net/doc/manual.html#configuration][Project configuration (Tern)]].
 
