@@ -1162,7 +1162,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+END_SRC
 
 **** Jacking in to a Luminus project
-Run =M-x= ~cider-jack-in~ then, from the REPL, run ~(start)~.
+Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
 
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
