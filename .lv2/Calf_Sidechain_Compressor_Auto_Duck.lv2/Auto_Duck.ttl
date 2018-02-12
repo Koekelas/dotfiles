@@ -1,0 +1,70 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<>
+	a pset:Preset ;
+	lv2:appliesTo <http://calf.sourceforge.net/plugins/SidechainCompressor> ;
+	rdfs:label "Auto Duck" ;
+	lv2:port [
+		lv2:symbol "attack" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "bypass" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "detection" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "f1_freq" ;
+		pset:value 250.0
+	] , [
+		lv2:symbol "f1_level" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "f2_freq" ;
+		pset:value 4500.0
+	] , [
+		lv2:symbol "f2_level" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "knee" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "level_in" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "makeup" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "mix" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "ratio" ;
+		pset:value 2.0
+	] , [
+		lv2:symbol "release" ;
+		pset:value 500.0
+	] , [
+		lv2:symbol "sc_level" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "sc_listen" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "sc_mode" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "sc_route" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "stereo_link" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "threshold" ;
+		pset:value 0.0079
+	] .
