@@ -1,0 +1,16 @@
+#+TITLE: Dotfiles
+#+PROPERTY: header-args :mkdirp yes
+
+* Leiningen
+:PROPERTIES:
+:header-args+: :tangle .lein/profiles.clj
+:END:
+
+Migratus included with Luminus =2.9.12.10= and later, crashes. The last
+version tested is =2.9.12.25=. Pin Luminus to =2.9.12.09=.
+
+#+BEGIN_SRC clojure
+  {:user {:plugins [[luminus/lein-template "2.9.12.09"]]}}
+#+END_SRC
+
+Migratus included with Luminus =2.9.12.09= only works with Java 8.
