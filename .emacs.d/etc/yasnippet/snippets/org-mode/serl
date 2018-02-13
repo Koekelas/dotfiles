@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Erlang code block
+# key: <serl
+# --
+#+BEGIN_SRC erlang
+$0
+#+END_SRC

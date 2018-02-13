@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: JSON code block
+# key: <sjson
+# --
+#+BEGIN_SRC json
+$0
+#+END_SRC

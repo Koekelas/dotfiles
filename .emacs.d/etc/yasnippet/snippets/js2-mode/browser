@@ -1,0 +1,13 @@
+# -*- mode: snippet; -*-
+# name: New JavaScript browser file
+# key: browser
+# --
+/*jslint
+  browser
+*/
+
+(function () {
+    "use strict";
+
+    $0
+}());

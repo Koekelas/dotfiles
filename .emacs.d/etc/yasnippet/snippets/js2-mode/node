@@ -1,0 +1,13 @@
+# -*- mode: snippet; -*-
+# name: New JavaScript Node.js file
+# key: node
+# --
+/*jslint
+  node
+*/
+
+"use strict";
+
+$0
+
+module.exports = {};
