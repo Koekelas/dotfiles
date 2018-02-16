@@ -27,6 +27,7 @@ Finally, copy the dotfiles to your home directory.
 - Erlang:
   - [[https://www.erlang.org/][Erlang/OTP]]
 - JavaScript:
+  - [[https://www.chromium.org/][Chromium]]
   - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
   - [[https://nodejs.org/][Node.js]]
   - [[https://ternjs.net/][Tern]]
@@ -50,7 +51,7 @@ To install dependencies on Arch Linux, run:
   pacman -S erlang-nox
 
   # JavaScript
-  pacman -S nodejs npm python2
+  pacman -S chromium nodejs npm python2
   npm i -g javascript-typescript-langserver tern
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g

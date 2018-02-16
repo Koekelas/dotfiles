@@ -244,7 +244,8 @@ When popping mark, skip consecutive identical marks.
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
-    :hook ((prog-mode comint-mode cider-repl-mode) . subword-mode)
+    :hook
+    ((prog-mode comint-mode cider-repl-mode indium-repl-mode) . subword-mode)
     :delight)
 #+END_SRC
 
@@ -328,7 +329,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode comint-mode cider-repl-mode) . smartparens-mode)
+    (((prog-mode comint-mode cider-repl-mode indium-repl-mode) . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (declare-function sp--get-context "smartparens")
@@ -713,6 +714,10 @@ whitespace mode.
     (add-hook 'tern-mode-hook
               (koek-cpny/make-setup-backends
                '((company-tern company-keywords company-files
+                  :with company-yasnippet))))
+    (add-hook 'indium-repl-mode-hook
+              (koek-cpny/make-setup-backends
+               '((company-indium-repl company-keywords company-files
                   :with company-yasnippet))))
     (add-hook 'json-mode-hook
               (koek-cpny/make-setup-backends
@@ -1252,6 +1257,19 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     :config
     (setq xref-js2-ignored-dirs '("node_modules"))
     (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend))
+#+END_SRC
+
+*** indium - Interact with process
+[[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package indium
+    :ensure t
+    :defer t)
+
+  (use-package indium-interaction
+    :hook (js2-mode . indium-interaction-mode)
+    :delight)
 #+END_SRC
 
 ** JSON
