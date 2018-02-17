@@ -245,7 +245,8 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode comint-mode cider-repl-mode indium-repl-mode) . subword-mode)
+    ((prog-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+     . subword-mode)
     :delight)
 #+END_SRC
 
@@ -329,7 +330,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode comint-mode cider-repl-mode indium-repl-mode) . smartparens-mode)
+    (((prog-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+      . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (declare-function sp--get-context "smartparens")
@@ -1115,6 +1117,21 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
 #+END_SRC
 
 Prefix map =projectile= is sorted before prefix map =documentation=.
+
+** eshell - Shell
+#+BEGIN_SRC emacs-lisp
+  (use-package eshell
+    :bind
+    ("C-c x t" . eshell))
+
+  (use-package em-unix
+    :defer t
+    :config
+    (setq eshell-mv-interactive-query t)
+    (setq eshell-cp-interactive-query t)
+    (setq eshell-ln-interactive-query t)
+    (setq eshell-rm-interactive-query t))
+#+END_SRC
 
 ** compile - Run asynchronous processes
 #+BEGIN_SRC emacs-lisp
