@@ -98,7 +98,7 @@ Move deleted files to trash.
     (add-hook 'with-editor-finish-query-functions #'koek-git/check-spelling))
 #+END_SRC
 
-** ediff - Compare files
+** ediff - Diff viewer
 #+BEGIN_SRC emacs-lisp
   (use-package ediff
     :bind
