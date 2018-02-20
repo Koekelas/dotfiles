@@ -788,7 +788,6 @@ whitespace mode.
     :ensure t
     :after js2-mode
     :config
-    (require 'lsp-flycheck)
     (declare-function lsp--make-stdio-connection "lsp-mode")
     (declare-function lsp--should-start-p "lsp-methods")
     (declare-function lsp--start "lsp-methods")
@@ -806,6 +805,12 @@ whitespace mode.
             default-directory)))
      "javascript-typescript-stdio")
     :delight)
+
+  (use-package lsp-flycheck
+    :after lsp-mode)
+
+  (use-package lsp-imenu
+    :hook (lsp-after-open . lsp-enable-imenu))
 #+END_SRC
 
 ** abbrev - Abbreviations
