@@ -21,6 +21,8 @@ Finally, copy the dotfiles to your home directory.
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://x.org/][xprop]]
+- C family:
+  - [[https://gcc.gnu.org/][GCC]]
 - Clojure:
   - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
   - [[https://leiningen.org/][Leiningen]]
@@ -42,6 +44,9 @@ To install dependencies on Arch Linux, run:
   # General
   pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts
   pacman -S the_silver_searcher xorg-xprop
+
+  # C family
+  pacman -S gcc
 
   # Clojure
   pacman -S jdk9-openjdk

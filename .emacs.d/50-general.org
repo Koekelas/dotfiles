@@ -406,6 +406,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
     (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
     (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
+    (koek-sp/setup-format-c-block-on-return-handler 'c-mode "{")
+    (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
     :delight)
@@ -585,15 +587,26 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
         (prettify-symbols-mode))))
 
   (setq prettify-symbols-unprettify-at-point 'right-edge)
+  (add-hook 'c-mode-hook
+            (koek-ps/make-enable
+             "!=" "%=" "&&" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "<<" "<=" "=="
+             ">=" ">>" "^=" "|=" "||"))
+  (add-hook 'c++-mode-hook
+            (koek-ps/make-enable
+             "!=" "%=" "&&" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" "<<" "<="
+             "==" ">=" ">>" "^=" "|=" "||"))
   (add-hook 'clojure-mode-hook
             (koek-ps/make-enable "lambda" "->" "->>" "<=" ">="))
-  (add-hook 'emacs-lisp-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
-  (add-hook 'erlang-mode-hook (koek-ps/make-enable "->" '("=<" . "<=") ">="))
+  (add-hook 'emacs-lisp-mode-hook
+            (koek-ps/make-enable "lambda" "<=" ">="))
+  (add-hook 'erlang-mode-hook
+            (koek-ps/make-enable "->" '("=<" . "<=") ">="))
   (add-hook 'js2-mode-hook
             (koek-ps/make-enable
              "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
              "..." "/=" "<<" "<=" "==" "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
-  (add-hook 'scheme-mode-hook (koek-ps/make-enable "lambda" "<=" ">="))
+  (add-hook 'scheme-mode-hook
+            (koek-ps/make-enable "lambda" "<=" ">="))
 #+END_SRC
 
 ** Whitespace
@@ -792,6 +805,13 @@ whitespace mode.
             (and (projectile-project-p) (projectile-project-root))
             default-directory)))
      "javascript-typescript-stdio")
+    :delight)
+#+END_SRC
+
+** abbrev - Abbreviations
+#+BEGIN_SRC emacs-lisp
+  (use-package abbrev
+    :commands abbrev-mode
     :delight)
 #+END_SRC
 
@@ -1159,6 +1179,33 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+END_SRC
 
 * Languages
+
+** C family
+#+BEGIN_SRC emacs-lisp
+  (use-package cc-mode
+    :mode
+    (((rx (or ".c" ".h") string-end) . c-mode)
+     ((rx ".cpp" string-end) . c++-mode))
+    :delight
+    ((c-mode "C" :major)
+     (c++-mode "C++" :major)))
+
+  (use-package cc-cmds
+    :defer t
+    :preface
+    (define-advice c-update-modeline (:around (f) koek-cc/restore-mode-name)
+      (let ((name mode-name))
+        (funcall f)
+        (setq mode-name name))))
+
+  (use-package cc-vars
+    :defer t
+    :config
+    (setq c-default-style
+          '((awk-mode  . "awk")
+            (java-mode . "java")
+            (other     . "stroustrup"))))
+#+END_SRC
 
 ** Clojure
 [[https://github.com/clojure-emacs/clojure-mode][clojure-mode (GitHub)]]
