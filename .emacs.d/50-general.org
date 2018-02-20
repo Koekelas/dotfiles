@@ -1338,6 +1338,9 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 
   (use-package indium-interaction
     :hook (js2-mode . indium-interaction-mode)
+    :config
+    ;; Resolve keybinding conflict with documentation keymap
+    (unbind-key "C-c d" indium-interaction-mode-map)
     :delight)
 #+END_SRC
 
