@@ -37,6 +37,8 @@ Declare variables and functions setup by [[file:init.el][init.el]].
     :bind
     ("C-c f f" . dired)
     :config
+    (setq dired-recursive-copies 'always)
+    (setq dired-recursive-deletes 'always)
     (setq dired-dwim-target t)
     ;; For switches supported by ls-lisp, see
     ;; `ls-lisp--insert-directory'
