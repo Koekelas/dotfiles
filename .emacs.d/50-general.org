@@ -815,6 +815,24 @@ whitespace mode.
     :hook (lsp-after-open . lsp-enable-imenu))
 #+END_SRC
 
+** xref - Jump to definition & references
+
+*** xref-js2 - JavaScript backend
+[[https://github.com/NicolasPetton/xref-js2][xref-js2 (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package xref-js2
+    :ensure t
+    :after tern
+    :preface
+    (defun koek-xref/setup-js-backend ()
+      "Setup JavaScript backend for current."
+      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
+    :config
+    (setq xref-js2-ignored-dirs '("node_modules"))
+    (add-hook 'tern-mode-hook #'koek-xref/setup-js-backend))
+#+END_SRC
+
 ** abbrev - Abbreviations
 #+BEGIN_SRC emacs-lisp
   (use-package abbrev
@@ -1313,22 +1331,6 @@ Create then visit file =.tern-project= in project home directory.
 Expand snippet =browser= or =node=.
 
 For more information, see [[https://ternjs.net/doc/manual.html#configuration][Project configuration (Tern)]].
-
-*** xref-js2 - Jump to definition & references
-[[https://github.com/NicolasPetton/xref-js2][xref-js2 (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package xref-js2
-    :ensure t
-    :after tern
-    :preface
-    (defun koek-xref/setup-js2-backend ()
-      "Setup JS2 backend for current."
-      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
-    :config
-    (setq xref-js2-ignored-dirs '("node_modules"))
-    (add-hook 'tern-mode-hook #'koek-xref/setup-js2-backend))
-#+END_SRC
 
 *** indium - Interact with process
 [[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
