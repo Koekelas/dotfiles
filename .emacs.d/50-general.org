@@ -1464,16 +1464,16 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
     :ensure t
-    :after scheme
-    :init
-    (defvar geiser-active-implementations)
-
-    ;; Set implementations before geiser is loaded
-    (setq geiser-active-implementations '(guile)))
+    :after scheme)
 
   (use-package geiser-autodoc
     :defer t
     :delight)
+
+  (use-package geiser-impl
+    :defer t
+    :config
+    (setq geiser-active-implementations '(guile)))
 
   (use-package geiser-mode
     :defer t
