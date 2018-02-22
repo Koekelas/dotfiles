@@ -788,24 +788,7 @@ whitespace mode.
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
     :ensure t
-    :after js2-mode
-    :config
-    (declare-function lsp--make-stdio-connection "lsp-mode")
-    (declare-function lsp--should-start-p "lsp-methods")
-    (declare-function lsp--start "lsp-methods")
-    (declare-function make-lsp--client "lsp-methods")
-    (declare-function projectile-project-p "projectile")
-    (declare-function projectile-project-root "projectile")
-
-    (lsp-define-stdio-client
-     koek-lsp/js
-     "javascript"
-     (lambda ()
-       (expand-file-name
-        (or (locate-dominating-file default-directory "package.json")
-            (and (projectile-project-p) (projectile-project-root))
-            default-directory)))
-     "javascript-typescript-stdio")
+    :commands lsp-mode
     :delight)
 
   (use-package lsp-flycheck
@@ -813,6 +796,15 @@ whitespace mode.
 
   (use-package lsp-imenu
     :hook (lsp-after-open . lsp-enable-imenu))
+#+END_SRC
+
+*** lsp-javascript-typescript - JavaScript backend
+[[https://github.com/emacs-lsp/lsp-javascript][lsp-javascript-typescript (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-javascript-typescript
+    :ensure t
+    :after js2-mode)
 #+END_SRC
 
 ** xref - Jump to definition & references
@@ -1291,7 +1283,8 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
     :mode (rx ".js" string-end)
     :interpreter "node"
     :preface
-    (declare-function koek-lsp/js-enable "general")
+    (declare-function lsp-javascript-typescript-enable
+                      "lsp-javascript-typescript")
 
     (defun koek-js/enable-code-insight ()
       "Enable code insight.
@@ -1301,7 +1294,7 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
        ((locate-dominating-file default-directory ".tern-project")
         (tern-mode))
        (t
-        (koek-lsp/js-enable))))
+        (lsp-javascript-typescript-enable))))
     :config
     ;; Resolve keybinding conflict with xref-js2
     (unbind-key "M-." js2-mode-map)
