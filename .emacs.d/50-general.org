@@ -88,13 +88,13 @@ Move deleted files to trash.
                         ispell-skip-region-alist))
                  (tick (buffer-chars-modified-tick))
                  (result (ispell-buffer)))
-            (or force
-                ;; When spell check was completed, result is truthy
-                (and result
-                     ;; When nothing was corrected, character tick
-                     ;; counter is unchanged
-                     (or (= (buffer-chars-modified-tick) tick)
-                         (y-or-n-p "Spelling checked.  Commit? ")))))
+            (cond
+             (force t)
+             (result ; When spell check was completed, result is truthy
+              ;; When nothing was corrected, character tick counter
+              ;; didn't change
+              (or (= (buffer-chars-modified-tick) tick)
+                  (y-or-n-p "Spelling checked.  Commit? ")))))
         t))
     :config
     (add-hook 'with-editor-finish-query-functions #'koek-git/check-spelling))
