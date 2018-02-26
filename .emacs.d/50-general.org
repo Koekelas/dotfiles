@@ -723,27 +723,22 @@ whitespace mode.
         (whitespace-mode)))
     :config
     (setq company-backends
-          '((company-capf company-keywords company-files
-             :with company-yasnippet)))
+          '((company-capf company-files :with company-yasnippet)))
     (setq company-show-numbers t)
 
     ;; Setup mode specific backends
     (add-hook 'tern-mode-hook
               (koek-cpny/make-setup-backends
-               '((company-tern company-keywords company-files
-                  :with company-yasnippet))))
+               '((company-tern company-files :with company-yasnippet))))
     (add-hook 'indium-repl-mode-hook
               (koek-cpny/make-setup-backends
-               '((company-indium-repl company-keywords company-files
-                  :with company-yasnippet))))
+               '((company-indium-repl company-files :with company-yasnippet))))
     (add-hook 'json-mode-hook
               (koek-cpny/make-setup-backends
-               '((company-dabbrev company-files
-                  :with company-yasnippet))))
+               '((company-dabbrev company-files :with company-yasnippet))))
     (let ((setup-backends
            (koek-cpny/make-setup-backends
-            '((geiser-company-backend company-keywords company-files
-               :with company-yasnippet)))))
+            '((geiser-company-backend company-files :with company-yasnippet)))))
       (add-hook 'geiser-mode-hook setup-backends)
       (add-hook 'geiser-repl-mode-hook setup-backends))
 
