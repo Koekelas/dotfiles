@@ -798,6 +798,15 @@ whitespace mode.
     :hook (lsp-after-open . lsp-enable-imenu))
 #+END_SRC
 
+*** cquery - C & C++ backend
+[[https://github.com/cquery-project/emacs-cquery][cquery (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cquery
+    :ensure t
+    :hook ((c-mode c++-mode) . lsp-cquery-enable))
+#+END_SRC
+
 *** lsp-javascript-typescript - JavaScript backend
 [[https://github.com/emacs-lsp/lsp-javascript][lsp-javascript-typescript (GitHub)]]
 

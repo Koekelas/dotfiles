@@ -22,6 +22,7 @@ Finally, copy the dotfiles to your home directory.
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://x.org/][xprop]]
 - C family:
+  - [[https://github.com/cquery-project/cquery][cquery]]
   - [[https://gcc.gnu.org/][GCC]]
 - Clojure:
   - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
@@ -41,30 +42,31 @@ Finally, copy the dotfiles to your home directory.
 To install dependencies on Arch Linux, run:
 
 #+BEGIN_SRC sh
-  # General
+  ### General
   pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts
   pacman -S the_silver_searcher xorg-xprop
 
-  # C family
+  ### C family
   pacman -S gcc
+  # Install cquery from AUR
 
-  # Clojure
+  ### Clojure
   pacman -S jdk9-openjdk
-  # leiningen (AUR)
+  # Install leiningen from AUR
 
-  # Erlang
+  ### Erlang
   pacman -S erlang-nox
 
-  # JavaScript
+  ### JavaScript
   pacman -S chromium nodejs npm python2
   npm i -g javascript-typescript-langserver tern
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
 
-  # Org
+  ### Org
   pacman -S texlive-core texlive-latexextra
 
-  # Scheme
+  ### Scheme
   pacman -S guile
 #+END_SRC
 
