@@ -826,6 +826,14 @@ whitespace mode.
 #+END_SRC
 
 ** xref - Jump to definition & references
+#+BEGIN_SRC emacs-lisp
+  (use-package xref
+    :defer t
+    :config
+    (declare-function xref-find-references "xref")
+
+    (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
+#+END_SRC
 
 *** xref-js2 - JavaScript backend
 [[https://github.com/NicolasPetton/xref-js2][xref-js2 (GitHub)]]
