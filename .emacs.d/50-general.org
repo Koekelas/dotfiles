@@ -727,6 +727,9 @@ whitespace mode.
     (setq company-show-numbers t)
 
     ;; Setup mode specific backends
+    (add-hook 'lsp-mode-hook
+              (koek-cpny/make-setup-backends
+               '((company-lsp company-files :with company-yasnippet))))
     (add-hook 'tern-mode-hook
               (koek-cpny/make-setup-backends
                '((company-tern company-files :with company-yasnippet))))
@@ -766,6 +769,17 @@ whitespace mode.
     :after company
     :config
     (company-flx-mode))
+#+END_SRC
+
+*** company-lsp - LSP backend
+[[https://github.com/tigersoldier/company-lsp][company-lsp (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-lsp
+    :ensure t
+    :after lsp-mode
+    :config
+    (setq company-lsp-enable-snippet nil))
 #+END_SRC
 
 *** company-tern - Tern backend
