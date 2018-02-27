@@ -1187,7 +1187,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+BEGIN_SRC emacs-lisp
   (use-package eshell
     :bind
-    ("C-c x t" . eshell))
+    ("C-c x e" . eshell))
 
   (use-package em-unix
     :defer t
