@@ -76,28 +76,26 @@ Move deleted files to trash.
     :bind
     ("C-c f g" . magit-status))
 
-  (use-package with-editor
+  (use-package git-commit
     :defer t
     :preface
     (defun koek-git/check-spelling (force)
       "Check spelling of commit message.
   When FORCE is truthy, continue commit unconditionally."
-      (if git-commit-mode
-          (let* ((ispell-skip-region-alist ; Looked up dynamically
-                  (cons `(,(rx line-start "#") forward-line) ; Single line comment
-                        ispell-skip-region-alist))
-                 (tick (buffer-chars-modified-tick))
-                 (result (ispell-buffer)))
-            (cond
-             (force t)
-             (result ; When spell check was completed, result is truthy
-              ;; When nothing was corrected, character tick counter
-              ;; didn't change
-              (or (= (buffer-chars-modified-tick) tick)
-                  (y-or-n-p "Spelling checked.  Commit? ")))))
-        t))
+      (let* ((ispell-skip-region-alist    ; Looked up dynamically
+              (cons `(,(rx line-start "#") forward-line) ; Single line comment
+                    ispell-skip-region-alist))
+             (tick (buffer-chars-modified-tick))
+             (result (ispell-buffer)))
+        (cond
+         (force t)
+         (result ; When spell check was completed, result is truthy
+          ;; When nothing was corrected, character tick counter didn't
+          ;; change
+          (or (= (buffer-chars-modified-tick) tick)
+              (y-or-n-p "Spelling checked.  Commit? "))))))
     :config
-    (add-hook 'with-editor-finish-query-functions #'koek-git/check-spelling))
+    (add-hook 'git-commit-finish-query-functions #'koek-git/check-spelling))
 #+END_SRC
 
 ** ediff - Diff viewer
