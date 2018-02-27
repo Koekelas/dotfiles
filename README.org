@@ -18,22 +18,23 @@ Finally, copy the dotfiles to your home directory.
 - General:
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
-  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://x.org/][xprop]]
+  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
 - C family:
-  - [[https://github.com/cquery-project/cquery][cquery]]
   - [[https://gcc.gnu.org/][GCC]]
+  - [[http://mesonbuild.com/][Meson]]
+  - [[https://github.com/cquery-project/cquery][cquery]]
 - Clojure:
   - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
   - [[https://leiningen.org/][Leiningen]]
 - Erlang:
   - [[https://www.erlang.org/][Erlang/OTP]]
 - JavaScript:
+  - [[https://nodejs.org/][Node.js]]
   - [[https://www.chromium.org/][Chromium]]
   - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
-  - [[https://nodejs.org/][Node.js]]
-  - [[https://ternjs.net/][Tern]]
+  - [[https://ternjs.net/][Tern]] (optional)
 - Org:
   - [[https://www.latex-project.org/][LaTeX]]
 - Scheme:
@@ -43,11 +44,12 @@ To install dependencies on Arch Linux, run:
 
 #+BEGIN_SRC sh
   ### General
-  pacman -S git hunspell hunspell-en adobe-source-code-pro-fonts
-  pacman -S the_silver_searcher xorg-xprop
+  pacman -S git hunspell hunspell-en the_silver_searcher xorg-xprop
+  # Install PragmataPro Mono or
+  pacman -S adobe-source-code-pro-fonts
 
   ### C family
-  pacman -S gcc
+  pacman -S gcc meson
   # Install cquery from AUR
 
   ### Clojure
@@ -58,8 +60,9 @@ To install dependencies on Arch Linux, run:
   pacman -S erlang-nox
 
   ### JavaScript
-  pacman -S chromium nodejs npm python2
-  npm i -g javascript-typescript-langserver tern
+  pacman -S nodejs npm python2 chromium
+  npm i -g javascript-typescript-langserver
+  npm i -g tern                   # Optional
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
 

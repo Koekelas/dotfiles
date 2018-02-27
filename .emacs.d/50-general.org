@@ -814,6 +814,10 @@ whitespace mode.
     :hook ((c-mode c++-mode) . lsp-cquery-enable))
 #+END_SRC
 
+**** Setting up cquery
+Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
+the project home directory.
+
 *** lsp-javascript-typescript - JavaScript backend
 [[https://github.com/emacs-lsp/lsp-javascript][lsp-javascript-typescript (GitHub)]]
 
@@ -1343,9 +1347,9 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
     :delight)
 #+END_SRC
 
-**** Getting started
-Create then visit file =.tern-project= in project home directory.
-Expand snippet =browser= or =node=.
+**** Setting up Tern
+Create a file named =.tern-project= in the project home directory.
+Inside the file, expand the snippet =browser= or =node=.
 
 For more information, see [[https://ternjs.net/doc/manual.html#configuration][Project configuration (Tern)]].
 
@@ -1372,6 +1376,15 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
   (use-package json-mode
     :ensure t
     :mode (rx (or ".json" "/.tern-project") string-end))
+#+END_SRC
+
+** Meson
+[[https://github.com/wentasah/meson-mode][meson-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package meson-mode
+    :ensure t
+    :mode (rx "meson.build" string-end))
 #+END_SRC
 
 ** Org
