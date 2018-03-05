@@ -140,6 +140,7 @@ Move deleted files to trash.
     :config
     (declare-function ediff-setup-windows-plain "ediff-wind")
 
+    (setq ediff-grab-mouse nil)
     (setq ediff-window-setup-function #'ediff-setup-windows-plain)
     (setq ediff-split-window-function #'split-window-right))
 #+END_SRC
