@@ -435,7 +435,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 ** prettify-symbols - Show composed symbols
 #+BEGIN_SRC emacs-lisp
-  (defun koek-ps/baseline-right-left-spec (&rest chars)
+  (defun koek-ps/make-baseline-right-left-spec (&rest chars)
     "Return composition specification for CHARS.
   CHARS are two or more characters.  Baseline right of previous
   character is composed with baseline left of next character."
@@ -453,7 +453,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
               (pcase-lambda (`(,symbol . ,char))
                 (cons symbol
                       ;; Widen char to symbol characters
-                      (apply #'koek-ps/baseline-right-left-spec
+                      (apply #'koek-ps/make-baseline-right-left-spec
                              `(,@(make-list (1- (length symbol)) ?\s) ,char))))
               '(("[ERROR]"   . ?\uE380) ("[DEBUG]" . ?\uE381)
                 ("[INFO]"    . ?\uE382) ("[WARN]"  . ?\uE383)

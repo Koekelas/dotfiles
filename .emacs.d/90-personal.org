@@ -70,7 +70,7 @@ Require libraries.
   (use-package org
     :defer t
     :preface
-    (defun koek/directories (file-name &optional full)
+    (defun koek/fetch-directories (file-name &optional full)
       "Return directories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names."
       (mapcar
@@ -82,7 +82,7 @@ Require libraries.
                             (not (or (string= name ".") (string= name ".."))))))
                    (directory-files-and-attributes file-name full))))
 
-    (defun koek/agenda-files ()
+    (defun koek/fetch-agenda-files ()
       "Return agenda files."
       (append
        koek/static-agenda-files
@@ -92,16 +92,16 @@ Require libraries.
                   (concat file-name
                           (file-name-nondirectory (directory-file-name file-name))
                           ".org"))
-                (koek/directories koek/projects-dir 'full)))))
+                (koek/fetch-directories koek/projects-dir 'full)))))
 
     (define-advice
         org-agenda-files (:before (&rest _args) koek/update-agenda-files)
-      (setq org-agenda-files (koek/agenda-files)))
+      (setq org-agenda-files (koek/fetch-agenda-files)))
     :config
     (setq org-directory koek/org-dir)
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
-            (koek/agenda-files . (:maxlevel . 3)))))
+            (koek/fetch-agenda-files . (:maxlevel . 3)))))
 
   (use-package org-capture
     :defer t
@@ -119,14 +119,14 @@ Require libraries.
 Show agenda.
 
 #+BEGIN_SRC emacs-lisp
-  (defun koek/initial-buffer ()
+  (defun koek/make-initial-buffer ()
     "Return initial buffer."
     (org-agenda-list)
     ;; Hide agenda so scratch is replaced
     (delete-window)
     (get-buffer "*Org Agenda*"))
 
-  (setq initial-buffer-choice #'koek/initial-buffer)
+  (setq initial-buffer-choice #'koek/make-initial-buffer)
 #+END_SRC
 
 * Footer
