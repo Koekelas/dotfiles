@@ -798,12 +798,30 @@ whitespace mode.
     :ensure t
     :commands lsp-mode
     :delight)
+#+END_SRC
 
-  (use-package lsp-flycheck
-    :after lsp-mode)
+*** lsp-ui - Integrate Imenu & Flycheck
+[[https://github.com/emacs-lsp/lsp-ui][lsp-ui (GitHub)]]
 
-  (use-package lsp-imenu
-    :hook (lsp-after-open . lsp-enable-imenu))
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :hook (lsp-mode . lsp-ui-mode))
+
+  (use-package lsp-ui-doc
+    :defer t
+    :config
+    (setq lsp-ui-doc-enable nil))
+
+  (use-package lsp-ui-peek
+    :defer t
+    :config
+    (setq lsp-ui-peek-enable nil))
+
+  (use-package lsp-ui-sideline
+    :defer t
+    :config
+    (setq lsp-ui-sideline-enable nil))
 #+END_SRC
 
 *** cquery - C & C++ backend
@@ -1856,7 +1874,7 @@ in mode line.
         id)))
 
   (defconst koek-ml/checker-names
-    '((lsp . "LSP")
+    '((lsp-ui . "LSP")
       (emacs-lisp . "El")
       (emacs-lisp-checkdoc . "Checkdoc")
       (erlang . "Erlc")
