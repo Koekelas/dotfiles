@@ -1244,6 +1244,57 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 
 * Languages
 
+** Arduino
+#+BEGIN_SRC emacs-lisp
+  (defun koek-ino/get-in (keys alist)
+    "Return value for KEYS in nested ALIST.
+  KEYS is a list of keys."
+    (if keys
+        (koek-ino/get-in (cdr keys) (assq (car keys) alist))
+      (cdr alist)))
+
+  (defun koek-ino/set-in (keys value alist)
+    "Set value for KEYS to VALUE in nested ALIST.
+  KEYS is a list of keys."
+    (when-let (key (car keys))
+      (let ((pair (or (assq key alist)
+                      (let ((new-pair (cons key ())))
+                        (push new-pair alist)
+                        new-pair))))
+        (setcdr pair (if-let (rem-keys (cdr keys))
+                         (koek-ino/set-in rem-keys value (cdr pair))
+                       value))))
+    alist)
+
+  (defun koek-ino/extract-keys (compound-key)
+    "Extract keys from COMPOUND-KEY.
+  COMPOUND-KEY is a string of dot separated keys."
+    (mapcar (lambda (key)
+              (intern (concat ":" key)))
+            (split-string compound-key (rx "."))))
+
+  (defun koek-ino/make-nested-alist (properties)
+    "Return nested alist.
+  PROPERTIES is an alist of compound key to value pairs."
+    (seq-reduce (pcase-lambda (alist `(,key . ,value))
+                  (koek-ino/set-in (koek-ino/extract-keys key) value alist))
+                properties ()))
+
+  (defun koek-ino/read-properties (file-name)
+    "Read properties from FILE-NAME."
+    (let ((properties ()))
+      (with-temp-buffer
+        (insert-file-contents file-name)
+        (while (re-search-forward         ; Matches across multiple lines
+                (rx line-start
+                    (submatch-n 1
+                     (not (any "#\n")) (one-or-more (not (any "=")))) "="
+                    (submatch-n 2 (one-or-more not-newline)) line-end)
+                nil t)
+          (push (cons (match-string 1) (match-string 2)) properties)))
+      (koek-ino/make-nested-alist properties)))
+#+END_SRC
+
 ** C family
 #+BEGIN_SRC emacs-lisp
   (use-package cc-mode
