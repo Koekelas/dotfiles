@@ -1666,6 +1666,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
     :preface
+    (declare-function color-rgb-to-hex "color")
+
     (defun koek-thm/set-dark-wm-theme-variant (frame)
       "Set window manager theme variant of FRAME to dark."
       (call-process "xprop" nil nil nil
@@ -1675,20 +1677,19 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 
     (defun koek-thm/mix (color1 color2 &optional ratio)
       "Mix COLOR1 with COLOR2 according to RATIO.
-  COLOR1 and COLOR2 are lists of RGB components, see
-  `color-name-to-rgb'.  Optional RATIO is a float from zero to one
-  and defaults to one half.  Zero means mix zero units of COLOR1
-  with one unit of COLOR2, one means mix one unit of COLOR1 with
-  zero units of COLOR2."
+  COLOR1 and COLOR2 are strings, a color name or an RGB triplet,
+  see `color-name-to-rgb'.  Optional RATIO is a float from zero to
+  one and defaults to one half.  Zero means mix zero units of
+  COLOR1 with one unit of COLOR2, one means mix one unit of COLOR1
+  with zero units of COLOR2."
       (unless ratio
         (setq ratio 0.5))
       (let ((ratio´ (- 1 ratio)))
-        (seq-mapn (lambda (component component´)
-                    (+ (* component ratio) (* component´ ratio´)))
-                  color1 color2)))
+        (apply #'color-rgb-to-hex
+               (seq-mapn (lambda (component component´)
+                           (+ (* component ratio) (* component´ ratio´)))
+                         (color-name-to-rgb color1) (color-name-to-rgb color2)))))
     :config
-    (declare-function color-rgb-to-hex "color")
-
     ;; Set frame (i.e. window manager) theme
     (when (executable-find "xprop")
       (koek-thm/set-dark-wm-theme-variant (selected-frame))
@@ -1698,33 +1699,29 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
     (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
            (personal
-            (mapcar
-             (pcase-lambda (`(,name . ,rgb))
-               (cons name (apply #'color-rgb-to-hex rgb)))
-             (map-let                     ; How to use let-alist and backquote?
-                 (foreground background current-line selection
-                  yellow green aqua blue)
-                 (mapcar (pcase-lambda (`(,name . ,hex))
-                           (cons name (color-name-to-rgb hex)))
-                         theme)
-               `((lc-fg     . ,(koek-thm/mix foreground background))
-                 (lc-bg     . ,(koek-thm/mix current-line selection))
-                 (lc-yellow . ,(koek-thm/mix yellow background))
-                 (lc-green  . ,(koek-thm/mix green background))
-                 (lc-aqua   . ,(koek-thm/mix aqua background))
-                 (lc-blue   . ,(koek-thm/mix blue background))))))
+            (map-let                      ; How to use let-alist and backquote?
+                (foreground background current-line selection
+                 yellow green aqua blue)
+                theme
+              `((lc-fg     . ,(koek-thm/mix foreground background))
+                (lc-bg     . ,(koek-thm/mix current-line selection))
+                (lc-yellow . ,(koek-thm/mix yellow background))
+                (lc-green  . ,(koek-thm/mix green background))
+                (lc-aqua   . ,(koek-thm/mix aqua background))
+                (lc-blue   . ,(koek-thm/mix blue background)))))
            (specs
             (map-let
                 (foreground background selection lc-fg lc-bg
                  red orange lc-yellow lc-green lc-aqua lc-blue)
                 (append personal theme)
-              `((show-paren-match    :foreground ,foreground
+              `(;; Default
+                (show-paren-match    :foreground ,foreground
                                      :background ,selection)
                 (show-paren-mismatch :foreground ,foreground
                                      :background unspecified
                                      :underline (:style wave :color ,red))
                 (mode-line-emphasis :foreground ,orange :slant unspecified)
-                ;; rainbow-delimiters-mode
+                ;; rainbow-delimiters
                 (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
                 (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
                 (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
@@ -1736,7 +1733,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (rainbow-delimiters-depth-9-face :foreground ,lc-green)
                 (rainbow-delimiters-unmatched-face :foreground unspecified
                                                    :inherit show-paren-mismatch)
-                ;; whitespace-mode
+                ;; whitespace
                 (whitespace-space   :foreground ,lc-bg :background unspecified)
                 (whitespace-hspace  :foreground ,lc-bg :background unspecified)
                 (whitespace-tab     :foreground ,lc-bg :background unspecified)
@@ -1751,7 +1748,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (aw-leading-char-face :foreground unspecified
                                       :inherit avy-lead-face)
                 (aw-background-face :foreground ,lc-fg :background ,background)
-                ;; eyebrowse-mode
+                ;; eyebrowse
                 (eyebrowse-mode-line-active :foreground unspecified
                                             :weight unspecified
                                             :inherit mode-line-emphasis)))))
