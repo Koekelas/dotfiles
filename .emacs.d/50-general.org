@@ -82,7 +82,7 @@ Move deleted files to trash.
     (defun koek-git/check-spelling (force)
       "Check spelling of commit message.
   When FORCE is truthy, continue commit unconditionally."
-      (let* ((ispell-skip-region-alist    ; Looked up dynamically
+      (let* ((ispell-skip-region-alist    ; Dynamic variable
               (cons `(,(rx line-start "#") forward-line) ; Single line comment
                     ispell-skip-region-alist))
              (tick (buffer-chars-modified-tick))
@@ -1587,7 +1587,7 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     :preface
     ;; When SQL dialect is setup, whitespace-mode faces are overridden
     (define-advice sql-mode (:around (f) koek-sql/defer-whitespace-mode)
-      (let ((prog-mode-hook               ; Looked up dynamically
+      (let ((prog-mode-hook               ; Dynamic variable
              (remq 'whitespace-mode prog-mode-hook)))
         (funcall f)))
 
@@ -2020,7 +2020,7 @@ in mode line.
                   (eldoc-mode-line-string
                    nil)
                   (:eval
-                   (let* ((inhibit-mode-name-delight nil) ; Looked up dynamically
+                   (let* ((inhibit-mode-name-delight nil) ; Dynamic variable
                           (right (format-mode-line koek-ml/right)))
                      `((,(max 0 (- (window-total-width) (string-width right)))
                         ("" koek-ml/left koek-ml/separator))
