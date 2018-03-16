@@ -1731,8 +1731,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
                 (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
                 (rainbow-delimiters-depth-9-face :foreground ,lc-green)
-                (rainbow-delimiters-unmatched-face :foreground unspecified
-                                                   :inherit show-paren-mismatch)
+                (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
+                                                   :foreground unspecified)
                 ;; whitespace
                 (whitespace-space   :foreground ,lc-bg :background unspecified)
                 (whitespace-hspace  :foreground ,lc-bg :background unspecified)
@@ -1745,13 +1745,13 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (whitespace-line     :foreground unspecified
                                      :background ,selection)
                 ;; ace-window
-                (aw-leading-char-face :foreground unspecified
-                                      :inherit avy-lead-face)
+                (aw-leading-char-face :inherit avy-lead-face
+                                      :foreground unspecified)
                 (aw-background-face :foreground ,lc-fg :background ,background)
                 ;; eyebrowse
-                (eyebrowse-mode-line-active :foreground unspecified
-                                            :weight unspecified
-                                            :inherit mode-line-emphasis)))))
+                (eyebrowse-mode-line-active :inherit mode-line-emphasis
+                                            :foreground unspecified
+                                            :weight unspecified)))))
       ;; Adding attributes to a face before it's defined, fails. Add
       ;; attributes to user theme.
       (apply #'custom-set-faces
