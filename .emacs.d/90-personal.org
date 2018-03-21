@@ -22,12 +22,16 @@ Require libraries.
 #+END_SRC
 
 * Name & e-mail
+Set name and e-mail.
+
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Nicolas De Jaeghere")
   (setq user-mail-address "nicodeja@gmail.com")
 #+END_SRC
 
 * File & directory names
+Declare well known file and directory names.
+
 #+BEGIN_SRC emacs-lisp
   (defconst koek/home-dir-kratos "d:/"
     "File name to home directory on Kratos.")
@@ -66,6 +70,9 @@ Require libraries.
 #+END_SRC
 
 * To-do's & agenda
+When a file is member of ~koek/static-agenda-files~ or matches pattern
+=KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda file.
+
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :defer t
@@ -73,26 +80,26 @@ Require libraries.
     (defun koek/fetch-directories (file-name &optional full)
       "Return directories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names."
-      (mapcar
-       (lambda (spec)
-         (concat (car spec) "/"))
-       (seq-filter (pcase-lambda (`(,file-name ,type))
-                     (let ((name (file-name-nondirectory file-name)))
-                       (and (eq type t)   ; Directory
-                            (not (or (string= name ".") (string= name ".."))))))
-                   (directory-files-and-attributes file-name full))))
+      (thread-last (directory-files-and-attributes file-name full)
+        (seq-filter (pcase-lambda (`(,file-name ,type))
+                      (let ((name (file-name-nondirectory file-name)))
+                        (and (eq type t)  ; Directory
+                             (not (or (string= name ".") (string= name "..")))))))
+        (mapcar (lambda (spec)
+                  (file-name-as-directory (car spec))))))
 
     (defun koek/fetch-agenda-files ()
       "Return agenda files."
       (append
        koek/static-agenda-files
-       (seq-filter
-        #'file-exists-p
-        (mapcar (lambda (file-name)
-                  (concat file-name
-                          (file-name-nondirectory (directory-file-name file-name))
-                          ".org"))
-                (koek/fetch-directories koek/projects-dir 'full)))))
+       (thread-last (koek/fetch-directories koek/projects-dir 'full)
+         (mapcar
+          (lambda (file-name)
+            (expand-file-name
+             (concat (file-name-nondirectory (directory-file-name file-name))
+                     ".org")
+             file-name)))
+         (seq-filter #'file-exists-p))))
 
     (define-advice
         org-agenda-files (:before (&rest _args) koek/update-agenda-files)
@@ -116,14 +123,14 @@ Require libraries.
 #+END_SRC
 
 * Initial buffer
-Show agenda.
+Show agenda as initial buffer.
 
 #+BEGIN_SRC emacs-lisp
   (defun koek/make-initial-buffer ()
     "Return initial buffer."
-    (org-agenda-list)
-    ;; Hide agenda so scratch is replaced
-    (delete-window)
+    (let ((layout (current-window-configuration)))
+      (org-agenda-list)
+      (set-window-configuration layout))
     (get-buffer "*Org Agenda*"))
 
   (setq initial-buffer-choice #'koek/make-initial-buffer)
