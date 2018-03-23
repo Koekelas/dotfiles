@@ -9,7 +9,7 @@ To get started, run:
   git clone --recurse-submodules https://github.com/Koekelas/dotfiles.git
 #+END_SRC
 
-Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle-file~.
+Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
 Finally, copy the dotfiles to your home directory.
 
 * Installing dependencies
