@@ -1,6 +1,184 @@
 #+TITLE: Dotfiles
 #+PROPERTY: header-args :mkdirp yes
 
+* GNOME Shell app folders
+To apply configuration, run:
+
+#+BEGIN_SRC sh
+  gnome-catgen -s
+#+END_SRC
+
+** Avahi
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Avahi.category
+:END:
+
+#+BEGIN_SRC fundamental
+  avahi-discover.desktop
+  bssh.desktop
+  bvnc.desktop
+#+END_SRC
+
+** Creative
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Creative.category
+:END:
+
+#+BEGIN_SRC fundamental
+  ardour.desktop
+  blender.desktop
+  calf.desktop
+  fontforge.desktop
+  freecad.desktop
+  gimp.desktop
+  inkscape.desktop
+  openscad.desktop
+  scribus.desktop
+#+END_SRC
+
+** DisplayCAL
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/DisplayCAL.category
+:END:
+
+#+BEGIN_SRC fundamental
+  displaycal-3dlut-maker.desktop
+  displaycal-apply-profiles.desktop
+  displaycal-curve-viewer.desktop
+  displaycal-profile-info.desktop
+  displaycal-scripting-client.desktop
+  displaycal-synthprofile.desktop
+  displaycal-testchart-editor.desktop
+  displaycal-vrml-to-x3d-converter.desktop
+  displaycal.desktop
+#+END_SRC
+
+** Internet
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Internet.category
+:END:
+
+#+BEGIN_SRC fundamental
+  chromium.desktop
+  evolution.desktop
+  firefox.desktop
+  jdownloader.desktop
+  org.baedert.corebird.desktop
+  org.gnome.Geary.desktop
+  org.gnome.Polari.desktop
+  skypeforlinux.desktop
+#+END_SRC
+
+** Leisure
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Leisure.category
+:END:
+
+#+BEGIN_SRC fundamental
+  kodi.desktop
+  makemkv.desktop
+  org.gnome.Lollypop.desktop
+  picard.desktop
+  puddletag.desktop
+  steam-native.desktop
+  steam.desktop
+  vlc.desktop
+#+END_SRC
+
+** LibreOffice
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/LibreOffice.category
+:END:
+
+#+BEGIN_SRC fundamental
+  libreoffice-base.desktop
+  libreoffice-calc.desktop
+  libreoffice-draw.desktop
+  libreoffice-impress.desktop
+  libreoffice-math.desktop
+  libreoffice-startcenter.desktop
+  libreoffice-writer.desktop
+#+END_SRC
+
+** OpenJDK
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/OpenJDK.category
+:END:
+
+#+BEGIN_SRC fundamental
+  jconsole-java9-openjdk.desktop
+  policytool-java9-openjdk.desktop
+#+END_SRC
+
+** Qt
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Qt.category
+:END:
+
+#+BEGIN_SRC fundamental
+  assistant-qt4.desktop
+  designer-qt4.desktop
+  linguist-qt4.desktop
+  qdbusviewer-qt4.desktop
+  qv4l2.desktop
+#+END_SRC
+
+** System
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/System.category
+:END:
+
+#+BEGIN_SRC fundamental
+  cups.desktop
+  gnome-control-center.desktop
+  gnome-system-monitor.desktop
+  gnome-tweak-tool.desktop
+  gufw.desktop
+  org.gnome.DiskUtility.desktop
+  org.gnome.Logs.desktop
+  org.gnome.Terminal.desktop
+  org.gnome.font-viewer.desktop
+  seahorse.desktop
+  yelp.desktop
+#+END_SRC
+
+** Utilities
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Utilities.category
+:END:
+
+#+BEGIN_SRC fundamental
+  electrum.desktop
+  eog.desktop
+  evince.desktop
+  keepassx2.desktop
+  obs.desktop
+  org.gnome.Cheese.desktop
+  org.gnome.FileRoller.desktop
+  org.gnome.Nautilus.desktop
+  org.gnome.Screenshot.desktop
+  org.remmina.Remmina.desktop
+  syncthing-gtk.desktop
+  veracrypt.desktop
+#+END_SRC
+
+** Work
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Work.category
+:END:
+
+#+BEGIN_SRC fundamental
+  anki.desktop
+  arduino.desktop
+  emacs.desktop
+  org.gnome.Calculator.desktop
+  org.gnome.Calendar.desktop
+  org.gnome.Contacts.desktop
+  org.gnome.Maps.desktop
+  org.gnome.Weather.Application.desktop
+  org.gnome.clocks.desktop
+#+END_SRC
+
 * Leiningen
 :PROPERTIES:
 :header-args+: :tangle .lein/profiles.clj
