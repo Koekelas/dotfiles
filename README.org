@@ -14,69 +14,77 @@ Finally, copy the dotfiles to your home directory.
 
 * Installing dependencies
 
-** Emacs
-- General:
-  - [[https://git-scm.com/][Git]]
-  - [[https://hunspell.github.io/][Hunspell]]
-  - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
-  - [[https://x.org/][xprop]]
-  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
-- Arduino:
-  - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
-- C family:
-  - [[https://gcc.gnu.org/][GCC]]
-  - [[http://mesonbuild.com/][Meson]]
-  - [[https://github.com/cquery-project/cquery][cquery]]
-- Clojure:
-  - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
-  - [[https://leiningen.org/][Leiningen]]
-- Erlang:
-  - [[https://www.erlang.org/][Erlang/OTP]]
-- JavaScript:
-  - [[https://nodejs.org/][Node.js]]
-  - [[https://www.chromium.org/][Chromium]]
-  - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
-  - [[https://ternjs.net/][Tern]] (optional)
-- Org:
-  - [[https://www.latex-project.org/][LaTeX]]
-- Scheme:
-  - [[https://www.gnu.org/software/guile/][Guile]]
+- Emacs:
+  - General:
+    - [[https://git-scm.com/][Git]]
+    - [[https://hunspell.github.io/][Hunspell]]
+    - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
+    - [[https://x.org/][xprop]]
+    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+  - Arduino:
+    - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
+  - C family:
+    - [[https://gcc.gnu.org/][GCC]]
+    - [[http://mesonbuild.com/][Meson]]
+    - [[https://github.com/cquery-project/cquery][cquery]]
+    - [[https://www.gnu.org/software/gdb/][GDB]]
+  - Clojure:
+    - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+    - [[https://leiningen.org/][Leiningen]]
+  - Erlang:
+    - [[https://www.erlang.org/][Erlang/OTP]]
+  - JavaScript:
+    - [[https://nodejs.org/][Node.js]]
+    - [[https://www.chromium.org/][Chromium]]
+    - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
+    - [[https://ternjs.net/][Tern]] (optional)
+  - Org:
+    - [[https://www.latex-project.org/][LaTeX]]
+  - Scheme:
+    - [[https://www.gnu.org/software/guile/][Guile]]
+- GNOME Shell:
+  - [[https://github.com/prurigro/gnome-catgen][gnome-catgen]]
 
 To install dependencies on Arch Linux, run:
 
 #+BEGIN_SRC sh
-  ### General
+  ### Emacs
+
+  ## General
   pacman -S git hunspell hunspell-en the_silver_searcher xorg-xprop
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
 
-  ### Arduino
+  ## Arduino
   pacman -S arduino arduino-avr-core
   gpasswd -a `whoami` uucp
 
-  ### C family
-  pacman -S gcc meson
+  ## C family
+  pacman -S gcc meson gdb
   # Install cquery from AUR
 
-  ### Clojure
+  ## Clojure
   pacman -S jdk9-openjdk
   # Install leiningen from AUR
 
-  ### Erlang
+  ## Erlang
   pacman -S erlang-nox
 
-  ### JavaScript
+  ## JavaScript
   pacman -S nodejs npm python2 chromium
   npm i -g javascript-typescript-langserver
   npm i -g tern                   # Optional
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
 
-  ### Org
+  ## Org
   pacman -S texlive-core texlive-latexextra
 
-  ### Scheme
+  ## Scheme
   pacman -S guile
+
+  ### GNOME Shell
+  # Install gnome-catgen-git from AUR
 #+END_SRC
 
 * Issues
