@@ -158,7 +158,6 @@ To apply configuration, run:
   org.gnome.FileRoller.desktop
   org.gnome.Nautilus.desktop
   org.gnome.Screenshot.desktop
-  org.remmina.Remmina.desktop
   syncthing-gtk.desktop
   veracrypt.desktop
 #+END_SRC
@@ -178,6 +177,7 @@ To apply configuration, run:
   org.gnome.Maps.desktop
   org.gnome.Weather.Application.desktop
   org.gnome.clocks.desktop
+  org.remmina.Remmina.desktop
 #+END_SRC
 
 * Leiningen
