@@ -60,10 +60,10 @@ To apply configuration, run:
 
 #+BEGIN_SRC fundamental
   chromium.desktop
-  evolution.desktop
   firefox.desktop
   jdownloader.desktop
   org.baedert.corebird.desktop
+  org.gnome.Evolution.desktop
   org.gnome.Geary.desktop
   org.gnome.Polari.desktop
   skypeforlinux.desktop
@@ -132,12 +132,13 @@ To apply configuration, run:
   cups.desktop
   gnome-control-center.desktop
   gnome-system-monitor.desktop
-  gnome-tweak-tool.desktop
   gufw.desktop
+  ibus-setup.desktop
   org.gnome.DiskUtility.desktop
   org.gnome.Logs.desktop
   org.gnome.Terminal.desktop
   org.gnome.font-viewer.desktop
+  org.gnome.tweaks.desktop
   seahorse.desktop
   yelp.desktop
 #+END_SRC
