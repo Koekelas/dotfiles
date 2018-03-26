@@ -653,6 +653,16 @@ End files with empty line.
     :delight)
 #+END_SRC
 
+** Edit commands
+Supercharge edit commands.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-key [remap downcase-word] #'downcase-dwim)
+  (bind-key [remap upcase-word] #'upcase-dwim)
+  (bind-key [remap capitalize-word] #'capitalize-dwim)
+  (bind-key "M-<dead-circumflex>" #'delete-indentation)
+#+END_SRC
+
 ** Complete text
 When line is indented, press =TAB= to complete text before point.
 
