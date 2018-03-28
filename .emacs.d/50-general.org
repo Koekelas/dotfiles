@@ -322,14 +322,14 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-u" . sp-up-sexp)
      ("C-S-d" . sp-backward-down-sexp)
      ("C-S-u" . sp-backward-up-sexp)
+     ("C-M-t" . sp-transpose-sexp)
+     ("C-M-w" . sp-copy-sexp)
+     ("C-M-k" . sp-kill-sexp)
      ("C-M-<right>" . sp-forward-slurp-sexp)
      ("C-M-<left>"  . sp-forward-barf-sexp)
      ("C-S-<left>"  . sp-backward-slurp-sexp)
      ("C-S-<right>" . sp-backward-barf-sexp)
-     ("C-M-<down>"  . sp-unwrap-sexp)
-     ("C-M-t" . sp-transpose-sexp)
-     ("C-M-w" . sp-copy-sexp)
-     ("C-M-k" . sp-kill-sexp))
+     ("C-M-<down>"  . sp-unwrap-sexp))
     :hook
     (((prog-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
       . smartparens-mode)
@@ -346,10 +346,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   ignored."
       (when (and (eq action 'insert)
                  ;; Outer context, _context is inner context
-                 (eq (sp--get-context
-                      (save-excursion
-                        (search-backward open-delimiter)))
-                     'code))
+                 (save-excursion
+                   (search-backward open-delimiter)
+                   (eq (sp--get-context) 'code)))
         (save-excursion
           (search-backward open-delimiter)
           (unless (looking-back (rx (or (any "#'`,~@([{" blank) line-start))
@@ -374,10 +373,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   symbol, the action performed, see `sp-pair'.  _CONTEXT is
   ignored."
       (when (and (eq action 'insert)
-                 (eq (sp--get-context
-                      (save-excursion
-                        (search-backward open-delimiter)))
-                     'code))
+                 (save-excursion
+                   (search-backward open-delimiter)
+                   (eq (sp--get-context) 'code)))
         (save-excursion
           (insert "\n")
           (indent-according-to-mode))
