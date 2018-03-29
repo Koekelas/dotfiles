@@ -428,7 +428,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   (use-package expand-region
     :ensure t
     :bind
-    ("C-S-SPC" . er/expand-region))
+    ("C-S-SPC" . er/expand-region)
+    :config
+    (setq expand-region-smart-cursor t))
 #+END_SRC
 
 ** prettify-symbols - Show composed symbols
