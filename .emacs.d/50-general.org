@@ -638,10 +638,9 @@ End files with empty line.
 ** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
-    :hook
-    ((prog-mode . whitespace-mode)
-     (before-save . whitespace-cleanup))
+    :hook (prog-mode . whitespace-mode)
     :config
+    (setq whitespace-action '(auto-cleanup))
     (setq whitespace-style
           '(space-mark tab-mark newline-mark
             face spaces tabs newline trailing empty lines-tail))
