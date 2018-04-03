@@ -732,6 +732,7 @@ whitespace mode.
     :config
     (setq company-backends
           '((company-capf company-files :with company-yasnippet)))
+    (setq company-idle-delay 1)           ; In seconds
     (setq company-show-numbers t)
 
     ;; Setup mode specific backends
