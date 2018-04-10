@@ -961,6 +961,8 @@ When revisiting then modifying file, history is discarded.
   (use-package flycheck
     :ensure t
     :hook (prog-mode . flycheck-mode)
+    :config
+    (setq flycheck-check-syntax-automatically '(mode-enabled save))
     :delight)
 #+END_SRC
 
