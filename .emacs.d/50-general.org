@@ -1040,7 +1040,8 @@ When revisiting then modifying file, history is discarded.
 #+BEGIN_SRC emacs-lisp
   (use-package uniquify
     :config
-    (setq uniquify-buffer-name-style 'forward))
+    (setq uniquify-buffer-name-style 'forward)
+    (setq uniquify-trailing-separator-p t))
 #+END_SRC
 
 ** ibuffer - list-buffers replacement
