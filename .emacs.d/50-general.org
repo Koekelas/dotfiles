@@ -1052,7 +1052,7 @@ When revisiting then modifying file, history is discarded.
 #+END_SRC
 
 ** Buffer commands
-Bury buffers, don't kill them. Computers have more than enough memory.
+Bury unneeded buffers, computers have more than enough memory.
 
 #+BEGIN_SRC emacs-lisp
   (defun koek-buff/bury (&optional arg)
