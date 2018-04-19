@@ -659,7 +659,6 @@ Supercharge edit commands.
   (bind-key [remap downcase-word] #'downcase-dwim)
   (bind-key [remap upcase-word] #'upcase-dwim)
   (bind-key [remap capitalize-word] #'capitalize-dwim)
-  (bind-key "M-<dead-circumflex>" #'delete-indentation)
 #+END_SRC
 
 ** Complete text
