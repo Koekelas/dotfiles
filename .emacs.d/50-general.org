@@ -1118,7 +1118,17 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
      ("C-c j d" . counsel-imenu)
      ("C-c j o" . counsel-org-goto-all)
      :map minibuffer-local-map
-     ("C-r" . counsel-minibuffer-history)))
+     ("C-r" . counsel-minibuffer-history))
+    :config
+    (declare-function ivy-set-actions "ivy")
+
+    (let ((show-help (lambda (candidate)
+                       (helpful-function (intern candidate)))))
+      (ivy-set-actions 'counsel-M-x
+                       `(("d" counsel--find-symbol "definition")
+                         ("h" ,show-help "help"))))
+
+    (setq counsel-org-goto-face-style 'org))
 #+END_SRC
 
 *** counsel-projectile - Ivy powered Projectile commands
@@ -1128,6 +1138,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package counsel-projectile
     :ensure t
     :after projectile
+    :bind
+    (:map counsel-projectile-mode-map
+     ("C-c p p" . counsel-projectile))
     :config
     (counsel-projectile-mode))
 #+END_SRC
