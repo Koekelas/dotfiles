@@ -1138,10 +1138,10 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package counsel-projectile
     :ensure t
     :after projectile
-    :bind
-    (:map counsel-projectile-mode-map
-     ("C-c p p" . counsel-projectile))
     :config
+    ;; :bind defers loading
+    (bind-key "C-c p p" #'counsel-projectile counsel-projectile-mode-map)
+
     (counsel-projectile-mode))
 #+END_SRC
 
