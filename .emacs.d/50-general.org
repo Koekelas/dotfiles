@@ -1139,7 +1139,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :after projectile
     :config
-    ;; :bind defers loading
+    ;; Why does :after + :bind fail to load?
     (bind-key "C-c p p" #'counsel-projectile counsel-projectile-mode-map)
 
     (counsel-projectile-mode))
