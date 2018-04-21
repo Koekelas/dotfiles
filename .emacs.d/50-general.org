@@ -1342,7 +1342,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package cc-cmds
     :defer t
     :preface
-    (define-advice c-update-modeline (:around (f) koek-cc/restore-mode-name)
+    (define-advice
+        c-update-modeline (:around (f) koek-cc/disable-update-mode-name)
       (let ((name mode-name))
         (funcall f)
         (setq mode-name name))))
