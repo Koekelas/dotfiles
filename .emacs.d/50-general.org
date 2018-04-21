@@ -1154,6 +1154,15 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :after ivy)
 #+END_SRC
 
+*** wgrep - Edit files through grep output
+[[https://github.com/mhayashi1120/Emacs-wgrep][wgrep (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :ensure t
+    :after ivy)
+#+END_SRC
+
 ** helpful - Help viewer
 [[https://github.com/Wilfred/helpful][helpful (GitHub)]]
 
