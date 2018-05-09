@@ -51,7 +51,7 @@ Declare well known file and directory names.
   (defconst koek/static-agenda-files
     (mapcar (lambda (file-name)
               (expand-file-name file-name koek/org-dir))
-            '("To Do.org" "Afspraken.org"))
+            '("To Do.org" "Afspraken.org" "Dagindeling.org"))
     "List of file names to static agenda files.")
 
   (use-package erlang
