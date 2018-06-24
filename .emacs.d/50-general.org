@@ -409,6 +409,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
+    (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
     :delight)
 #+END_SRC
 
@@ -606,6 +607,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
             (koek-ps/make-enable
              "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
              "..." "/=" "<<" "<=" "==" "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
+  (add-hook 'scad-mode-hook
+            (koek-ps/make-enable "!=" "&&" "<=" "==" ">=" "||"))
   (add-hook 'scheme-mode-hook
             (koek-ps/make-enable "lambda" "<=" ">="))
 #+END_SRC
@@ -747,6 +750,9 @@ whitespace mode.
     (add-hook 'json-mode-hook
               (koek-cpny/make-setup-backends
                '((company-dabbrev company-files :with company-yasnippet))))
+    (add-hook 'scad-mode-hook
+              (koek-cpny/make-setup-backends
+               '((company-dabbrev-code company-files :with company-yasnippet))))
     (let ((setup-backends
            (koek-cpny/make-setup-backends
             '((geiser-company-backend company-files :with company-yasnippet)))))
@@ -1647,6 +1653,24 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
     :ensure t
     :mode (rx "meson.build" string-end))
 #+END_SRC
+
+** OpenSCAD
+[[https://github.com/openscad/openscad][scad-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package scad-mode
+    :ensure t
+    :mode (rx ".scad" string-end)
+    :config
+    ;; Resolve smartparens' delayed post handlers not being called
+    (unbind-key "<return>" scad-mode-map) ; Why does <return> differ from RET?
+
+    (setq scad-indent-style "stroustrup"))
+#+END_SRC
+
+*** Issues
+
+**** Built-in indentation styles are inappropriate for multiple line vectors
 
 ** Org
 #+BEGIN_SRC emacs-lisp

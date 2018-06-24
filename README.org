@@ -38,6 +38,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.chromium.org/][Chromium]]
     - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
     - [[https://ternjs.net/][Tern]] (optional)
+  - OpenSCAD:
+    - [[https://www.openscad.org/][OpenSCAD]]
   - Org:
     - [[https://www.latex-project.org/][LaTeX]]
   - Scheme:
@@ -76,6 +78,9 @@ To install dependencies on Arch Linux, run:
   npm i -g tern                   # Optional
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
+
+  ## OpenSCAD
+  pacman -S openscad
 
   ## Org
   pacman -S texlive-core texlive-latexextra
