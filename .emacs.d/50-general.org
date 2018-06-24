@@ -1242,6 +1242,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :bind
     ("C-c x e" . eshell))
 
+  (use-package esh-module
+    :defer t
+    :config
+    (add-to-list 'eshell-modules-list 'eshell-smart))
+
   (use-package em-unix
     :defer t
     :config
