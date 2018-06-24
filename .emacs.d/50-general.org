@@ -1145,7 +1145,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :after projectile
     :config
-    ;; Why does :after + :bind fail to load?
+    ;; Why does :after with :bind fail to load?
     (bind-keys
      :map counsel-projectile-mode-map
      ("C-c p SPC" . counsel-projectile-switch-project)
