@@ -2016,15 +2016,15 @@ Disable blink cursor mode, instead, enable highlight line mode.
 
 Show:
 
-- memory full
+- memory full indicator
 - function arguments
 - variant name and diff status
 - edit depth
 - input name
 - workspace names
-- project name, buffer name and buffer state
-- narrow, percentage buffer above first visible line, line number and
-  column number
+- project name, buffer name and buffer status
+- narrowed indicator, percentage buffer above first visible line, line
+  number and column number
 - clocked time
 - version control name and branch name
 - checker name, number of errors and number of warnings
