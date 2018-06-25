@@ -17,6 +17,11 @@
 
 (setq gc-cons-threshold (* gc-cons-threshold 128))
 
+;;; nsm - Network security manager
+(require 'nsm)
+
+(setq network-security-level 'high)
+
 ;;; package - Package manager
 (require 'package)
 
