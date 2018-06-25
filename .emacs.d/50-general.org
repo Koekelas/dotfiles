@@ -1270,6 +1270,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   Output is between compilation-filter-start and point."
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
+    (setq compilation-scroll-output 'first-error)
     (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 #+END_SRC
 
