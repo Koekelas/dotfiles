@@ -1575,6 +1575,16 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
     :delight (erlang-mode "Erl" :major))
 #+END_SRC
 
+** HTML & CSS
+[[https://github.com/fxbois/web-mode][web-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :disabled
+    :ensure t
+    :mode (rx (or ".htm" ".html") string-end))
+#+END_SRC
+
 ** JavaScript
 [[https://github.com/mooz/js2-mode][js2-mode (GitHub)]]
 
