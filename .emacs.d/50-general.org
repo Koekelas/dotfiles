@@ -2081,8 +2081,8 @@ in mode line.
       (when (symbolp status)
         (setq status (symbol-value status)))
       (unless (string= status "")
-        (replace-regexp-in-string (rx (or (and string-start "[")
-                                          (and "] " string-end)))
+        (replace-regexp-in-string (rx (or (and line-start "[")
+                                          (and "] " line-end)))
                                   "" status))))
 
   (define-advice ediff-refresh-mode-lines (:after () koek-ml/update-ediff)
@@ -2225,10 +2225,10 @@ in mode line.
       (:eval
        (when vc-mode
          (let ((status (substring-no-properties vc-mode)))
-           (string-match (rx (submatch-n 1 (one-or-more word))
-                             (zero-or-one ":" (one-or-more word))
+           (string-match (rx (submatch-n 1 (one-or-more alnum))
+                             (zero-or-one ":" (one-or-more alnum))
                              (any "-:@!?")
-                             (submatch-n 2 (one-or-more word)))
+                             (submatch-n 2 (one-or-more not-newline)))
                          status)
            (format (concat "%s %s" koek-ml/separator)
                    (match-string 1 status) (match-string 2 status)))))
