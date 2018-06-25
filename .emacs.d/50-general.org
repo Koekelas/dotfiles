@@ -1930,27 +1930,34 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
     (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
            (personal
-            (map-let                      ; How to use let-alist and backquote?
-                (foreground background current-line selection
-                 yellow green aqua blue)
-                theme
-              `((lc-fg     . ,(koek-thm/mix foreground background))
-                (lc-bg     . ,(koek-thm/mix current-line selection))
+            (map-let (foreground background yellow green aqua blue) theme
+              `((alt-fg    . ,(koek-thm/mix foreground background 0.16))
+                (alt-bg    . ,(koek-thm/mix background foreground 0.98))
+                (lc-fg     . ,(koek-thm/mix foreground background))
                 (lc-yellow . ,(koek-thm/mix yellow background))
                 (lc-green  . ,(koek-thm/mix green background))
                 (lc-aqua   . ,(koek-thm/mix aqua background))
                 (lc-blue   . ,(koek-thm/mix blue background)))))
            (specs
-            (map-let
-                (foreground background selection lc-fg lc-bg
-                 red orange lc-yellow lc-green lc-aqua lc-blue)
+            (map-let                      ; How to use let-alist and backquote?
+                (foreground background current-line selection comment red orange
+                 aqua alt-fg alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
                 (append personal theme)
               `(;; Default
-                (show-paren-match    :foreground ,foreground
-                                     :background ,selection)
-                (show-paren-mismatch :foreground ,foreground
-                                     :background unspecified
+                (show-paren-match    :foreground ,foreground :background ,selection)
+                (show-paren-mismatch :foreground ,foreground :background unspecified
                                      :underline (:style wave :color ,red))
+                (header-line :inherit unspecified
+                             :foreground ,aqua :background unspecified
+                             :box ,selection)
+                (fringe :foreground ,comment :background ,alt-bg)
+                (mode-line          :foreground ,foreground :background ,current-line
+                                    :underline ,selection :overline ,selection
+                                    :box unspecified :weight unspecified)
+                (mode-line-inactive :inherit unspecified
+                                    :foreground ,comment :background ,alt-bg
+                                    :underline ,selection :overline ,selection
+                                    :weight unspecified)
                 (mode-line-emphasis :foreground ,orange :slant unspecified)
                 ;; rainbow-delimiters
                 (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
@@ -1965,16 +1972,13 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
                                                    :foreground unspecified)
                 ;; whitespace
-                (whitespace-space   :foreground ,lc-bg :background unspecified)
-                (whitespace-hspace  :foreground ,lc-bg :background unspecified)
-                (whitespace-tab     :foreground ,lc-bg :background unspecified)
-                (whitespace-newline :foreground ,lc-bg :background unspecified)
-                (whitespace-trailing :foreground unspecified
-                                     :background ,selection)
-                (whitespace-empty    :foreground unspecified
-                                     :background ,selection)
-                (whitespace-line     :foreground unspecified
-                                     :background ,selection)
+                (whitespace-space   :foreground ,alt-fg :background unspecified)
+                (whitespace-hspace  :foreground ,alt-fg :background unspecified)
+                (whitespace-tab     :foreground ,alt-fg :background unspecified)
+                (whitespace-newline :foreground ,alt-fg :background unspecified)
+                (whitespace-trailing :foreground unspecified :background ,selection)
+                (whitespace-empty    :foreground unspecified :background ,selection)
+                (whitespace-line     :foreground unspecified :background ,selection)
                 ;; ace-window
                 (aw-leading-char-face :inherit avy-lead-face
                                       :foreground unspecified)
