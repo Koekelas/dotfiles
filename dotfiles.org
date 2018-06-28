@@ -106,8 +106,8 @@ To apply configuration, run:
 :END:
 
 #+BEGIN_SRC fundamental
-  jconsole-java9-openjdk.desktop
-  policytool-java9-openjdk.desktop
+  jconsole-java10-openjdk.desktop
+  jshell-java10-openjdk.desktop
 #+END_SRC
 
 ** Qt
