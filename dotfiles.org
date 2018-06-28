@@ -160,6 +160,7 @@ To apply configuration, run:
   org.gnome.Screenshot.desktop
   syncthing-gtk.desktop
   veracrypt.desktop
+  xdvi.desktop
 #+END_SRC
 
 ** Work
