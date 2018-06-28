@@ -66,7 +66,7 @@ To install dependencies on Arch Linux, run:
   # Install cquery from AUR
 
   ## Clojure
-  pacman -S jdk9-openjdk
+  pacman -S jdk10-openjdk
   # Install leiningen from AUR
 
   ## Erlang
