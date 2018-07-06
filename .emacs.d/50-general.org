@@ -1538,6 +1538,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package cider-mode
     :defer t
     :delight)
+
+  (use-package cider-common
+    :defer t
+    :config
+    (setq cider-prompt-for-symbol nil))
 #+END_SRC
 
 **** Jacking in to a Luminus project
