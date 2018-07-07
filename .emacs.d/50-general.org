@@ -1494,10 +1494,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package cc-mode
     :mode
     (((rx (or ".c" ".h") string-end) . c-mode)
-     ((rx ".cpp" string-end) . c++-mode))
-    :delight
-    ((c-mode "C" :major)
-     (c++-mode "C++" :major)))
+     ((rx ".cpp" string-end) . c++-mode)))
 
   (use-package cc-cmds
     :defer t
