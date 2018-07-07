@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Meson code block
+# key: <smeson
+# --
+#+BEGIN_SRC meson
+$0
+#+END_SRC
