@@ -28,7 +28,7 @@ Finally, copy the dotfiles to your home directory.
     - [[http://mesonbuild.com/][Meson]]
     - [[https://github.com/cquery-project/cquery][cquery]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
-  - Clojure:
+  - Clojure & ClojureScript:
     - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
     - [[https://leiningen.org/][Leiningen]]
   - Erlang:
@@ -65,7 +65,7 @@ To install dependencies on Arch Linux, run:
   pacman -S gcc meson gdb
   # Install cquery from AUR
 
-  ## Clojure
+  ## Clojure & ClojureScript
   pacman -S jdk10-openjdk
   # Install leiningen from AUR
 

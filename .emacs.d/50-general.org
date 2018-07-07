@@ -1517,14 +1517,18 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
             (other     . "stroustrup"))))
 #+END_SRC
 
-** Clojure
+** Clojure & ClojureScript
 [[https://github.com/clojure-emacs/clojure-mode][clojure-mode (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
     :ensure t
-    :mode (rx ".clj" string-end)
-    :delight (clojure-mode "Clj" :major))
+    :mode
+    (((rx ".clj" string-end) . clojure-mode)
+     ((rx ".cljs" string-end) . clojurescript-mode))
+    :delight
+    (clojure-mode "Clj" :major)
+    (clojurescript-mode "Cljs" :major))
 #+END_SRC
 
 *** cider - Interact with process
