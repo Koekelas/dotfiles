@@ -1493,7 +1493,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+BEGIN_SRC emacs-lisp
   (use-package cc-mode
     :mode
-    (((rx (or ".c" ".h") string-end) . c-mode)
+    (((rx ".c" string-end) . c-mode)
      ((rx ".cpp" string-end) . c++-mode)))
 
   (use-package cc-cmds
