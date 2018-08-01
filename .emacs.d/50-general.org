@@ -1134,7 +1134,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
                        `(("d" counsel--find-symbol "definition")
                          ("h" ,show-help "help"))))
 
-    (setq counsel-org-goto-face-style 'org))
+    (setq counsel-outline-face-style 'org))
 #+END_SRC
 
 *** counsel-projectile - Ivy powered Projectile commands
