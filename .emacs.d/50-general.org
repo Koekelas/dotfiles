@@ -1148,8 +1148,7 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     ;; Why does :after with :bind fail to load?
     (bind-keys
      :map counsel-projectile-mode-map
-     ("C-c p SPC" . counsel-projectile-switch-project)
-     ("C-c p p"   . counsel-projectile))
+     ("C-c C-p C-p" . counsel-projectile))
 
     (counsel-projectile-mode))
 #+END_SRC
@@ -1220,9 +1219,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
       "C-c f" "files"
       "C-c j" "jump"
       "C-c o" "org"
-      "C-c p" "projectile"
       "C-c w" "windows"
-      "C-c x" "other")
+      "C-c x" "other"
+      "C-c C-p" "projectile")
     (which-key-mode)
     :delight)
 #+END_SRC
