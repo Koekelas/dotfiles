@@ -33,6 +33,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://leiningen.org/][Leiningen]]
   - Erlang:
     - [[https://www.erlang.org/][Erlang/OTP]]
+  - HTML & CSS:
+    - [[http://www.html-tidy.org/][HTML Tidy]]
   - JavaScript:
     - [[https://nodejs.org/][Node.js]]
     - [[https://www.chromium.org/][Chromium]]
@@ -71,6 +73,9 @@ To install dependencies on Arch Linux, run:
 
   ## Erlang
   pacman -S erlang-nox
+
+  ## HTML & CSS
+  pacman -S tidy
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium

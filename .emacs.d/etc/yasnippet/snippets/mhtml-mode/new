@@ -1,0 +1,17 @@
+# -*- mode: snippet; -*-
+# name: New HTML file
+# key: new
+# --
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>${1:`(thread-first (or (buffer-file-name) "Title") file-name-base capitalize)`}</title>
+    <link rel="shortcut icon" href="resources/images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="resources/styles/common.css" />
+  </head>
+  <body>
+    $0
+  </body>
+</html>

@@ -1591,6 +1591,12 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
     :mode (rx (or ".htm" ".html") string-end))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (use-package mhtml-mode
+    :mode (rx (or ".htm" ".html") string-end)
+    :delight (mhtml-mode "HTML" :major))
+#+END_SRC
+
 ** JavaScript
 [[https://github.com/mooz/js2-mode][js2-mode (GitHub)]]
 
@@ -2167,6 +2173,7 @@ in mode line.
       (emacs-lisp . "El")
       (emacs-lisp-checkdoc . "Checkdoc")
       (erlang . "Erlc")
+      (html-tidy . "Tidy")
       (javascript-jslint . "JSLint"))
     "Alist of checker symbol to checker name pairs.")
 
