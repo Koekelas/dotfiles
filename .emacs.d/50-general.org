@@ -1561,6 +1561,7 @@ Run =M-x= ~cider-jack-in~. Then, from the REPL, run ~(start)~.
        :map lisp-interaction-mode-map
        ("C-c x p" . pp-eval-last-sexp)
        ("C-c x m" . pp-macroexpand-last-sexp)))
+
     (use-package helpful
       :bind
       (:map emacs-lisp-mode-map
