@@ -805,6 +805,33 @@ whitespace mode.
     :after tern)
 #+END_SRC
 
+*** company-posframe - Show candidates in a child frame
+[[https://github.com/tumashu/company-posframe][company-posframe (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-posframe
+    :ensure t
+    :unless
+    (string= (getenv "XDG_CURRENT_DESKTOP") "GNOME")
+    :after company
+    :config
+    ;; Remove whitespace-mode workaround
+    (remove-hook 'company-completion-started-hook
+                 #'koek-cpny/suspend-whitespace-mode)
+    (remove-hook 'company-completion-finished-hook
+                 #'koek-cpny/resume-whitespace-mode)
+    (remove-hook 'company-completion-cancelled-hook
+                 #'koek-cpny/resume-whitespace-mode)
+
+    (company-posframe-mode)
+    :delight)
+#+END_SRC
+
+*** Issues
+
+**** Under GNOME, child frames fail to resize
+See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
+
 ** lsp - Code insight
 [[https://github.com/emacs-lsp/lsp-mode][lsp-mode (GitHub)]]
 
