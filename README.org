@@ -18,9 +18,9 @@ Finally, copy the dotfiles to your home directory.
   - General:
     - [[https://git-scm.com/][Git]]
     - [[https://hunspell.github.io/][Hunspell]]
+    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
     - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
     - [[https://x.org/][xprop]]
-    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - Arduino:
     - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
   - C family:
