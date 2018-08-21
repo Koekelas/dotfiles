@@ -443,7 +443,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   CHARS are two or more characters.  Baseline right of previous
   character is composed with baseline left of next character."
     (seq-reduce (lambda (spec char)
-                  `(,@spec (Br . Bl) ,char))
+                  (append spec (list '(Br . Bl) char)))
                 (cdr chars) (list (car chars))))
 
   (defconst koek-ps/comp-specs
@@ -457,7 +457,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                 (cons symbol
                       ;; Widen char to symbol characters
                       (apply #'koek-ps/make-baseline-right-left-spec
-                             `(,@(make-list (1- (length symbol)) ?\s) ,char))))
+                             (append (make-list (1- (length symbol)) ?\s)
+                                     (list char)))))
               '(("[ERROR]"   . ?\uE380) ("[DEBUG]" . ?\uE381)
                 ("[INFO]"    . ?\uE382) ("[WARN]"  . ?\uE383)
                 ("[WARNING]" . ?\uE384) ("[ERR]"   . ?\uE385)
