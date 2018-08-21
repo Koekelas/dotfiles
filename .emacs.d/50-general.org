@@ -59,6 +59,8 @@ Move deleted files to trash.
   (use-package projectile
     :ensure t
     :config
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
     (setq projectile-completion-system 'ivy)
     (projectile-mode)
     :delight)
@@ -1172,10 +1174,10 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :after projectile
     :config
-    ;; Why does :after with :bind fail to load?
-    (bind-keys
-     :map counsel-projectile-mode-map
-     ("C-c C-p C-p" . counsel-projectile))
+    (setq counsel-projectile-key-bindings
+          (append counsel-projectile-key-bindings
+                  `((,(kbd "C-p") . counsel-projectile-switch-project)
+                    (,(kbd "p")   . counsel-projectile))))
 
     (counsel-projectile-mode))
 #+END_SRC
@@ -1246,9 +1248,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
       "C-c f" "files"
       "C-c j" "jump"
       "C-c o" "org"
+      "C-c p" "projectile"
       "C-c w" "windows"
-      "C-c x" "other"
-      "C-c C-p" "projectile")
+      "C-c x" "other")
     (which-key-mode)
     :delight)
 #+END_SRC
