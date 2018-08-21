@@ -1404,7 +1404,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   a string."
     (cond
      ((listp value)
-      (concat "[" (mapconcat #'koek-ino/normalize-property-value value ", ") "]"))
+      (format "[%s]" (mapconcat #'koek-ino/normalize-property-value value ", ")))
      ((stringp value)
       (format "'%s'" value))
      (t
@@ -2227,7 +2227,7 @@ in mode line.
       (:eval
        (let ((depth (- (recursion-depth) (minibuffer-depth))))
          (when (> depth 0)
-           (format (concat "[%d]" koek-ml/separator) depth))))
+           (format "[%d]%s" depth koek-ml/separator))))
       (current-input-method
        ("" current-input-method-title koek-ml/separator))
       (:eval
@@ -2248,7 +2248,7 @@ in mode line.
               koek-ml/separator)))))
       ((:eval
         (when (projectile-project-p)
-          (format "%s/" (projectile-project-name))))
+          (concat (projectile-project-name) "/")))
        (:propertize "%b" face mode-line-buffer-id)
        " %*%+"))
     "List of mode line constructs shown left.")
@@ -2272,8 +2272,9 @@ in mode line.
                              (any "-:@!?")
                              (submatch-n 2 (one-or-more not-newline)))
                          status)
-           (format (concat "%s %s" koek-ml/separator)
-                   (match-string 1 status) (match-string 2 status)))))
+           (format "%s %s%s"
+                   (match-string 1 status) (match-string 2 status)
+                   koek-ml/separator))))
       (:eval
        (when flycheck-mode
          (concat (pcase flycheck-last-status-change
