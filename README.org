@@ -40,6 +40,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.chromium.org/][Chromium]]
     - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
     - [[https://ternjs.net/][Tern]] (optional)
+    - [[https://github.com/NicolasPetton/Indium][Indium]]
   - OpenSCAD:
     - [[https://www.openscad.org/][OpenSCAD]]
   - Org:
@@ -79,7 +80,7 @@ To install dependencies on Arch Linux, run:
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium
-  npm i -g javascript-typescript-langserver
+  npm i -g javascript-typescript-langserver indium
   npm i -g tern                   # Optional
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
