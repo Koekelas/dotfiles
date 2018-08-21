@@ -451,7 +451,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
            '(("function" . ?ƒ)
              ("lambda"   . ?λ)))
           (pragmata
-           (when (x-list-fonts "*-PragmataPro Mono-*")
+           (when (member "PragmataPro Mono" (font-family-list))
              (mapcar
               (pcase-lambda (`(,symbol . ,char))
                 (cons symbol
@@ -2043,7 +2043,7 @@ Set default font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro 
   (when-let
       (spec
        (seq-find (lambda (spec)
-                   (x-list-fonts (format "*-%s-*" (plist-get spec :family))))
+                   (member (plist-get spec :family) (font-family-list)))
                  '((:family "PragmataPro Mono" :size 15)
                    (:family "Source Code Pro"  :size 15))))
     (set-frame-font (apply #'font-spec spec) nil t))
