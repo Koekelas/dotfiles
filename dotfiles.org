@@ -119,9 +119,13 @@ To apply configuration, run:
 
 #+BEGIN_SRC fundamental
   assistant-qt4.desktop
+  assistant.desktop
   designer-qt4.desktop
+  designer.desktop
   linguist-qt4.desktop
+  linguist.desktop
   qdbusviewer-qt4.desktop
+  qdbusviewer.desktop
   qv4l2.desktop
 #+END_SRC
 
