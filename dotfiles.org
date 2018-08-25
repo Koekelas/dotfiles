@@ -34,6 +34,8 @@ To apply configuration, run:
   inkscape.desktop
   openscad.desktop
   scribus.desktop
+  tape.desktop
+  valentina.desktop
 #+END_SRC
 
 ** DisplayCAL
