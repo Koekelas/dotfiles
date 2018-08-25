@@ -174,6 +174,7 @@ To apply configuration, run:
   anki.desktop
   arduino.desktop
   emacs.desktop
+  org.gnome.Boxes.desktop
   org.gnome.Calculator.desktop
   org.gnome.Calendar.desktop
   org.gnome.Contacts.desktop
