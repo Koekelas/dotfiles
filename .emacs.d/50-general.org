@@ -1312,6 +1312,21 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :defer t)
 #+END_SRC
 
+** elfeed - News reader
+[[https://github.com/skeeto/elfeed][elfeed (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :bind
+    ("C-c x n" . elfeed))
+
+  (use-package elfeed-search
+    :defer t
+    :config
+    (setq elfeed-search-filter (concat elfeed-search-filter " ")))
+#+END_SRC
+
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
