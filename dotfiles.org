@@ -181,6 +181,7 @@ To apply configuration, run:
   org.gnome.Maps.desktop
   org.gnome.Weather.Application.desktop
   org.gnome.clocks.desktop
+  org.octave.Octave.desktop
   org.remmina.Remmina.desktop
 #+END_SRC
 
