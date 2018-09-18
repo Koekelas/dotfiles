@@ -167,7 +167,6 @@ To apply configuration, run:
   org.gnome.Nautilus.desktop
   org.gnome.Screenshot.desktop
   syncthing-gtk.desktop
-  veracrypt.desktop
   xdvi.desktop
 #+END_SRC
 
@@ -188,7 +187,6 @@ To apply configuration, run:
   org.gnome.Weather.Application.desktop
   org.gnome.clocks.desktop
   org.octave.Octave.desktop
-  org.remmina.Remmina.desktop
 #+END_SRC
 
 * Steam
