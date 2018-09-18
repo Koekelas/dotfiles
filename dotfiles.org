@@ -159,10 +159,10 @@ To apply configuration, run:
 #+BEGIN_SRC fundamental
   electrum.desktop
   eog.desktop
-  evince.desktop
   keepassx2.desktop
   obs.desktop
   org.gnome.Cheese.desktop
+  org.gnome.Evince.desktop
   org.gnome.FileRoller.desktop
   org.gnome.Nautilus.desktop
   org.gnome.Screenshot.desktop
