@@ -42,6 +42,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
     - [[https://ternjs.net/][Tern]] (optional)
     - [[https://github.com/NicolasPetton/Indium][Indium]]
+  - Octave & MATLAB
+    - [[https://www.gnu.org/software/octave/][Octave]]
   - OpenSCAD:
     - [[https://www.openscad.org/][OpenSCAD]]
   - Org:
@@ -85,6 +87,9 @@ To install dependencies on Arch Linux, run:
   npm i -g tern                   # Optional
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
+
+  ## Octave & MATLAB
+  pacman -S octave
 
   ## OpenSCAD
   pacman -S openscad

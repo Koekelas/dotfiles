@@ -614,6 +614,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
             (koek-ps/make-enable
              "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
              "..." "/=" "<<" "<=" "==" "===" "=>" ">=" ">>" ">>>" "^=" "|=" "||"))
+  (add-hook 'octave-mode-hook
+            (koek-ps/make-enable "&&" "<=" "==" ">=" "||" "~="))
   (add-hook 'scad-mode-hook
             (koek-ps/make-enable "!=" "&&" "<=" "==" ">=" "||"))
   (add-hook 'scheme-mode-hook
@@ -1729,6 +1731,30 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
   (use-package meson-mode
     :ensure t
     :mode (rx "meson.build" string-end))
+#+END_SRC
+
+** Octave & MATLAB
+
+#+BEGIN_SRC emacs-lisp
+  (use-package octave
+    :mode ((rx ".m" string-end) . octave-mode)
+    :config
+    ;; Insert MATLAB compatible comments
+    (setq octave-comment-char ?%)
+    (setq octave-comment-start (char-to-string octave-comment-char))
+    (setq octave-block-comment-start
+          (concat (make-string 2 octave-comment-char) " "))
+
+    (setq octave-blink-matching-block nil))
+#+END_SRC
+
+*** Issues
+
+**** Eldoc fails to show docstring
+It fails with error:
+
+#+BEGIN_SRC fundamental
+  alnum:]][[:alnum:]\-]*)({ <-- HERE })?\s*/ at /usr/share/texinfo/Texinfo/Parser.pm line 5481. | alnum:]][[:alnum:]\-]*)({ <-- HERE })?\s*(\@(c|comment)((\@|\s+).*)?)?/ at /usr/share/texinfo/Texinfo/Parser.pm line 5485.
 #+END_SRC
 
 ** OpenSCAD
