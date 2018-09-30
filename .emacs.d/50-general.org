@@ -747,9 +747,6 @@ whitespace mode.
     (setq company-show-numbers t)
 
     ;; Setup mode specific backends
-    (add-hook 'lsp-mode-hook
-              (koek-cpny/make-setup-backends
-               '((company-lsp company-files :with company-yasnippet))))
     (add-hook 'indium-repl-mode-hook
               (koek-cpny/make-setup-backends
                '((company-indium-repl company-files :with company-yasnippet))))
@@ -791,17 +788,6 @@ whitespace mode.
     (company-flx-mode))
 #+END_SRC
 
-*** company-lsp - LSP backend
-[[https://github.com/tigersoldier/company-lsp][company-lsp (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company-lsp
-    :ensure t
-    :after lsp-mode
-    :config
-    (setq company-lsp-enable-snippet nil))
-#+END_SRC
-
 *** company-posframe - Show candidates in a child frame
 [[https://github.com/tumashu/company-posframe][company-posframe (GitHub)]]
 
@@ -828,62 +814,6 @@ whitespace mode.
 
 **** Under GNOME, child frames fail to resize
 See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
-
-** lsp - Code insight
-[[https://github.com/emacs-lsp/lsp-mode][lsp-mode (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :commands lsp-mode
-    :delight)
-#+END_SRC
-
-*** lsp-ui - Integrate Imenu & Flycheck
-[[https://github.com/emacs-lsp/lsp-ui][lsp-ui (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-ui
-    :ensure t
-    :hook (lsp-mode . lsp-ui-mode))
-
-  (use-package lsp-ui-doc
-    :defer t
-    :config
-    (setq lsp-ui-doc-enable nil))
-
-  (use-package lsp-ui-peek
-    :defer t
-    :config
-    (setq lsp-ui-peek-enable nil))
-
-  (use-package lsp-ui-sideline
-    :defer t
-    :config
-    (setq lsp-ui-sideline-enable nil))
-#+END_SRC
-
-*** cquery - C & C++ backend
-[[https://github.com/cquery-project/emacs-cquery][cquery (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package cquery
-    :ensure t
-    :hook ((c-mode c++-mode) . lsp-cquery-enable))
-#+END_SRC
-
-**** Setting up cquery
-Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
-the project home directory.
-
-*** lsp-javascript-typescript - JavaScript backend
-[[https://github.com/emacs-lsp/lsp-javascript][lsp-javascript-typescript (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-javascript-typescript
-    :ensure t
-    :hook (js2-mode . lsp-javascript-typescript-enable))
-#+END_SRC
 
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
@@ -2176,8 +2106,7 @@ in mode line.
         id)))
 
   (defconst koek-ml/checker-names
-    '((lsp-ui . "LSP")
-      (emacs-lisp . "El")
+    '((emacs-lisp . "El")
       (emacs-lisp-checkdoc . "Checkdoc")
       (erlang . "Erlc")
       (html-tidy . "Tidy")

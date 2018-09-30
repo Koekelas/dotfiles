@@ -27,7 +27,6 @@ Finally, copy the dotfiles to your home directory.
   - C family:
     - [[https://gcc.gnu.org/][GCC]]
     - [[http://mesonbuild.com/][Meson]]
-    - [[https://github.com/cquery-project/cquery][cquery]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript:
     - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
@@ -39,7 +38,6 @@ Finally, copy the dotfiles to your home directory.
   - JavaScript:
     - [[https://nodejs.org/][Node.js]]
     - [[https://www.chromium.org/][Chromium]]
-    - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
     - [[https://github.com/NicolasPetton/Indium][Indium]]
   - Octave & MATLAB
     - [[https://www.gnu.org/software/octave/][Octave]]
@@ -68,7 +66,6 @@ To install dependencies on Arch Linux, run:
 
   ## C family
   pacman -S gcc meson gdb
-  # Install cquery from AUR
 
   ## Clojure & ClojureScript
   pacman -S jdk10-openjdk
@@ -82,7 +79,7 @@ To install dependencies on Arch Linux, run:
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium
-  npm i -g javascript-typescript-langserver indium
+  npm i -g indium
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
 
