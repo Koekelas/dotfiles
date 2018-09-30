@@ -750,9 +750,6 @@ whitespace mode.
     (add-hook 'lsp-mode-hook
               (koek-cpny/make-setup-backends
                '((company-lsp company-files :with company-yasnippet))))
-    (add-hook 'tern-mode-hook
-              (koek-cpny/make-setup-backends
-               '((company-tern company-files :with company-yasnippet))))
     (add-hook 'indium-repl-mode-hook
               (koek-cpny/make-setup-backends
                '((company-indium-repl company-files :with company-yasnippet))))
@@ -803,15 +800,6 @@ whitespace mode.
     :after lsp-mode
     :config
     (setq company-lsp-enable-snippet nil))
-#+END_SRC
-
-*** company-tern - Tern backend
-[[https://github.com/proofit404/company-tern][company-tern (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company-tern
-    :ensure t
-    :after tern)
 #+END_SRC
 
 *** company-posframe - Show candidates in a child frame
@@ -894,7 +882,7 @@ the project home directory.
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-javascript-typescript
     :ensure t
-    :after js2-mode)
+    :hook (js2-mode . lsp-javascript-typescript-enable))
 #+END_SRC
 
 ** xref - Jump to definition & references
@@ -905,22 +893,6 @@ the project home directory.
     (declare-function xref-find-references "xref")
 
     (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
-#+END_SRC
-
-*** xref-js2 - JavaScript backend
-[[https://github.com/NicolasPetton/xref-js2][xref-js2 (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package xref-js2
-    :ensure t
-    :after tern
-    :preface
-    (defun koek-xref/setup-js-backend ()
-      "Setup JavaScript backend for current."
-      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil 'local))
-    :config
-    (setq xref-js2-ignored-dirs '("node_modules"))
-    (add-hook 'tern-mode-hook #'koek-xref/setup-js-backend))
 #+END_SRC
 
 ** abbrev - Abbreviations
@@ -1653,48 +1625,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :ensure t
     :mode (rx ".js" string-end)
     :interpreter "node"
-    :preface
-    (declare-function lsp-javascript-typescript-enable
-                      "lsp-javascript-typescript")
-
-    (defun koek-js/enable-code-insight ()
-      "Enable code insight.
-  When Tern is configured for current, enable `tern-mode', else,
-  enable `lsp-mode'."
-      (cond
-       ((locate-dominating-file default-directory ".tern-project")
-        (tern-mode))
-       (t
-        (lsp-javascript-typescript-enable))))
     :config
-    ;; Resolve keybinding conflict with xref-js2
-    (unbind-key "M-." js2-mode-map)
-
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
-    (add-hook 'js2-mode-hook #'koek-js/enable-code-insight)
     :delight (js2-mode "JS" :major))
 #+END_SRC
-
-*** tern - Code insight
-[[https://github.com/ternjs/tern][tern (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package tern
-    :ensure t
-    :commands tern-mode
-    :config
-    ;; Resolve keybinding conflict with xref-js2
-    (unbind-key "M-." tern-mode-keymap)
-    (unbind-key "M-," tern-mode-keymap)
-    :delight)
-#+END_SRC
-
-**** Setting up Tern
-Create a file named =.tern-project= in the project home directory.
-Inside the file, expand the snippet =browser= or =node=.
-
-For more information, see [[https://ternjs.net/doc/manual.html#configuration][Project configuration (Tern)]].
 
 *** indium - Interact with process
 [[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
@@ -1718,7 +1653,7 @@ For more information, see [[https://ternjs.net/doc/manual.html#configuration][Pr
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
-    :mode (rx (or ".json" "/.tern-project") string-end))
+    :mode (rx ".json" string-end))
 #+END_SRC
 
 ** Meson
