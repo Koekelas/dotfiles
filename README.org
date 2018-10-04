@@ -39,7 +39,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://nodejs.org/][Node.js]]
     - [[https://www.chromium.org/][Chromium]]
     - [[https://github.com/NicolasPetton/Indium][Indium]]
-  - Octave & MATLAB
+  - Octave & MATLAB:
     - [[https://www.gnu.org/software/octave/][Octave]]
   - OpenSCAD:
     - [[https://www.openscad.org/][OpenSCAD]]
