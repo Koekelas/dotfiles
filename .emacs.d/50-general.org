@@ -750,9 +750,6 @@ whitespace mode.
     (add-hook 'indium-repl-mode-hook
               (koek-cpny/make-setup-backends
                '((company-indium-repl company-files :with company-yasnippet))))
-    (add-hook 'json-mode-hook
-              (koek-cpny/make-setup-backends
-               '((company-dabbrev company-files :with company-yasnippet))))
     (add-hook 'scad-mode-hook
               (koek-cpny/make-setup-backends
                '((company-dabbrev-code company-files :with company-yasnippet))))
@@ -770,11 +767,6 @@ whitespace mode.
     (add-hook 'company-completion-cancelled-hook
               #'koek-cpny/resume-whitespace-mode)
     :delight)
-
-  (use-package company-dabbrev
-    :defer t
-    :config
-    (setq company-dabbrev-other-buffers t))
 #+END_SRC
 
 *** company-flx - Match candidates fuzzily
@@ -814,6 +806,39 @@ whitespace mode.
 
 **** Under GNOME, child frames fail to resize
 See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
+
+** eglot - Code insight
+[[https://github.com/joaotavora/eglot][eglot (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eglot
+    :ensure t
+    :bind
+    (:map eglot-mode-map
+     ("C-c r f" . eglot-code-actions)
+     ("C-c r r" . eglot-rename)
+     ("C-c C-d" . eglot-help-at-point))
+    :hook ((c-mode c++-mode mhtml-mode js2-mode json-mode) . eglot-ensure)
+    :config
+    (add-to-list 'eglot-server-programs
+                 '(mhtml-mode . ("html-languageserver" "--stdio")))
+    (add-to-list 'eglot-server-programs
+                 '(json-mode . ("json-languageserver" "--stdio"))))
+
+  (use-package flymake
+    :bind
+    (:map flymake-mode-map
+     ("C-c ! n" . flymake-goto-next-error)
+     ("C-c ! p" . flymake-goto-prev-error)
+     ("C-c ! l" . flymake-show-diagnostics-buffer))
+    :config
+    (setq flymake-no-changes-timeout nil)
+    (setq flymake-wrap-around nil))
+#+END_SRC
+
+*** Setting up ccls
+Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
+the project home directory.
 
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
@@ -903,7 +928,7 @@ When revisiting then modifying file, history is discarded.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    :hook (prog-mode . flycheck-mode)
+    :hook ((emacs-lisp-mode erlang-mode) . flycheck-mode)
     :config
     (setq flycheck-check-syntax-automatically '(mode-enabled save))
     :delight)
@@ -915,7 +940,7 @@ When revisiting then modifying file, history is discarded.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-jslint
     :load-path "lisp/jslint-cli/"
-    :after (:any js2-mode json-mode))
+    :after (:all flycheck (:any js2-mode json-mode)))
 #+END_SRC
 
 * Windows & buffers
@@ -1151,13 +1176,14 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :ensure t
     :config
     (which-key-add-key-based-replacements
-      "C-c !" "flycheck"
+      "C-c !" "errors"
       "C-c &" "yasnippet"
       "C-c d" "documentation"
       "C-c f" "files"
       "C-c j" "jump"
       "C-c o" "org"
       "C-c p" "projectile"
+      "C-c r" "refactor"
       "C-c w" "windows"
       "C-c x" "other")
     (which-key-mode)
@@ -1556,6 +1582,9 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode (rx ".js" string-end)
     :interpreter "node"
     :config
+    ;; Resolve keybinding conflict with eglot
+    (unbind-key "M-." js2-mode-map)
+
     (setq js2-mode-show-parse-errors nil)
     (setq js2-mode-show-strict-warnings nil)
     :delight (js2-mode "JS" :major))

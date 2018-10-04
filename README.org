@@ -27,6 +27,7 @@ Finally, copy the dotfiles to your home directory.
   - C family:
     - [[https://gcc.gnu.org/][GCC]]
     - [[http://mesonbuild.com/][Meson]]
+    - [[https://github.com/MaskRay/ccls][ccls]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript:
     - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
@@ -34,11 +35,15 @@ Finally, copy the dotfiles to your home directory.
   - Erlang:
     - [[https://www.erlang.org/][Erlang/OTP]]
   - HTML & CSS:
+    - [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]]
     - [[http://www.html-tidy.org/][HTML Tidy]]
   - JavaScript:
     - [[https://nodejs.org/][Node.js]]
     - [[https://www.chromium.org/][Chromium]]
+    - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
     - [[https://github.com/NicolasPetton/Indium][Indium]]
+  - JSON:
+    - [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
   - Octave & MATLAB:
     - [[https://www.gnu.org/software/octave/][Octave]]
   - OpenSCAD:
@@ -66,6 +71,7 @@ To install dependencies on Arch Linux, run:
 
   ## C family
   pacman -S gcc meson gdb
+  # Install ccls from AUR
 
   ## Clojure & ClojureScript
   pacman -S jdk10-openjdk
@@ -75,13 +81,17 @@ To install dependencies on Arch Linux, run:
   pacman -S erlang-nox
 
   ## HTML & CSS
+  npm i -g vscode-html-languageserver-bin
   pacman -S tidy
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium
-  npm i -g indium
+  npm i -g javascript-typescript-langserver indium
   cd ~/.emacs.d/lisp/jslint-cli/
   npm i -g
+
+  ## JSON
+  npm i -g vscode-json-languageserver-bin
 
   ## Octave & MATLAB
   pacman -S octave
