@@ -1524,6 +1524,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :defer t
     :config
     (setq cider-prompt-for-symbol nil))
+
+  (use-package cider-repl
+    :defer t
+    :config
+    (setq cider-repl-use-pretty-printing t))
 #+END_SRC
 
 ** Emacs Lisp
