@@ -750,14 +750,16 @@ whitespace mode.
     (add-hook 'indium-repl-mode-hook
               (koek-cpny/make-setup-backends
                '((company-indium-repl company-files :with company-yasnippet))))
-    (add-hook 'scad-mode-hook
-              (koek-cpny/make-setup-backends
-               '((company-dabbrev-code company-files :with company-yasnippet))))
-    (let ((setup-backends
+    (let ((setup-geiser-backend
            (koek-cpny/make-setup-backends
             '((geiser-company-backend company-files :with company-yasnippet)))))
-      (add-hook 'geiser-mode-hook setup-backends)
-      (add-hook 'geiser-repl-mode-hook setup-backends))
+      (add-hook 'geiser-mode-hook setup-geiser-backend)
+      (add-hook 'geiser-repl-mode-hook setup-geiser-backend))
+    (let ((setup-fallback-backend
+           (koek-cpny/make-setup-backends
+            '((company-dabbrev-code company-files :with company-yasnippet)))))
+      (add-hook 'erlang-mode-hook setup-fallback-backend)
+      (add-hook 'scad-mode-hook setup-fallback-backend))
 
     ;; Setup suspend whitespace-mode on complete
     (add-hook 'company-completion-started-hook
