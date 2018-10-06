@@ -932,7 +932,7 @@ When revisiting then modifying file, history is discarded.
     :ensure t
     :hook ((emacs-lisp-mode erlang-mode) . flycheck-mode)
     :config
-    (setq flycheck-check-syntax-automatically '(mode-enabled save))
+    (setq flycheck-check-syntax-automatically '(mode-enabled new-line save))
     :delight)
 #+END_SRC
 
