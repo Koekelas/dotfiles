@@ -1631,6 +1631,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode (rx "meson.build" string-end))
 #+END_SRC
 
+*** Issues
+
+**** Code fails to complete
+See [[https://github.com/wentasah/meson-mode/issues/16][Issue 16 (GitHub)]].
+
 ** Octave & MATLAB
 
 #+BEGIN_SRC emacs-lisp
