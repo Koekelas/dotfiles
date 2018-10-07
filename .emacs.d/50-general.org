@@ -1672,6 +1672,7 @@ It fails with error:
 *** Issues
 
 **** Built-in indentation styles are inappropriate for multiple line vectors
+See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 
 ** Org
 #+BEGIN_SRC emacs-lisp
