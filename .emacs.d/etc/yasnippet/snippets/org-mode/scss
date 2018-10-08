@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: CSS code block
+# key: <scss
+# --
+#+BEGIN_SRC css
+$0
+#+END_SRC

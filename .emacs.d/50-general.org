@@ -409,6 +409,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
     (koek-sp/setup-format-c-block-on-return-handler 'c-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
+    (koek-sp/setup-format-c-block-on-return-handler 'css-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
@@ -820,10 +821,13 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
      ("C-c r f" . eglot-code-actions)
      ("C-c r r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
-    :hook ((c-mode c++-mode mhtml-mode js2-mode json-mode) . eglot-ensure)
+    :hook
+    ((c-mode c++-mode mhtml-mode css-mode js2-mode json-mode) . eglot-ensure)
     :config
     (add-to-list 'eglot-server-programs
                  '(mhtml-mode . ("html-languageserver" "--stdio")))
+    (add-to-list 'eglot-server-programs
+                 '(css-mode . ("css-languageserver" "--stdio")))
     (add-to-list 'eglot-server-programs
                  '(json-mode . ("json-languageserver" "--stdio"))))
 
@@ -1578,6 +1582,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package mhtml-mode
     :mode (rx (or ".htm" ".html") string-end)
     :delight (mhtml-mode "HTML" :major))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package css-mode
+    :mode (rx ".css" string-end))
 #+END_SRC
 
 ** JavaScript
