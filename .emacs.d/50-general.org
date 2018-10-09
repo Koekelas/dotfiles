@@ -783,7 +783,7 @@ whitespace mode.
     (company-flx-mode))
 #+END_SRC
 
-*** company-posframe - Show candidates in a child frame
+*** company-posframe - Show candidates in child frame
 [[https://github.com/tumashu/company-posframe][company-posframe (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
