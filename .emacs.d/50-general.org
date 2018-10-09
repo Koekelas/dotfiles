@@ -838,7 +838,6 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
      ("C-c ! p" . flymake-goto-prev-error)
      ("C-c ! l" . flymake-show-diagnostics-buffer))
     :config
-    (setq flymake-no-changes-timeout nil)
     (setq flymake-wrap-around nil))
 #+END_SRC
 
@@ -935,8 +934,6 @@ When revisiting then modifying file, history is discarded.
   (use-package flycheck
     :ensure t
     :hook ((emacs-lisp-mode erlang-mode) . flycheck-mode)
-    :config
-    (setq flycheck-check-syntax-automatically '(mode-enabled new-line save))
     :delight)
 #+END_SRC
 
