@@ -1586,6 +1586,21 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode (rx ".css" string-end))
 #+END_SRC
 
+*** emmet - Expand selector to HTML or CSS
+[[https://github.com/smihica/emmet-mode][emmet-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emmet-mode
+    :ensure t
+    :bind
+    (:map emmet-mode-keymap
+     ("C-<tab>" . emmet-expand-line))     ; Why does <tab> work but TAB not?
+    :hook (mhtml-mode css-mode)
+    :config
+    (setq emmet-self-closing-tag-style " /")
+    :delight)
+#+END_SRC
+
 ** JavaScript
 [[https://github.com/mooz/js2-mode][js2-mode (GitHub)]]
 
