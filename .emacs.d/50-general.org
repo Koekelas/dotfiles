@@ -1669,7 +1669,8 @@ See [[https://github.com/wentasah/meson-mode/issues/16][Issue 16 (GitHub)]].
     (setq octave-block-comment-start
           (concat (make-string 2 octave-comment-char) " "))
 
-    (setq octave-blink-matching-block nil))
+    (setq octave-blink-matching-block nil)
+    :delight (octave-mode "M" :major))
 #+END_SRC
 
 *** Issues
