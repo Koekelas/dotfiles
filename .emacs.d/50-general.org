@@ -619,6 +619,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
             (koek-ps/make-enable "&&" "<=" "==" ">=" "||" "~="))
   (add-hook 'scad-mode-hook
             (koek-ps/make-enable "!=" "&&" "<=" "==" ">=" "||"))
+  (add-hook 'python-mode-hook
+            (koek-ps/make-enable "!=" "//" "<<" "<=" "==" ">=" ">>"))
   (add-hook 'scheme-mode-hook
             (koek-ps/make-enable "lambda" "<=" ">="))
 #+END_SRC
@@ -822,7 +824,8 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
      ("C-c r r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
-    ((c-mode c++-mode mhtml-mode css-mode js2-mode json-mode) . eglot-ensure)
+    ((c-mode c++-mode mhtml-mode css-mode js2-mode json-mode python-mode)
+     . eglot-ensure)
     :config
     (add-to-list 'eglot-server-programs
                  '(mhtml-mode . ("html-languageserver" "--stdio")))
@@ -1787,6 +1790,21 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     :defer t
     :config
     (setq org-export-headline-levels 4))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC emacs-lisp
+  (use-package python
+    :mode ((rx ".py" string-end) . python-mode)
+    :preface
+    (declare-function python-flymake "python")
+
+    (defun koek-py/disable-checker ()
+      "Disable Python checker for current."
+      (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
+    :config
+    (add-hook 'python-mode-hook #'koek-py/disable-checker)
+    :delight (python-mode "Py" :major))
 #+END_SRC
 
 ** Scheme

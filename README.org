@@ -50,6 +50,9 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.openscad.org/][OpenSCAD]]
   - Org:
     - [[https://www.latex-project.org/][LaTeX]]
+  - Python:
+    - [[https://www.python.org/][Python]]
+    - [[https://github.com/palantir/python-language-server][Python Language Server]]
   - Scheme:
     - [[https://www.gnu.org/software/guile/][Guile]]
 - GNOME Shell:
@@ -101,6 +104,10 @@ To install dependencies on Arch Linux, run:
 
   ## Org
   pacman -S texlive-core texlive-latexextra
+
+  ## Python
+  pacman -S python python-pipenv
+  pacman -S python-language-server python-rope python-pyflakes
 
   ## Scheme
   pacman -S guile
