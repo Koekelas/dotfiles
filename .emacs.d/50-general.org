@@ -606,7 +606,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
              "!=" "%=" "&&" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" "<<" "<="
              "==" ">=" ">>" "^=" "|=" "||"))
   (add-hook 'clojure-mode-hook
-            (koek-ps/make-enable ("fn" . "lambda") "->" "->>" "<=" ">="))
+            (koek-ps/make-enable '("fn" . "lambda") "->" "->>" "<=" ">="))
   (add-hook 'emacs-lisp-mode-hook
             (koek-ps/make-enable "lambda" "<=" ">="))
   (add-hook 'erlang-mode-hook
