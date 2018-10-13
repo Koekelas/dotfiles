@@ -1157,14 +1157,14 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     ("C-c d a" . apropos))
 #+END_SRC
 
-** devdocs - Search DevDocs
-[[https://github.com/xuchunyang/DevDocs.el][devdocs (GitHub)]]
+** devdocs-lookup - Search DevDocs
+[[https://github.com/skeeto/devdocs-lookup][devdocs-lookup (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package devdocs
-    :ensure t
+  (use-package devdocs-lookup
+    :load-path "lisp/devdocs-lookup/"
     :bind
-    ("C-c d d" . devdocs-search))
+    ("C-c d d" . devdocs-lookup))
 #+END_SRC
 
 ** eldoc - Show docstring

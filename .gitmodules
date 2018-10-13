@@ -1,3 +1,6 @@
 [submodule "jslint-cli"]
 	path = .emacs.d/lisp/jslint-cli
 	url = https://github.com/Koekelas/jslint-cli.git
+[submodule "devdocs-lookup"]
+	path = .emacs.d/lisp/devdocs-lookup
+	url = https://github.com/skeeto/devdocs-lookup.git
