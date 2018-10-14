@@ -1749,7 +1749,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (use-package counsel
       :bind
       (:map org-agenda-mode-map
-       ([remap org-agenda-set-tags] . counsel-org-tag-agenda))))
+       ([remap org-agenda-set-tags] . counsel-org-tag-agenda)))
+
+    (setq org-agenda-time-leading-zero t))
 
   (use-package org-capture
     :bind
