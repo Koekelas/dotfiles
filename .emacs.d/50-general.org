@@ -1164,7 +1164,9 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
   (use-package devdocs-lookup
     :load-path "lisp/devdocs-lookup/"
     :bind
-    ("C-c d d" . devdocs-lookup))
+    ("C-c d d" . devdocs-lookup)
+    :config
+    (devdocs-setup))
 #+END_SRC
 
 ** eldoc - Show docstring
@@ -1613,6 +1615,14 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode (rx ".js" string-end)
     :interpreter "node"
     :config
+    (use-package devdocs-lookup
+      :bind
+      (:map js2-mode-map
+       ("C-c d d" . devdocs-lookup-javascript)
+       ("C-c d C-d" . devdocs-lookup-dom)
+       ("C-c d C-e" . devdocs-lookup-dom_events)
+       ("C-c d C-n" . devdocs-lookup-node)))
+
     ;; Resolve keybinding conflict with eglot
     (unbind-key "M-." js2-mode-map)
 
