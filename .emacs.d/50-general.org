@@ -1754,7 +1754,10 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
     (setq org-adapt-indentation nil)
-    (setq org-hide-emphasis-markers t))
+    (setq org-hide-emphasis-markers t)
+    (setq org-startup-with-inline-images t)
+    (setq org-image-actual-width (round (* (/ 1920 2) 0.95)))
+    (setq org-startup-with-latex-preview t))
 
   (use-package org-agenda
     :bind
