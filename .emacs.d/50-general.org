@@ -1753,7 +1753,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
-    (setq org-adapt-indentation nil))
+    (setq org-adapt-indentation nil)
+    (setq org-hide-emphasis-markers t))
 
   (use-package org-agenda
     :bind
