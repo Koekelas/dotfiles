@@ -1166,6 +1166,8 @@ Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) i
     :bind
     ("C-c d d" . devdocs-lookup)
     :config
+    (declare-function devdocs-setup "devdocs-lookup")
+
     (devdocs-setup))
 #+END_SRC
 
