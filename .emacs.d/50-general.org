@@ -824,9 +824,31 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
      ("C-c r r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
-    ((c-mode c++-mode mhtml-mode css-mode js2-mode json-mode python-mode)
+    ((c-mode c++-mode mhtml-mode css-mode java-mode js2-mode json-mode
+      python-mode)
      . eglot-ensure)
     :config
+    ;; Eclipse JDT Language Server lacks an executable. Eglot requires
+    ;; the jdtls launcher to be added to the CLASSPATH environment
+    ;; variable.
+    (when-let
+        ((launcher-program-name
+          (thread-last '("/usr/share/java/jdtls/plugins/" "c:/bin/jdtls/plugins/")
+            (seq-filter #'file-exists-p)
+            (seq-mapcat (lambda (file-name)
+                          (directory-files file-name 'full
+                                           (rx "org.eclipse.equinox.launcher_"
+                                               (one-or-more (or alnum punct))
+                                               ".jar" line-end))))
+            car)))
+      (let ((paths (split-string (or (getenv "CLASSPATH") "")
+                                 path-separator 'no-empty)))
+        (unless (member launcher-program-name paths)
+          (setenv "CLASSPATH"
+                  (string-join (cons launcher-program-name paths)
+                               path-separator)))))
+
+    ;; Register additional language servers
     (add-to-list 'eglot-server-programs
                  '(mhtml-mode . ("html-languageserver" "--stdio")))
     (add-to-list 'eglot-server-programs

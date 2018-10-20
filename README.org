@@ -29,14 +29,17 @@ Finally, copy the dotfiles to your home directory.
     - [[http://mesonbuild.com/][Meson]]
     - [[https://github.com/MaskRay/ccls][ccls]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
-  - Clojure & ClojureScript:
-    - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+  - Clojure & ClojureScript (depends on Java):
     - [[https://leiningen.org/][Leiningen]]
   - Erlang:
     - [[https://www.erlang.org/][Erlang/OTP]]
   - HTML & CSS:
     - [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
     - [[http://www.html-tidy.org/][HTML Tidy]]
+  - Java:
+    - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+    - [[https://maven.apache.org/][Apache Maven]]
+    - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
   - JavaScript:
     - [[https://nodejs.org/][Node.js]]
     - [[https://www.chromium.org/][Chromium]]
@@ -77,7 +80,6 @@ To install dependencies on Arch Linux, run:
   # Install ccls from AUR
 
   ## Clojure & ClojureScript
-  pacman -S jdk10-openjdk
   # Install leiningen from AUR
 
   ## Erlang
@@ -86,6 +88,10 @@ To install dependencies on Arch Linux, run:
   ## HTML & CSS
   npm i -g vscode-html-languageserver-bin vscode-css-languageserver-bin
   pacman -S tidy
+
+  ## Java
+  pacman -S jdk10-openjdk maven
+  # Install jdtls from AUR
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium
