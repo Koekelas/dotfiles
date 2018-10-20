@@ -1482,7 +1482,14 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package cc-mode
     :mode
     (((rx ".c" string-end) . c-mode)
-     ((rx ".cpp" string-end) . c++-mode)))
+     ((rx ".cpp" string-end) . c++-mode))
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map c-mode-map
+       ("C-c d d" . devdocs-lookup-c)
+       :map c++-mode-map
+       ("C-c d d" . devdocs-lookup-cpp))))
 
   (use-package cc-cmds
     :defer t
