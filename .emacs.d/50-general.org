@@ -842,6 +842,13 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
      ("C-c ! l" . flymake-show-diagnostics-buffer))
     :config
     (setq flymake-wrap-around nil))
+
+  (use-package flymake-proc
+    :defer t
+    :config
+    (declare-function flymake-proc-legacy-flymake "flymake-proc")
+
+    (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
 
 *** Setting up ccls
