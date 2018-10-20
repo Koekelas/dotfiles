@@ -117,7 +117,7 @@ Move deleted files to trash.
       (when (derived-mode-p 'outline-mode) ; org is derived from outline
         (outline-show-all)))
     :config
-    ;; Setup restore window layout on quit
+    ;; Restore window layout on quit
     (let (last-layout)
       ;; Store window layout before it's modified. Control buffer
       ;; doesn't exist yet.
@@ -129,7 +129,7 @@ Move deleted files to trash.
       (add-hook 'ediff-mode-hook
                 (lambda ()
                   (let ((layout last-layout))
-                    ;; Restore window layout on quit
+                    ;; Restore window layout
                     (add-hook 'ediff-quit-hook
                               (lambda ()
                                 (set-window-configuration layout))
@@ -764,7 +764,7 @@ whitespace mode.
       (add-hook 'erlang-mode-hook setup-fallback-backend)
       (add-hook 'scad-mode-hook setup-fallback-backend))
 
-    ;; Setup suspend whitespace-mode on complete
+    ;; Suspend whitespace-mode on complete
     (add-hook 'company-completion-started-hook
               #'koek-cpny/suspend-whitespace-mode)
     (add-hook 'company-completion-finished-hook
