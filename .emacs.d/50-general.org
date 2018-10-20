@@ -1576,6 +1576,17 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package erlang
     :ensure t
     :mode ((rx ".erl" string-end) . erlang-mode)
+    :config
+    ;; On Windows, executable-find finds the erlc shim. Shadow
+    ;; c:/ProgramData/chocolatey/bin/.
+    (when-let
+        (erlc-program-name
+         ;; Assume only one version installed
+         (car (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" 'full)))
+      (push (file-name-directory erlc-program-name) exec-path))
+    (when-let (erlc-program-name (executable-find "erlc"))
+      (setq erlang-root-dir
+            (locate-dominating-file (file-truename erlc-program-name) "bin")))
     :delight (erlang-mode "Erl" :major))
 #+END_SRC
 
