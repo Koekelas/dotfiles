@@ -410,6 +410,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-format-c-block-on-return-handler 'c-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'css-mode "{")
+    (koek-sp/setup-format-c-block-on-return-handler 'java-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
@@ -611,6 +612,10 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
             (koek-ps/make-enable "lambda" "<=" ">="))
   (add-hook 'erlang-mode-hook
             (koek-ps/make-enable "->" '("=<" . "<=") ">="))
+  (add-hook 'java-mode-hook
+            (koek-ps/make-enable
+             "!=" "%=" "&&" "&=" "*=" "++" "+=" "--" "-=" "/=" "<<" "<=" "==" ">="
+             ">>" ">>>" "^=" "|=" "||"))
   (add-hook 'js2-mode-hook
             (koek-ps/make-enable
              "function" "!!" "!=" "!==" "%=" "&&" "&=" "*=" "++" "+=" "--" "-="
@@ -1511,7 +1516,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package cc-mode
     :mode
     (((rx ".c" string-end) . c-mode)
-     ((rx ".cpp" string-end) . c++-mode))
+     ((rx ".cpp" string-end) . c++-mode)
+     ((rx ".java" string-end) . java-mode))
     :config
     (use-package devdocs-lookup
       :bind
