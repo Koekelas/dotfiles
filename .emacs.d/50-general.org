@@ -1810,7 +1810,11 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
                    (alist-get 'workarea) ; Arrangement/resolution without taskbar
                    (nth 2))))            ; Width
       (setq org-image-actual-width (floor (* width (/ 1 3.0)))))
-    (setq org-startup-with-latex-preview t))
+    (setq org-startup-with-latex-preview t)
+    (setq org-preview-latex-image-directory
+          (no-littering-expand-var-file-name "org/latex-previews/"))
+    (setq org-format-latex-options
+          (plist-put org-format-latex-options :scale (/ 4 3.0))))
 
   (use-package org-agenda
     :bind
