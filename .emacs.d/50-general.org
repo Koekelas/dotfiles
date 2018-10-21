@@ -1632,6 +1632,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+BEGIN_SRC emacs-lisp
   (use-package mhtml-mode
     :mode (rx (or ".htm" ".html") string-end)
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map mhtml-mode-map
+       ("C-c d d" . devdocs-lookup-html)))
     :delight (mhtml-mode "HTML" :major))
 #+END_SRC
 
@@ -1705,7 +1710,12 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
-    :mode (rx ".json" string-end))
+    :mode (rx ".json" string-end)
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map json-mode-map
+       ("C-c d C-n" . devdocs-lookup-npm))))
 #+END_SRC
 
 ** Meson
