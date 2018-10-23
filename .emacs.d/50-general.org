@@ -1881,6 +1881,16 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers)
     :delight)
 
+  (use-package ob-core
+    :defer t
+    :config
+    (setq org-confirm-babel-evaluate nil))
+
+  (use-package ob-clojure
+    :defer t
+    :config
+    (setq org-babel-clojure-backend 'cider))
+
   (use-package ox
     :defer t
     :config
