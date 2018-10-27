@@ -1077,7 +1077,7 @@ Bury unneeded buffers, computers have more than enough memory.
 * Other
 
 ** Minibuffer
-Enable minibuffer commands (e.g. [[*counsel - ivy powered commands][counsel]]) in minibuffer.
+Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) in minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (setq enable-recursive-minibuffers t)
