@@ -1,7 +1,0 @@
-# -*- mode: snippet; -*-
-# name: Set dictionary to nl_BE
-# key: <nl
-# --
-# -*- ispell-local-dictionary: "nl_BE"; -*-
-
-$0

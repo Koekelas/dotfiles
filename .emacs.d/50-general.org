@@ -909,7 +909,28 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :ensure t
     :hook ((text-mode prog-mode) . yas-minor-mode)
     :config
+    (declare-function yas-choose-value "yasnippet")
     (declare-function yas-reload-all "yasnippet")
+
+    ;; Snippet odds and ends
+    (defun koek-ys/complete-field (candidates)
+      "Complete field from CANDIDATES.
+  CANDIDATES is an alist of pretty candidate to candidate pairs."
+      (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
+
+    (defconst koek-ys/org-languages
+      '(("de-de" . ("Deutsch" "ngerman" "de_DE"))
+        ("en-us" . ("English" "american" "en_US"))
+        ("fr"    . ("Français" "frenchb" "fr_FR"))
+        ("nl"    . ("Nederlands" "dutch" "nl_BE")))
+      "Alist of Org language pairs.
+  Org language pair is a cons.  Its car is a string, an Org
+  language name.  Its cdr is a list of strings, a language name, a
+  LaTeX language name and a Hunspell language name.")
+
+    (fset 'koek-ys/get-language-name (apply-partially #'nth 0))
+    (fset 'koek-ys/get-latex-name (apply-partially #'nth 1))
+    (fset 'koek-ys/get-hunspell-name (apply-partially #'nth 2))
 
     ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
@@ -1895,7 +1916,10 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package ox
     :defer t
     :config
-    (setq org-export-headline-levels 4))
+    (setq org-export-headline-levels 4)
+    (setq org-export-with-author nil)
+    (setq org-export-with-date nil)
+    (setq org-export-with-toc 3))
 #+END_SRC
 
 ** Python

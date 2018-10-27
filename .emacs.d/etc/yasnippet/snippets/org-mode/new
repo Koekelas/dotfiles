@@ -2,7 +2,12 @@
 # name: New Org file
 # key: <new
 # --
-#+TITLE: ${1:`(file-name-base (or (buffer-file-name) "Title"))`}
+# -*- ispell-local-dictionary: "${2:$(koek-ys/get-hunspell-name (cdr (assoc yas-text koek-ys/org-languages)))}"; -*-
 
-* ${2:Heading}
+#+TITLE: ${1:`(file-name-base (or (buffer-file-name) "Title"))`}
+#+LANGUAGE: ${2:`(caar koek-ys/org-languages)`$(koek-ys/complete-field (mapcar (pcase-lambda (`(,id . ,spec)) (cons (koek-ys/get-language-name spec) id)) koek-ys/org-languages))}
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+LATEX_HEADER: \usepackage[${2:$(koek-ys/get-latex-name (cdr (assoc yas-text koek-ys/org-languages)))}]{babel}
+
+* ${3:Heading}
 $0
