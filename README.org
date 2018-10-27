@@ -67,7 +67,7 @@ To install dependencies on Arch Linux, run:
   ### Emacs
 
   ## General
-  pacman -S curl git hunspell hunspell-en the_silver_searcher xorg-xprop
+  pacman -S curl git hunspell hunspell-en_US the_silver_searcher xorg-xprop
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
 
