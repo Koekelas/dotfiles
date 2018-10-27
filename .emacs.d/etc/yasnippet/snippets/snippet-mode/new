@@ -3,7 +3,7 @@
 # key: new
 # --
 # -*- mode: snippet; -*-
-# name: ${1:Name of snippet}
+# name: ${1:Snippet name}
 # key: ${2:${1:$(progn (string-match (rx (submatch-n 1 (one-or-more word))) yas-text) (downcase (match-string 1 yas-text)))}}
 # --
 $0
