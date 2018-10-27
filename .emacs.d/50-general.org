@@ -1493,7 +1493,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
                                      `((:board    . ,board-spec)
                                        (:hardware . ,hardware-spec))))))))
                hardware-specs)))
-        (cdr (assoc (completing-read "Board: " candidates t) candidates)))))
+        (cdr (assoc (completing-read "Board: " candidates nil t) candidates)))))
     (make-directory file-name 'make-parents)
     (koek-ino/write-cross-file (expand-file-name "cross.txt" file-name)
       :binaries
