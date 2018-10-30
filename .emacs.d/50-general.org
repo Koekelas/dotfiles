@@ -1906,7 +1906,17 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package ob-core
     :defer t
     :config
-    (setq org-confirm-babel-evaluate nil))
+    ;; Evaluate language after confirmation
+    (let ((whitelist ()))
+      (setq org-confirm-babel-evaluate
+            (lambda (language _body)
+              (unless (assoc language whitelist)
+                (push (cons language
+                            (yes-or-no-p
+                             (format "Evaluate %s code blocks on your system this session? "
+                                     language)))
+                      whitelist))
+              (not (cdr (assoc language whitelist)))))))
 
   (use-package ob-clojure
     :defer t
