@@ -735,16 +735,16 @@ whitespace mode.
     (defvar-local koek-cpny/resume nil
       "Whether whitespace-mode should be re-enabled.")
 
-    (defun koek-cpny/suspend-whitespace-mode (&rest _args)
+    (defun koek-cpny/suspend-whitespace-mode (_manual)
       "Suspend whitespace-mode.
-  Resume with `koek-cpny/resume-whitespace-mode'.  _ARGS is
+  Resume with `koek-cpny/resume-whitespace-mode'.  _MANUAL is
   ignored."
       (setq koek-cpny/resume whitespace-mode)
       (whitespace-mode 0))
 
-    (defun koek-cpny/resume-whitespace-mode (&rest _args)
+    (defun koek-cpny/resume-whitespace-mode (_manual)
       "Resume whitespace-mode.
-  Suspend with `koek-cpny/suspend-whitespace-mode'.  _ARGS is
+  Suspend with `koek-cpny/suspend-whitespace-mode'.  _MANUAL is
   ignored."
       (when koek-cpny/resume
         (whitespace-mode)))
