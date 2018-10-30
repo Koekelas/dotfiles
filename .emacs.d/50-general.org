@@ -909,6 +909,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :ensure t
     :hook ((text-mode prog-mode) . yas-minor-mode)
     :config
+    (declare-function koek-ys/get-org-name "50-general")
     (declare-function yas-choose-value "yasnippet")
     (declare-function yas-reload-all "yasnippet")
 
@@ -918,19 +919,24 @@ For the major mode, see [[*YASnippet][YASnippet]].
   CANDIDATES is an alist of pretty candidate to candidate pairs."
       (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
-    (defconst koek-ys/org-languages
-      '(("de-de" . ("Deutsch" "ngerman" "de_DE"))
-        ("en-us" . ("English" "american" "en_US"))
-        ("fr"    . ("Français" "frenchb" "fr_FR"))
-        ("nl"    . ("Nederlands" "dutch" "nl_BE")))
-      "Alist of Org language pairs.
-  Org language pair is a cons.  Its car is a string, an Org
-  language name.  Its cdr is a list of strings, a language name, a
-  LaTeX language name and a Hunspell language name.")
+    (defconst koek-ys/ietf-languages
+      '(("de-DE" . ("de-de" "ngerman"  "de_DE"))
+        ("en-US" . ("en-us" "american" "en_US"))
+        ("fr-FR" . ("fr"    "frenchb"  "fr_FR"))
+        ("nl-BE" . ("nl"    "dutch"    "nl_BE")))
+      "Alist of IETF language pairs.
+  IETF language pair is a cons.  Its car is a string, an IETF
+  language name.  Its cdr is a list of strings, an Org language
+  name, a LaTeX language name and a Hunspell language name.")
 
-    (fset 'koek-ys/get-language-name (apply-partially #'nth 0))
+    (fset 'koek-ys/get-org-name (apply-partially #'nth 0))
     (fset 'koek-ys/get-latex-name (apply-partially #'nth 1))
     (fset 'koek-ys/get-hunspell-name (apply-partially #'nth 2))
+    (let ((map (mapcar (pcase-lambda (`(,ietf . ,spec))
+                         (cons (koek-ys/get-org-name spec) ietf))
+                       koek-ys/ietf-languages)))
+      (fset 'koek-ys/org-to-ietf (lambda (org)
+                                   (cdr (assoc org map)))))
 
     ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
@@ -1744,6 +1750,20 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
       :bind
       (:map json-mode-map
        ("C-c d C-n" . devdocs-lookup-npm))))
+#+END_SRC
+
+** Markdown
+[[https://github.com/jrblevin/markdown-mode][markdown-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode (rx ".md" string-end)
+    :config
+    (setq markdown-command "pandoc -s -f markdown -t html5")
+    (setq markdown-use-pandoc-style-yaml-metadata t)
+    (setq markdown-asymmetric-header t)
+    :delight (markdown-mode "MD" :major))
 #+END_SRC
 
 ** Meson

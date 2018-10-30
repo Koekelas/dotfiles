@@ -1,0 +1,13 @@
+# -*- mode: snippet; -*-
+# name: New Markdown file
+# key: <new
+# --
+<!-- -*- ispell-local-dictionary: "${2:$(koek-ys/get-hunspell-name (cdr (assoc yas-text koek-ys/ietf-languages)))}"; -*- -->
+
+---
+title: ${1:`(file-name-base (or (buffer-file-name) "Title"))`}
+lang: ${2:en-US$(yas-choose-value (mapcar #'car koek-ys/ietf-languages))}
+...
+
+# ${3:Heading}
+$0
