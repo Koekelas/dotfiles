@@ -1838,6 +1838,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block))
     :config
+    (declare-function org-babel-do-load-languages "org")
+
     (use-package avy
       :bind
       (:map org-mode-map
@@ -1858,6 +1860,16 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
       (:map org-mode-map
        ("C-M-u" . outline-up-heading)))
 
+    (org-babel-do-load-languages 'org-babel-load-languages
+                                 '((C . t) ; C and C++
+                                   (clojure . t)
+                                   (emacs-lisp . t)
+                                   (java . t)
+                                   (js . t)
+                                   (octave . t)
+                                   (python . t)
+                                   (scheme . t)
+                                   (sql . t)))
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
 
