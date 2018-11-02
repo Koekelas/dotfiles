@@ -59,7 +59,7 @@ Move deleted files to trash.
   (use-package projectile
     :ensure t
     :config
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
 
     (setq projectile-completion-system 'ivy)
     (projectile-mode)
