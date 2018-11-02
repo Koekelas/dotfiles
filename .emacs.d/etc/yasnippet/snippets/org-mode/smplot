@@ -1,0 +1,12 @@
+# -*- mode: snippet; -*-
+# name: Octave plot code block
+# key: <smplot
+# expand-env: ((yas-indent-line 'fixed))
+# --
+#+BEGIN_SRC octave :var plot_path="images/plot-${1:name}.png" :results file :exports results
+  plot_handle = figure();
+  set(plot_handle, 'visible', 'off');
+  $0fplot(@(x) [sin(x), cos(x)], [-pi, pi]); xlabel('x'); ylabel('y'); legend('sin(x)', 'cos(x)');
+  saveas(plot_handle, plot_path);
+  ans = plot_path;
+#+END_SRC
