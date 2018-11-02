@@ -1839,6 +1839,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
      ("C-M-e" . org-next-block))
     :config
     (declare-function org-babel-do-load-languages "org")
+    (declare-function org-redisplay-inline-images "org")
 
     (use-package avy
       :bind
@@ -1882,6 +1883,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
                    (alist-get 'workarea) ; Arrangement/resolution without taskbar
                    (nth 2))))            ; Width
       (setq org-image-actual-width (floor (* width (/ 1 3.0)))))
+    (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
 
     (setq org-startup-with-latex-preview t)
     (setq org-preview-latex-image-directory
