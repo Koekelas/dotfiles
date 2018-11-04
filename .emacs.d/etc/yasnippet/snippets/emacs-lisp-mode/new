@@ -1,6 +1,7 @@
 # -*- mode: snippet; -*-
 # name: New Emacs Lisp file
 # key: new
+# expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
 # --
 ;;; ${1:`(file-name-nondirectory (or (buffer-file-name) "name.el"))`} --- ${2:Short description} -*- lexical-binding: t; -*-
 

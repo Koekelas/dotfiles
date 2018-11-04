@@ -1,6 +1,7 @@
 # -*- mode: snippet; -*-
 # name: New Markdown file
 # key: <new
+# expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
 # --
 <!-- -*- ispell-local-dictionary: "${2:$(koek-ys/get-hunspell-name (cdr (assoc yas-text koek-ys/ietf-languages)))}"; -*- -->
 
