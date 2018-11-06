@@ -1890,7 +1890,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (setq org-preview-latex-image-directory
           (no-littering-expand-var-file-name "org/latex-previews/"))
     (setq org-format-latex-options
-          (plist-put org-format-latex-options :scale (/ 4 3.0))))
+          (plist-put org-format-latex-options :scale (/ 4 3.0)))
+
+    (add-to-list 'org-latex-packages-alist '("" "listings" t)))
 
   (use-package org-agenda
     :bind
@@ -1965,6 +1967,11 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (setq org-export-with-author nil)
     (setq org-export-with-date nil)
     (setq org-export-with-toc 3))
+
+  (use-package ox-latex
+    :defer t
+    :config
+    (setq org-latex-listings t))
 #+END_SRC
 
 ** Python
