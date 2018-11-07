@@ -1971,6 +1971,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package ox-latex
     :defer t
     :config
+    (setq org-latex-pdf-process '("latexmk -pdf %f"))
     (setq org-latex-listings t))
 #+END_SRC
 
