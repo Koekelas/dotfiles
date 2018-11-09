@@ -1943,17 +1943,18 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package ob-core
     :defer t
     :config
-    ;; Evaluate language after confirmation
+    ;; Evaluate code blocks in buffer after confirmation
     (let ((whitelist ()))
       (setq org-confirm-babel-evaluate
-            (lambda (language _body)
-              (unless (assoc language whitelist)
-                (push (cons language
-                            (yes-or-no-p
-                             (format "Evaluate %s code blocks on your system this session? "
-                                     language)))
-                      whitelist))
-              (not (cdr (assoc language whitelist)))))))
+            (lambda (_language _body)
+              (let ((id (or (buffer-file-name) (buffer-name))))
+                (unless (assoc id whitelist)
+                  (push (cons id
+                              (yes-or-no-p
+                               (format "Evaluate code blocks in %s on your system this session? "
+                                       id)))
+                        whitelist))
+                (not (cdr (assoc id whitelist))))))))
 
   (use-package ob-clojure
     :defer t
