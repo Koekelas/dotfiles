@@ -128,6 +128,7 @@ To apply configuration, run:
   qdbusviewer-qt4.desktop
   qdbusviewer.desktop
   qv4l2.desktop
+  qvidcap.desktop
 #+END_SRC
 
 ** System
