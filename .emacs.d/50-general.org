@@ -1862,6 +1862,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
       (:map org-mode-map
        ("C-M-u" . outline-up-heading)))
 
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (setq org-keep-stored-link-after-insertion t)
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
                                    (clojure . t)
@@ -1872,8 +1875,6 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
                                    (python . t)
                                    (scheme . t)
                                    (sql . t)))
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
 
     (setq org-adapt-indentation nil)
     (setq org-hide-emphasis-markers t)
