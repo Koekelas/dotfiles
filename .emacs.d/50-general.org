@@ -1864,6 +1864,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-use-outline-path 'buffer-name)
     (setq org-keep-stored-link-after-insertion t)
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
