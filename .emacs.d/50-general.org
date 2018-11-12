@@ -1940,6 +1940,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (unbind-key "C-c '" org-src-mode-map)
     (unbind-key "C-c C-k" org-src-mode-map)
 
+    (add-to-list 'org-src-lang-modes '("js" . js2))
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers)
     :delight)
 

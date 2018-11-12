@@ -2,6 +2,6 @@
 # name: JavaScript code block
 # key: <sjs
 # --
-#+BEGIN_SRC js2
+#+BEGIN_SRC js
 $0
 #+END_SRC
