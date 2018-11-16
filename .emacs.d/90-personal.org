@@ -57,7 +57,8 @@ Declare well known file and directory names.
 
 * To-do's & agenda
 When a file is member of ~koek/static-agenda-files~ or matches pattern
-=KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda file.
+=KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda
+file.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org

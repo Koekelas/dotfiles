@@ -879,8 +879,8 @@ See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
 #+END_SRC
 
 *** Setting up ccls
-Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
-the project home directory.
+Run =M-x= ~make-symbolic-link~. Create a link to
+=compile_commands.json= in the project home directory.
 
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
@@ -1879,7 +1879,6 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
                                    (sql . t)))
 
     (setq org-adapt-indentation nil)
-    (setq org-hide-emphasis-markers t)
 
     (setq org-startup-with-inline-images t)
     (let ((width (thread-last (display-monitor-attributes-list)
