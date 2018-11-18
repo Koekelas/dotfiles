@@ -1486,8 +1486,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
             (let ((name (koek-ino/get-in '(:platform :name) spec))
                   (version (koek-ino/get-in '(:platform :version) spec)))
               (and (string= name "Arch Linux Arduino AVR Boards")
-                   (string-match (rx line-start "1.6." (one-or-more num) line-end)
-                                 version)
+                   (string-match-p (rx line-start "1.6." (one-or-more num) line-end)
+                                   version)
                    t))))
     "List of hardware specification whitelist predicates.
   Predicates are passed a hardware specification.  When a predicate
