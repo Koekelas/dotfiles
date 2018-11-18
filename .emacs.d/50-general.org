@@ -681,6 +681,13 @@ Supercharge edit commands.
   (bind-key [remap capitalize-word] #'capitalize-dwim)
 #+END_SRC
 
+** Clipboard
+Add clipboard to kill ring before killing.
+
+#+BEGIN_SRC emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+END_SRC
+
 ** Complete text
 When line is indented, press =TAB= to complete text before point.
 
