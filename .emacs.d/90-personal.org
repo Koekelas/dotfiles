@@ -39,7 +39,7 @@ Declare well known file and directory names.
   (defconst koek/home-dir
     (if (file-exists-p koek/home-dir-kratos)
         koek/home-dir-kratos
-      (expand-file-name "~/"))
+      "~/")
     "File name to home directory.")
 
   (defconst koek/org-dir (expand-file-name "20 Documenten/Varia/" koek/home-dir)

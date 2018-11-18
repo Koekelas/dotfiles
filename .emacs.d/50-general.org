@@ -163,7 +163,7 @@ Move deleted files to trash.
     :config
     (mapc (apply-partially #'add-to-list 'recentf-exclude)
           (list "/share/emacs/"
-                (expand-file-name (locate-user-emacs-file "elpa/"))
+                (locate-user-emacs-file "elpa/")
                 no-littering-etc-directory
                 no-littering-var-directory))
     (recentf-mode))
