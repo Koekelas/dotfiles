@@ -1439,8 +1439,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
            (:programmers . ,(koek-ino/read-properties
                              (expand-file-name "programmers.txt" file-name))))))))
 
-  (defun koek-ino/insert-section-headline (name)
-    "Insert section headline into current.
+  (defun koek-ino/insert-section-heading (name)
+    "Insert section heading into current.
   NAME is a string."
     (unless (= (point) 1)
       (insert "\n"))
@@ -1491,7 +1491,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (declare (indent 1))
     `(with-temp-file ,file-name
        ,@(seq-mapcat (pcase-lambda (`(,name . ,properties))
-                       (cons `(koek-ino/insert-section-headline ,name)
+                       (cons `(koek-ino/insert-section-heading ,name)
                              (mapcar (pcase-lambda (`(,key . ,value))
                                        `(koek-ino/insert-property ,key ,value))
                                      properties)))
