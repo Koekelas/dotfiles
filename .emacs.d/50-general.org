@@ -1864,6 +1864,11 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
      ("C-M-p" . org-previous-visible-heading)
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block))
+    :preface
+    (defun koek-org/setup-tag-completion ()
+      "Setup tag completion for current.
+  Candidates are collected from agenda files."
+      (setq-default org-complete-tags-always-offer-all-agenda-tags t))
     :config
     (declare-function org-babel-do-load-languages "org")
     (declare-function org-redisplay-inline-images "org")
@@ -1888,10 +1893,14 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
       (:map org-mode-map
        ("C-M-u" . outline-up-heading)))
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    ;; Headings, keywords & tags
     (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-use-outline-path 'buffer-name)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+    (add-hook 'org-capture-mode-hook #'koek-org/setup-tag-completion)
+
+    ;; Other
     (setq org-keep-stored-link-after-insertion t)
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
