@@ -1951,10 +1951,14 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     ("C-c o c" . org-capture))
 
   (use-package org-clock
+    :demand t
     :bind
     (("C-c j c" . org-clock-goto)
      ("C-c o o" . org-clock-out)
-     ("C-c o x" . org-clock-cancel)))
+     ("C-c o x" . org-clock-cancel))
+    :config
+    (setq org-clock-persist 'clock)
+    (org-clock-persistence-insinuate))
 
   (use-package org-src
     :bind
