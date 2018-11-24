@@ -1871,6 +1871,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
       (setq-default org-complete-tags-always-offer-all-agenda-tags t))
     :config
     (declare-function org-babel-do-load-languages "org")
+    (declare-function org-clock-persistence-insinuate "org")
     (declare-function org-redisplay-inline-images "org")
 
     (use-package avy
@@ -1902,6 +1903,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 
     ;; Other
     (setq org-keep-stored-link-after-insertion t)
+    (org-clock-persistence-insinuate)
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
                                    (clojure . t)
@@ -1951,14 +1953,12 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     ("C-c o c" . org-capture))
 
   (use-package org-clock
-    :demand t
     :bind
     (("C-c j c" . org-clock-goto)
      ("C-c o o" . org-clock-out)
      ("C-c o x" . org-clock-cancel))
     :config
-    (setq org-clock-persist 'clock)
-    (org-clock-persistence-insinuate))
+    (setq org-clock-persist 'clock))
 
   (use-package org-src
     :bind
