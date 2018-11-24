@@ -193,8 +193,7 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
   (use-package swiper
     :ensure t
     :bind
-    (([remap isearch-forward] . swiper)
-     :map swiper-map
+    (:map swiper-map
      ("C-c j" . swiper-avy)))
 #+END_SRC
 
@@ -1172,6 +1171,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :bind
     (([remap find-file] . counsel-find-file)
      ([remap insert-char] . counsel-unicode-char)
+     ([remap isearch-forward] . counsel-grep-or-swiper)
      ([remap yank-pop] . counsel-yank-pop)
      ([remap execute-extended-command] . counsel-M-x)
      ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
