@@ -1868,7 +1868,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (defun koek-org/setup-tag-completion ()
       "Setup tag completion for current.
   Candidates are collected from agenda files."
-      (setq-default org-complete-tags-always-offer-all-agenda-tags t))
+      (setq-local org-complete-tags-always-offer-all-agenda-tags t))
     :config
     (declare-function org-babel-do-load-languages "org")
     (declare-function org-clock-persistence-insinuate "org")
