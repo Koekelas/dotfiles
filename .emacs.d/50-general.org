@@ -660,15 +660,15 @@ End files with empty line.
     :hook (prog-mode . whitespace-mode)
     :config
     (setq whitespace-action '(auto-cleanup))
-    (setq whitespace-style
-          '(space-mark tab-mark newline-mark
-            face spaces tabs newline trailing empty lines-tail))
-    (setq whitespace-display-mappings
-          '((space-mark   ?\s     [?·])
-            (space-mark   ?\u00A0 [?¤])   ; No break space
-            (tab-mark     ?\t     [?⇥ ?\t])
-            (newline-mark ?\n     [?↵ ?\n])))
+    (setq whitespace-style '(face trailing empty lines-tail))
     :delight)
+#+END_SRC
+
+*** Issues
+
+**** Modifying display table affects overlays
+#+BEGIN_SRC emacs-lisp :tangle no 
+  (setq whitespace-style '(space-mark tab-mark newline-mark))
 #+END_SRC
 
 ** Edit commands
@@ -692,21 +692,6 @@ When line is indented, press =TAB= to complete text before point.
 
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
-#+END_SRC
-
-Display tables affect overlays. When showing candidates, suspend
-whitespace mode.
-
-#+BEGIN_SRC emacs-lisp
-  (define-advice
-      completion-in-region
-      (:around (f &rest args) koek-cplt/suspend-whitespace-mode)
-    (let ((resume whitespace-mode))
-      (whitespace-mode 0)
-      (unwind-protect                     ; e.g. keyboard-quit
-          (apply f args)
-        (when resume
-          (whitespace-mode)))))
 #+END_SRC
 
 ** company - Autocomplete code
@@ -737,23 +722,6 @@ whitespace mode.
       (let ((backends company-backends))
         (apply f args)
         (setq company-backends backends)))
-
-    (defvar-local koek-cpny/resume nil
-      "Whether whitespace-mode should be re-enabled.")
-
-    (defun koek-cpny/suspend-whitespace-mode (_manual)
-      "Suspend whitespace-mode.
-  Resume with `koek-cpny/resume-whitespace-mode'.  _MANUAL is
-  ignored."
-      (setq koek-cpny/resume whitespace-mode)
-      (whitespace-mode 0))
-
-    (defun koek-cpny/resume-whitespace-mode (_manual)
-      "Resume whitespace-mode.
-  Suspend with `koek-cpny/suspend-whitespace-mode'.  _MANUAL is
-  ignored."
-      (when koek-cpny/resume
-        (whitespace-mode)))
     :config
     (setq company-backends
           '((company-capf company-files :with company-yasnippet)))
@@ -774,14 +742,6 @@ whitespace mode.
             '((company-dabbrev-code company-files :with company-yasnippet)))))
       (add-hook 'erlang-mode-hook setup-fallback-backend)
       (add-hook 'scad-mode-hook setup-fallback-backend))
-
-    ;; Suspend whitespace-mode on complete
-    (add-hook 'company-completion-started-hook
-              #'koek-cpny/suspend-whitespace-mode)
-    (add-hook 'company-completion-finished-hook
-              #'koek-cpny/resume-whitespace-mode)
-    (add-hook 'company-completion-cancelled-hook
-              #'koek-cpny/resume-whitespace-mode)
     :delight)
 #+END_SRC
 
@@ -795,33 +755,6 @@ whitespace mode.
     :config
     (company-flx-mode))
 #+END_SRC
-
-*** company-posframe - Show candidates in child frame
-[[https://github.com/tumashu/company-posframe][company-posframe (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company-posframe
-    :ensure t
-    :unless
-    (string= (getenv "XDG_CURRENT_DESKTOP") "GNOME")
-    :after company
-    :config
-    ;; Remove whitespace-mode workaround
-    (remove-hook 'company-completion-started-hook
-                 #'koek-cpny/suspend-whitespace-mode)
-    (remove-hook 'company-completion-finished-hook
-                 #'koek-cpny/resume-whitespace-mode)
-    (remove-hook 'company-completion-cancelled-hook
-                 #'koek-cpny/resume-whitespace-mode)
-
-    (company-posframe-mode)
-    :delight)
-#+END_SRC
-
-*** Issues
-
-**** Under GNOME, child frames fail to resize
-See [[https://github.com/tumashu/company-posframe/issues/2][Issue 2 (GitHub)]].
 
 ** eglot - Code insight
 [[https://github.com/joaotavora/eglot][eglot (GitHub)]]
@@ -2229,8 +2162,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
            (personal
             (map-let (foreground background yellow green aqua blue) theme
-              `((alt-fg    . ,(koek-thm/mix foreground background 0.16))
-                (alt-bg    . ,(koek-thm/mix background foreground 0.98))
+              `((alt-bg    . ,(koek-thm/mix background foreground 0.98))
                 (lc-fg     . ,(koek-thm/mix foreground background))
                 (lc-yellow . ,(koek-thm/mix yellow background))
                 (lc-green  . ,(koek-thm/mix green background))
@@ -2239,7 +2171,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
            (specs
             (map-let                      ; How to use let-alist and backquote?
                 (foreground background current-line selection comment red orange
-                 aqua alt-fg alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
+                 aqua alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
                 (append personal theme)
               `(;; Default
                 (show-paren-match    :foreground ,foreground :background ,selection)
@@ -2270,10 +2202,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
                                                    :foreground unspecified)
                 ;; whitespace
-                (whitespace-space   :foreground ,alt-fg :background unspecified)
-                (whitespace-hspace  :foreground ,alt-fg :background unspecified)
-                (whitespace-tab     :foreground ,alt-fg :background unspecified)
-                (whitespace-newline :foreground ,alt-fg :background unspecified)
                 (whitespace-trailing :foreground unspecified :background ,selection)
                 (whitespace-empty    :foreground unspecified :background ,selection)
                 (whitespace-line     :foreground unspecified :background ,selection)
