@@ -109,8 +109,8 @@ To apply configuration, run:
 :END:
 
 #+BEGIN_SRC fundamental
-  jconsole-java10-openjdk.desktop
-  jshell-java10-openjdk.desktop
+  jconsole-java-openjdk.desktop
+  jshell-java-openjdk.desktop
 #+END_SRC
 
 ** Qt
