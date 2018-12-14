@@ -2040,6 +2040,11 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package geiser-mode
     :defer t
     :delight)
+
+  (use-package geiser-repl
+    :defer t
+    :config
+    (setq geiser-repl-query-on-exit-p t))
 #+END_SRC
 
 ** SQL
