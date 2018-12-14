@@ -2035,7 +2035,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package geiser-impl
     :defer t
     :config
-    (setq geiser-active-implementations '(guile)))
+    (setq geiser-default-implementation 'guile))
 
   (use-package geiser-mode
     :defer t
