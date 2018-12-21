@@ -1105,6 +1105,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
     (setq ivy-re-builders-alist
           '((swiper . ivy--regex-plus)
+            (counsel-ag . ivy--regex-plus)
             (counsel-unicode-char . ivy--regex-ignore-order)
             (t . ivy--regex-fuzzy)))
     (setq ivy-use-virtual-buffers t)
