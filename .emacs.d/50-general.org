@@ -2100,6 +2100,14 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (setq sql-product 'postgres))
 #+END_SRC
 
+*** sql-indent - Indent code
+#+BEGIN_SRC emacs-lisp
+  (use-package sql-indent
+    :ensure t
+    :hook (sql-mode . sqlind-minor-mode)
+    :delight sqlind-minor-mode)
+#+END_SRC
+
 ** Text
 #+BEGIN_SRC emacs-lisp
   (use-package text-mode
