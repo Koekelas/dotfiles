@@ -786,7 +786,7 @@ When line is indented, press =TAB= to complete text before point.
                                                ".jar" line-end))))
             car)))
       (let ((paths (split-string (or (getenv "CLASSPATH") "")
-                                 path-separator 'no-empty)))
+                                 path-separator 'omit-nulls)))
         (unless (member launcher-program-name paths)
           (setenv "CLASSPATH"
                   (string-join (cons launcher-program-name paths)
@@ -834,7 +834,28 @@ Run =M-x= ~make-symbolic-link~. Create a link to
 ** abbrev - Abbreviations
 #+BEGIN_SRC emacs-lisp
   (use-package abbrev
-    :commands abbrev-mode
+    :hook (sql-mode . abbrev-mode)
+    :config
+    (declare-function define-abbrev-table "abbrev")
+    (declare-function find-library-name "find-func")
+
+    ;; Prime abbrev tables
+    (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
+      ;; Upcase SQL keywords
+      (let ((keywords
+             (split-string
+              (with-temp-buffer
+                (insert-file-contents (find-library-name "sql"))
+                (search-forward "ANSI Reserved keywords")
+                (buffer-substring (re-search-forward
+                                   (rx (one-or-more (not (any "\"")))))
+                                  (re-search-forward
+                                   (rx (one-or-more (not (any ")")))))))
+              (rx (any " \n")) 'omit-nulls "\"")))
+        (define-abbrev-table 'sql-mode-abbrev-table
+          (mapcar (lambda (keyword)
+                    (list keyword (upcase keyword)))
+                  keywords))))
     :delight)
 #+END_SRC
 
