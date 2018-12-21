@@ -59,6 +59,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://github.com/palantir/python-language-server][Python Language Server]]
   - Scheme:
     - [[https://www.gnu.org/software/guile/][Guile]]
+  - SQL:
+    - [[https://www.postgresql.org/][PostgreSQL]]
 - GNOME Shell:
   - [[https://github.com/prurigro/gnome-catgen][gnome-catgen]]
 
@@ -74,6 +76,8 @@ To install dependencies on Arch Linux, run:
 
   ## Arduino
   pacman -S arduino arduino-avr-core
+
+  # Setup Arduino
   gpasswd -a `whoami` uucp
 
   ## C family
@@ -118,6 +122,16 @@ To install dependencies on Arch Linux, run:
 
   ## Scheme
   pacman -S guile
+
+  ## SQL
+  pacman -S postgresql
+
+  # Setup PostgreSQL
+  sudo -u postgres initdb -D /var/lib/postgres/data/
+  systemctl enable postgresql.service
+  systemctl start postgresql.service
+  sudo -u postgres createuser -s `whoami`
+  createdb
 
   ### GNOME Shell
   # Install gnome-catgen-git from AUR

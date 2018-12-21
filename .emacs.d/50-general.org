@@ -2073,7 +2073,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
               ;; inhibit-mode-name-delight is truthy
               (if (or inhibit-mode-name-delight (eq sql-product 'ansi))
                   "SQL"
-                (sql-get-product-feature sql-product :name))))))
+                (sql-get-product-feature sql-product :name)))))
+    :config
+    (setq sql-product 'postgres))
 #+END_SRC
 
 ** Text
