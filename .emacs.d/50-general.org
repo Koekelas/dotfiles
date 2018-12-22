@@ -834,7 +834,7 @@ Run =M-x= ~make-symbolic-link~. Create a link to
 ** abbrev - Abbreviations
 #+BEGIN_SRC emacs-lisp
   (use-package abbrev
-    :hook (sql-mode . abbrev-mode)
+    :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
     :config
     (declare-function define-abbrev-table "abbrev")
     (declare-function find-library-name "find-func")
@@ -842,20 +842,21 @@ Run =M-x= ~make-symbolic-link~. Create a link to
     ;; Prime abbrev tables
     (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
       ;; Upcase SQL keywords
-      (let ((keywords
-             (split-string
-              (with-temp-buffer
-                (insert-file-contents (find-library-name "sql"))
-                (search-forward "ANSI Reserved keywords")
-                (buffer-substring (re-search-forward
-                                   (rx (one-or-more (not (any "\"")))))
-                                  (re-search-forward
-                                   (rx (one-or-more (not (any ")")))))))
-              (rx (any " \n")) 'omit-nulls "\"")))
-        (define-abbrev-table 'sql-mode-abbrev-table
-          (mapcar (lambda (keyword)
-                    (list keyword (upcase keyword)))
-                  keywords))))
+      (let* ((keywords
+              (split-string
+               (with-temp-buffer
+                 (insert-file-contents (find-library-name "sql"))
+                 (search-forward "ANSI Reserved keywords")
+                 (buffer-substring (re-search-forward
+                                    (rx (one-or-more (not (any "\"")))))
+                                   (re-search-forward
+                                    (rx (one-or-more (not (any ")")))))))
+               (rx (any " \n")) 'omit-nulls "\""))
+             (abbrevs (mapcar (lambda (keyword)
+                                (list keyword (upcase keyword)))
+                              keywords)))
+        (define-abbrev-table 'sql-mode-abbrev-table abbrevs)
+        (define-abbrev-table 'sql-interactive-mode-abbrev-table abbrevs)))
     :delight)
 #+END_SRC
 
