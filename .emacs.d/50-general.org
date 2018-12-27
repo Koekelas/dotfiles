@@ -2100,6 +2100,11 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
                   "SQL"
                 (sql-get-product-feature sql-product :name)))))
     :config
+    (use-package devdocs-lookup
+      :bind
+      (:map sql-mode-map
+       ("C-c d C-p" . devdocs-lookup-postgresql)))
+
     (setq sql-product 'postgres))
 #+END_SRC
 
