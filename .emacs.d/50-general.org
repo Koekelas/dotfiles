@@ -404,6 +404,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (setq sp-navigate-reindent-after-up ())
     (setq sp-highlight-pair-overlay nil)
     (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
+    (koek-sp/setup-separate-sexp-handler 'lisp-mode "(" "\"")
     (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
     (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
     (koek-sp/setup-format-c-block-on-return-handler 'c-mode "{")
@@ -422,7 +423,9 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure t
-    :hook ((clojure-mode emacs-lisp-mode scheme-mode) . rainbow-delimiters-mode))
+    :hook
+    ((clojure-mode lisp-mode emacs-lisp-mode scheme-mode)
+     . rainbow-delimiters-mode))
 #+END_SRC
 
 ** expand-region - Mark increasingly larger unit
@@ -607,6 +610,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
              "==" ">=" ">>" "^=" "|=" "||"))
   (add-hook 'clojure-mode-hook
             (koek-ps/make-enable '("fn" . "lambda") "->" "->>" "<=" ">="))
+  (add-hook 'lisp-mode-hook
+            (koek-ps/make-enable "lambda" "<=" ">="))
   (add-hook 'emacs-lisp-mode-hook
             (koek-ps/make-enable "lambda" "<=" ">="))
   (add-hook 'erlang-mode-hook
@@ -1592,6 +1597,17 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :defer t
     :config
     (setq cider-repl-use-pretty-printing t))
+#+END_SRC
+
+** Common Lisp
+#+BEGIN_SRC emacs-lisp
+  (use-package lisp-mode
+    :mode (rx ".lisp" string-end))
+
+  (use-package inf-lisp
+    :defer t
+    :config
+    (setq inferior-lisp-program "sbcl"))
 #+END_SRC
 
 ** Emacs Lisp

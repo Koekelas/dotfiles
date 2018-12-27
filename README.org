@@ -32,6 +32,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript (depends on Java):
     - [[https://leiningen.org/][Leiningen]]
+  - Common Lisp:
+    - [[http://www.sbcl.org/][Steel Bank Common Lisp]]
   - Erlang:
     - [[https://www.erlang.org/][Erlang/OTP]]
   - HTML & CSS:
@@ -86,6 +88,9 @@ To install dependencies on Arch Linux, run:
 
   ## Clojure & ClojureScript
   # Install leiningen from AUR
+
+  ## Common Lisp
+  pacman -S sbcl
 
   ## Erlang
   pacman -S erlang-nox
