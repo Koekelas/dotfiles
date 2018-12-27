@@ -627,6 +627,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
             (koek-ps/make-enable "!=" "//" "<<" "<=" "==" ">=" ">>"))
   (add-hook 'scheme-mode-hook
             (koek-ps/make-enable "lambda" "<=" ">="))
+  (add-hook 'sql-mode-hook
+            (koek-ps/make-enable "::" "<=" "<>" ">="))
 #+END_SRC
 
 ** Whitespace
