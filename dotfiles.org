@@ -188,6 +188,7 @@ To apply configuration, run:
   org.gnome.Weather.Application.desktop
   org.gnome.clocks.desktop
   org.octave.Octave.desktop
+  wireshark-gtk.desktop
 #+END_SRC
 
 * Steam
