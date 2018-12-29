@@ -1606,7 +1606,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode (rx ".lisp" string-end))
 
   (use-package inf-lisp
-    :defer t
+    :after lisp-mode
     :config
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC
