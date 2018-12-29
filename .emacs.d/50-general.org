@@ -1877,6 +1877,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
                                    (clojure . t)
+                                   (lisp . t)
                                    (emacs-lisp . t)
                                    (java . t)
                                    (js . t)
