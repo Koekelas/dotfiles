@@ -81,7 +81,7 @@ To apply configuration, run:
   kodi.desktop
   makemkv.desktop
   org.gnome.Lollypop.desktop
-  picard.desktop
+  org.musicbrainz.Picard.desktop
   puddletag.desktop
   steam-native.desktop
   steam.desktop
