@@ -1656,15 +1656,6 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+END_SRC
 
 ** HTML & CSS
-[[https://github.com/fxbois/web-mode][web-mode (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :disabled
-    :ensure t
-    :mode (rx (or ".htm" ".html") string-end))
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
   (use-package mhtml-mode
     :mode (rx (or ".htm" ".html") string-end)
