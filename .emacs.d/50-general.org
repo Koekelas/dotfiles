@@ -248,7 +248,8 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode
+      indium-repl-mode)
      . subword-mode)
     :delight)
 #+END_SRC
@@ -333,7 +334,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-S-<right>" . sp-backward-barf-sexp)
      ("C-M-<down>"  . sp-unwrap-sexp))
     :hook
-    (((prog-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode
+       indium-repl-mode)
       . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
@@ -665,7 +667,7 @@ End files with empty line.
 ** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
-    :hook (prog-mode . whitespace-mode)
+    :hook ((prog-mode conf-mode) . whitespace-mode)
     :config
     (setq whitespace-action '(auto-cleanup))
     (setq whitespace-style '(face trailing empty lines-tail))
@@ -715,7 +717,7 @@ When line is indented, press =TAB= to complete text before point.
      :map company-active-map
      ("C-n" . company-select-next)
      ("C-p" . company-select-previous))
-    :hook ((prog-mode comint-mode cider-repl-mode) . company-mode)
+    :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
     :preface
     (defun koek-cpny/make-setup-backends (backends)
       "Return function to setup backends for current.
@@ -745,12 +747,21 @@ When line is indented, press =TAB= to complete text before point.
             '((geiser-company-backend company-files :with company-yasnippet)))))
       (add-hook 'geiser-mode-hook setup-geiser-backend)
       (add-hook 'geiser-repl-mode-hook setup-geiser-backend))
-    (let ((setup-fallback-backend
+    (let ((setup-code-backend
            (koek-cpny/make-setup-backends
             '((company-dabbrev-code company-files :with company-yasnippet)))))
-      (add-hook 'erlang-mode-hook setup-fallback-backend)
-      (add-hook 'scad-mode-hook setup-fallback-backend))
+      (add-hook 'erlang-mode-hook setup-code-backend)
+      (add-hook 'scad-mode-hook setup-code-backend))
+    (let ((setup-dabbrev-backend
+           (koek-cpny/make-setup-backends
+            '((company-dabbrev company-files :with company-yasnippet)))))
+      (add-hook 'conf-mode-hook setup-dabbrev-backend))
     :delight)
+
+  (use-package company-dabbrev
+    :defer t
+    :config
+    (setq company-dabbrev-other-buffers t)) ; Same major mode
 #+END_SRC
 
 *** company-flx - Match candidates fuzzily
@@ -876,7 +887,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
-    :hook ((text-mode prog-mode) . yas-minor-mode)
+    :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
     :config
     (declare-function koek-org/get-src-block-var-value "50-general")
     (declare-function koek-ys/get-org-name "50-general")
@@ -2134,6 +2145,27 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     ;; See https://github.com/jwiegley/use-package/issues/267
     (provide 'text-mode)
     :delight (text-mode "Txt" :major))
+#+END_SRC
+
+** Conf
+Conf mode's mode declaration requires precedence over Text mode's.
+Configure Conf mode after Text mode.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package conf-mode
+    :mode (rx "cross.txt" string-end)
+    :preface
+    (defconst koek-conf/mode-names
+      '((conf-unix-mode . "Unix"))
+      "Alist of Conf mode symbol to Conf mode name pairs.")
+
+    (define-advice
+        conf-mode-initialize (:after (&rest _args) koek-conf/update-mode-name)
+      (setq mode-name
+            '(:eval
+              (or (and (not inhibit-mode-name-delight)
+                       (alist-get major-mode koek-conf/mode-names))
+                  "Conf")))))
 #+END_SRC
 
 ** YASnippet

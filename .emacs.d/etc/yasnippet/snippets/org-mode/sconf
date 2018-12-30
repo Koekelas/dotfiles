@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Conf code block
+# key: <sconf
+# --
+#+BEGIN_SRC conf
+$0
+#+END_SRC
