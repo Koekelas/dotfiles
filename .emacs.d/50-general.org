@@ -1250,7 +1250,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :config
     (which-key-add-key-based-replacements
       "C-c !" "errors"
-      "C-c $" "pipenv"
       "C-c &" "yasnippet"
       "C-c d" "documentation"
       "C-c f" "files"
@@ -2048,8 +2047,6 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package pipenv
     :ensure t
     :hook (python-mode . pipenv-mode)
-    :config
-    (define-key pipenv-mode-map (kbd "C-c $") pipenv-command-map)
     :delight)
 #+END_SRC
 
