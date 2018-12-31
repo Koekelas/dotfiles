@@ -1629,6 +1629,26 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC
 
+*** sly - Interact with process
+[[https://github.com/joaotavora/sly][sly (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package sly
+    :ensure t
+    :after lisp-mode
+    :preface
+    (defun koek-sly/fix-install ()
+      "Fix Sly install."
+      (interactive)
+      (byte-recompile-directory (file-name-directory (find-library-name "sly"))
+                                nil 'force)))
+#+END_SRC
+
+*** Issues
+
+**** Sly and Slynk versions differ
+Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
+
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
   (use-package elisp-mode
