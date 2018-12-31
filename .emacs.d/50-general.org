@@ -876,6 +876,8 @@ Run =M-x= ~make-symbolic-link~. Create a link to
                               keywords)))
         (define-abbrev-table 'sql-mode-abbrev-table abbrevs)
         (define-abbrev-table 'sql-interactive-mode-abbrev-table abbrevs)))
+
+    (setq save-abbrevs 'silently)
     :delight)
 #+END_SRC
 
