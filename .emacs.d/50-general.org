@@ -2180,7 +2180,15 @@ Configure Conf mode after Text mode.
     :mode (rx "cross.txt" string-end)
     :preface
     (defconst koek-conf/mode-names
-      '((conf-unix-mode . "Unix"))
+      '((conf-colon-mode . "Conf:")
+        (conf-desktop-mode . "Desktop")
+        (conf-javaprop-mode . "Properties")
+        (conf-ppd-mode . "PPD")
+        (conf-space-mode . "Conf·")
+        (conf-toml-mode . "TOML")
+        (conf-unix-mode . "Unix")
+        (conf-windows-mode . "INI")
+        (conf-xdefaults-mode . "Xdefaults"))
       "Alist of Conf mode symbol to Conf mode name pairs.")
 
     (define-advice
