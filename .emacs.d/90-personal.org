@@ -109,6 +109,62 @@ file.
              :empty-lines 1))))
 #+END_SRC
 
+* News feeds
+Set news feeds.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed
+    :defer t
+    :preface
+    (declare-function elfeed-db-get-feed "elfeed-db")
+    (declare-function elfeed-meta--put "elfeed-db")
+
+    (defconst koek/feeds
+      '(("Baggers" youtube "UCMV8p6Lb-bd6UZtTc_QD4zA" lisp)
+        ("Clickspring" youtube "UCworsKCR-Sx6R6-BnIjS2MA" metalwork)
+        ("Clojure" reddit "Clojure" clojure)
+        ("ClojureTV" youtube "UCaLlzGqiPE2QRj6sSOawJRg" clojure)
+        ("DIY" reddit top "DIY" create)
+        ("Documentaries" reddit top "Documentaries" video doc)
+        ("Emacs" reddit "emacs" emacs)
+        ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
+        ("Two-Bit History" "https://twobithistory.org/feed.xml" blog history)
+        ("frank howarth" youtube "UC3_VCOJMaivgcGqPCTePLBA" woodwork))
+      "List of news feeds.
+  News feed is a list of format:
+
+  (\"title\" \"url\" tag*)
+  (\"title\" reddit \"id\" tag*)
+  (\"title\" reddit top \"id\" tag*)
+  (\"title\" youtube \"id\" tag*)")
+
+    (defun koek/add-feed (title url &rest tags)
+      "Add news feed to the database.
+  TITLE and URL are strings.  TAGS are zero or more symbols."
+      (setf (elfeed-meta (elfeed-db-get-feed url) :title) title)
+      (push (cons url tags) elfeed-feeds))
+    :config
+    (mapc (lambda (feed)
+            (let ((args
+                   (pcase feed
+                     (`(,title reddit top ,id . ,tags)
+                      `(,(concat title " (Reddit - Top)")
+                        ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
+                        post ,@tags))
+                     (`(,title reddit ,id . ,tags)
+                      `(,(concat title " (Reddit)")
+                        ,(format "https://www.reddit.com/r/%s.rss" id)
+                        post ,@tags))
+                     (`(,title youtube ,id . ,tags)
+                      `(,(concat title " (YouTube)")
+                        ,(format "https://www.youtube.com/feeds/videos.xml?channel_id=%s" id)
+                        video ,@tags))
+                     (_feed
+                      feed))))
+              (apply #'koek/add-feed args)))
+          koek/feeds))
+#+END_SRC
+
 * Initial buffer
 Show agenda as initial buffer.
 
