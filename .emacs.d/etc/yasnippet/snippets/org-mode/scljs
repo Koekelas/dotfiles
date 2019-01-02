@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: ClojureScript code block
-# key: <scljs
+# key: scljs
 # --
 #+BEGIN_SRC clojurescript
 $0

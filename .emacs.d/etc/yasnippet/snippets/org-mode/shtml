@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: HTML code block
-# key: <shtml
+# key: shtml
 # --
 #+BEGIN_SRC mhtml
 $0

@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: New Org file
-# key: <new
+# key: new
 # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
 # --
 # -*- ispell-local-dictionary: "${2:$(koek-ys/get-hunspell-name (cdr (assoc (koek-ys/org-to-ietf yas-text) koek-ys/ietf-languages)))}"; -*-

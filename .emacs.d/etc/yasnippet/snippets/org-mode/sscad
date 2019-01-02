@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: OpenSCAD code block
-# key: <sscad
+# key: sscad
 # --
 #+BEGIN_SRC scad
 $0

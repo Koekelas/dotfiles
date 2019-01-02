@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: C++ code block
-# key: <scpp
+# key: scpp
 # --
 #+BEGIN_SRC c++
 $0

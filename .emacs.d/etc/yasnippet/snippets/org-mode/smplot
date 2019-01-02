@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: Octave plot code block
-# key: <smplot
+# key: smplot
 # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "plot_path") t)) (yas-indent-line 'fixed))
 # --
 #+BEGIN_SRC octave :var plot_path="images/plot-${1:name}.png" :results file :exports results

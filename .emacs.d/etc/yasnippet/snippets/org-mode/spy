@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: Python code block
-# key: <spy
+# key: spy
 # --
 #+BEGIN_SRC python
 $0

@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: Octave code block
-# key: <sm
+# key: sm
 # --
 #+BEGIN_SRC octave
 $0

@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: Scheme code block
-# key: <sscm
+# key: sscm
 # --
 #+BEGIN_SRC scheme
 $0

@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: C code block
-# key: <sc
+# key: sc
 # --
 #+BEGIN_SRC c
 $0

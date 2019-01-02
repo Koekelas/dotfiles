@@ -1,6 +1,6 @@
 # -*- mode: snippet; -*-
 # name: Java code block
-# key: <sjava
+# key: sjava
 # --
 #+BEGIN_SRC java
 $0
