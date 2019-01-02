@@ -14,6 +14,17 @@ Set identity.
   email = nicodeja@gmail.com
 #+END_SRC
 
+** Global ignore
+:PROPERTIES:
+:header-args+: :tangle .config/git/ignore
+:END:
+
+Ignore common artifacts.
+
+#+BEGIN_SRC fundamental
+  node_modules/
+#+END_SRC
+
 * GNOME Shell app folders
 To apply configuration, run:
 
