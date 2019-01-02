@@ -19,7 +19,7 @@ Set identity.
 :header-args+: :tangle .config/git/ignore
 :END:
 
-Ignore common artifacts.
+Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
 #+BEGIN_SRC fundamental
   node_modules/
