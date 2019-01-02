@@ -280,6 +280,5 @@ Hide Steam with bundled runtime.
   Type=Application
   Categories=Network;FileTransfer;Game;
   MimeType=x-scheme-handler/steam;
-  Actions=Store;Community;Library;Servers;Screenshots;News;Settings;BigPicture;Friends;
   NoDisplay=true
 #+END_SRC
