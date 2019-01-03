@@ -27,7 +27,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
   - C family:
     - [[https://gcc.gnu.org/][GCC]]
-    - [[http://mesonbuild.com/][Meson]]
+    - [[https://mesonbuild.com/][Meson]]
     - [[https://github.com/MaskRay/ccls][ccls]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript (depends on Java):
@@ -40,7 +40,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
     - [[http://www.html-tidy.org/][HTML Tidy]]
   - Java:
-    - [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+    - [[https://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
     - [[https://maven.apache.org/][Apache Maven]]
     - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
   - JavaScript:
