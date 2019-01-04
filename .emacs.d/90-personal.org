@@ -26,7 +26,7 @@ Set name and e-mail.
 
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Nicolas De Jaeghere")
-  (setq user-mail-address "nicodeja@gmail.com")
+  (setq user-mail-address "nicolas@dejaeghe.re")
 #+END_SRC
 
 * File & directory names
