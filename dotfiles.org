@@ -11,7 +11,7 @@ Set identity.
 #+BEGIN_SRC conf
   [user]
   name = Nicolas De Jaeghere
-  email = nicodeja@gmail.com
+  email = nicolas@dejaeghe.re
 #+END_SRC
 
 ** Global ignore
