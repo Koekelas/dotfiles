@@ -955,8 +955,6 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+END_SRC
 
 ** undo-tree - Undo & redo replacement
-[[http://melpa.milkbox.net/#/undo-tree][undo-tree (Melpa)]]
-
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure t
