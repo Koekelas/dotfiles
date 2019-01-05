@@ -42,7 +42,7 @@ Declare well known file and directory names.
       "~/")
     "File name to home directory.")
 
-  (defconst koek/org-dir (expand-file-name "20 Documenten/Varia/" koek/home-dir)
+  (defconst koek/org-dir (expand-file-name "20 Documenten/" koek/home-dir)
     "File name to org directory.")
 
   (defconst koek/projects-dir (expand-file-name "21 Projecten/" koek/home-dir)
@@ -51,11 +51,11 @@ Declare well known file and directory names.
   (defconst koek/static-agenda-files
     (mapcar (lambda (file-name)
               (expand-file-name file-name koek/org-dir))
-            '("To Do.org" "Afspraken.org" "Dagindeling.org"))
+            '("Inbox.org" "Afspraken.org"))
     "List of file names to static agenda files.")
 #+END_SRC
 
-* To-do's & agenda
+* Agendas
 When a file is member of ~koek/static-agenda-files~ or matches pattern
 =KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda
 file.
@@ -101,7 +101,7 @@ file.
     :defer t
     :config
     (setq org-capture-templates
-          '(("t" "Task" entry (file+olp "To Do.org" "Taken")
+          '(("t" "Task" entry (file+olp "Inbox.org" "Taken")
              "* TODO %?"
              :empty-lines 1)
             ("a" "Appointment" entry (file "Afspraken.org")
