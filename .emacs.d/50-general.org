@@ -1213,6 +1213,13 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     ("C-c d i" . info-apropos))
 #+END_SRC
 
+** man - Manual viewer
+#+BEGIN_SRC emacs-lisp
+  (use-package man
+    :bind
+    ("C-c d m" . man))
+#+END_SRC
+
 ** apropos - Search Emacs environment
 #+BEGIN_SRC emacs-lisp
   (use-package apropos
