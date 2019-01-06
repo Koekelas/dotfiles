@@ -30,7 +30,7 @@ Set name and e-mail.
 #+END_SRC
 
 * File & directory names
-Declare well known file and directory names.
+Define well known file and directory names.
 
 #+BEGIN_SRC emacs-lisp
   (defconst koek/home-dir-kratos "d:/"
