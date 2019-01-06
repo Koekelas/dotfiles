@@ -120,7 +120,8 @@ Set news feeds.
     (declare-function elfeed-meta--put "elfeed-db")
 
     (defconst koek/feeds
-      '(("Baggers" youtube "UCMV8p6Lb-bd6UZtTc_QD4zA" lisp)
+      '(("Arch Linux" "https://www.archlinux.org/feeds/news/" notice linux)
+        ("Baggers" youtube "UCMV8p6Lb-bd6UZtTc_QD4zA" lisp)
         ("Clickspring" youtube "UCworsKCR-Sx6R6-BnIjS2MA" metalwork)
         ("Clojure" reddit "Clojure" clojure)
         ("ClojureTV" youtube "UCaLlzGqiPE2QRj6sSOawJRg" clojure)
