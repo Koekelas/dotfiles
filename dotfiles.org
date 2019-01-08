@@ -1,6 +1,75 @@
 #+TITLE: Dotfiles
 #+PROPERTY: header-args :mkdirp yes
 
+* E-mail
+
+** Domain
+To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
+(FastMail)]].
+
+** isync
+:PROPERTIES:
+:header-args+: :tangle .mbsyncrc
+:header-args:sh: :tangle no
+:END:
+
+Store =.mbsyncstate= with maildir sub directories.
+
+#+BEGIN_SRC fundamental
+  SyncState *
+#+END_SRC
+
+*** Personal
+To create the maildir directory, run:
+
+#+BEGIN_SRC sh
+  mkdir -p ~/20\ Documenten/isync/Personal
+#+END_SRC
+
+Note that tilde =~= only expands outside double quotes ="=.
+
+Define local personal store.
+
+#+BEGIN_SRC fundamental
+  MaildirStore personal-local
+  Inbox "~/20 Documenten/isync/Personal/INBOX"
+  Path "~/20 Documenten/isync/Personal/"
+  SubFolders Verbatim
+#+END_SRC
+
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+=Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
+securely, run:
+
+#+BEGIN_SRC sh
+  secret-tool store --label="Emacs e-mail personal" app-password "Emacs e-mail personal"
+#+END_SRC
+
+Define remote personal store. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names and
+ports (FastMail)]].
+
+#+BEGIN_SRC fundamental
+  IMAPStore personal-remote
+  Host imap.fastmail.com
+  SSLType IMAPS
+  User nicolas@dejaeghe.re
+  PassCmd "secret-tool lookup app-password \"Emacs e-mail personal\""
+#+END_SRC
+
+Define personal channel.
+
+#+BEGIN_SRC fundamental
+  Channel personal
+  Master :personal-remote:
+  Slave :personal-local:
+  Patterns *
+  Sync All
+  Create Both
+  Remove Both
+  Expunge Both
+  CopyArrivalDate yes
+#+END_SRC
+
 * Git
 :PROPERTIES:
 :header-args+: :tangle .config/git/config
