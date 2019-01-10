@@ -23,17 +23,15 @@ Store =.mbsyncstate= with maildir sub directories.
 To create the maildir directory, run:
 
 #+BEGIN_SRC sh
-  mkdir -p ~/20\ Documenten/E-mail/Personal
+  mkdir -p ~/Documenten/E-mail/Personal
 #+END_SRC
-
-Note that tilde =~= only expands outside double quotes ="=.
 
 Define local personal store.
 
 #+BEGIN_SRC fundamental
   MaildirStore personal-local
-  Inbox "~/20 Documenten/E-mail/Personal/INBOX"
-  Path "~/20 Documenten/E-mail/Personal/"
+  Inbox "~/Documenten/E-mail/Personal/INBOX"
+  Path "~/Documenten/E-mail/Personal/"
   SubFolders Verbatim
 #+END_SRC
 
