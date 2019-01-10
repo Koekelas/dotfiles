@@ -42,10 +42,10 @@ Define well known file and directory names.
       "~/")
     "File name to home directory.")
 
-  (defconst koek/org-dir (expand-file-name "20 Documenten/" koek/home-dir)
+  (defconst koek/org-dir (expand-file-name "Documenten/" koek/home-dir)
     "File name to org directory.")
 
-  (defconst koek/projects-dir (expand-file-name "21 Projecten/" koek/home-dir)
+  (defconst koek/projects-dir (expand-file-name "Projecten/" koek/home-dir)
     "File name to projects directory.")
 
   (defconst koek/static-agenda-files
