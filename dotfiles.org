@@ -19,7 +19,7 @@ Store =.mbsyncstate= with maildir sub directories.
   SyncState *
 #+END_SRC
 
-*** Personal
+*** Personal account
 To create the maildir directory, run:
 
 #+BEGIN_SRC sh
