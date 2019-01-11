@@ -141,7 +141,7 @@ file.
               :match-func
               (lambda (message)
                 (when message
-                  (string-match-p (rx line-start "/Personal/")
+                  (string-prefix-p "/Personal/"
                                   (mu4e-message-field message :maildir))))
               :vars
               `((mu4e-refile-folder . ,mu4e-refile-folder)
