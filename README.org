@@ -19,6 +19,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://curl.haxx.se/][curl]]
     - [[https://git-scm.com/][Git]]
     - [[https://hunspell.github.io/][Hunspell]]
+    - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
     - [[https://pandoc.org/][pandoc]]
     - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
     - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
@@ -72,7 +73,8 @@ To install dependencies on Arch Linux, run:
   ### Emacs
 
   ## General
-  pacman -S curl git hunspell hunspell-en_US pandoc the_silver_searcher xorg-xprop
+  pacman -S curl git hunspell hunspell-en_US mu isync pandoc the_silver_searcher
+  pacman -S xorg-xprop
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
 
