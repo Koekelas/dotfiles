@@ -1343,6 +1343,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :defer t
     :config
     (defvar mu4e-change-filenames-when-moving)
+    (defvar mu4e-completing-read-function)
     (defvar mu4e-context-policy)
     (defvar mu4e-get-mail-command)
     (defvar mu4e-update-interval)
@@ -1351,6 +1352,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (setq mu4e-update-interval (* 60 30)) ; In seconds
     ;; When moving e-mail, isync requires them to be renamed
     (setq mu4e-change-filenames-when-moving t)
+
+    (setq mu4e-completing-read-function #'completing-read)
     (setq mu4e-context-policy 'pick-first))
 #+END_SRC
 
