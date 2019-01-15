@@ -156,7 +156,6 @@ To apply configuration, run:
   firefox.desktop
   gnome-ring.desktop
   jdownloader.desktop
-  org.baedert.corebird.desktop
   org.gnome.Polari.desktop
   skypeforlinux.desktop
 #+END_SRC
