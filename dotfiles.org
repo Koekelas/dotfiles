@@ -157,8 +157,6 @@ To apply configuration, run:
   gnome-ring.desktop
   jdownloader.desktop
   org.baedert.corebird.desktop
-  org.gnome.Evolution.desktop
-  org.gnome.Geary.desktop
   org.gnome.Polari.desktop
   skypeforlinux.desktop
 #+END_SRC
@@ -273,8 +271,6 @@ To apply configuration, run:
   emacs.desktop
   org.gnome.Boxes.desktop
   org.gnome.Calculator.desktop
-  org.gnome.Calendar.desktop
-  org.gnome.Contacts.desktop
   org.gnome.Maps.desktop
   org.gnome.Weather.Application.desktop
   org.gnome.clocks.desktop
