@@ -229,7 +229,6 @@ To apply configuration, run:
   gnome-control-center.desktop
   gnome-system-monitor.desktop
   gufw.desktop
-  ibus-setup.desktop
   lstopo.desktop
   org.gnome.DiskUtility.desktop
   org.gnome.Logs.desktop
