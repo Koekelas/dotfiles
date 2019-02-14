@@ -230,6 +230,7 @@ To apply configuration, run:
   gnome-system-monitor.desktop
   gufw.desktop
   lstopo.desktop
+  nm-connection-editor.desktop
   org.gnome.DiskUtility.desktop
   org.gnome.Logs.desktop
   org.gnome.Terminal.desktop
