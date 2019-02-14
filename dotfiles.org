@@ -255,6 +255,7 @@ To apply configuration, run:
   org.gnome.FileRoller.desktop
   org.gnome.Nautilus.desktop
   org.gnome.Screenshot.desktop
+  simple-scan.desktop
   syncthing-gtk.desktop
   xdvi.desktop
 #+END_SRC
