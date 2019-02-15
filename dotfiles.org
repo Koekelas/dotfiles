@@ -246,6 +246,7 @@ To apply configuration, run:
 :END:
 
 #+BEGIN_SRC fundamental
+  eid-viewer.desktop
   electrum.desktop
   eog.desktop
   keepassx2.desktop
