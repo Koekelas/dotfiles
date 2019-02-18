@@ -2228,6 +2228,16 @@ Configure Conf mode after Text mode.
                   "Conf")))))
 #+END_SRC
 
+** Wolfram Language
+[[https://github.com/kawabata/wolfram-mode][wolfram-mode (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wolfram-mode
+    :ensure t
+    :mode (rx ".wl" string-end)
+    :delight (wolfram-mode "WL" :major))
+#+END_SRC
+
 ** YASnippet
 For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
 

@@ -64,6 +64,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/guile/][Guile]]
   - SQL:
     - [[https://www.postgresql.org/][PostgreSQL]]
+  - Wolfram Language:
+    - [[https://www.wolfram.com/mathematica/][Mathematica]]
 - GNOME Shell:
   - [[https://github.com/prurigro/gnome-catgen][gnome-catgen]]
 
@@ -139,6 +141,9 @@ To install dependencies on Arch Linux, run:
   systemctl start postgresql.service
   sudo -u postgres createuser -s `whoami`
   createdb
+
+  ## Wolfram Language
+  # Install mathematica from AUR
 
   ### GNOME Shell
   # Install gnome-catgen-git from AUR
