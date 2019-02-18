@@ -277,6 +277,7 @@ To apply configuration, run:
   org.gnome.clocks.desktop
   org.octave.Octave.desktop
   wireshark-gtk.desktop
+  wolfram-mathematica11.desktop
 #+END_SRC
 
 * Steam
