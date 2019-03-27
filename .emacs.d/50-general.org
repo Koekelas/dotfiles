@@ -2076,11 +2076,26 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (setq org-export-with-date nil)
     (setq org-export-with-toc 3))
 
+  (use-package ox-html
+    :defer t
+    :config
+    (setq org-html-doctype "html5")
+    (setq org-html-html5-fancy t))
+
   (use-package ox-latex
     :defer t
     :config
     (setq org-latex-pdf-process '("latexmk -pdf %f"))
     (setq org-latex-listings t))
+#+END_SRC
+
+*** htmlize - Text to HTML converter
+[[https://github.com/hniksic/emacs-htmlize][htmlize (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure t
+    :defer t)
 #+END_SRC
 
 ** Python
