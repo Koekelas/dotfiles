@@ -2054,6 +2054,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (let ((whitelist ()))
       (setq org-confirm-babel-evaluate
             (lambda (_language _body)
+              ;; A reference to a buffer is a good ID but would storing
+              ;; a reference prevent the buffer from being garbage
+              ;; collected?
               (let ((id (or (buffer-file-name) (buffer-name))))
                 (unless (assoc id whitelist)
                   (push (cons id
