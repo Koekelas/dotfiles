@@ -119,11 +119,11 @@ To apply configuration, run:
   ardour.desktop
   blender.desktop
   calf.desktop
-  fontforge.desktop
   freecad.desktop
   gimp.desktop
   inkscape.desktop
   openscad.desktop
+  org.fontforge.FontForge.desktop
   scribus.desktop
   tape.desktop
   valentina.desktop
@@ -235,8 +235,8 @@ To apply configuration, run:
   org.gnome.Logs.desktop
   org.gnome.Terminal.desktop
   org.gnome.font-viewer.desktop
+  org.gnome.seahorse.Application.desktop
   org.gnome.tweaks.desktop
-  seahorse.desktop
   yelp.desktop
 #+END_SRC
 
@@ -273,10 +273,10 @@ To apply configuration, run:
   org.gnome.Boxes.desktop
   org.gnome.Calculator.desktop
   org.gnome.Maps.desktop
-  org.gnome.Weather.Application.desktop
+  org.gnome.Weather.desktop
   org.gnome.clocks.desktop
   org.octave.Octave.desktop
-  wireshark-gtk.desktop
+  wireshark.desktop
   wolfram-mathematica11.desktop
 #+END_SRC
 
