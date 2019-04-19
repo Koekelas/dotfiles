@@ -154,7 +154,7 @@ To apply configuration, run:
 #+BEGIN_SRC fundamental
   chromium.desktop
   firefox.desktop
-  gnome-ring.desktop
+  jami-gnome.desktop
   jdownloader.desktop
   org.gnome.Polari.desktop
   skypeforlinux.desktop
