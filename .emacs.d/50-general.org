@@ -418,6 +418,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
     (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
+    (koek-sp/setup-format-c-block-on-return-handler 'python-mode "{" "[" "(")
     :delight)
 #+END_SRC
 
