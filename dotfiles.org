@@ -257,11 +257,11 @@ To apply configuration, run:
 :END:
 
 #+BEGIN_SRC fundamental
+  com.obsproject.Studio.desktop
   eid-viewer.desktop
   electrum.desktop
   eog.desktop
   keepassx2.desktop
-  obs.desktop
   org.gnome.Cheese.desktop
   org.gnome.Evince.desktop
   org.gnome.FileRoller.desktop
