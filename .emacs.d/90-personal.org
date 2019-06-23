@@ -176,6 +176,7 @@ Set news feeds.
         ("Emacs" reddit "emacs" emacs)
         ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
         ("Two-Bit History" "https://twobithistory.org/feed.xml" blog history)
+        ("Wait But Why" "https://waitbutwhy.com/feed" blog science psychology)
         ("frank howarth" youtube "UC3_VCOJMaivgcGqPCTePLBA" woodwork))
       "List of news feeds.
   News feed is a list of format:
