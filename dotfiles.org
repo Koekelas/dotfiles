@@ -110,6 +110,17 @@ To apply configuration, run:
   bvnc.desktop
 #+END_SRC
 
+** Citrix
+:PROPERTIES:
+:header-args+: :tangle .local/share/applications-categories/Citrix.category
+:END:
+
+#+BEGIN_SRC fundamental
+  configmgr.desktop
+  conncentre.desktop
+  wfcmgr.desktop
+#+END_SRC
+
 ** Creative
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Creative.category
