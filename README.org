@@ -31,7 +31,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://mesonbuild.com/][Meson]]
     - [[https://github.com/MaskRay/ccls][ccls]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
-  - Clojure & ClojureScript (depends on Java):
+  - Clojure & ClojureScript (depends on Java and JavaScript):
     - [[https://leiningen.org/][Leiningen]]
   - Common Lisp:
     - [[http://www.sbcl.org/][Steel Bank Common Lisp]]
