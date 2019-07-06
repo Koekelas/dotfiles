@@ -1621,7 +1621,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :ensure t
     :mode
     (((rx ".clj" string-end) . clojure-mode)
-     ((rx ".cljs" string-end) . clojurescript-mode))
+     ((rx ".cljs" string-end) . clojurescript-mode)
+     ((rx ".edn" string-end) . clojure-mode))
     :delight
     (clojure-mode "Clj" :major)
     (clojurescript-mode "Cljs" :major))
