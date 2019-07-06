@@ -2282,7 +2282,8 @@ Show file name in title bar.
               ((and (projectile-project-p) file-name)
                (format "~%s/%s"
                        (projectile-project-name)
-                       (file-relative-name file-name (projectile-project-root))))
+                       (file-relative-name (file-truename file-name)
+                                           (projectile-project-root))))
               (file-name
                (abbreviate-file-name file-name))
               (t
