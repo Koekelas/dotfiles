@@ -89,7 +89,10 @@ Set identity.
 Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
 #+BEGIN_SRC fundamental
+  .shadow-cljs/
+  build/
   node_modules/
+  .nrepl-port
 #+END_SRC
 
 * GNOME Shell app folders
