@@ -1041,6 +1041,11 @@ When revisiting then modifying file, history is discarded.
     (("C-c w l" . winner-undo)
      ("C-c w r" . winner-redo))
     :config
+    (declare-function winner-save-unconditionally "winner")
+
+    ;; When reading from the minibuffer, the window layout doesn't
+    ;; change (i.e. consecutive identical layouts are stored)
+    (remove-hook 'minibuffer-setup-hook #'winner-save-unconditionally)
     (winner-mode))
 #+END_SRC
 
