@@ -1627,10 +1627,12 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :mode
     (((rx ".clj" string-end) . clojure-mode)
      ((rx ".cljs" string-end) . clojurescript-mode)
+     ((rx ".cljc" string-end) . clojurec-mode)
      ((rx ".edn" string-end) . clojure-mode))
     :delight
     (clojure-mode "Clj" :major)
-    (clojurescript-mode "Cljs" :major))
+    (clojurescript-mode "Cljs" :major)
+    (clojurec-mode "Cljc" :major))
 #+END_SRC
 
 *** cider - Interact with process
