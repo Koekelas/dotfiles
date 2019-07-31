@@ -1165,6 +1165,9 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      ("C-r" . counsel-minibuffer-history))
     :config
     (declare-function ivy-set-actions "ivy")
+    (put 'counsel-ag-base-command 'safe-local-variable
+         (lambda (value)
+           (string= value "ag --nocolor --nogroup --hidden %s")))
 
     (let ((show-help (lambda (candidate)
                        (helpful-function (intern candidate)))))
