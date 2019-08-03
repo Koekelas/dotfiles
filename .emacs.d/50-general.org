@@ -1258,6 +1258,31 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 ** devdocs-lookup - Search DevDocs
 [[https://github.com/skeeto/devdocs-lookup][devdocs-lookup (GitHub)]]
 
+On [[https://devdocs.io/][DevDocs]], enable:
+
+- C
+- C++
+- Clojure 1.9
+- CSS
+- DOM
+- DOM Events
+- Erlang 21
+- Express
+- HTML
+- JavaScript
+- jQuery
+- lodash
+- Matplotlib 3.0
+- Node.js
+- npm
+- NumPy 1.14
+- OpenJDK 8
+- pandas 0.23
+- PostgreSQL 10
+- Python 3.7
+- scikit-image
+- scikit-learn
+
 #+BEGIN_SRC emacs-lisp
   (use-package devdocs-lookup
     :load-path "lisp/devdocs-lookup/"
@@ -1623,7 +1648,9 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
       (:map c-mode-map
        ("C-c d d" . devdocs-lookup-c)
        :map c++-mode-map
-       ("C-c d d" . devdocs-lookup-cpp))))
+       ("C-c d d" . devdocs-lookup-cpp)
+       :map java-mode-map
+       ("C-c d d" . devdocs-lookup-openjdk~8))))
 
   (use-package cc-cmds
     :defer t
@@ -1654,6 +1681,11 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
      ((rx ".cljs" string-end) . clojurescript-mode)
      ((rx ".cljc" string-end) . clojurec-mode)
      ((rx ".edn" string-end) . clojure-mode))
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map clojure-mode-map
+       ("C-c d d" . devdocs-lookup-clojure~1.9)))
     :delight
     (clojure-mode "Clj" :major)
     (clojurescript-mode "Cljs" :major)
@@ -1745,6 +1777,11 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
     :ensure t
     :mode ((rx ".erl" string-end) . erlang-mode)
     :config
+    (use-package devdocs-lookup
+      :bind
+      (:map erlang-mode-map
+       ("C-c d d" . devdocs-lookup-erlang~21)))
+
     ;; On Windows, executable-find finds the erlc shim. Shadow
     ;; c:/ProgramData/chocolatey/bin/.
     (when-let
@@ -1772,7 +1809,12 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package css-mode
-    :mode (rx ".css" string-end))
+    :mode (rx ".css" string-end)
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map css-mode-map
+       ("C-c d d" . devdocs-lookup-css))))
 #+END_SRC
 
 *** emmet - Expand selector to HTML or CSS
@@ -2146,6 +2188,16 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
       "Disable Python checker for current."
       (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
     :config
+    (use-package devdocs-lookup
+      :bind
+      (:map python-mode-map
+       ("C-c d d" . devdocs-lookup-python~3.7)
+       ("C-c d C-i" . devdocs-lookup-scikit_image)
+       ("C-c d C-l" . devdocs-lookup-scikit_learn)
+       ("C-c d C-m" . devdocs-lookup-matplotlib~3.0)
+       ("C-c d C-n" . devdocs-lookup-numpy~1.14)
+       ("C-c d C-p" . devdocs-lookup-pandas~0.23)))
+
     (add-hook 'python-mode-hook #'koek-py/disable-checker)
     :delight (python-mode "Py" :major))
 #+END_SRC
@@ -2231,7 +2283,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (use-package devdocs-lookup
       :bind
       (:map sql-mode-map
-       ("C-c d C-p" . devdocs-lookup-postgresql)))
+       ("C-c d C-p" . devdocs-lookup-postgresql~10)))
 
     (setq sql-product 'postgres))
 #+END_SRC
