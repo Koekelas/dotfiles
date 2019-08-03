@@ -895,6 +895,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :config
     (declare-function koek-org/get-src-block-var-value "50-general")
     (declare-function koek-ys/get-org-name "50-general")
+    (declare-function projectile-project-p "projectile")
+    (declare-function projectile-project-root "projectile")
     (declare-function yas-choose-value "yasnippet")
     (declare-function yas-reload-all "yasnippet")
 
@@ -903,6 +905,23 @@ For the major mode, see [[*YASnippet][YASnippet]].
       "Complete field from CANDIDATES.
   CANDIDATES is an alist of pretty candidate to candidate pairs."
       (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
+
+    (defun koek-ys/determine-ns-name ()
+      "Return Clojure namespace name for current.
+  Assumes source path is a child of project root."
+      (let* ((separator (thread-first (expand-file-name "a" "b")
+                          file-relative-name
+                          (substring 1 2)))
+             (rel-file-name
+              (let ((file-name (buffer-file-name)))
+                (if (and (projectile-project-p) file-name)
+                    (file-relative-name file-name (projectile-project-root))
+                  (buffer-name))))
+             (parts (let ((file-name (file-name-sans-extension rel-file-name)))
+                      (or (cdr (split-string file-name (regexp-quote separator)))
+                          (list file-name)))))
+        (string-join
+         (mapcar (apply-partially #'replace-regexp-in-string "_" "-") parts) ".")))
 
     (defconst koek-ys/ietf-languages
       '(("de-DE" . ("de-de" "ngerman"  "de_DE"))
@@ -934,10 +953,10 @@ For the major mode, see [[*YASnippet][YASnippet]].
                       (replace-regexp-in-string (rx (or (and line-start "\"")
                                                         (and "\"" line-end)))
                                                 "" value))))
-          (when-let (root-file-name (buffer-file-name))
+          (when-let (file-name-root (buffer-file-name))
             (setq file-name
                   (expand-file-name file-name
-                                    (file-name-directory root-file-name))))
+                                    (file-name-directory file-name-root))))
           (when (file-name-absolute-p file-name)
             (make-directory file-name 'parents)))))
 

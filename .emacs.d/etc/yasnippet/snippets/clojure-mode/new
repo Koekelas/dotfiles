@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: New Clojure file
+# key: new
+# --
+(ns ${1:`(koek-ys/determine-ns-name)`}$2)
+
+$0
