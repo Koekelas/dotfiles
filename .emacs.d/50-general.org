@@ -1374,6 +1374,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (defvar mu4e-completing-read-function)
     (defvar mu4e-context-policy)
     (defvar mu4e-get-mail-command)
+    (defvar mu4e-hide-index-messages)
     (defvar mu4e-update-interval)
 
     (setq mu4e-get-mail-command "mbsync -a")
@@ -1382,7 +1383,9 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (setq mu4e-change-filenames-when-moving t)
 
     (setq mu4e-completing-read-function #'completing-read)
-    (setq mu4e-context-policy 'pick-first))
+    (setq mu4e-context-policy 'pick-first)
+
+    (setq mu4e-hide-index-messages t))
 #+END_SRC
 
 ** elfeed - News reader
