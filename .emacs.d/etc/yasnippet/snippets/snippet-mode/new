@@ -4,6 +4,6 @@
 # --
 # -*- mode: snippet; -*-
 # name: ${1:Snippet name}
-# key: ${2:${1:$(progn (string-match (rx (submatch-n 1 (one-or-more word))) yas-text) (downcase (match-string 1 yas-text)))}}
+# key: ${2:`(let ((buffer-name (buffer-name))) (if (not (string= buffer-name yas-new-snippet-buffer-name)) buffer-name "key"))`}
 # --
 $0
