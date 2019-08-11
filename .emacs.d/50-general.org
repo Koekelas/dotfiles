@@ -1368,7 +1368,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 
     (defun koek-cmpl/style-output ()
       "Style output of process.
-  Output is between compilation-filter-start and point."
+  Output is between `compilation-filter-start' and point."
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
     (setq compilation-scroll-output 'first-error)
