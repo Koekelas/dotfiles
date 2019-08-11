@@ -2362,17 +2362,21 @@ Show file name in title bar.
 #+BEGIN_SRC emacs-lisp
   (setq frame-title-format
         '((:eval
-           (let ((file-name (buffer-file-name)))
-             (cond
-              ((and (projectile-project-p) file-name)
-               (format "~%s/%s"
-                       (projectile-project-name)
-                       (file-relative-name (file-truename file-name)
-                                           (projectile-project-root))))
-              (file-name
-               (abbreviate-file-name file-name))
-              (t
-               "%b"))))
+           ;; Resolve conflict between `file-truename' and
+           ;; `query-replace', see
+           ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=33697
+           (save-match-data
+             (let ((file-name (buffer-file-name)))
+               (cond
+                ((and (projectile-project-p) file-name)
+                 (format "~%s/%s"
+                         (projectile-project-name)
+                         (file-relative-name (file-truename file-name)
+                                             (projectile-project-root))))
+                (file-name
+                 (abbreviate-file-name file-name))
+                (t
+                 "%b")))))
           " - Emacs"))
 #+END_SRC
 
