@@ -55,8 +55,6 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/octave/][Octave]]
   - OpenSCAD:
     - [[https://www.openscad.org/][OpenSCAD]]
-  - Org:
-    - [[https://www.latex-project.org/][LaTeX]]
   - Python:
     - [[https://www.python.org/][Python]]
     - [[https://github.com/palantir/python-language-server][Python Language Server]]
@@ -64,6 +62,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/guile/][Guile]]
   - SQL:
     - [[https://www.postgresql.org/][PostgreSQL]]
+  - TeX & Org:
+    - [[https://www.latex-project.org/][LaTeX]]
   - Wolfram Language:
     - [[https://www.wolfram.com/mathematica/][Mathematica]]
 - GNOME Shell:
@@ -124,9 +124,6 @@ To install dependencies on Arch Linux, run:
   ## OpenSCAD
   pacman -S openscad
 
-  ## Org
-  pacman -S texlive-core texlive-latexextra
-
   ## Python
   pacman -S python python-pipenv
   pacman -S python-language-server python-rope python-pyflakes
@@ -143,6 +140,9 @@ To install dependencies on Arch Linux, run:
   systemctl start postgresql.service
   sudo -u postgres createuser -s `whoami`
   createdb
+
+  ## TeX & Org
+  pacman -S texlive-core texlive-latexextra
 
   ## Wolfram Language
   # Install mathematica from AUR

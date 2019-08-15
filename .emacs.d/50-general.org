@@ -2301,6 +2301,15 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     :delight sqlind-minor-mode)
 #+END_SRC
 
+** TeX
+[[https://www.gnu.org/software/auctex/][AUCTeX]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tex
+    :ensure auctex
+    :mode ((rx ".tex" string-end) . TeX-tex-mode))
+#+END_SRC
+
 ** Text
 #+BEGIN_SRC emacs-lisp
   (use-package text-mode
