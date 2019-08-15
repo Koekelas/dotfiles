@@ -1980,6 +1980,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
      ("C-M-p" . org-previous-visible-heading)
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block))
+    :hook (org-mode . org-cdlatex-mode)
     :preface
     (declare-function org-clock-persistence-insinuate "org")
 
@@ -2055,7 +2056,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
           (plist-put org-format-latex-options :scale (/ 4 3.0)))
 
     ;; Appearance - Export
-    (add-to-list 'org-latex-packages-alist '("" "listings" t)))
+    (add-to-list 'org-latex-packages-alist '("" "listings" t))
+    :delight org-cdlatex-mode)
 
   (use-package org-agenda
     :bind
@@ -2308,6 +2310,16 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
   (use-package tex
     :ensure auctex
     :mode ((rx ".tex" string-end) . TeX-tex-mode))
+#+END_SRC
+
+*** cdlatex - Assist with inserting LaTeX
+[[https://github.com/cdominik/cdlatex][cdlatex (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cdlatex
+    :ensure t
+    :hook (LaTeX-mode . cdlatex-mode)
+    :delight)
 #+END_SRC
 
 ** Text
