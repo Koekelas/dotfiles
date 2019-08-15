@@ -901,6 +901,11 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (declare-function yas-reload-all "yasnippet")
 
     ;; Snippet odds and ends
+    (defun koek-ys/indent-snippet ()
+      "Indent last expanded snippet.
+  Snippet is between `yas-snippet-beg' and `yas-snippet-end'."
+      (indent-region yas-snippet-beg yas-snippet-end))
+
     (defun koek-ys/complete-field (candidates)
       "Complete field from CANDIDATES.
   CANDIDATES is an alist of pretty candidate to candidate pairs."

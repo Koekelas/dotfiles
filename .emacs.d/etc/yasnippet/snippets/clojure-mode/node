@@ -1,0 +1,9 @@
+# -*- mode: snippet; -*-
+# name: shadow-cljs Node.js target
+# key: node
+# expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet t)))
+# --
+:${1:node} {:target :node-script
+            :output-to "${2:index.js}"
+            :main ${3:$1.core/main}
+            :devtools {:autoload ${4:true}}}$0
