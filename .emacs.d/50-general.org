@@ -1367,7 +1367,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (declare-function ansi-color-apply-on-region "ansi-color")
 
     (defun koek-cmpl/style-output ()
-      "Style output of process.
+      "Style process output.
   Output is between `compilation-filter-start' and point."
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
