@@ -2312,7 +2312,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     :mode ((rx ".tex" string-end) . TeX-tex-mode))
 #+END_SRC
 
-*** cdlatex - Assist with inserting LaTeX
+*** cdlatex - Assist with writing LaTeX
 [[https://github.com/cdominik/cdlatex][cdlatex (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
