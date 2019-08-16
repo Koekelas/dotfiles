@@ -1918,11 +1918,6 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
     :mode (rx "meson.build" string-end))
 #+END_SRC
 
-*** Issues
-
-**** Code fails to complete
-See [[https://github.com/wentasah/meson-mode/issues/16][Issue 16 (GitHub)]].
-
 ** Octave & MATLAB
 
 #+BEGIN_SRC emacs-lisp
