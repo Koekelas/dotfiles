@@ -459,7 +459,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (let ((safe
            '(("function" . ?ƒ)
              ("lambda"   . ?λ)))
-          (pragmata
+          (pragmata                       ; PragmataPro 0.828
            (when (member "PragmataPro Mono" (font-family-list))
              (mapcar
               (pcase-lambda (`(,symbol . ,char))
@@ -468,13 +468,29 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                       (apply #'koek-ps/make-baseline-right-left-spec
                              (append (make-list (1- (length symbol)) ?\s)
                                      (list char)))))
-              '(("[ERROR]"   . ?\uE380) ("[DEBUG]" . ?\uE381)
-                ("[INFO]"    . ?\uE382) ("[WARN]"  . ?\uE383)
-                ("[WARNING]" . ?\uE384) ("[ERR]"   . ?\uE385)
-                ("[FATAL]"   . ?\uE386) ("[TRACE]" . ?\uE387)
-                ("[FIXME]"   . ?\uE388) ("[TODO]"  . ?\uE389)
-                ("[BUG]"     . ?\uE38A) ("[NOTE]"  . ?\uE38B)
-                ("[HACK]"    . ?\uE38C) ("[MARK]"  . ?\uE38D)
+              '(("[ERROR]"   . ?\uE2C0) ("[DEBUG]"    . ?\uE2C1)
+                ("[INFO]"    . ?\uE2C2) ("[WARN]"     . ?\uE2C3)
+                ("[WARNING]" . ?\uE2C4) ("[ERR]"      . ?\uE2C5)
+                ("[FATAL]"   . ?\uE2C6) ("[TRACE]"    . ?\uE2C7)
+                ("[FIXME]"   . ?\uE2C8) ("[TODO]"     . ?\uE2C9)
+                ("[BUG]"     . ?\uE2CA) ("[NOTE]"     . ?\uE2CB)
+                ("[HACK]"    . ?\uE2CC) ("[MARK]"     . ?\uE2CD)
+                ("[FAIL]"    . ?\uE2CE) ("// ERROR"   . ?\uE2E0)
+                ("// DEBUG"  . ?\uE2E1) ("// INFO"    . ?\uE2E2)
+                ("// WARN"   . ?\uE2E3) ("// WARNING" . ?\uE2E4)
+                ("// ERR"    . ?\uE2E5) ("// FATAL"   . ?\uE2E6)
+                ("// TRACE"  . ?\uE2E7) ("// FIXME"   . ?\uE2E8)
+                ("// TODO"   . ?\uE2E9) ("// BUG"     . ?\uE2EA)
+                ("// NOTE"   . ?\uE2EB) ("// HACK"    . ?\uE2EC)
+                ("// MARK"   . ?\uE2ED) ("// FAIL"    . ?\uE2EE)
+                ("# ERROR"   . ?\uE2F0) ("# DEBUG"    . ?\uE2F1)
+                ("# INFO"    . ?\uE2F2) ("# WARN"     . ?\uE2F3)
+                ("# WARNING" . ?\uE2F4) ("# ERR"      . ?\uE2F5)
+                ("# FATAL"   . ?\uE2F6) ("# TRACE"    . ?\uE2F7)
+                ("# FIXME"   . ?\uE2F8) ("# TODO"     . ?\uE2F9)
+                ("# BUG"     . ?\uE2FA) ("# NOTE"     . ?\uE2FB)
+                ("# HACK"    . ?\uE2FC) ("# MARK"     . ?\uE2FD)
+                ("# FAIL"    . ?\uE2FE)
                 ;; !
                 ("!!"  . ?\uE900) ("!="  . ?\uE901) ("!==" . ?\uE902)
                 ("!!!" . ?\uE903) ("!≡"  . ?\uE904) ("!≡≡" . ?\uE905)
@@ -503,6 +519,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                 ("-="   . ?\uE983) ("->"  . ?\uE984) ("->>" . ?\uE985)
                 ("---"  . ?\uE986) ("-->" . ?\uE987) ("-+-" . ?\uE988)
                 ("-\\/" . ?\uE989) ("-|>" . ?\uE98A) ("-<|" . ?\uE98B)
+                ("->-"  . ?\uE98C) ("-<-" . ?\uE98D)
                 ;; .
                 (".." . ?\uE990) ("..." . ?\uE991) ("..<" . ?\uE992)
                 (".>" . ?\uE993) (".~"  . ?\uE994) (".="  . ?\uE995)
@@ -542,7 +559,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                 ("=<<"  . ?\uEA00) ("=="  . ?\uEA01) ("===" . ?\uEA02)
                 ("==>"  . ?\uEA03) ("=>"  . ?\uEA04) ("=~"  . ?\uEA05)
                 ("=>>"  . ?\uEA06) ("=/=" . ?\uEA07) ("=~=" . ?\uEA08)
-                ("==>>" . ?\uEA09)
+                ("==>>" . ?\uEA09) ("=>=" . ?\uEA0A) ("=<=" . ?\uEA0B)
+                ("=<"   . ?\uEA0C)
                 ;; ≡
                 ("≡≡" . ?\uEA10) ("≡≡≡" . ?\uEA11) ("≡:≡" . ?\uEA12)
                 ;; >
