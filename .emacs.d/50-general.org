@@ -2317,7 +2317,10 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 #+END_SRC
 
 ** TeX
-[[https://www.gnu.org/software/auctex/][AUCTeX]]
+TeX configuration is a placeholder. [[*Org][Org]] optionally requires CDLaTeX
+which requires AUCTeX.
+
+[[https://www.gnu.org/software/auctex/][auctex]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package tex
