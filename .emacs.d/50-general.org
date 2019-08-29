@@ -456,9 +456,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                 (cdr chars) (list (car chars))))
 
   (defconst koek-ps/comp-specs
-    (let ((safe
-           '(("function" . ?ƒ)
-             ("lambda"   . ?λ)))
+    (let ((safe '(("function" . ?ƒ)
+                  ("lambda"   . ?λ)))
           (pragmata                       ; PragmataPro 0.828
            (when (member "PragmataPro Mono" (font-family-list))
              (mapcar
@@ -608,16 +607,15 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
   symbol.
 
   Pretty symbol is a key in `koek-ps/comp-specs'."
-    (let ((specs
-           (seq-reduce
-            (lambda (specs symbol)
-              (unless (consp symbol)
-                (setq symbol (cons symbol symbol)))
-              (pcase-let ((`(,from . ,to) symbol))
-                (when-let (spec (cdr (assoc to koek-ps/comp-specs)))
-                  (push (cons from spec) specs)))
-              specs)
-            symbols ())))
+    (let ((specs (seq-reduce
+                  (lambda (specs symbol)
+                    (unless (consp symbol)
+                      (setq symbol (cons symbol symbol)))
+                    (pcase-let ((`(,from . ,to) symbol))
+                      (when-let ((spec (cdr (assoc to koek-ps/comp-specs))))
+                        (push (cons from spec) specs)))
+                    specs)
+                  symbols ())))
       (lambda ()
         (setq prettify-symbols-alist specs)
         (prettify-symbols-mode))))
@@ -881,19 +879,20 @@ Run =M-x= ~make-symbolic-link~. Create a link to
     ;; Prime abbrev tables
     (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
       ;; Upcase SQL keywords
-      (let* ((keywords
-              (split-string
-               (with-temp-buffer
-                 (insert-file-contents (find-library-name "sql"))
-                 (search-forward "ANSI Reserved keywords")
-                 (buffer-substring (re-search-forward
-                                    (rx (one-or-more (not (any "\"")))))
-                                   (re-search-forward
-                                    (rx (one-or-more (not (any ")")))))))
-               (rx (any " \n")) 'omit-nulls "\""))
-             (abbrevs (mapcar (lambda (keyword)
-                                (list keyword (upcase keyword)))
-                              keywords)))
+      (let ((abbrevs
+             (let ((keywords
+                    (split-string
+                     (with-temp-buffer
+                       (insert-file-contents (find-library-name "sql"))
+                       (search-forward "ANSI Reserved keywords")
+                       (buffer-substring (re-search-forward
+                                          (rx (one-or-more (not (any "\"")))))
+                                         (re-search-forward
+                                          (rx (one-or-more (not (any ")")))))))
+                     (rx (any " \n")) 'omit-nulls "\"")))
+               (mapcar (lambda (keyword)
+                         (list keyword (upcase keyword)))
+                       keywords))))
         (define-abbrev-table 'sql-mode-abbrev-table abbrevs)
         (define-abbrev-table 'sql-interactive-mode-abbrev-table abbrevs)))
 
@@ -932,17 +931,18 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (defun koek-ys/determine-ns-name ()
       "Return Clojure namespace name for current.
   Assumes source path is a child of project root."
-      (let* ((separator (thread-first (expand-file-name "a" "b")
-                          file-relative-name
-                          (substring 1 2)))
-             (rel-file-name
-              (let ((file-name (buffer-file-name)))
-                (if (and (projectile-project-p) file-name)
-                    (file-relative-name file-name (projectile-project-root))
-                  (buffer-name))))
-             (parts (let ((file-name (file-name-sans-extension rel-file-name)))
-                      (or (cdr (split-string file-name (regexp-quote separator)))
-                          (list file-name)))))
+      (let ((parts
+             (let ((separator (thread-first (expand-file-name "a" "b")
+                                file-relative-name
+                                (substring 1 2)))
+                   (rel-file-name
+                    (let ((file-name (buffer-file-name)))
+                      (if (and (projectile-project-p) file-name)
+                          (file-relative-name file-name (projectile-project-root))
+                        (buffer-name)))))
+               (let ((file-name (file-name-sans-extension rel-file-name)))
+                 (or (cdr (split-string file-name (regexp-quote separator)))
+                     (list file-name))))))
         (string-join
          (mapcar (apply-partially #'replace-regexp-in-string "_" "-") parts) ".")))
 
@@ -970,13 +970,14 @@ For the major mode, see [[*YASnippet][YASnippet]].
   VAR-NAME is a string, the variable name which stores the result
   file name."
       (lambda ()
-        (when-let (file-name
-                   (when-let (value (koek-org/get-src-block-var-value var-name))
-                     (file-name-directory
-                      (replace-regexp-in-string (rx (or (and line-start "\"")
-                                                        (and "\"" line-end)))
-                                                "" value))))
-          (when-let (file-name-root (buffer-file-name))
+        (when-let
+            ((file-name (when-let
+                            ((value (koek-org/get-src-block-var-value var-name)))
+                          (file-name-directory
+                           (replace-regexp-in-string (rx (or (and line-start "\"")
+                                                             (and "\"" line-end)))
+                                                     "" value)))))
+          (when-let ((file-name-root (buffer-file-name)))
             (setq file-name
                   (expand-file-name file-name
                                     (file-name-directory file-name-root))))
@@ -1473,12 +1474,12 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (defun koek-ino/set-in (keys value alist)
     "Set value for KEYS to VALUE in nested ALIST.
   KEYS is a list of keys."
-    (when-let (key (car keys))
+    (when-let ((key (car keys)))
       (let ((pair (or (assq key alist)
                       (let ((new-pair (cons key ())))
                         (push new-pair alist)
                         new-pair))))
-        (setcdr pair (if-let (rem-keys (cdr keys))
+        (setcdr pair (if-let ((rem-keys (cdr keys)))
                          (koek-ino/set-in rem-keys value (cdr pair))
                        value))))
     alist)
@@ -1615,31 +1616,30 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
       (thread-last (read-directory-name "Project home: ")
         expand-file-name
         file-name-as-directory)
-      (let* ((hardware-specs
-              (seq-filter
-               (lambda (spec)
-                 (seq-some (lambda (pred)
-                             (funcall pred spec))
-                           koek-ino/hardware-whitelist-preds))
-               (koek-ino/read-hardware-specs koek-ino/hardware-install-dirs)))
-             (candidates
-              (seq-mapcat
-               (lambda (hardware-spec)
-                 (let ((platform-name
-                        (format
-                         "%s %s"
-                         (koek-ino/get-in '(:platform :name) hardware-spec)
-                         (koek-ino/get-in '(:platform :version) hardware-spec))))
-                   (thread-last (koek-ino/get-in '(:boards) hardware-spec)
-                     (mapcar #'cdr)
-                     (seq-filter (apply-partially #'koek-ino/get-in '(:name)))
-                     (mapcar (lambda (board-spec)
-                               (cons (format "%s (%s)"
-                                             (koek-ino/get-in '(:name) board-spec)
-                                             platform-name)
-                                     `((:board    . ,board-spec)
-                                       (:hardware . ,hardware-spec))))))))
-               hardware-specs)))
+      (let ((candidates
+             (let ((hardware-specs
+                    (seq-filter
+                     (lambda (spec)
+                       (seq-some (lambda (pred)
+                                   (funcall pred spec))
+                                 koek-ino/hardware-whitelist-preds))
+                     (koek-ino/read-hardware-specs koek-ino/hardware-install-dirs))))
+               (seq-mapcat
+                (lambda (hardware-spec)
+                  (let ((platform-name
+                         (format "%s %s"
+                                 (koek-ino/get-in '(:platform :name) hardware-spec)
+                                 (koek-ino/get-in '(:platform :version) hardware-spec))))
+                    (thread-last (koek-ino/get-in '(:boards) hardware-spec)
+                      (mapcar #'cdr)
+                      (seq-filter (apply-partially #'koek-ino/get-in '(:name)))
+                      (mapcar (lambda (board-spec)
+                                (cons (format "%s (%s)"
+                                              (koek-ino/get-in '(:name) board-spec)
+                                              platform-name)
+                                      `((:board    . ,board-spec)
+                                        (:hardware . ,hardware-spec))))))))
+                hardware-specs))))
         (cdr (assoc (completing-read "Board: " candidates nil t) candidates)))))
     (make-directory file-name 'parents)
     (koek-ino/write-cross-file (expand-file-name "cross.txt" file-name)
@@ -1808,11 +1808,12 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
     ;; On Windows, executable-find finds the erlc shim. Shadow
     ;; c:/ProgramData/chocolatey/bin/.
     (when-let
-        (erlc-program-name
-         ;; Assume only one version installed
-         (car (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" 'full)))
+        ((erlc-program-name
+          ;; Assume only one version installed
+          (car (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" '
+                                      full))))
       (push (file-name-directory erlc-program-name) exec-path))
-    (when-let (erlc-program-name (executable-find "erlc"))
+    (when-let ((erlc-program-name (executable-find "erlc")))
       (setq erlang-root-dir
             (locate-dominating-file (file-truename erlc-program-name) "bin")))
     :delight (erlang-mode "Erl" :major))
@@ -2467,60 +2468,61 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 
     ;; Set window theme
     (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
-    (let* ((theme (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
-           (personal
-            (map-let (foreground background yellow green aqua blue) theme
-              `((alt-bg    . ,(koek-thm/mix background foreground 0.98))
-                (lc-fg     . ,(koek-thm/mix foreground background))
-                (lc-yellow . ,(koek-thm/mix yellow background))
-                (lc-green  . ,(koek-thm/mix green background))
-                (lc-aqua   . ,(koek-thm/mix aqua background))
-                (lc-blue   . ,(koek-thm/mix blue background)))))
-           (specs
-            (map-let                      ; How to use let-alist and backquote?
-                (foreground background current-line selection comment red orange
-                 aqua alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
-                (append personal theme)
-              `(;; Default
-                (show-paren-match    :foreground ,foreground :background ,selection)
-                (show-paren-mismatch :foreground ,foreground :background unspecified
-                                     :underline (:style wave :color ,red))
-                (header-line :inherit unspecified
-                             :foreground ,aqua :background unspecified
-                             :box ,selection)
-                (fringe :foreground ,comment :background ,alt-bg)
-                (mode-line          :foreground ,foreground :background ,current-line
-                                    :underline ,selection :overline ,selection
-                                    :box unspecified :weight unspecified)
-                (mode-line-inactive :inherit unspecified
-                                    :foreground ,comment :background ,alt-bg
-                                    :underline ,selection :overline ,selection
-                                    :weight unspecified)
-                (mode-line-emphasis :foreground ,orange :slant unspecified)
-                ;; rainbow-delimiters
-                (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
-                (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-4-face :foreground ,lc-green)
-                (rainbow-delimiters-depth-5-face :foreground ,lc-blue)
-                (rainbow-delimiters-depth-6-face :foreground ,lc-fg)
-                (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
-                (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
-                (rainbow-delimiters-depth-9-face :foreground ,lc-green)
-                (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
-                                                   :foreground unspecified)
-                ;; whitespace
-                (whitespace-trailing :foreground unspecified :background ,selection)
-                (whitespace-empty    :foreground unspecified :background ,selection)
-                (whitespace-line     :foreground unspecified :background ,selection)
-                ;; ace-window
-                (aw-leading-char-face :inherit avy-lead-face
-                                      :foreground unspecified)
-                (aw-background-face :foreground ,lc-fg :background ,background)
-                ;; eyebrowse
-                (eyebrowse-mode-line-active :inherit mode-line-emphasis
-                                            :foreground unspecified
-                                            :weight unspecified)))))
+    (let ((specs
+           (let* ((theme
+                   (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
+                  (personal
+                   (map-let (foreground background yellow green aqua blue) theme
+                     `((alt-bg    . ,(koek-thm/mix background foreground 0.98))
+                       (lc-fg     . ,(koek-thm/mix foreground background))
+                       (lc-yellow . ,(koek-thm/mix yellow background))
+                       (lc-green  . ,(koek-thm/mix green background))
+                       (lc-aqua   . ,(koek-thm/mix aqua background))
+                       (lc-blue   . ,(koek-thm/mix blue background))))))
+             (map-let                ; How to use let-alist and backquote?
+                 (foreground background current-line selection comment red orange
+                  aqua alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
+                 (append personal theme)
+               `(;; Default
+                 (show-paren-match    :foreground ,foreground :background ,selection)
+                 (show-paren-mismatch :foreground ,foreground :background unspecified
+                                      :underline (:style wave :color ,red))
+                 (header-line :inherit unspecified
+                              :foreground ,aqua :background unspecified
+                              :box ,selection)
+                 (fringe :foreground ,comment :background ,alt-bg)
+                 (mode-line          :foreground ,foreground :background ,current-line
+                                     :underline ,selection :overline ,selection
+                                     :box unspecified :weight unspecified)
+                 (mode-line-inactive :inherit unspecified
+                                     :foreground ,comment :background ,alt-bg
+                                     :underline ,selection :overline ,selection
+                                     :weight unspecified)
+                 (mode-line-emphasis :foreground ,orange :slant unspecified)
+                 ;; rainbow-delimiters
+                 (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
+                 (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
+                 (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
+                 (rainbow-delimiters-depth-4-face :foreground ,lc-green)
+                 (rainbow-delimiters-depth-5-face :foreground ,lc-blue)
+                 (rainbow-delimiters-depth-6-face :foreground ,lc-fg)
+                 (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
+                 (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
+                 (rainbow-delimiters-depth-9-face :foreground ,lc-green)
+                 (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
+                                                    :foreground unspecified)
+                 ;; whitespace
+                 (whitespace-trailing :foreground unspecified :background ,selection)
+                 (whitespace-empty    :foreground unspecified :background ,selection)
+                 (whitespace-line     :foreground unspecified :background ,selection)
+                 ;; ace-window
+                 (aw-leading-char-face :inherit avy-lead-face
+                                       :foreground unspecified)
+                 (aw-background-face :foreground ,lc-fg :background ,background)
+                 ;; eyebrowse
+                 (eyebrowse-mode-line-active :inherit mode-line-emphasis
+                                             :foreground unspecified
+                                             :weight unspecified))))))
       ;; Adding attributes to a face before it's defined, fails. Add
       ;; attributes to user theme.
       (apply #'custom-set-faces
@@ -2533,11 +2535,10 @@ Set default font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro 
 
 #+BEGIN_SRC emacs-lisp
   (when-let
-      (spec
-       (seq-find (lambda (spec)
-                   (member (plist-get spec :family) (font-family-list)))
-                 '((:family "PragmataPro Mono" :size 15)
-                   (:family "Source Code Pro"  :size 15))))
+      ((spec (seq-find (lambda (spec)
+                         (member (plist-get spec :family) (font-family-list)))
+                       '((:family "PragmataPro Mono" :size 15)
+                         (:family "Source Code Pro"  :size 15)))))
     (set-frame-font (apply #'font-spec spec) nil t))
 #+END_SRC
 
@@ -2574,17 +2575,18 @@ in mode line.
     '((eldoc-mode-line-string
        nil)
       (:eval
-       (let* ((diff-n (1+ ediff-current-difference))
-              (n-diffs ediff-number-of-differences)
-              (right (concat (cond
-                              ((< diff-n 1)
-                               (format "Start -/%d" n-diffs))
-                              ((> diff-n n-diffs)
-                               (format "End -/%d" n-diffs))
-                              (t
-                               (format "%d/%d" diff-n n-diffs)))
-                             koek-ml/separator
-                             "(Ediff) ")))
+       (let ((right
+              (let ((diff-n (1+ ediff-current-difference))
+                    (n-diffs ediff-number-of-differences))
+                (concat (cond
+                         ((< diff-n 1)
+                          (format "Start -/%d" n-diffs))
+                         ((> diff-n n-diffs)
+                          (format "End -/%d" n-diffs))
+                         (t
+                          (format "%d/%d" diff-n n-diffs)))
+                        koek-ml/separator
+                        "(Ediff) "))))
          `((,(max 0 (- (window-total-width) (string-width right)))
             (" "
              (eldoc-mode-line-string
@@ -2702,7 +2704,7 @@ in mode line.
 
   (defun koek-ml/checker-name ()
     "Return name of current checker."
-    (when-let (checker (flycheck-get-checker-for-buffer))
+    (when-let ((checker (flycheck-get-checker-for-buffer)))
       (or (alist-get checker koek-ml/checker-names) "Checker")))
 
   (defconst koek-ml/left

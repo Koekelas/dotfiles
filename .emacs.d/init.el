@@ -31,10 +31,9 @@ PACKAGE-NAME is a symbol."
   (unless (package-installed-p package-name)
     (package-install package-name)))
 
-(let ((archives
-       '(("gnu"   . "https://elpa.gnu.org/packages/")
-         ("melpa" . "https://melpa.org/packages/")
-         ("org"   . "https://orgmode.org/elpa/"))))
+(let ((archives '(("gnu"   . "https://elpa.gnu.org/packages/")
+                  ("melpa" . "https://melpa.org/packages/")
+                  ("org"   . "https://orgmode.org/elpa/"))))
   ;; HTTPS locations require GnuTLS to be available
   (unless (gnutls-available-p)
     (setq archives
