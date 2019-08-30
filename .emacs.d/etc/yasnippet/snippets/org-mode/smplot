@@ -1,12 +1,14 @@
 # -*- mode: snippet; -*-
 # name: Octave plot code block
 # key: smplot
-# expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "plot_path") t)) (yas-indent-line 'fixed))
+# expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "path") t)) (yas-indent-line 'fixed))
 # --
-#+BEGIN_SRC octave :var plot_path="images/plot-${1:name}.png" :results file :exports results
-  plot_handle = figure();
-  set(plot_handle, 'visible', 'off');
-  $0fplot(@(x) [sin(x), cos(x)], [-pi, pi]); xlabel('x'); ylabel('y'); legend('sin(x)', 'cos(x)');
-  saveas(plot_handle, plot_path);
-  ans = plot_path;
+#+BEGIN_SRC octave :var path="images/plot-${1:name}.png" :results file :exports results
+  fig = figure('visible', 'off');
+  $0fplot(@(x) [sin(x), cos(x)], [-pi, pi]);
+  xlabel('x');
+  ylabel('y');
+  legend('sin(x)', 'cos(x)');
+  saveas(fig, path);
+  ans = path;
 #+END_SRC
