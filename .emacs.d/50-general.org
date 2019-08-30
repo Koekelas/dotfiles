@@ -2172,7 +2172,6 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     :defer t
     :config
     (setq org-export-headline-levels 4)
-    (setq org-export-with-author nil)
     (setq org-export-with-date nil)
     (setq org-export-with-toc 3))
 
