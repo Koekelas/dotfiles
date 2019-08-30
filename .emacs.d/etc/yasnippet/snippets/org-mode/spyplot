@@ -1,0 +1,19 @@
+# -*- mode: snippet; -*-
+# name: Python plot code block
+# key: spyplot
+# expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "path") t)) (yas-indent-line 'fixed))
+# --
+#+BEGIN_SRC python :var path="images/plot-${1:name}.png" :results file :exports results
+  from numpy import pi, linspace, sin, cos
+  from matplotlib.pyplot import subplots
+
+  $0xs = linspace(-pi, pi)
+  fig, ax = subplots()
+  ax.plot(xs, sin(xs), label='sin(x)')
+  ax.plot(xs, cos(xs), label='cos(x)')
+  ax.set_xlabel('x')
+  ax.set_ylabel('y')
+  ax.legend()
+  fig.savefig(path)
+  return path
+#+END_SRC
