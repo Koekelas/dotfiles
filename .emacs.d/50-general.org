@@ -2186,7 +2186,21 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     :defer t
     :config
     (setq org-latex-pdf-process '("latexmk -pdf %f"))
-    (setq org-latex-listings t))
+    (setq org-latex-listings t)
+
+    ;; Setup hyperref
+    (let ((options
+           (let ((normalized
+                  (replace-regexp-in-string (rx (any " \n")) ""
+                                            org-latex-hyperref-template)))
+             (string-match
+              (rx "{" (submatch-n 1 (one-or-more (any letter "={}%,"))) "}")
+              normalized)
+             (split-string (match-string 1 normalized) ","))))
+      (setq org-latex-hyperref-template
+            (concat "\\hypersetup{\n "
+                    (string-join (append options '("hidelinks")) ",\n ")
+                    "\n}\n"))))
 #+END_SRC
 
 *** htmlize - Text to HTML converter
