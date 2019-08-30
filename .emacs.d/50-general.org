@@ -2070,7 +2070,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
           (plist-put org-format-latex-options :scale (/ 4 3.0)))
 
     ;; Appearance - Export
-    (add-to-list 'org-latex-packages-alist '("" "listings" t))
+    (add-to-list 'org-latex-packages-alist '("" "listings" nil))
     :delight org-cdlatex-mode)
 
   (use-package org-agenda
