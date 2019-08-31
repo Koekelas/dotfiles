@@ -1,0 +1,5 @@
+# -*- mode: snippet; -*-
+# name: LaTeX math environment
+# key: $
+# --
+\\( $0 \\)

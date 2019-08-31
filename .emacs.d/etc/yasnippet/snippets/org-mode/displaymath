@@ -1,0 +1,5 @@
+# -*- mode: snippet; -*-
+# name: LaTeX displaymath environment
+# key: $$
+# --
+\\[ $0 \\]
