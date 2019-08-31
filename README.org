@@ -28,8 +28,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
   - C family:
     - [[https://gcc.gnu.org/][GCC]]
+    - [[https://clang.llvm.org/][Clang]]
     - [[https://mesonbuild.com/][Meson]]
-    - [[https://github.com/MaskRay/ccls][ccls]]
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript (depends on Java and JavaScript):
     - [[https://leiningen.org/][Leiningen]]
@@ -89,8 +89,7 @@ To install dependencies on Arch Linux, run:
   gpasswd -a `whoami` uucp
 
   ## C family
-  pacman -S gcc meson gdb
-  # Install ccls from AUR
+  pacman -S gcc clang meson gdb
 
   ## Clojure & ClojureScript
   # Install leiningen from AUR

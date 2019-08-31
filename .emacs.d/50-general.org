@@ -830,6 +830,7 @@ When line is indented, press =TAB= to complete text before point.
                                path-separator)))))
 
     ;; Register additional language servers
+    (add-to-list 'eglot-server-programs '((c-mode c++-mode) . ("clangd")))
     (add-to-list 'eglot-server-programs
                  '(mhtml-mode . ("html-languageserver" "--stdio")))
     (add-to-list 'eglot-server-programs
@@ -854,7 +855,7 @@ When line is indented, press =TAB= to complete text before point.
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
 
-*** Setting up ccls
+*** Setting up Clang
 Run =M-x= ~make-symbolic-link~. Create a link to
 =compile_commands.json= in the project home directory.
 
