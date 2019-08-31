@@ -106,7 +106,7 @@ To install dependencies on Arch Linux, run:
   pacman -S tidy
 
   ## Java
-  pacman -S jdk11-openjdk maven
+  pacman -S jdk-openjdk maven
   # Install jdtls from AUR
 
   ## JavaScript
