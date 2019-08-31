@@ -938,7 +938,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
                    (rel-file-name
                     (let ((file-name (buffer-file-name)))
                       (if (and (projectile-project-p) file-name)
-                          (file-relative-name file-name (projectile-project-root))
+                          (file-relative-name (file-truename file-name)
+                                              (projectile-project-root))
                         (buffer-name)))))
                (let ((file-name (file-name-sans-extension rel-file-name)))
                  (or (cdr (split-string file-name (regexp-quote separator)))
