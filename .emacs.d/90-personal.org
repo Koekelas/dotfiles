@@ -21,12 +21,21 @@ Require libraries.
   (require 'subr-x)
 #+END_SRC
 
-* Name & e-mail
+* Identity
 Set name and e-mail.
 
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Nicolas De Jaeghere")
   (setq user-mail-address "nicolas@dejaeghe.re")
+#+END_SRC
+
+Retrieve secrets from the [[https://specifications.freedesktop.org/secret-service/][Secret Service]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auth-source
+    :defer t
+    :config
+    (setq auth-sources '("secrets:Login")))
 #+END_SRC
 
 * File & directory names
@@ -54,7 +63,7 @@ Define well known file and directory names.
   (defconst koek/static-agenda-files
     (mapcar (lambda (file-name)
               (expand-file-name file-name koek/documents-dir))
-            '("Inbox.org" "Afspraken.org"))
+            '("Inbox.org" "Kalenders/Afspraken.org"))
     "List of file names to static agenda files.")
 #+END_SRC
 
@@ -109,9 +118,42 @@ Configure agendas.
           '(("t" "Task" entry (file+olp "Inbox.org" "Taken")
              "* TODO %?"
              :empty-lines 1)
-            ("a" "Appointment" entry (file "Afspraken.org")
+            ("a" "Appointment" entry (file "Kalenders/Afspraken.org")
              "* %?"
              :empty-lines 1))))
+#+END_SRC
+
+** Calendars
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+=Emacs calendar= and give it access to CalDAV. Then, to store it
+securely, run:
+
+#+BEGIN_SRC sh
+  secret-tool store --label="Emacs calendar personal" host "caldav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
+#+END_SRC
+
+For more information, see [[info:auth#Help%20for%20users][Help for users (info)]], specifically the
+explanation of URL authentication.
+
+Configure calendars. For calendar details, login to [[https://www.fastmail.com/][FastMail]], click
+=Settings=, =Calendars=. Then, for the desired calendar, click
+=Export=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-caldav
+    :defer t
+    :config
+    ;; Local copy
+    (let ((calendars-dir (expand-file-name "Kalenders/" koek/documents-dir)))
+      ;; Store sync state with calendars, simplifying backup
+      (setq org-caldav-save-directory calendars-dir)
+      (setq org-caldav-inbox (expand-file-name "Afspraken.org" calendars-dir))
+      (setq org-caldav-files (list org-caldav-inbox)))
+
+    ;; Remote copy
+    (setq org-caldav-url
+          "https://caldav.fastmail.com/dav/calendars/user/nicolas@dejaeghe.re")
+    (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
 #+END_SRC
 
 * E-mail accounts
