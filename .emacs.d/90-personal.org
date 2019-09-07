@@ -63,6 +63,8 @@ When a file is member of ~koek/static-agenda-files~ or matches pattern
 =KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda
 file.
 
+Configure agendas.
+
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :defer t
@@ -113,7 +115,7 @@ file.
 #+END_SRC
 
 * E-mail accounts
-Set e-mail accounts.
+Configure e-mail accounts.
 
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e-vars
@@ -156,7 +158,7 @@ Set e-mail accounts.
 #+END_SRC
 
 * News feeds
-Set news feeds.
+Configure news feeds.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
