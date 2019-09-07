@@ -13,7 +13,7 @@ To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-
 :header-args:sh: :tangle no
 :END:
 
-Store =.mbsyncstate= with maildir sub directories.
+Store =.mbsyncstate= with maildir sub directories, simplifying backup.
 
 #+BEGIN_SRC fundamental
   SyncState *
