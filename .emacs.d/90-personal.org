@@ -115,11 +115,15 @@ Configure agendas.
     :defer t
     :config
     (setq org-capture-templates
-          '(("t" "Task" entry (file+olp "Inbox.org" "Taken")
+          `(("t" "Task" entry (file+olp "Inbox.org" "Taken")
              "* TODO %?"
              :empty-lines 1)
             ("a" "Appointment" entry (file "Kalenders/Afspraken.org")
-             "* %?"
+             ,(string-join '("* %^{Name}"
+                             "%^T"
+                             "%^{LOCATION}p" ; Inserted after heading
+                             "%?")
+                           "\n")
              :empty-lines 1))))
 #+END_SRC
 
