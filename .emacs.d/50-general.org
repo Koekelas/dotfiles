@@ -1418,6 +1418,23 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :bind
     ("C-c x m" . mu4e))
 
+  (use-package mu4e-mark
+    :defer t
+    :config
+    (defvar mu4e-marks)
+    (declare-function mu4e~mark-check-target "mu4e-mark")
+    (declare-function mu4e~proc-move "mu4e-proc")
+
+    ;; When trashing e-mail, e-mail is flagged trashed. E-mail flagged
+    ;; trashed is deleted by most e-mail providers. Move to trash but
+    ;; don't flag trashed.
+    (setf (alist-get 'trash mu4e-marks)
+          (plist-put
+           (alist-get 'trash mu4e-marks)
+           :action
+           (lambda (docid _msg target)
+             (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))))
+
   (use-package mu4e-vars
     :defer t
     :config
