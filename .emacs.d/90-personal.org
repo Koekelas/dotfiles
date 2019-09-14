@@ -188,19 +188,18 @@ Configure e-mail accounts.
       (declare-function mu4e-message-field "mu4e-message")
 
       (setq mu4e-contexts
-            (list
-             (make-mu4e-context
-              :name "Personal"
-              :match-func
-              (lambda (message)
-                (when message
-                  (string-prefix-p "/Personal/"
-                                  (mu4e-message-field message :maildir))))
-              :vars
-              `((mu4e-refile-folder . ,mu4e-refile-folder)
-                (mu4e-drafts-folder . ,mu4e-drafts-folder)
-                (mu4e-sent-folder   . ,mu4e-sent-folder)
-                (mu4e-trash-folder  . ,mu4e-trash-folder)))))))
+            (list (make-mu4e-context
+                   :name "Personal"
+                   :match-func
+                   (lambda (message)
+                     (when message
+                       (string-prefix-p "/Personal/"
+                                        (mu4e-message-field message :maildir))))
+                   :vars
+                   `((mu4e-refile-folder . ,mu4e-refile-folder)
+                     (mu4e-drafts-folder . ,mu4e-drafts-folder)
+                     (mu4e-sent-folder   . ,mu4e-sent-folder)
+                     (mu4e-trash-folder  . ,mu4e-trash-folder)))))))
 #+END_SRC
 
 * News feeds
