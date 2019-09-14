@@ -271,6 +271,8 @@ Configure news feeds.
       (setf (elfeed-meta (elfeed-db-get-feed url) :title) title)
       (push (cons url tags) elfeed-feeds))
     :config
+    (setq elfeed-db-directory
+          (expand-file-name "Nieuws/elfeed/" koek/documents-dir))
     (mapc (lambda (feed)
             (let ((args
                    (pcase feed
