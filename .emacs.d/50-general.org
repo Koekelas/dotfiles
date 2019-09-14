@@ -1454,6 +1454,20 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (setq mu4e-context-policy 'pick-first)
 
     (setq mu4e-hide-index-messages t))
+
+  (use-package mu4e-view
+    :defer t
+    :config
+    (defvar mu4e-view-actions)
+
+    (use-package mu4e-actions
+      :defer t
+      :config
+      (defvar mu4e-msg2pdf)
+
+      (unless mu4e-msg2pdf
+        (setq mu4e-view-actions
+              (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions)))))
 #+END_SRC
 
 ** elfeed - News reader
