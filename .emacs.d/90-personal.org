@@ -124,7 +124,9 @@ Configure agendas.
                              "%^{LOCATION}p" ; Inserted after heading
                              "%?")
                            "\n")
-             :empty-lines 1))))
+             :empty-lines 1)
+            ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
+             "- [[%x][%^{Title}]]%?"))))
 #+END_SRC
 
 ** Calendars
