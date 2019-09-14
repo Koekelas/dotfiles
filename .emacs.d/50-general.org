@@ -1467,7 +1467,10 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 
       (unless mu4e-msg2pdf
         (setq mu4e-view-actions
-              (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions)))))
+              (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
+
+    (add-to-list 'mu4e-view-actions
+                 '("open in browser" . mu4e-action-view-in-browser) 'append))
 #+END_SRC
 
 ** elfeed - News reader
