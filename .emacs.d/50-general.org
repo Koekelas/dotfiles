@@ -830,13 +830,10 @@ When line is indented, press =TAB= to complete text before point.
                                path-separator)))))
 
     ;; Register additional language servers
-    (add-to-list 'eglot-server-programs '((c-mode c++-mode) . ("clangd")))
-    (add-to-list 'eglot-server-programs
-                 '(mhtml-mode . ("html-languageserver" "--stdio")))
-    (add-to-list 'eglot-server-programs
-                 '(css-mode . ("css-languageserver" "--stdio")))
-    (add-to-list 'eglot-server-programs
-                 '(json-mode . ("json-languageserver" "--stdio"))))
+    (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs)
+    (push '(mhtml-mode . ("html-languageserver" "--stdio")) eglot-server-programs)
+    (push '(css-mode . ("css-languageserver" "--stdio")) eglot-server-programs)
+    (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
 
   (use-package flymake
     :bind
@@ -1372,7 +1369,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   (use-package esh-module
     :defer t
     :config
-    (add-to-list 'eshell-modules-list 'eshell-smart))
+    (push 'eshell-smart eshell-modules-list))
 
   (use-package em-unix
     :defer t
@@ -2123,7 +2120,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
           (plist-put org-format-latex-options :scale (/ 4 3.0)))
 
     ;; Appearance - Export
-    (add-to-list 'org-latex-packages-alist '("" "listings" nil))
+    (push '("" "listings" nil) org-latex-packages-alist)
     :delight org-cdlatex-mode)
 
   (use-package org-agenda
@@ -2175,7 +2172,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (unbind-key "C-c '" org-src-mode-map)
     (unbind-key "C-c C-k" org-src-mode-map)
 
-    (add-to-list 'org-src-lang-modes '("js" . js2))
+    (push '("js" . js2) org-src-lang-modes)
     (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers)
     :delight)
 
@@ -2478,7 +2475,7 @@ For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
 Maximize frames.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (push '(fullscreen . maximized) default-frame-alist)
 #+END_SRC
 
 Show file name in title bar.
