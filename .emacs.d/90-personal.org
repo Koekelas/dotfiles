@@ -275,6 +275,11 @@ Configure news feeds.
     :config
     (setq elfeed-db-directory
           (expand-file-name "Nieuws/elfeed/" koek/documents-dir))
+
+    (use-package recentf
+      :config
+      (push elfeed-db-directory recentf-exclude))
+
     (mapc (lambda (feed)
             (let ((args
                    (pcase feed
