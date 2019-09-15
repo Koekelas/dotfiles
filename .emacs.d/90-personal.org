@@ -255,7 +255,7 @@ Configure news feeds.
         ("Rainfall Projects" youtube "UCPO4D4-UeeFQceK8XrgwXug" woodwork metalwork)
         ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
         ("Two-Bit History" "https://twobithistory.org/feed.xml" blog history)
-        ("Wait But Why" "https://waitbutwhy.com/feed" blog science)
+        ("Wait But Why" "https://waitbutwhy.com/feed" blog popsci)
         ("frank howarth" youtube "UC3_VCOJMaivgcGqPCTePLBA" woodwork)
         ("krtwood" youtube "UCrI3NWmFF45LwKwk5TEYihQ" woodwork)
         ("scanlime" youtube "UCaEgw3321ct_PE4PJvdhXEQ" electronics))
