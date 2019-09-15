@@ -1488,6 +1488,23 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (setq elfeed-search-filter (concat elfeed-search-filter " ")))
 #+END_SRC
 
+** pdf-tools - PDF viewer
+[[https://github.com/politza/pdf-tools][pdf-tools (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :defer t)
+
+  (use-package pdf-loader
+    :config
+    (pdf-loader-install 'no-ask 'no-install-deps))
+
+  (use-package pdf-view
+    :mode ((rx ".pdf" string-end) . pdf-view-mode)
+    :delight (pdf-view-mode "PDF" :major))
+#+END_SRC
+
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar

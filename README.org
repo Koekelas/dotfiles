@@ -16,14 +16,18 @@ Finally, copy the dotfiles to your home directory.
 
 - Emacs:
   - General:
-    - [[https://curl.haxx.se/][curl]]
+    - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
     - [[https://git-scm.com/][Git]]
     - [[https://hunspell.github.io/][Hunspell]]
-    - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
     - [[https://pandoc.org/][pandoc]]
-    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
-    - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
     - [[https://x.org/][xprop]]
+    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+  - E-mail client:
+    - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
+  - News reader:
+    - [[https://curl.haxx.se/][curl]]
+  - PDF viewer:
+    - [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
   - Arduino (depends on C family):
     - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
   - C family:
@@ -75,12 +79,20 @@ To install dependencies on Arch Linux, run:
   ### Emacs
 
   ## General
-  pacman -S curl git hunspell hunspell-en_US isync pandoc the_silver_searcher
-  pacman -S xorg-xprop
-  # Install mu from AUR
+  pacman -S the_silver_searcher git hunspell hunspell-en_US pandoc xorg-xprop
 
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
+
+  ## E-mail client
+  pacman -S isync
+  # Install mu from AUR
+
+  ## News reader
+  pacman -S curl
+
+  ## PDF viewer
+  pacman -S poppler-glib libpng zlib imagemagick
 
   ## Arduino
   pacman -S arduino arduino-avr-core
