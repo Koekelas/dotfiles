@@ -8,8 +8,8 @@
   <head>
     <meta charset="utf-8" />
     <title>${1:`(thread-first (or (buffer-file-name) (buffer-name)) file-name-base capitalize)`}</title>
-    <link rel="shortcut icon" href="resources/images/favicon.png" type="image/png" />
-    <link rel="stylesheet" href="resources/styles/common.css" />
+    <link rel="icon" href="favicon.png" />
+    <link rel="stylesheet" href="assets/common.css" />
   </head>
   <body>
     $0
