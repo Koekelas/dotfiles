@@ -1178,7 +1178,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
             (counsel-unicode-char . ivy--regex-ignore-order)
             (t . ivy--regex-fuzzy)))
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-virtual-abbreviate 'full)
+    (setq ivy-virtual-abbreviate 'abbreviate)
     (setq ivy-initial-inputs-alist nil)
     (setq ivy-use-selectable-prompt t)
     (setq ivy-count-format "%d/%d ")
