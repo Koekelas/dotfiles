@@ -1217,6 +1217,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
                        `(("d" counsel--find-symbol "definition")
                          ("h" ,show-help "help"))))
 
+    (setq counsel-org-goto-all-outline-path-prefix 'buffer-name)
     (setq counsel-outline-face-style 'org))
 #+END_SRC
 
