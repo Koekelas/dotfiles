@@ -241,6 +241,7 @@ Configure news feeds.
         ("Emacs" reddit "emacs" emacs)
         ("Erlang Solutions" youtube "UCKrD_GYN3iDpG_uMmADPzJQ" erlang)
         ("Erlang" reddit month "erlang" erlang)
+        ("Factorio" "https://www.factorio.com/blog/rss" blog program)
         ("Furniture Making" reddit month "FurnitureMaking" woodwork)
         ("Ishitani Furniture" youtube "UC7FkqjV8SU5I8FCHXQSQe9Q" woodwork)
         ("John Heisz" youtube "UCjA8vRlL1c7BDixQRJ39-LQ" woodwork)
