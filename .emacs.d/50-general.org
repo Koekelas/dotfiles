@@ -2137,7 +2137,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
 
   (use-package org-capture
     :bind
-    ("C-c o c" . org-capture))
+    (("C-c o c" . org-capture)
+     ("C-c j s" . org-capture-goto-last-stored)))
 
   (use-package org-clock
     :bind
