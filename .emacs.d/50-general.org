@@ -1290,24 +1290,24 @@ On [[https://devdocs.io/][DevDocs]], enable:
 
 - C
 - C++
-- Clojure 1.9
+- Clojure
 - CSS
 - DOM
 - DOM Events
-- Erlang 21
+- Erlang
 - Express
 - HTML
 - JavaScript
 - jQuery
 - lodash
-- Matplotlib 3.0
+- Matplotlib
 - Node.js
 - npm
-- NumPy 1.14
-- OpenJDK 8
-- pandas 0.23
-- PostgreSQL 10
-- Python 3.7
+- NumPy
+- OpenJDK
+- pandas
+- PostgreSQL
+- Python
 - scikit-image
 - scikit-learn
 
@@ -1318,6 +1318,32 @@ On [[https://devdocs.io/][DevDocs]], enable:
     ("C-c d d" . devdocs-lookup)
     :config
     (declare-function devdocs-setup "devdocs-lookup")
+
+    ;; DevDocs is updated more frequently than devdocs-lookup. Update
+    ;; subjects.
+    (setq devdocs-subjects
+          '(("C" "c")
+            ("C++" "cpp")
+            ("Clojure" "clojure~1.10")
+            ("CSS" "css")
+            ("DOM" "dom")
+            ("DOM Events" "dom_events")
+            ("Erlang" "erlang~21")
+            ("Express" "express")
+            ("HTML" "html")
+            ("JavaScript" "javascript")
+            ("jQuery" "jquery")
+            ("lodash" "lodash~4")
+            ("Matplotlib" "matplotlib~3.1")
+            ("Node.js" "node")
+            ("npm" "npm")
+            ("NumPy" "numpy~1.17")
+            ("OpenJDK" "openjdk~8")
+            ("pandas" "pandas~0.25")
+            ("PostgreSQL" "postgresql~11")
+            ("Python" "python~3.7")
+            ("scikit-image" "scikit_image")
+            ("scikit-learn" "scikit_learn")))
 
     (devdocs-setup))
 #+END_SRC
@@ -1763,7 +1789,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     (use-package devdocs-lookup
       :bind
       (:map clojure-mode-map
-       ("C-c d d" . devdocs-lookup-clojure~1.9)))
+       ("C-c d d" . devdocs-lookup-clojure~1.10)))
     :delight
     (clojure-mode "Clj" :major)
     (clojurescript-mode "Cljs" :major)
@@ -2299,9 +2325,9 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
        ("C-c d d" . devdocs-lookup-python~3.7)
        ("C-c d C-i" . devdocs-lookup-scikit_image)
        ("C-c d C-l" . devdocs-lookup-scikit_learn)
-       ("C-c d C-m" . devdocs-lookup-matplotlib~3.0)
-       ("C-c d C-n" . devdocs-lookup-numpy~1.14)
-       ("C-c d C-p" . devdocs-lookup-pandas~0.23)))
+       ("C-c d C-m" . devdocs-lookup-matplotlib~3.1)
+       ("C-c d C-n" . devdocs-lookup-numpy~1.17)
+       ("C-c d C-p" . devdocs-lookup-pandas~0.25)))
 
     (add-hook 'python-mode-hook #'koek-py/disable-checker)
     :delight (python-mode "Py" :major))
@@ -2388,7 +2414,7 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
     (use-package devdocs-lookup
       :bind
       (:map sql-mode-map
-       ("C-c d C-p" . devdocs-lookup-postgresql~10)))
+       ("C-c d C-p" . devdocs-lookup-postgresql~11)))
 
     (setq sql-product 'postgres))
 #+END_SRC
