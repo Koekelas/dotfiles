@@ -1923,7 +1923,7 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
        ("C-c d C-d" . devdocs-lookup-dom)
        ("C-c d C-e" . devdocs-lookup-dom_events)
        ("C-c d C-j" . devdocs-lookup-jquery)
-       ("C-c d C-l" . devdocs-lookup-lodash)
+       ("C-c d C-l" . devdocs-lookup-lodash~4)
        ("C-c d C-n" . devdocs-lookup-node)
        ("C-c d C-x" . devdocs-lookup-express)))
 
