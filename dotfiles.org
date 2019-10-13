@@ -295,6 +295,26 @@ To apply configuration, run:
   wolfram-mathematica11.desktop
 #+END_SRC
 
+* Jupyter Notebook
+Jupyter is forced upon me. Documentation on configuring the frontend
+is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties, see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide -
+Configuration (CodeMirror)]].
+
+#+BEGIN_SRC json :tangle .jupyter/nbconfig/notebook.json
+  {
+      "CodeCell": {
+          "cm_config": {
+              "cursorBlinkRate": 0
+          }
+      },
+      "MarkdownCell": {
+          "cm_config": {
+              "cursorBlinkRate": 0
+          }
+      }
+  }
+#+END_SRC
+
 * Steam
 Show Steam with native runtime as Steam.
 
