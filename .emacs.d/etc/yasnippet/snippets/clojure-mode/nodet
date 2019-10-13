@@ -4,5 +4,5 @@
 # expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet t)))
 # --
 :${1:node-test} {:target :node-test
-                 :output-to "${2:build/$1.js}"
+                 :output-to "${2:build/$1}.js"
                  :autorun ${3:true}}$0
