@@ -1174,6 +1174,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
     ;; When counsel loads, various commands setup initial input
     (use-package counsel
+      :defer t
       :config
       (setq ivy-initial-inputs-alist nil))
 
