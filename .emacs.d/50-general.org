@@ -2056,7 +2056,7 @@ It fails with error:
     :mode (rx ".scad" string-end)
     :config
     ;; Resolve smartparens' delayed post handlers not being called
-    (unbind-key "<return>" scad-mode-map) ; Why does <return> differ from RET?
+    (unbind-key "<return>" scad-mode-map) ; Why does <return> work but RET not?
 
     (setq scad-indent-style "stroustrup"))
 #+END_SRC
