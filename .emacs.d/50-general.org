@@ -1488,6 +1488,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
     :defer t
     :config
     (defvar mu4e-view-actions)
+    (defvar mu4e-view-show-addresses)
 
     (use-package mu4e-actions
       :defer t
@@ -1499,7 +1500,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
               (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
 
     (add-to-list 'mu4e-view-actions
-                 '("open in browser" . mu4e-action-view-in-browser) 'append))
+                 '("open in browser" . mu4e-action-view-in-browser) 'append)
+    (setq mu4e-view-show-addresses t))
 #+END_SRC
 
 ** elfeed - News reader
