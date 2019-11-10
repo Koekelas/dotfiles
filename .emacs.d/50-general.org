@@ -327,13 +327,14 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-S-d" . sp-backward-down-sexp)
      ("C-S-u" . sp-backward-up-sexp)
      ("C-M-t" . sp-transpose-sexp)
-     ("C-M-w" . sp-copy-sexp)
-     ("C-M-k" . sp-kill-sexp)
+     ("C-M-(" . sp-split-sexp)
      ("C-M-<right>" . sp-forward-slurp-sexp)
      ("C-M-<left>"  . sp-forward-barf-sexp)
      ("C-S-<left>"  . sp-backward-slurp-sexp)
      ("C-S-<right>" . sp-backward-barf-sexp)
-     ("C-M-<down>"  . sp-unwrap-sexp))
+     ("C-M-<down>"  . sp-unwrap-sexp)
+     ("C-M-w" . sp-copy-sexp)
+     ("C-M-k" . sp-kill-sexp))
     :hook
     (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode
        indium-repl-mode)
