@@ -194,7 +194,9 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
   (use-package swiper
     :ensure t
     :bind
-    (([remap isearch-forward] . swiper-isearch)
+    (;; Why does [remap isearch-forward] prevent pdf-view-mode from
+     ;; rebinding C-s?
+     ("C-s" . swiper-isearch)
      :map swiper-map
      ("C-c j" . swiper-avy)))
 #+END_SRC
@@ -1534,6 +1536,14 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 
   (use-package pdf-view
     :mode ((rx ".pdf" string-end) . pdf-view-mode)
+    :config
+    ;; Only isearch is supported
+    (use-package isearch
+      :bind
+      (:map pdf-view-mode-map
+       ("C-s" . isearch-forward)))
+
+    (setq-default pdf-view-display-size 'fit-page)
     :delight (pdf-view-mode "PDF" :major))
 #+END_SRC
 
