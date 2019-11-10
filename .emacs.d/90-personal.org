@@ -212,12 +212,15 @@ Configure e-mail accounts.
       (declare-function make-mu4e-bookmark "mu4e-utils")
 
       (setq mu4e-bookmarks
-            (list (make-mu4e-bookmark :name "Unread"
-                                      :query "flag:unread"
-                                      :key ?u)
-                  (make-mu4e-bookmark :name "Personal INBOX"
+            (list (make-mu4e-bookmark :name "Personal INBOX"
                                       :query "maildir:/Personal/INBOX"
-                                      :key ?p)))))
+                                      :key ?p)
+                  (make-mu4e-bookmark :name "Applied Artificial Intelligence"
+                                      :query "maildir:/Personal/Opleidingen/AAI"
+                                      :key ?a)
+                  (make-mu4e-bookmark :name "Unread"
+                                      :query "flag:unread"
+                                      :key ?u)))))
 #+END_SRC
 
 * News feeds
