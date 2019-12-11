@@ -1088,8 +1088,9 @@ When revisiting then modifying file, history is discarded.
     :config
     (declare-function winner-save-unconditionally "winner")
 
-    ;; When reading from the minibuffer, the window layout doesn't
-    ;; change (i.e. consecutive identical layouts are stored)
+    ;; Reading from the minibuffer doesn't change the window layout.
+    ;; Storing the window layout stores a consecutive identical layout.
+    ;; Don't store the window layout when reading from the minibuffer.
     (remove-hook 'minibuffer-setup-hook #'winner-save-unconditionally)
     (winner-mode))
 #+END_SRC
