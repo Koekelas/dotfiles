@@ -315,6 +315,13 @@ Configuration (CodeMirror)]].
   }
 #+END_SRC
 
+* NLTK
+Move data directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-nltk.conf
+  NLTK_DATA="$HOME/.nltk_data"
+#+END_SRC
+
 * Steam
 Show Steam with native runtime as Steam.
 
