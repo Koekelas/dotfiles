@@ -2154,7 +2154,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (add-hook 'org-capture-mode-hook #'koek-org/setup-tag-completion)
 
     ;; Other
-    (setq org-keep-stored-link-after-insertion t)
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
                                    (clojure . t)
@@ -2285,6 +2284,11 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     :defer t
     :config
     (setq org-babel-clojure-backend 'cider))
+
+  (use-package ol
+    :defer t
+    :config
+    (setq org-link-keep-stored-after-insertion t))
 
   (use-package ox
     :defer t
