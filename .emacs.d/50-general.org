@@ -1309,12 +1309,14 @@ On [[https://devdocs.io/][DevDocs]], enable:
 - Node.js
 - npm
 - NumPy
+- Octave
 - OpenJDK
 - pandas
 - PostgreSQL
 - Python
 - scikit-image
 - scikit-learn
+- StatsModels
 
 #+BEGIN_SRC emacs-lisp
   (use-package devdocs-lookup
@@ -1343,12 +1345,14 @@ On [[https://devdocs.io/][DevDocs]], enable:
             ("Node.js" "node")
             ("npm" "npm")
             ("NumPy" "numpy~1.17")
+            ("Octave" "octave")
             ("OpenJDK" "openjdk~8")
             ("pandas" "pandas~0.25")
             ("PostgreSQL" "postgresql~11")
             ("Python" "python~3.7")
             ("scikit-image" "scikit_image")
-            ("scikit-learn" "scikit_learn")))
+            ("scikit-learn" "scikit_learn")
+            ("StatsModels" "statsmodels")))
 
     (devdocs-setup))
 #+END_SRC
@@ -2039,6 +2043,11 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
   (use-package octave
     :mode ((rx ".m" string-end) . octave-mode)
     :config
+    (use-package devdocs-lookup
+      :bind
+      (:map octave-mode-map
+       ("C-c d d" . devdocs-lookup-octave)))
+
     ;; Insert MATLAB compatible comments
     (setq octave-comment-char ?%)
     (setq octave-comment-start (char-to-string octave-comment-char))
@@ -2342,7 +2351,8 @@ See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
        ("C-c d C-l" . devdocs-lookup-scikit_learn)
        ("C-c d C-m" . devdocs-lookup-matplotlib~3.1)
        ("C-c d C-n" . devdocs-lookup-numpy~1.17)
-       ("C-c d C-p" . devdocs-lookup-pandas~0.25)))
+       ("C-c d C-p" . devdocs-lookup-pandas~0.25)
+       ("C-c d C-s" . devdocs-lookup-statsmodels)))
 
     (add-hook 'python-mode-hook #'koek-py/disable-checker)
     :delight (python-mode "Py" :major))
