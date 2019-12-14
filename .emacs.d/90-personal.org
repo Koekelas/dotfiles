@@ -141,7 +141,7 @@ securely, run:
   secret-tool store --label="Emacs calendar personal" host "caldav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
 #+END_SRC
 
-For more information, see [[info:auth#Help%20for%20users][Help for users (info)]], specifically the
+For more information, see [[info:auth#Help for users][Help for users (info)]], specifically the
 explanation of URL authentication.
 
 Configure calendars. For calendar details, login to [[https://www.fastmail.com/][FastMail]], click

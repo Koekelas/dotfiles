@@ -1453,7 +1453,7 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 ** mu4e - E-mail client
 [[https://github.com/djcb/mu][mu4e (GitHub)]]
 
-For e-mail accounts, see [[file:90-personal.org::*E-mail%20accounts][E-mail accounts]].
+For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accounts]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e
@@ -1520,7 +1520,7 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail%20accounts][E-mail acco
 ** elfeed - News reader
 [[https://github.com/skeeto/elfeed][elfeed (GitHub)]]
 
-For news feeds, see [[file:90-personal.org::*News%20feeds][News feeds]].
+For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
@@ -2097,7 +2097,7 @@ It fails with error:
 *** Issues
 
 **** Built-in indentation styles are inappropriate for multiple line vectors
-See [[info:ccmode#Customizing%20Indentation][Customizing Indentation (info)]].
+See [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
 
 ** Org
 For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
