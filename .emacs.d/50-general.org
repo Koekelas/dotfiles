@@ -1077,7 +1077,9 @@ When revisiting then modifying file, history is discarded.
     ;; background (default) differentiates both cases. Don't disable
     ;; background when jumping to a window.
     ;; (setq aw-background nil)
-    )
+
+    ;; Ace isn't a minor mode but it can be delighted [sic]
+    :delight)
 #+END_SRC
 
 ** winner - Undo & redo window layout changes
