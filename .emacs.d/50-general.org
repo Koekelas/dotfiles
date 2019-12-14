@@ -2227,6 +2227,12 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
      ("C-c o '" . org-edit-src-exit)
      ("C-c o k" . org-edit-src-abort))
     :preface
+    (define-advice
+        org-src--construct-edit-buffer-name
+        (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
+      ;; Like helpful buffer names
+      (format "*org-src: %s*" org-buffer-name))
+
     (defconst koek-org/excluded-checkers
       '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
       "Alist of excluded checker pairs.
