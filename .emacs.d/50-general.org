@@ -2176,7 +2176,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
                    car                   ; Primary display
                    (alist-get 'workarea) ; Arrangement/resolution without taskbar
                    (nth 2))))            ; Width
-      (setq org-image-actual-width (floor (* width (/ 1 3.0)))))
+      (setq org-image-actual-width (floor (* width (/ 1 5.0)))))
     (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
 
     ;; Appearance - LaTeX previews
