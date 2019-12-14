@@ -2172,6 +2172,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
 
     ;; Appearance
     (setq org-adapt-indentation nil)
+    (setq org-highlight-latex-and-related '(native))
 
     ;; Appearance - Images
     (setq org-startup-with-inline-images t)
