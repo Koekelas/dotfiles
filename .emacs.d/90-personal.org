@@ -1,4 +1,5 @@
 #+TITLE: Personal
+#+PROPERTY: header-args:emacs-lisp :lexical yes
 
 * Header
 Enable lexical binding. When visiting the tangled file, enable read
