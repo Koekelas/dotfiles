@@ -2076,15 +2076,6 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
     :delight (octave-mode "M" :major))
 #+END_SRC
 
-*** Issues
-
-**** Eldoc fails to show docstring
-It fails with error:
-
-#+BEGIN_SRC fundamental
-  alnum:]][[:alnum:]\-]*)({ <-- HERE })?\s*/ at /usr/share/texinfo/Texinfo/Parser.pm line 5481. | alnum:]][[:alnum:]\-]*)({ <-- HERE })?\s*(\@(c|comment)((\@|\s+).*)?)?/ at /usr/share/texinfo/Texinfo/Parser.pm line 5485.
-#+END_SRC
-
 ** OpenSCAD
 [[https://github.com/openscad/openscad][scad-mode (GitHub)]]
 
