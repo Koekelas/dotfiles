@@ -19,7 +19,6 @@ Finally, copy the dotfiles to your home directory.
     - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
     - [[https://git-scm.com/][Git]]
     - [[https://hunspell.github.io/][Hunspell]]
-    - [[https://pandoc.org/][pandoc]]
     - [[https://x.org/][xprop]]
     - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
   - E-mail client:
@@ -66,8 +65,9 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/guile/][Guile]]
   - SQL:
     - [[https://www.postgresql.org/][PostgreSQL]]
-  - TeX & Org:
+  - TeX, Org & Markdown:
     - [[https://www.latex-project.org/][LaTeX]]
+    - [[https://pandoc.org/][pandoc]]
   - Wolfram Language:
     - [[https://www.wolfram.com/mathematica/][Mathematica]]
 - GNOME Shell:
@@ -79,7 +79,7 @@ To install dependencies on Arch Linux, run:
   ### Emacs
 
   ## General
-  pacman -S the_silver_searcher git hunspell hunspell-en_US pandoc xorg-xprop
+  pacman -S the_silver_searcher git hunspell hunspell-en_US xorg-xprop
 
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
@@ -152,8 +152,8 @@ To install dependencies on Arch Linux, run:
   sudo -u postgres createuser -s `whoami`
   createdb
 
-  ## TeX & Org
-  pacman -S texlive-core texlive-latexextra
+  ## TeX, Org & Markdown
+  pacman -S texlive-core texlive-latexextra pandoc
 
   ## Wolfram Language
   # Install mathematica from AUR
