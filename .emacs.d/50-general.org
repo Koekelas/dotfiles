@@ -2056,7 +2056,6 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
 #+END_SRC
 
 ** Octave & MATLAB
-
 #+BEGIN_SRC emacs-lisp
   (use-package octave
     :mode ((rx ".m" string-end) . octave-mode)
