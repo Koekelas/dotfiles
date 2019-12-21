@@ -1082,6 +1082,40 @@ When revisiting then modifying file, history is discarded.
     :delight)
 #+END_SRC
 
+** transpose-frame - Transform window layout
+[[https://github.com/emacsorphanage/transpose-frame][transpose-frame (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package transpose-frame
+    :ensure t
+    :bind
+    ("C-c w t" . transpose-frame)
+    :commands
+    (flip-frame flop-frame rotate-frame-clockwise rotate-frame-anticlockwise)
+    :preface
+    (defun koek-tf/flip (&optional arg)
+      "Flip window layout.
+  With `\\[universal-argument]' prefix argument ARG, flip
+  vertically, else, flip horizontally."
+      (interactive "P")
+      (if arg
+          (flip-frame)
+        (flop-frame)))
+
+    (defun koek-tf/rotate (&optional arg)
+      "Rotate window layout.
+  With `\\[universal-argument]' prefix argument ARG, rotate
+  counterclockwise, else, rotate clockwise."
+      (interactive "P")
+      (if arg
+          (rotate-frame-anticlockwise)
+        (rotate-frame-clockwise)))
+    :init
+    (bind-keys
+     ("C-c w f" . koek-tf/flip)
+     ("C-c w c" . koek-tf/rotate)))
+#+END_SRC
+
 ** winner - Undo & redo window layout changes
 #+BEGIN_SRC emacs-lisp
   (use-package winner
