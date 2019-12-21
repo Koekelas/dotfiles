@@ -1904,6 +1904,9 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
        ("C-c C-d" . helpful-at-point)
        :map lisp-interaction-mode-map
        ("C-c C-d" . helpful-at-point)))
+
+    (bind-key "C-c C-c" #'eval-buffer emacs-lisp-mode-map)
+    (bind-key "C-c C-c" #'eval-buffer lisp-interaction-mode-map)
     :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
