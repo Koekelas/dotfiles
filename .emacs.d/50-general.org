@@ -1010,15 +1010,6 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :delight)
 #+END_SRC
 
-*** Issues
-
-**** Restoring history fails
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq undo-tree-auto-save-history t)
-#+END_SRC
-
-When revisiting then modifying file, history is discarded.
-
 ** ispell - Spell checker
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
