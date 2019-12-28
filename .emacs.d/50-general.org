@@ -1225,6 +1225,10 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (setq ivy-count-format "%d/%d ")
     (ivy-mode)
     :delight)
+
+  (use-package flx                        ; Optional dependency
+    :ensure t
+    :defer t)
 #+END_SRC
 
 *** counsel - Ivy powered commands
@@ -1276,15 +1280,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
                     (,(kbd "p")   . counsel-projectile))))
 
     (counsel-projectile-mode))
-#+END_SRC
-
-*** flx - Score candidates
-[[https://github.com/lewang/flx][flx (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package flx
-    :ensure t
-    :after ivy)
 #+END_SRC
 
 ** helpful - Help viewer
