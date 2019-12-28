@@ -1490,6 +1490,19 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     :bind
     ("C-c x m" . mu4e))
 
+  (use-package mu4e-vars
+    :defer t
+    :config
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-update-interval (* 60 30)) ; In seconds
+    ;; When moving e-mail, isync requires them to be renamed
+    (setq mu4e-change-filenames-when-moving t)
+
+    (setq mu4e-completing-read-function #'completing-read)
+    (setq mu4e-context-policy 'pick-first)
+
+    (setq mu4e-hide-index-messages t))
+
   (use-package mu4e-mark
     :defer t
     :config
@@ -1505,19 +1518,6 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
            :action
            (lambda (docid _msg target)
              (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))))
-
-  (use-package mu4e-vars
-    :defer t
-    :config
-    (setq mu4e-get-mail-command "mbsync -a")
-    (setq mu4e-update-interval (* 60 30)) ; In seconds
-    ;; When moving e-mail, isync requires them to be renamed
-    (setq mu4e-change-filenames-when-moving t)
-
-    (setq mu4e-completing-read-function #'completing-read)
-    (setq mu4e-context-policy 'pick-first)
-
-    (setq mu4e-hide-index-messages t))
 
   (use-package mu4e-view
     :defer t
