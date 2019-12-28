@@ -1045,6 +1045,8 @@ When revisiting then modifying file, history is discarded.
   (use-package flycheck
     :ensure t
     :hook ((emacs-lisp-mode erlang-mode) . flycheck-mode)
+    :config
+    (setq flycheck-emacs-lisp-load-path 'inherit)
     :delight)
 #+END_SRC
 
