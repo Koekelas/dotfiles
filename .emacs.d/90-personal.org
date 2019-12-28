@@ -173,13 +173,6 @@ Configure e-mail accounts.
   (use-package mu4e-vars
     :defer t
     :config
-    (defvar mu4e-bookmarks)
-    (defvar mu4e-drafts-folder)
-    (defvar mu4e-maildir)
-    (defvar mu4e-refile-folder)
-    (defvar mu4e-sent-folder)
-    (defvar mu4e-trash-folder)
-
     ;; maildir, refile-folder, drafts-folder, sent-folder and
     ;; trash-folder are directory file names (i.e. no end /)
     (setq mu4e-maildir (expand-file-name "E-mail" koek/documents-dir))
@@ -190,8 +183,6 @@ Configure e-mail accounts.
 
     (use-package mu4e-context
       :config
-      (defvar mu4e-contexts)
-      (declare-function make-mu4e-context "mu4e-context")
       (declare-function mu4e-message-field "mu4e-message")
 
       (setq mu4e-contexts
@@ -210,8 +201,6 @@ Configure e-mail accounts.
 
     (use-package mu4e-utils
       :config
-      (declare-function make-mu4e-bookmark "mu4e-utils")
-
       (setq mu4e-bookmarks
             (list (make-mu4e-bookmark :name "Personal INBOX"
                                       :query "maildir:/Personal/INBOX"

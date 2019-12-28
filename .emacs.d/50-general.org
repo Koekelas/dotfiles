@@ -152,8 +152,6 @@ Move deleted files to trash.
 #+BEGIN_SRC emacs-lisp
   (use-package autorevert
     :config
-    (declare-function global-auto-revert-mode "autorevert")
-
     (global-auto-revert-mode)
     :delight auto-revert-mode)
 #+END_SRC
@@ -865,8 +863,6 @@ Run =M-x= ~make-symbolic-link~. Create a link to
   (use-package xref
     :defer t
     :config
-    (declare-function xref-find-references "xref")
-
     (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 #+END_SRC
 
@@ -875,7 +871,6 @@ Run =M-x= ~make-symbolic-link~. Create a link to
   (use-package abbrev
     :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
     :config
-    (declare-function define-abbrev-table "abbrev")
     (declare-function find-library-name "find-func")
 
     ;; Prime abbrev tables
@@ -1222,8 +1217,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      :map ivy-minibuffer-map
      ("C-c j" . ivy-avy))
     :config
-    (declare-function ivy-mode "ivy")
-
     ;; When counsel loads, various commands setup initial input
     (use-package counsel
       :defer t
@@ -1508,7 +1501,6 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e-mark
     :defer t
     :config
-    (defvar mu4e-marks)
     (declare-function mu4e~mark-check-target "mu4e-mark")
     (declare-function mu4e~proc-move "mu4e-proc")
 
@@ -1525,13 +1517,6 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e-vars
     :defer t
     :config
-    (defvar mu4e-change-filenames-when-moving)
-    (defvar mu4e-completing-read-function)
-    (defvar mu4e-context-policy)
-    (defvar mu4e-get-mail-command)
-    (defvar mu4e-hide-index-messages)
-    (defvar mu4e-update-interval)
-
     (setq mu4e-get-mail-command "mbsync -a")
     (setq mu4e-update-interval (* 60 30)) ; In seconds
     ;; When moving e-mail, isync requires them to be renamed
@@ -1545,14 +1530,9 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e-view
     :defer t
     :config
-    (defvar mu4e-view-actions)
-    (defvar mu4e-view-show-addresses)
-
     (use-package mu4e-actions
       :defer t
       :config
-      (defvar mu4e-msg2pdf)
-
       (unless mu4e-msg2pdf
         (setq mu4e-view-actions
               (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
@@ -2154,8 +2134,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
      ("C-M-e" . org-next-block))
     :hook (org-mode . org-cdlatex-mode)
     :preface
-    (declare-function org-clock-persistence-insinuate "org")
-
     (defun koek-org/setup-tag-completion ()
       "Setup tag completion for current.
   Candidates are collected from agenda files."
@@ -2164,7 +2142,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     ;; Setup resume clock after showing initial buffer
     (add-hook 'window-setup-hook #'org-clock-persistence-insinuate)
     :config
-    (declare-function org-babel-do-load-languages "org")
     (declare-function org-redisplay-inline-images "org")
 
     (use-package avy
