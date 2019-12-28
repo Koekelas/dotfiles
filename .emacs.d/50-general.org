@@ -2237,7 +2237,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (define-advice
         org-src--construct-edit-buffer-name
         (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
-      ;; Like helpful buffer names
+      ;; Mirror helpful buffer names
       (format "*org-src: %s*" org-buffer-name))
 
     (defconst koek-org/excluded-checkers
