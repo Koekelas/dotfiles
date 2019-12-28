@@ -1503,6 +1503,22 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
 
     (setq mu4e-hide-index-messages t))
 
+  (use-package mu4e-main
+    :defer t
+    :config
+    (use-package mu4e-utils
+      :bind
+      (:map mu4e-main-mode-map
+       ("G" . mu4e-update-mail-and-index)))) ; Mirror elfeed
+
+  (use-package mu4e-headers
+    :defer t
+    :config
+    (use-package mu4e-utils
+      :bind
+      (:map mu4e-headers-mode-map
+       ("G" . mu4e-update-mail-and-index))))
+
   (use-package mu4e-mark
     :defer t
     :config
@@ -1522,6 +1538,11 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e-view
     :defer t
     :config
+    (use-package mu4e-utils
+      :bind
+      (:map mu4e-view-mode-map
+       ("G" . mu4e-update-mail-and-index)))
+
     (use-package mu4e-actions
       :defer t
       :config
