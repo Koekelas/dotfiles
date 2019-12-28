@@ -1248,6 +1248,8 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      ("C-c f l" . counsel-find-library)
      ("C-c j d" . counsel-imenu)
      ("C-c j o" . counsel-org-goto-all)
+     ("C-c x x" . counsel-linux-app)
+     ("C-c x s" . counsel-search)
      :map minibuffer-local-map
      ("C-r" . counsel-minibuffer-history))
     :config
@@ -1264,6 +1266,10 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
     (setq counsel-org-goto-all-outline-path-prefix 'buffer-name)
     (setq counsel-outline-face-style 'org))
+
+  (use-package request                    ; Optional dependency
+    :ensure t
+    :defer t)
 #+END_SRC
 
 *** counsel-projectile - Ivy powered Projectile commands
