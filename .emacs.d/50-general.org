@@ -1054,6 +1054,20 @@ Resize windows pixelwise, not characterwise.
   (setq window-resize-pixelwise t)
 #+END_SRC
 
+** Window commands
+The default keybindings assume a QWERTY keyboard layout. Some
+keybindings are clunky on other keyboard layouts. Rebind clunky window
+commands.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ("C-c w h" . split-window-below)
+   ("C-c w v" . split-window-right)
+   ("C-c w b" . balance-windows)
+   ("C-c w d" . delete-window)
+   ("C-c w C-d" . delete-other-windows))
+#+END_SRC
+
 ** ace-window - Jump to window
 [[https://github.com/abo-abo/ace-window][ace-window (GitHub)]]
 
