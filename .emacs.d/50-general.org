@@ -1438,7 +1438,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
             ("scikit-image" "scikit_image")
             ("scikit-learn" "scikit_learn")
             ("StatsModels" "statsmodels")))
-
     (devdocs-setup))
 #+END_SRC
 
