@@ -1068,6 +1068,44 @@ commands.
    ("C-c w C-d" . delete-other-windows))
 #+END_SRC
 
+Resizing a window by characters or pixels is slow. Resize windows in
+steps.
+
+#+BEGIN_SRC emacs-lisp
+  (defconst koek-wind/n-hor-steps 32
+    "Number of horizontal steps to resize a window from monitor width to zero.")
+
+  (defun koek-wind/resize (shrink vertical)
+    "Resize selected window.
+  Unless SHRINK is nil, shrink window, else, grow window.  Unless
+  VERTICAL is nil, resize vertically, else, resize horizontally."
+    (let* ((geometry (frame-monitor-attribute 'geometry))
+           (width (nth 2 geometry))
+           (step (/ width koek-wind/n-hor-steps))
+           (delta (if shrink
+                      (* step -1)
+                    step)))
+      (window-resize nil delta (not vertical) nil 'pixelwise)))
+
+  (defun koek-wind/grow (&optional arg)
+    "Grow selected window.
+  With `\\[universal-argument]' prefix argument ARG, grow
+  vertically, else, grow horizontally."
+    (interactive "P")
+    (koek-wind/resize nil arg))
+
+  (defun koek-wind/shrink (&optional arg)
+    "Shrink selected window.
+  With `\\[universal-argument]' prefix argument ARG, shrink
+  vertically, else, shrink horizontally."
+    (interactive "P")
+    (koek-wind/resize 'shrink arg))
+
+  (bind-keys
+   ("C-c w g" . koek-wind/grow)
+   ("C-c w s" . koek-wind/shrink))
+#+END_SRC
+
 ** ace-window - Jump to window
 [[https://github.com/abo-abo/ace-window][ace-window (GitHub)]]
 
