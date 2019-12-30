@@ -2219,7 +2219,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (setq org-startup-with-inline-images t)
     (let ((width (thread-last (display-monitor-attributes-list)
                    car                   ; Primary display
-                   (alist-get 'workarea) ; Arrangement/resolution without taskbar
+                   (alist-get 'geometry) ; Arrangement/resolution
                    (nth 2))))            ; Width
       (setq org-image-actual-width (floor (* width (/ 1 5.0)))))
     (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
