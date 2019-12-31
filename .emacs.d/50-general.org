@@ -27,6 +27,7 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 #+BEGIN_SRC emacs-lisp
   (defvar no-littering-etc-directory)
   (defvar no-littering-var-directory)
+  (declare-function koek-pkg/ensure "init")
   (declare-function no-littering-expand-var-file-name "no-littering")
 #+END_SRC
 
@@ -71,11 +72,8 @@ Move deleted files to trash.
 [[https://github.com/magit/magit][magit (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :defer t)
-
   (use-package magit-status
+    :ensure magit
     :bind
     ("C-c f g" . magit-status))
 
@@ -1278,13 +1276,9 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (ivy-mode)
     :delight)
 
-  (use-package flx                        ; Optional dependency
-    :ensure t
-    :defer t)
-
-  (use-package wgrep                      ; Optional dependency
-    :ensure t
-    :defer t)
+  ;; Optional dependencies
+  (koek-pkg/ensure 'flx)
+  (koek-pkg/ensure 'wgrep)
 #+END_SRC
 
 *** counsel - Ivy powered commands
@@ -1323,9 +1317,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (setq counsel-org-goto-all-outline-path-prefix 'buffer-name)
     (setq counsel-outline-face-style 'org))
 
-  (use-package request                    ; Optional dependency
-    :ensure t
-    :defer t)
+  (koek-pkg/ensure 'request)              ; Optional dependency
 #+END_SRC
 
 *** counsel-projectile - Ivy powered Projectile commands
@@ -1622,21 +1614,8 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 [[https://github.com/politza/pdf-tools][pdf-tools (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package pdf-tools
-    :ensure t
-    :defer t)
-
-  (use-package pdf-links
-    :bind
-    (:map pdf-links-minor-mode-map
-     ("C-c j j" . pdf-links-isearch-link)
-     ("C-c j l" . pdf-links-action-perform)))
-
-  (use-package pdf-loader
-    :config
-    (pdf-loader-install 'no-ask 'no-install-deps))
-
   (use-package pdf-view
+    :ensure pdf-tools
     :mode ((rx ".pdf" string-end) . pdf-view-mode)
     :config
     ;; Only isearch is supported
@@ -1647,6 +1626,16 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 
     (setq-default pdf-view-display-size 'fit-page)
     :delight (pdf-view-mode "PDF" :major))
+
+  (use-package pdf-links
+    :bind
+    (:map pdf-links-minor-mode-map
+     ("C-c j j" . pdf-links-isearch-link)
+     ("C-c j l" . pdf-links-action-perform)))
+
+  (use-package pdf-loader
+    :config
+    (pdf-loader-install 'no-ask 'no-install-deps))
 #+END_SRC
 
 ** calendar - Calendar
@@ -2088,11 +2077,8 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
 [[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package indium
-    :ensure t
-    :defer t)
-
   (use-package indium-interaction
+    :ensure indium
     :hook (js2-mode . indium-interaction-mode)
     :config
     ;; Resolve keybinding conflict with documentation keymap
@@ -2412,9 +2398,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
                     (string-join (append options '("hidelinks")) ",\n ")
                     "\n}\n"))))
 
-  (use-package htmlize                    ; Optional dependency
-    :ensure t
-    :defer t)
+  (koek-pkg/ensure 'htmlize)              ; Optional dependency
 #+END_SRC
 
 *** org-caldav - Sync calendars
