@@ -103,8 +103,8 @@ Configure agendas.
              file-name)))
          (seq-filter #'file-exists-p))))
 
-    (define-advice
-        org-agenda-files (:before (&rest _args) koek/update-agenda-files)
+    (define-advice org-agenda-files
+        (:before (&rest _args) koek/update-agenda-files)
       (setq org-agenda-files (koek/fetch-agenda-files)))
     :config
     (setq org-directory koek/documents-dir)

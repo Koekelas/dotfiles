@@ -744,8 +744,7 @@ When line is indented, press =TAB= to complete text before point.
         (setq-local company-backends backends)))
 
     ;; Prevent geiser from modifying company-backends
-    (define-advice
-        geiser-company--setup-company
+    (define-advice geiser-company--setup-company
         (:around (f &rest args) koek-cpny/disable-setup-backends)
       (let ((backends company-backends))
         (apply f args)
@@ -1864,8 +1863,8 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
   (use-package cc-cmds
     :defer t
     :preface
-    (define-advice
-        c-update-modeline (:around (f) koek-cc/disable-update-mode-name)
+    (define-advice c-update-modeline
+        (:around (f) koek-cc/disable-update-mode-name)
       (let ((name mode-name))
         (funcall f)
         (setq mode-name name))))
@@ -2287,8 +2286,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
      ("C-c o '" . org-edit-src-exit)
      ("C-c o k" . org-edit-src-abort))
     :preface
-    (define-advice
-        org-src--construct-edit-buffer-name
+    (define-advice org-src--construct-edit-buffer-name
         (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
       ;; Mirror helpful buffer names
       (format "*org-src: %s*" org-buffer-name))
@@ -2498,8 +2496,8 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
              (remq 'whitespace-mode prog-mode-hook)))
         (funcall f)))
 
-    (define-advice
-        sql-highlight-product (:around (f) koek-sql/re-enable-whitespace-mode)
+    (define-advice sql-highlight-product
+        (:around (f) koek-sql/re-enable-whitespace-mode)
       (whitespace-mode 0)
       (funcall f)
       (whitespace-mode))
@@ -2580,8 +2578,8 @@ Configure Conf mode after Text mode.
         (conf-xdefaults-mode . "Xdefaults"))
       "Alist of Conf mode symbol to Conf mode name pairs.")
 
-    (define-advice
-        conf-mode-initialize (:after (&rest _args) koek-conf/update-mode-name)
+    (define-advice conf-mode-initialize
+        (:after (&rest _args) koek-conf/update-mode-name)
       (setq mode-name
             '(:eval
               (or (and (not inhibit-mode-name-delight)
