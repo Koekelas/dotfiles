@@ -841,7 +841,8 @@ When line is indented, press =TAB= to complete text before point.
      ("C-c ! p" . flymake-goto-prev-error)
      ("C-c ! l" . flymake-show-diagnostics-buffer))
     :config
-    (setq flymake-wrap-around nil))
+    (setq flymake-wrap-around nil)
+    :delight)
 
   (use-package flymake-proc
     :defer t
@@ -2761,255 +2762,364 @@ Disable blink cursor mode, instead, enable highlight line mode.
   (global-hl-line-mode)
 #+END_SRC
 
-Show:
-
-- memory full indicator
-- function arguments
-- variant name and diff status
-- edit depth
-- input name
-- workspace names
-- project name, buffer name and buffer status
-- narrowed indicator, percentage buffer above first visible line, line
-  number and column number
-- clocked time
-- version control name and branch name
-- checker name, number of errors and number of warnings
-- major name, process status and minor names
-
-in mode line.
+Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-ml/separator "   "
-    "Mode line group separator.")
+  (use-package moody
+    :ensure t
+    :preface
+    (declare-function eyebrowse--get "eyebrowse")
+    (declare-function flymake--backend-state-diags "flymake")
+    (declare-function flymake--lookup-type-property "flymake")
+    (declare-function flymake-disabled-backends "flymake")
+    (declare-function flymake-reporting-backends "flymake")
+    (declare-function flymake-running-backends "flymake")
 
-  (defconst koek-ml/ediff
-    '((eldoc-mode-line-string
-       nil)
-      (:eval
-       (let ((right
-              (let ((diff-n (1+ ediff-current-difference))
-                    (n-diffs ediff-number-of-differences))
-                (concat (cond
-                         ((< diff-n 1)
-                          (format "Start -/%d" n-diffs))
-                         ((> diff-n n-diffs)
-                          (format "End -/%d" n-diffs))
-                         (t
-                          (format "%d/%d" diff-n n-diffs)))
-                        koek-ml/separator
-                        "(Ediff) "))))
-         `((,(max 0 (- (window-total-width) (string-width right)))
-            (" "
-             (eldoc-mode-line-string
-              ("" eldoc-mode-line-string koek-ml/separator))
-             (:propertize "%b" face mode-line-buffer-id)
-             koek-ml/separator))
-           ,right))))
-    "List of mode line constructs for ediff control buffer.")
+    (defconst koek-ml/separator (make-string 3 ?\s)
+      "Mode line group separator.")
 
-  (defvar-local koek-ml/variant-name nil
-    "Name of variant.")
+    (defconst koek-ml/large-separator
+      (make-string (* (length koek-ml/separator) 5) ?\s)
+      "Mode line left right separator.")
 
-  (defvar-local koek-ml/diff-status nil
-    "Status of current diff.")
+    (defun koek-ml/mru-window-p ()
+      "Return whether selected window is most recently used window."
+      (eq (selected-window) (get-mru-window nil 'dedicated)))
 
-  (defun koek-ml/variants ()
-    "Return variants of current ediff session."
-    (seq-filter (lambda (variant)
-                  (bufferp (cdr variant)))
-                `(("A" . ,ediff-buffer-A)
-                  ("B" . ,ediff-buffer-B)
-                  ("C" . ,ediff-buffer-C)
-                  ("Ancestor" . ,ediff-ancestor-buffer))))
+    (defconst koek-ml/dummies '((eldoc-mode-line-string nil))
+      "Dummies mode line construct.
+  A dummy prevents a package from modifying the mode line.")
 
-  (defun koek-ml/diff-status ()
-    "Return status of current diff."
-    (let ((status (nth 1 mode-line-format)))
-      (when (symbolp status)
-        (setq status (symbol-value status)))
-      (unless (string= status "")
-        (replace-regexp-in-string (rx (or (and line-start "[")
-                                          (and "] " line-end)))
-                                  "" status))))
+    (defconst koek-ml/eldoc
+      '(eldoc-mode-line-string ("" eldoc-mode-line-string koek-ml/separator))
+      "Eldoc mode line construct.")
 
-  (define-advice ediff-refresh-mode-lines (:after () koek-ml/update-ediff)
-    (setq mode-line-format koek-ml/ediff)
-    (save-current-buffer
-      (dolist (variant (koek-ml/variants))
-        (set-buffer (cdr variant))
-        (setq koek-ml/variant-name (car variant))
-        (setq koek-ml/diff-status (koek-ml/diff-status))
-        (ediff-strip-mode-line-format))))
+    (defvar-local koek-ml/variant nil
+      "Ediff variant.")
 
-  (defun koek-ml/cleanup-ediff ()
-    "Cleanup ediff mode line variables."
-    (save-current-buffer
-      (dolist (variant (koek-ml/variants))
-        (set-buffer (cdr variant))
-        (kill-local-variable 'koek-ml/variant-name)
-        (kill-local-variable 'koek-ml/diff-status))))
+    (defconst koek-ml/ediff
+      '(:eval
+        (when koek-ml/variant
+          `(,(moody-ribbon
+              (concat (plist-get koek-ml/variant :label)
+                      (when-let ((state (plist-get koek-ml/variant :state)))
+                        (concat " " state)))
+              nil 'up)
+            koek-ml/separator)))
+      "Ediff mode line construct.")
 
-  (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-ediff)
+    (defconst koek-ml/depth
+      '(:eval
+        (let ((depth (- (recursion-depth) (minibuffer-depth))))
+          (when (and (> depth 0) (koek-ml/mru-window-p))
+            `(,(moody-ribbon (format "[%d]" depth) nil 'up)
+              koek-ml/separator))))
+      "Recursive edit depth mode line construct.")
 
-  (declare-function eyebrowse--get "eyebrowse")
+    (defconst koek-ml/roman-numerals
+      '((9 . "IX")
+        (5 . "V")
+        (4 . "IV")
+        (1 . "I"))
+      "Alist of sorted Arabic numeral to Roman numeral pairs.")
 
-  (defun koek-ml/workspaces ()
-    "Return workspaces of current frame."
-    (eyebrowse--get 'window-configs))
+    (defun koek-ml/arabic-to-roman (n &optional roman-numerals)
+      "Convert Arabic number N to a Roman number.
+  N is an integer greater than zero.  ROMAN-NUMERALS is used
+  internally."
+      (unless roman-numerals
+        (setq roman-numerals koek-ml/roman-numerals))
+      (when (> n 0)
+        (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
+          (if (>= n arabic)
+              (concat roman (koek-ml/arabic-to-roman (- n arabic) roman-numerals))
+            (koek-ml/arabic-to-roman n (cdr roman-numerals))))))
 
-  (defun koek-ml/current-workspace-id ()
-    "Return workspace id of current frame."
-    (eyebrowse--get 'current-slot))
+    (defun koek-ml/get-workspaces ()
+      "Return workspaces of selected frame."
+      (mapcar (lambda (workspace)
+                (let ((id (nth 0 workspace))
+                      (name (let ((name (nth 2 workspace)))
+                              (unless (string= name "")
+                                name))))
+                  (list :id id
+                        :label (concat (koek-ml/arabic-to-roman id)
+                                       (when name
+                                         (concat ":" name))))))
+              (eyebrowse--get 'window-configs)))
 
-  (defun koek-ml/workspace-id (workspace)
-    "Return id of WORKSPACE."
-    (car workspace))
+    (defun koek-ml/get-selected-workspace-id ()
+      "Return selected workspace id of selected frame."
+      (eyebrowse--get 'current-slot))
 
-  (defun koek-ml/workspace-name (workspace)
-    "Return name of WORKSPACE."
-    (let ((name (nth 2 workspace)))
-      (unless (string= name "")
-        name)))
+    (defconst koek-ml/eyebrowse
+      '(:eval
+        (when (and (bound-and-true-p eyebrowse-mode) (koek-ml/mru-window-p))
+          (let ((workspaces (koek-ml/get-workspaces))
+                (selected-id (koek-ml/get-selected-workspace-id)))
+            (when (or (> (length workspaces) 1) (not (= selected-id 1)))
+              `(,(moody-ribbon
+                  (mapconcat
+                   (lambda (workspace)
+                     (let ((face (if (= (plist-get workspace :id)
+                                        selected-id)
+                                     'eyebrowse-mode-line-active
+                                   'eyebrowse-mode-line-inactive)))
+                       (propertize (plist-get workspace :label) 'face face)))
+                   workspaces " ")
+                  nil 'up)
+                koek-ml/separator)))))
+      "Eyebrowse mode line construct.")
 
-  (defconst koek-ml/roman-numerals
-    '((9 . "IX")
-      (5 . "V")
-      (4 . "IV")
-      (1 . "I"))
-    "Alist of sorted Arabic numeral to Roman numeral pairs.")
+    (defconst koek-ml/id
+      '(:eval
+        (moody-tab (concat (when (projectile-project-p)
+                             (concat (projectile-project-name) "/"))
+                           (propertize (buffer-name)
+                                       'face 'mode-line-buffer-id))))
+      "Id mode line construct.")
 
-  (defun koek-ml/arabic-to-roman (n &optional roman-numerals)
-    "Convert Arabic number N to Roman number.
-  N is an integer greater than zero.  Optional ROMAN-NUMERALS is an
-  alist of sorted Arabic numeral to Roman numeral pairs and
-  defaults to `koek-ml/roman-numerals'."
-    (unless roman-numerals
-      (setq roman-numerals koek-ml/roman-numerals))
-    (when (> n 0)
-      (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
-        (if (>= n arabic)
-            (concat roman (koek-ml/arabic-to-roman (- n arabic) roman-numerals))
-          (koek-ml/arabic-to-roman n (cdr roman-numerals))))))
+    (defconst koek-ml/state '(" " "%*%+")
+      "State mode line construct.")
 
-  (defun koek-ml/workspace-label (workspace)
-    "Return label of WORKSPACE.
-  Label is made of a workspace id and name."
-    (let ((id (or (koek-ml/arabic-to-roman (koek-ml/workspace-id workspace))
-                  ;; Roman numeral zero doesn't exist. N stands for
-                  ;; nulla, which means zero.
-                  "N"))
-          (name (koek-ml/workspace-name workspace)))
-      (if name
-          (format "%s:%s" id name)
-        id)))
+    (defconst koek-ml/position
+      '(:eval
+        `("" koek-ml/large-separator
+          ,(when (buffer-narrowed-p)
+             (list (moody-ribbon "Narrowed" nil 'up) " "))
+          "%p" " " "%l,%c"))
+      "Position mode line construct.")
 
-  (defconst koek-ml/checker-names
-    '((emacs-lisp . "El")
-      (emacs-lisp-checkdoc . "Checkdoc")
-      (erlang . "Erlc")
-      (html-tidy . "Tidy")
-      (javascript-jslint . "JSLint"))
-    "Alist of checker symbol to checker name pairs.")
+    (defconst koek-ml/input
+      '(:eval
+        (when (and current-input-method (koek-ml/mru-window-p))
+          `("" koek-ml/separator
+            ,(moody-ribbon current-input-method-title nil 'up))))
+      "Input mode line construct.")
 
-  (declare-function flycheck-get-checker-for-buffer "flycheck")
+    (defconst koek-ml/checker-names
+      '((eglot-flymake-backend . "LSP")
+        (emacs-lisp . "El")
+        (emacs-lisp-checkdoc . "Checkdoc")
+        (erlang . "Erlc")
+        (html-tidy . "Tidy")
+        (javascript-jslint . "JSLint"))
+      "Alist of checker symbol to checker name pairs.")
 
-  (defun koek-ml/checker-name ()
-    "Return name of current checker."
-    (when-let ((checker (flycheck-get-checker-for-buffer)))
-      (or (alist-get checker koek-ml/checker-names) "Checker")))
+    (defun koek-ml/state-to-description (state)
+      "Convert checker state STATE to a description.
+  STATE is a symbol, a flycheck or flymake state."
+      (let ((words (split-string (symbol-name state) "-")))
+        (string-join (cons (capitalize (car words)) (cdr words)) " ")))
 
-  (defconst koek-ml/left
-    '(" "
-      (memory-full
-       ("Memory Full!" koek-ml/separator))
-      (eldoc-mode-line-string
-       ("" eldoc-mode-line-string koek-ml/separator))
-      (koek-ml/variant-name
-       ((:propertize koek-ml/variant-name face mode-line-emphasis)
-        (koek-ml/diff-status
-         (" " koek-ml/diff-status))
-        koek-ml/separator))
-      (:eval
-       (let ((depth (- (recursion-depth) (minibuffer-depth))))
-         (when (> depth 0)
-           (format "[%d]%s" depth koek-ml/separator))))
-      (current-input-method
-       ("" current-input-method-title koek-ml/separator))
-      (:eval
-       (when eyebrowse-mode
-         (let ((workspaces (koek-ml/workspaces))
-               (current-id (koek-ml/current-workspace-id)))
-           (when (and workspaces
-                      (or (> (length workspaces) 1) (not (= current-id 1))))
-             (concat
-              (mapconcat
-               (lambda (workspace)
-                 (let ((label (koek-ml/workspace-label workspace)))
-                   (when (= (koek-ml/workspace-id workspace) current-id)
-                     (setq label
-                           (propertize label 'face 'eyebrowse-mode-line-active)))
-                   label))
-               workspaces " ")
-              koek-ml/separator)))))
-      ((:eval
-        (when (projectile-project-p)
-          (concat (projectile-project-name) "/")))
-       (:propertize "%b" face mode-line-buffer-id)
-       " %*%+"))
-    "List of mode line constructs shown left.")
+    (defconst koek-ml/flycheck-diag-specs
+      '((:type error   :face compilation-error)
+        (:type warning :face compilation-warning))
+      "List of flycheck diagnosis specifications.
+  A flycheck diagnosis specification is a plist with keys :type and
+  :face.  :type is a symbol, a type of error.  :face is a symbol,
+  the face for showing the number of errors of type :type in the
+  mode line.")
 
-  (defconst koek-ml/right
-    '(((:eval
-        (when (buffer-narrowed-p)
-          (concat (propertize "Narrowed" 'face 'mode-line-emphasis) " ")))
-       "%p"
-       " %l,%c"
-       koek-ml/separator)
-      (:eval
-       (when (org-clock-is-active)
-         (concat (org-duration-from-minutes (org-clock-get-clocked-time))
-                 koek-ml/separator)))
-      (:eval
-       (when vc-mode
-         (let ((status (substring-no-properties vc-mode)))
-           (string-match (rx (submatch-n 1 (one-or-more alnum))
-                             (zero-or-one ":" (one-or-more alnum))
-                             (any "-:@!?")
-                             (submatch-n 2 (one-or-more not-newline)))
-                         status)
-           (format "%s %s%s"
-                   (match-string 1 status) (match-string 2 status)
-                   koek-ml/separator))))
-      (:eval
-       (when flycheck-mode
-         (concat (pcase flycheck-last-status-change
-                   (`running
-                    (format "%s - -" (koek-ml/checker-name)))
-                   (`finished
-                    (let-alist (flycheck-count-errors flycheck-current-errors)
-                      (format "%s %d %d"
-                              (koek-ml/checker-name)
-                              (or .error 0) (or .warning 0))))
-                   (`,status
-                    (capitalize
-                     (replace-regexp-in-string "-" " " (symbol-name status)))))
-                 koek-ml/separator)))
-      ("(" mode-name mode-line-process minor-mode-alist ")")
-      " ")
-    "List of mode line constructs shown right.")
+    (defconst koek-ml/flycheck
+      '(:eval
+        (when (and (bound-and-true-p flycheck-mode) (koek-ml/mru-window-p))
+          `("" koek-ml/separator
+            ,(when-let ((name (alist-get (flycheck-get-checker-for-buffer)
+                                         koek-ml/checker-names)))
+               (concat name " "))
+            ,(pcase flycheck-last-status-change
+               (`running
+                "- -")
+               (`finished
+                (let ((n-diags (flycheck-count-errors flycheck-current-errors)))
+                  (mapconcat
+                   (lambda (spec)
+                     (propertize (number-to-string
+                                  (alist-get (plist-get spec :type) n-diags 0))
+                                 'face (plist-get spec :face)))
+                   koek-ml/flycheck-diag-specs " ")))
+               (`,state
+                (koek-ml/state-to-description state))))))
+      "Flycheck mode line construct.")
 
-  (setq-default mode-line-format
-                '(;; Prevent eldoc from modifying mode-line-format
-                  (eldoc-mode-line-string
-                   nil)
-                  (:eval
-                   (let* ((inhibit-mode-name-delight nil) ; Dynamic variable
-                          (right (format-mode-line koek-ml/right)))
-                     `((,(max 0 (- (window-total-width) (string-width right)))
-                        ("" koek-ml/left koek-ml/separator))
-                       ;; Escape %'s
-                       ,(replace-regexp-in-string "%" "%%" right))))))
+    (defun koek-ml/get-flymake-state ()
+      "Return flymake state.
+  State is the symbol running (some checkers running),
+  finished (all checkers finished running), all-disabled (all
+  compatible checkers disabled) or no-checker (no compatible
+  checkers)."
+      (let* ((enabled (flymake-running-backends))
+             (finished (flymake-reporting-backends))
+             (running (seq-filter (lambda (checker)
+                                    (not (memq checker finished)))
+                                  enabled))
+             (disabled (flymake-disabled-backends)))
+        (cond
+         (running
+          'running)
+         (finished
+          'finished)
+         (disabled
+          'all-disabled)
+         (t
+          'no-checker))))
+
+    (defun koek-ml/get-flymake-n-diags ()
+      "Return number of diagnosis per type of error."
+      (thread-last (hash-table-values flymake--backend-state)
+        (seq-mapcat #'flymake--backend-state-diags)
+        (seq-group-by (lambda (diag)
+                        (flymake--lookup-type-property (flymake--diag-type diag)
+                                                       'flymake-category)))
+        (mapcar (pcase-lambda (`(,cat . ,diags))
+                  (cons cat (length diags))))))
+
+    (defconst koek-ml/flymake
+      '(:eval
+        ;; Why is flymake-mode unbound after load?
+        (when (and (bound-and-true-p flymake-mode) (koek-ml/mru-window-p))
+          `("" koek-ml/separator
+            ,(when-let ((name
+                         ;; Assume only one checker enabled
+                         (alist-get (car (flymake-running-backends))
+                                    koek-ml/checker-names)))
+               (concat name " "))
+            ,(pcase (koek-ml/get-flymake-state)
+               (`running
+                "- -")
+               (`finished
+                (let ((n-diags (koek-ml/get-flymake-n-diags)))
+                  (mapconcat
+                   (lambda (cat)
+                     (propertize
+                      (number-to-string (alist-get cat n-diags 0))
+                      'face (flymake--lookup-type-property cat 'mode-line-face)))
+                   '(flymake-error flymake-warning) " ")))
+               (`,state
+                (koek-ml/state-to-description state))))))
+      "Flymake mode line construct.")
+
+    (defconst koek-ml/vc
+      '(:eval
+        (when (and (bound-and-true-p vc-mode) (koek-ml/mru-window-p))
+          (let ((state (string-trim (substring-no-properties vc-mode))))
+            ;; For format, see `vc-default-mode-line-string'
+            (string-match
+             (rx (submatch-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
+                 (zero-or-one (not (any ":")) ":")
+                 (submatch-n 2 (one-or-more not-newline)))
+             state)
+            `("" koek-ml/separator
+              ,(format "%s %s" (match-string 1 state) (match-string 2 state))))))
+      "Version control mode line construct.")
+
+    (defconst koek-ml/task
+      '(:eval
+        (when (and (org-clock-is-active) (koek-ml/mru-window-p))
+          `("" koek-ml/separator
+            ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
+      "Task mode line construct.")
+
+    (defconst koek-ml/modes
+      '("" koek-ml/separator "(" mode-name mode-line-process minor-mode-alist ")")
+      "Modes mode line construct.")
+
+    ;; ediff
+    (defconst koek-ml/diff
+      '(:eval
+        `("" koek-ml/large-separator
+          ,(let ((diff-n (1+ ediff-current-difference))
+                 (n-diffs ediff-number-of-differences))
+             (cond
+              ((< diff-n 1)
+               (format "Start -/%d" n-diffs))
+              ((> diff-n n-diffs)
+               (format "End -/%d" n-diffs))
+              (t
+               (format "%d/%d" diff-n n-diffs))))))
+      "Ediff diff mode line construct.")
+
+    (defconst koek-ml/ediff-buffer-specs
+      '((:type A   :buffer ediff-buffer-A)
+        (:type B   :buffer ediff-buffer-B)
+        (:type C   :buffer ediff-buffer-C)
+        (:type Anc :buffer ediff-ancestor-buffer))
+      "List of ediff buffer specifications.
+  An ediff buffer specification is a plist with keys :type and
+  :buffer.  :type is a symbol, a type of buffer.  :buffer is a
+  symbol, the variable name which stores the buffer of type
+  :type.")
+
+    (defun koek-ml/get-variants ()
+      "Return variants of ediff session.
+  Must be called from control buffer."
+      (seq-reduce (lambda (variants spec)
+                    (let ((buffer (symbol-value (plist-get spec :buffer))))
+                      (when (buffer-live-p buffer)
+                        (let ((type (plist-get spec :type)))
+                          (push (list :type type
+                                      :buffer buffer
+                                      :label (symbol-name type))
+                                variants))))
+                    variants)
+                  koek-ml/ediff-buffer-specs ()))
+
+    (defun koek-ml/get-variant-state (variant)
+      "Return state of variant VARIANT.
+  Must be called from control buffer."
+      (when (ediff-valid-difference-p)
+        (let ((type (plist-get variant :type)))
+          (cond
+           ((eq type 'C)
+            (concat
+             (ediff-get-state-of-diff ediff-current-difference type)
+             (when-let ((merge (ediff-get-state-of-merge ediff-current-difference)))
+               (concat " " merge))
+             (when (ediff-get-state-of-ancestor ediff-current-difference)
+               " AncEmpty")))
+           ((eq type 'Anc)
+            (when-let ((merge (ediff-get-state-of-merge ediff-current-difference)))
+              (cond
+               ((string= merge "prefer-A")
+                "=diff(B)")
+               ((string= merge "prefer-B")
+                "=diff(A)"))))
+           (t
+            (ediff-get-state-of-diff ediff-current-difference type))))))
+
+    (define-advice ediff-refresh-mode-lines
+        (:override () koek-ml/update-variants)
+      (setq mode-line-format
+            `(,@koek-ml/dummies " "
+              koek-ml/eldoc koek-ml/depth koek-ml/eyebrowse koek-ml/id
+              koek-ml/diff koek-ml/task koek-ml/modes))
+      (force-mode-line-update)
+      (dolist (variant (koek-ml/get-variants))
+        (let ((state (koek-ml/get-variant-state variant)))
+          (with-current-buffer (plist-get variant :buffer)
+            (setq koek-ml/variant
+                  (list :label (plist-get variant :label) :state state))
+            (force-mode-line-update)))))
+
+    (defun koek-ml/cleanup-variants ()
+      "Cleanup variants."
+      (save-current-buffer
+        (dolist (variant (koek-ml/get-variants))
+          (set-buffer (plist-get variant :buffer))
+          (kill-local-variable 'koek-ml/variant)
+          (force-mode-line-update))))
+
+    (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-variants)
+    :config
+    (setq x-underline-at-descent-line t)
+    (setq moody-mode-line-height 24)
+    (setq-default mode-line-format
+                  `(,@koek-ml/dummies " "
+                    koek-ml/eldoc koek-ml/depth koek-ml/ediff koek-ml/eyebrowse
+                    koek-ml/id koek-ml/state
+                    koek-ml/position koek-ml/input koek-ml/flycheck
+                    koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
 #+END_SRC
 
 * Footer
