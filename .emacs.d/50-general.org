@@ -2684,33 +2684,26 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
            (let* ((theme
                    (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
                   (personal
-                   (map-let (foreground background yellow green aqua blue) theme
-                     `((alt-bg    . ,(koek-thm/mix background foreground 0.98))
-                       (lc-fg     . ,(koek-thm/mix foreground background))
-                       (lc-yellow . ,(koek-thm/mix yellow background))
-                       (lc-green  . ,(koek-thm/mix green background))
-                       (lc-aqua   . ,(koek-thm/mix aqua background))
-                       (lc-blue   . ,(koek-thm/mix blue background))))))
-             (map-let                ; How to use let-alist and backquote?
-                 (foreground background current-line selection comment red orange
-                  aqua alt-bg lc-fg lc-yellow lc-green lc-aqua lc-blue)
+                   (map-let (foreground background) theme
+                     `((alt-bg . ,(koek-thm/mix background foreground 0.98))
+                       (lc-fg  . ,(koek-thm/mix foreground background))))))
+             (map-let
+                 (foreground background current-line selection red alt-bg lc-fg)
                  (append personal theme)
                `(;; Default
                  (show-paren-match    :foreground ,foreground :background ,selection)
                  (show-paren-mismatch :foreground ,foreground :background unspecified
                                       :underline (:style wave :color ,red))
-                 (header-line :inherit unspecified
-                              :foreground ,aqua :background unspecified
-                              :box ,selection)
-                 (fringe :foreground ,comment :background ,alt-bg)
-                 (mode-line          :foreground ,foreground :background ,current-line
-                                     :underline ,selection :overline ,selection
-                                     :box unspecified :weight unspecified)
-                 (mode-line-inactive :inherit unspecified
-                                     :foreground ,comment :background ,alt-bg
-                                     :underline ,selection :overline ,selection
-                                     :weight unspecified)
-                 (mode-line-emphasis :foreground ,orange :slant unspecified)
+                 (header-line         :background unspecified)
+                 (fringe              :background ,alt-bg)
+                 (mode-line           :background ,current-line
+                                      :underline ,selection :overline ,selection
+                                      :box unspecified :weight unspecified)
+                 (mode-line-inactive  :background ,alt-bg
+                                      ;; Moody doesn't see inherited
+                                      ;; attributes
+                                      :underline ,selection :overline ,selection
+                                      :weight unspecified)
                  ;; paren-face
                  (parenthesis :foreground ,lc-fg)
                  ;; whitespace
@@ -2718,18 +2711,16 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                  (whitespace-empty    :foreground unspecified :background ,selection)
                  (whitespace-line     :foreground unspecified :background ,selection)
                  ;; ace-window
-                 (aw-leading-char-face :inherit avy-lead-face
-                                       :foreground unspecified)
-                 (aw-background-face :foreground ,lc-fg :background ,background)
+                 (aw-leading-char-face :background ,background
+                                       :weight bold :slant normal)
+                 (aw-background-face   :background ,background)
                  ;; eyebrowse
-                 (eyebrowse-mode-line-active :inherit mode-line-emphasis
-                                             :foreground unspecified
-                                             :weight unspecified))))))
+                 (eyebrowse-mode-line-active :foreground ,foreground))))))
       ;; Adding attributes to a face before it's defined, fails. Add
       ;; attributes to user theme.
       (apply #'custom-set-faces
-             (mapcar (pcase-lambda (`(,name . ,attribs))
-                       `(,name ((t . ,attribs))))
+             (mapcar (pcase-lambda (`(,name . ,attrs))
+                       `(,name ((t . ,attrs))))
                      specs))))
 #+END_SRC
 
