@@ -422,15 +422,14 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     :delight)
 #+END_SRC
 
-** rainbow-delimiters - Show bracket depth
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters (GitHub)]]
+** paren-face - Dim brackets
+[[https://github.com/tarsius/paren-face][paren-face (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
+  (use-package paren-face
     :ensure t
-    :hook
-    ((clojure-mode lisp-mode emacs-lisp-mode scheme-mode)
-     . rainbow-delimiters-mode))
+    :config
+    (global-paren-face-mode))
 #+END_SRC
 
 ** expand-region - Mark increasingly larger unit
@@ -2712,18 +2711,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                      :underline ,selection :overline ,selection
                                      :weight unspecified)
                  (mode-line-emphasis :foreground ,orange :slant unspecified)
-                 ;; rainbow-delimiters
-                 (rainbow-delimiters-depth-1-face :foreground ,lc-fg)
-                 (rainbow-delimiters-depth-2-face :foreground ,lc-aqua)
-                 (rainbow-delimiters-depth-3-face :foreground ,lc-yellow)
-                 (rainbow-delimiters-depth-4-face :foreground ,lc-green)
-                 (rainbow-delimiters-depth-5-face :foreground ,lc-blue)
-                 (rainbow-delimiters-depth-6-face :foreground ,lc-fg)
-                 (rainbow-delimiters-depth-7-face :foreground ,lc-aqua)
-                 (rainbow-delimiters-depth-8-face :foreground ,lc-yellow)
-                 (rainbow-delimiters-depth-9-face :foreground ,lc-green)
-                 (rainbow-delimiters-unmatched-face :inherit show-paren-mismatch
-                                                    :foreground unspecified)
+                 ;; paren-face
+                 (parenthesis :foreground ,lc-fg)
                  ;; whitespace
                  (whitespace-trailing :foreground unspecified :background ,selection)
                  (whitespace-empty    :foreground unspecified :background ,selection)
