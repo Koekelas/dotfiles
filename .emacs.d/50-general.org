@@ -1301,6 +1301,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      :map minibuffer-local-map
      ("C-r" . counsel-minibuffer-history))
     :config
+    (declare-function counsel-linux-app-format-function-name-first "counsel")
     (declare-function ivy-set-actions "ivy")
     (put 'counsel-ag-base-command 'safe-local-variable
          (lambda (value)
@@ -1312,6 +1313,8 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
                        `(("d" counsel--find-symbol "definition")
                          ("h" ,show-help "help"))))
 
+    (setq counsel-linux-app-format-function
+          #'counsel-linux-app-format-function-name-first)
     (setq counsel-org-goto-all-outline-path-prefix 'buffer-name)
     (setq counsel-outline-face-style 'org))
 
