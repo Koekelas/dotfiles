@@ -2653,12 +2653,39 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     :preface
     (declare-function color-rgb-to-hex "color")
 
-    (defun koek-thm/set-dark-wm-theme-variant (frame)
-      "Set window manager theme variant of FRAME to dark."
-      (call-process "xprop" nil nil nil
-                    "-id" (frame-parameter frame 'outer-window-id)
-                    "-f" "_GTK_THEME_VARIANT" "8u"
-                    "-set" "_GTK_THEME_VARIANT" "dark"))
+    (defconst koek-thm/theme-specs
+      '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
+        (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
+        (:theme sanityinc-tomorrow-day      :name "Day"      :palette day      :dark nil)
+        (:theme sanityinc-tomorrow-eighties :name "Eighties" :palette eighties :dark t)
+        (:theme sanityinc-tomorrow-night    :name "Night"    :palette night    :dark t))
+      "List of theme specifications.
+  A theme specification is a plist with keys :theme, :name,
+  :palette and :dark.  :theme is a symbol, a Tomorrow theme
+  variant.  :name is a string, the theme name.  :palette is a
+  symbol, the theme color palette, see
+  `color-theme-sanityinc-tomorrow-colors'.  :dark is a symbol,
+  whether the theme is dark.")
+
+    (defconst koek-thm/default-theme 'sanityinc-tomorrow-eighties
+      "Default theme.")
+
+    (when (executable-find "xprop")
+      (defun koek-thm/set-frame-theme-variant (frame)
+        "Set frame theme variant of FRAME.
+  When window theme is a dark theme, the variant is set to dark,
+  else, it's set to nothing."
+        (let* ((spec (seq-find (lambda (spec)
+                                 (eq (plist-get spec :theme)
+                                     (car custom-enabled-themes)))
+                               koek-thm/theme-specs))
+               (variant (or (and (plist-get spec :dark) "dark") "")))
+          (call-process "xprop" nil nil nil
+                        "-id" (frame-parameter frame 'outer-window-id)
+                        "-f" "_GTK_THEME_VARIANT" "8u"
+                        "-set" "_GTK_THEME_VARIANT" variant)))
+
+      (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant))
 
     (defun koek-thm/mix (color1 color2 &optional ratio)
       "Mix COLOR1 with COLOR2 according to RATIO.
@@ -2674,56 +2701,84 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                (seq-mapn (lambda (component component´)
                            (+ (* component ratio) (* component´ ratio´)))
                          (color-name-to-rgb color1) (color-name-to-rgb color2)))))
-    :config
-    ;; Set frame (i.e. window manager) theme
-    (when (executable-find "xprop")
-      (koek-thm/set-dark-wm-theme-variant (selected-frame))
-      (add-hook 'after-make-frame-functions #'koek-thm/set-dark-wm-theme-variant))
 
-    ;; Set window theme
-    (load-theme 'sanityinc-tomorrow-eighties 'no-confirm)
-    (let ((specs
-           (let* ((theme
-                   (alist-get 'eighties color-theme-sanityinc-tomorrow-colors))
-                  (personal
-                   (map-let (foreground background) theme
-                     `((alt-bg . ,(koek-thm/mix background foreground 0.98))
-                       (lc-fg  . ,(koek-thm/mix foreground background))))))
-             (map-let
-                 (foreground background current-line selection red alt-bg lc-fg)
-                 (append personal theme)
-               `(;; Default
-                 (show-paren-match    :foreground ,foreground :background ,selection)
-                 (show-paren-mismatch :foreground ,foreground :background unspecified
-                                      :underline (:style wave :color ,red))
-                 (header-line         :background unspecified)
-                 (fringe              :background ,alt-bg)
-                 (mode-line           :background ,current-line
-                                      :underline ,selection :overline ,selection
-                                      :box unspecified :weight unspecified)
-                 (mode-line-inactive  :background ,alt-bg
-                                      ;; Moody doesn't see inherited
-                                      ;; attributes
-                                      :underline ,selection :overline ,selection
-                                      :weight unspecified)
-                 ;; paren-face
-                 (parenthesis :foreground ,lc-fg)
-                 ;; whitespace
-                 (whitespace-trailing :foreground unspecified :background ,selection)
-                 (whitespace-empty    :foreground unspecified :background ,selection)
-                 (whitespace-line     :foreground unspecified :background ,selection)
-                 ;; ace-window
-                 (aw-leading-char-face :background ,background
-                                       :weight bold :slant normal)
-                 (aw-background-face   :background ,background)
-                 ;; eyebrowse
-                 (eyebrowse-mode-line-active :foreground ,foreground))))))
-      ;; Adding attributes to a face before it's defined, fails. Add
-      ;; attributes to user theme.
-      (apply #'custom-set-faces
-             (mapcar (pcase-lambda (`(,name . ,attrs))
-                       `(,name ((t . ,attrs))))
-                     specs))))
+    (defun koek-thm/enable (theme-spec)
+      "Enable theme THEME-SPEC.
+  THEME-SPEC is a theme specification, see
+  `koek-thm/tmrw-theme-specs'."
+      (interactive
+       (list
+        (let ((candidates
+               (mapcar (lambda (spec)
+                         (cons (format "%s (%s)"
+                                       (plist-get spec :name)
+                                       (or (and (plist-get spec :dark) "dark")
+                                           "light"))
+                               spec))
+                       koek-thm/theme-specs)))
+          (cdr (assoc (completing-read "Theme: " candidates nil t) candidates)))))
+      ;; Set window theme
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme (plist-get theme-spec :theme) 'no-confirm)
+      (let* ((palette
+              (let* ((theme (alist-get (plist-get theme-spec :palette)
+                                       color-theme-sanityinc-tomorrow-colors))
+                     (personal
+                      (map-let (foreground background) theme
+                        `((alt-bg . ,(koek-thm/mix background foreground 0.98))
+                          (lc-fg  . ,(koek-thm/mix foreground background))))))
+                (append personal theme)))
+             (specs
+              (map-let
+                  (foreground background current-line selection red alt-bg lc-fg)
+                  palette
+                `(;; Default
+                  (show-paren-match    :foreground ,foreground :background ,selection)
+                  (show-paren-mismatch :foreground ,foreground :background unspecified
+                                       :underline (:style wave :color ,red))
+                  (header-line         :background unspecified)
+                  (fringe              :background ,alt-bg)
+                  (mode-line           :background ,current-line
+                                       :underline ,selection :overline ,selection
+                                       :box unspecified :weight unspecified)
+                  (mode-line-inactive  :background ,alt-bg
+                                       ;; Moody doesn't see inherited
+                                       ;; attributes
+                                       :underline ,selection :overline ,selection
+                                       :weight unspecified)
+                  ;; avy
+                  (avy-lead-face   :weight normal :slant normal)
+                  (avy-lead-face-0 :inherit avy-lead-face)
+                  (avy-lead-face-1 :inherit avy-lead-face)
+                  (avy-lead-face-2 :inherit avy-lead-face)
+                  ;; paren-face
+                  (parenthesis :foreground ,lc-fg)
+                  ;; whitespace
+                  (whitespace-trailing :foreground unspecified :background ,selection)
+                  (whitespace-empty    :foreground unspecified :background ,selection)
+                  (whitespace-line     :foreground unspecified :background ,selection)
+                  ;; ace-window
+                  (aw-leading-char-face :background ,background
+                                        :weight bold :slant normal)
+                  (aw-background-face   :background ,background)
+                  ;; eyebrowse
+                  (eyebrowse-mode-line-active :foreground ,foreground)))))
+        ;; Adding attributes to a face before it's defined, fails. Add
+        ;; attributes to user theme.
+        (apply #'custom-set-faces
+               (mapcar (pcase-lambda (`(,name . ,attrs))
+                         `(,name ((t . ,attrs))))
+                       specs)))
+
+      ;; Set frame theme
+      (when (fboundp 'koek-thm/set-frame-theme-variant)
+        (mapc #'koek-thm/set-frame-theme-variant (frame-list))))
+    :config
+    (when-let ((spec (seq-find (lambda (spec)
+                                 (eq (plist-get spec :theme)
+                                     koek-thm/default-theme))
+                               koek-thm/theme-specs)))
+      (koek-thm/enable spec)))
 #+END_SRC
 
 Set default font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
