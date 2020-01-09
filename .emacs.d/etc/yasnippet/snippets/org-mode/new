@@ -3,12 +3,12 @@
 # key: new
 # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
 # --
-# -*- ispell-local-dictionary: "${2:$(koek-ys/get-hunspell-name (cdr (assoc (koek-ys/org-to-ietf yas-text) koek-ys/ietf-languages)))}"; -*-
+# -*- ispell-local-dictionary: "${2:$(koek-ys/org-to-other yas-text :hun)}"; -*-
 
 #+TITLE: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
-#+LANGUAGE: ${2:`(koek-ys/get-org-name (cdr (assoc "en-US" koek-ys/ietf-languages)))`$(koek-ys/complete-field (mapcar (pcase-lambda (`(,ietf . ,spec)) (cons ietf (koek-ys/get-org-name spec))) koek-ys/ietf-languages))}
+#+LANGUAGE: ${2:`(koek-ys/ietf-to-other "en-US" :org)`$(koek-ys/complete-org)}
 #+LATEX_CLASS_OPTIONS: [a4paper,11pt]
-#+LATEX_HEADER: \usepackage[${2:$(koek-ys/get-latex-name (cdr (assoc (koek-ys/org-to-ietf yas-text) koek-ys/ietf-languages)))}]{babel}
+#+LATEX_HEADER: \usepackage[${2:$(koek-ys/org-to-other yas-text :tex)}]{babel}
 #+LATEX_HEADER: \usepackage[margin=2cm]{geometry}
 
 * ${3:Heading}

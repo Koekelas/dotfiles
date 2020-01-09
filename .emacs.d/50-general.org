@@ -903,15 +903,13 @@ For the major mode, see [[*YASnippet][YASnippet]].
   (use-package yasnippet
     :ensure t
     :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
-    :config
+    :preface
     (declare-function koek-org/get-src-block-var-value "50-general")
-    (declare-function koek-ys/get-org-name "50-general")
     (declare-function projectile-project-p "projectile")
     (declare-function projectile-project-root "projectile")
     (declare-function yas-choose-value "yasnippet")
-    (declare-function yas-reload-all "yasnippet")
 
-    ;; Snippet odds and ends
+    ;; General
     (defun koek-ys/indent-snippet ()
       "Indent last expanded snippet.
   Snippet is between `yas-snippet-beg' and `yas-snippet-end'."
@@ -922,6 +920,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
   CANDIDATES is an alist of pretty candidate to candidate pairs."
       (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
+    ;; Clojure & ClojureScript
     (defun koek-ys/determine-ns-name ()
       "Return Clojure namespace name for current.
   Assumes source path is a child of project root."
@@ -941,24 +940,52 @@ For the major mode, see [[*YASnippet][YASnippet]].
         (string-join
          (mapcar (apply-partially #'replace-regexp-in-string "_" "-") parts) ".")))
 
-    (defconst koek-ys/ietf-languages
-      '(("de-DE" . ("de-de" "ngerman"  "de_DE"))
-        ("en-US" . ("en-us" "american" "en_US"))
-        ("fr-FR" . ("fr"    "frenchb"  "fr_FR"))
-        ("nl-BE" . ("nl"    "dutch"    "nl_BE")))
-      "Alist of IETF language pairs.
-  IETF language pair is a cons.  Its car is a string, an IETF
-  language name.  Its cdr is a list of strings, an Org language
-  name, a LaTeX language name and a Hunspell language name.")
+    ;; Org & Markdown
+    (defconst koek-ys/lang-specs
+      '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
+        (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
+        (:ietf "fr-FR" :org "fr"    :tex "frenchb"  :hun "fr_FR")
+        (:ietf "nl-BE" :org "nl"    :tex "dutch"    :hun "nl_BE"))
+      "List of language specifications.
+  A language specification is a plist with keys :ietf, :org, :tex
+  and :hun.  :ietf is a string, an IETF language code.  :org, :tex
+  and :hun are strings, the Org, LaTeX and Hunspell language
+  code.")
 
-    (fset 'koek-ys/get-org-name (apply-partially #'nth 0))
-    (fset 'koek-ys/get-latex-name (apply-partially #'nth 1))
-    (fset 'koek-ys/get-hunspell-name (apply-partially #'nth 2))
-    (let ((map (mapcar (pcase-lambda (`(,ietf . ,spec))
-                         (cons (koek-ys/get-org-name spec) ietf))
-                       koek-ys/ietf-languages)))
-      (fset 'koek-ys/org-to-ietf (lambda (org)
-                                   (cdr (assoc org map)))))
+    (defun koek-ys/lang-to-other (lang from to)
+      "Translate language code LANG from scheme FROM to TO.
+  FROM is a symbol, the language scheme of code LANG.  TO is a
+  symbol, the language scheme to.  For language schemes, see
+  `koek-ys/lang-specs'."
+      (plist-get (seq-find (lambda (spec)
+                             (string= (plist-get spec from) lang))
+                           koek-ys/lang-specs)
+                 to))
+
+    (defun koek-ys/ietf-to-other (lang to)
+      "Translate IETF language code LANG to scheme TO.
+  TO is a symbol, the language scheme to, see
+  `koek-ys/lang-to-other'."
+      (koek-ys/lang-to-other lang :ietf to))
+
+    (defun koek-ys/org-to-other (lang to)
+      "Translate Org language code LANG to scheme TO.
+  TO is a symbol, the language scheme to, see
+  `koek-ys/lang-to-other'."
+      (koek-ys/lang-to-other lang :org to))
+
+    (defun koek-ys/complete-ietf ()
+      "Complete IETF language code."
+      (yas-choose-value (mapcar (lambda (spec)
+                                  (plist-get spec :ietf))
+                                koek-ys/lang-specs)))
+
+    (defun koek-ys/complete-org ()
+      "Complete Org language code from IETF codes."
+      (koek-ys/complete-field (mapcar (lambda (spec)
+                                        (cons (plist-get spec :ietf)
+                                              (plist-get spec :org)))
+                                      koek-ys/lang-specs)))
 
     (defun koek-ys/make-ensure-result-directory (var-name)
       "Return function to ensure result directory of current source block exists.
@@ -978,6 +1005,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
                                     (file-name-directory file-name-root))))
           (when (file-name-absolute-p file-name)
             (make-directory file-name 'parents)))))
+    :config
+    (declare-function yas-reload-all "yasnippet")
 
     ;; Load own snippets
     (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
