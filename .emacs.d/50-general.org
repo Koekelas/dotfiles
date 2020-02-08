@@ -2790,7 +2790,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (koek-thm/enable spec)))
 #+END_SRC
 
-Set default font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
+Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
 
 #+BEGIN_SRC emacs-lisp
   (when-let
