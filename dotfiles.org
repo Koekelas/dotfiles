@@ -30,7 +30,7 @@ Define local personal store.
 
 #+BEGIN_SRC fundamental
   MaildirStore personal-local
-  Inbox "~/Documenten/E-mail/Personal/INBOX"
+  Inbox "~/Documenten/E-mail/Personal/INBOX/"
   Path "~/Documenten/E-mail/Personal/"
   SubFolders Verbatim
 #+END_SRC
