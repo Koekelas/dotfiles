@@ -2387,11 +2387,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (setq org-html-doctype "html5")
     (setq org-html-html5-fancy t))
 
-  (use-package ox-icalendar
-    :defer t
-    :config
-    (setq org-icalendar-timezone "Europe/Brussels"))
-
   (use-package ox-latex
     :defer t
     :config

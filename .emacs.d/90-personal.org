@@ -164,6 +164,11 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     (setq org-caldav-url
           "https://caldav.fastmail.com/dav/calendars/user/nicolas@dejaeghe.re")
     (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
+
+  (use-package ox-icalendar
+    :defer t
+    :config
+    (setq org-icalendar-timezone "Europe/Brussels"))
 #+END_SRC
 
 * E-mail accounts
