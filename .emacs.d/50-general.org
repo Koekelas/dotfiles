@@ -1443,8 +1443,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
             ("Octave" "octave")
             ("OpenJDK" "openjdk~8")
             ("pandas" "pandas~0.25")
-            ("PostgreSQL" "postgresql~11")
-            ("Python" "python~3.7")
+            ("PostgreSQL" "postgresql~12")
+            ("Python" "python~3.8")
             ("scikit-image" "scikit_image")
             ("scikit-learn" "scikit_learn")
             ("StatsModels" "statsmodels")))
@@ -2439,7 +2439,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (use-package devdocs-lookup
       :bind
       (:map python-mode-map
-       ("C-c d d" . devdocs-lookup-python~3.7)
+       ("C-c d d" . devdocs-lookup-python~3.8)
        ("C-c d C-n" . devdocs-lookup-numpy~1.17)
        ("C-c d C-p" . devdocs-lookup-pandas~0.25)
        ("C-c d C-s" . devdocs-lookup-statsmodels)
@@ -2532,7 +2532,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (use-package devdocs-lookup
       :bind
       (:map sql-mode-map
-       ("C-c d C-p" . devdocs-lookup-postgresql~11)))
+       ("C-c d C-p" . devdocs-lookup-postgresql~12)))
 
     (setq sql-product 'postgres))
 #+END_SRC
