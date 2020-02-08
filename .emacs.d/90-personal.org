@@ -135,11 +135,11 @@ Configure agendas.
 
 ** Calendars
 To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
-=Emacs calendar= and give it access to CalDAV. Then, to store it
+=Emacs calendars= and give it access to CalDAV. Then, to store it
 securely, run:
 
 #+BEGIN_SRC sh
-  secret-tool store --label="Emacs calendar personal" host "caldav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
+  secret-tool store --label="Emacs calendars personal" host "caldav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
 #+END_SRC
 
 For more information, see [[info:auth#Help for users][Help for users (info)]], specifically the
