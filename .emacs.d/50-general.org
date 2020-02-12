@@ -1264,6 +1264,14 @@ Bury unneeded buffers, computers have more than enough memory.
 
 * Other
 
+** Global commands
+The setting ~repeat-on-final-keystroke~ is clunky. Rebind ~repeat~ to
+something short.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-key "C-z" #'repeat)
+#+END_SRC
+
 ** Minibuffer
 Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) in minibuffer.
 
