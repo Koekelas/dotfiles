@@ -1526,8 +1526,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
 #+BEGIN_SRC emacs-lisp
   (use-package compile
     :bind
-    (("C-c x c" . compile)
-     ("C-c x r" . recompile))
+    (("C-c x r" . compile)
+     ("C-c x C-r" . recompile))
     :preface
     (declare-function ansi-color-apply-on-region "ansi-color")
 
