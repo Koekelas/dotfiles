@@ -1548,7 +1548,19 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e
     :bind
-    ("C-c x m" . mu4e))
+    ("C-c x m" . mu4e)
+    :preface
+    (defun koek-mu/compose ()
+      "Compose new e-mail."
+      (interactive)
+      (require 'mu4e)
+      (call-interactively #'compose-mail))
+    :init
+    (bind-keys
+     ([remap compose-mail] . koek-mu/compose)
+     ("C-c x c" . koek-mu/compose))
+
+    (setq mail-user-agent 'mu4e-user-agent))
 
   (use-package mu4e-vars
     :defer t
@@ -1613,6 +1625,34 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     (add-to-list 'mu4e-view-actions
                  '("open in browser" . mu4e-action-view-in-browser) 'append)
     (setq mu4e-view-show-addresses t))
+
+  ;; Prefer variables of package mu4e-compose to those of message and
+  ;; those of message to those of sendmail
+  (use-package message
+    :defer t
+    :preface
+    (defun koek-msg/check-spelling ()
+      "Check spelling of e-mail."
+      (let ((tick (buffer-chars-modified-tick)))
+        (ispell-message)
+        (unless (or (= (buffer-chars-modified-tick) tick)
+                    (y-or-n-p "Spelling checked.  Send? "))
+          (error "%s" "Send aborted"))))
+    :config
+    (setq message-send-mail-function #'smtpmail-send-it)
+    (setq message-beginning-of-line nil)
+    (add-hook 'message-send-hook #'koek-msg/check-spelling))
+
+  (use-package mu4e-compose
+    :defer t
+    :config
+    ;; Revert remap
+    (bind-keys
+     :map mu4e-compose-mode-map
+     ([remap beginning-of-buffer] . nil)
+     ([remap end-of-buffer]       . nil))
+
+    (setq mu4e-compose-context-policy 'ask-if-none))
 #+END_SRC
 
 ** elfeed - News reader

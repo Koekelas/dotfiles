@@ -172,7 +172,8 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
 #+END_SRC
 
 * E-mail accounts
-Configure e-mail accounts.
+Configure e-mail accounts. For server details, see [[file:~/.ststore/documents/Projecten/Dotfiles/dotfiles/dotfiles.org::*isync][isync]], specifically
+the instructions on storing passwords.
 
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e-vars
@@ -181,10 +182,6 @@ Configure e-mail accounts.
     ;; maildir, refile-folder, drafts-folder, sent-folder and
     ;; trash-folder are directory file names (i.e. no end /)
     (setq mu4e-maildir (expand-file-name "E-mail" koek/documents-dir))
-    (setq mu4e-refile-folder "/Personal/Archive")
-    (setq mu4e-drafts-folder "/Personal/Drafts")
-    (setq mu4e-sent-folder "/Personal/Sent")
-    (setq mu4e-trash-folder "/Personal/Trash")
 
     (use-package mu4e-context
       :config
@@ -199,10 +196,14 @@ Configure e-mail accounts.
                        (string-prefix-p "/Personal/"
                                         (mu4e-message-field message :maildir))))
                    :vars
-                   `((mu4e-refile-folder . ,mu4e-refile-folder)
-                     (mu4e-drafts-folder . ,mu4e-drafts-folder)
-                     (mu4e-sent-folder   . ,mu4e-sent-folder)
-                     (mu4e-trash-folder  . ,mu4e-trash-folder))))))
+                   `((smtpmail-smtp-server   . "smtp.fastmail.com")
+                     (smtpmail-smtp-service  . 465)
+                     (smtpmail-stream-type   . ssl)
+                     (mu4e-refile-folder     . "/Personal/Archive")
+                     (mu4e-drafts-folder     . "/Personal/Drafts")
+                     (mu4e-sent-folder       . "/Personal/Sent")
+                     (mu4e-trash-folder      . "/Personal/Trash")
+                     (mu4e-compose-signature . ,user-full-name))))))
 
     (use-package mu4e-utils
       :config

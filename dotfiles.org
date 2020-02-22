@@ -40,7 +40,8 @@ To generate the app password, follow [[https://www.fastmail.com/help/clients/app
 securely, run:
 
 #+BEGIN_SRC sh
-  secret-tool store --label="Emacs e-mail personal" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
+  secret-tool store --label="Emacs e-mail personal (IMAP)" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
+  secret-tool store --label="Emacs e-mail personal (SMTP)" host "smtp.fastmail.com" port "465" user "nicolas@dejaeghe.re"
 #+END_SRC
 
 Define remote personal store. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names and
