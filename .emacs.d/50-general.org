@@ -1340,16 +1340,16 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      ("C-r" . counsel-minibuffer-history))
     :config
     (declare-function counsel-linux-app-format-function-name-first "counsel")
-    (declare-function ivy-set-actions "ivy")
+    (declare-function ivy-add-actions "ivy")
     (put 'counsel-ag-base-command 'safe-local-variable
          (lambda (value)
            (string= value "ag --nocolor --nogroup --hidden %s")))
 
-    (let ((show-help (lambda (candidate)
-                       (helpful-function (intern candidate)))))
-      (ivy-set-actions 'counsel-M-x
-                       `(("d" counsel--find-symbol "definition")
-                         ("h" ,show-help "help"))))
+    (ivy-add-actions 'counsel-M-x
+                     `(("h"
+                        ,(lambda (candidate)
+                           (helpful-function (intern candidate)))
+                        "help")))
 
     (setq counsel-linux-app-format-function
           #'counsel-linux-app-format-function-name-first)
