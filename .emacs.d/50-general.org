@@ -872,6 +872,8 @@ Run =M-x= ~make-symbolic-link~. Create a link to
 
     ;; Prime abbrev tables
     (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
+      (require 'find-func)
+
       ;; Upcase SQL keywords
       (let ((abbrevs
              (let ((keywords
@@ -1536,6 +1538,8 @@ Prefix map =projectile= is sorted before prefix map =documentation=.
   Output is between `compilation-filter-start' and point."
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
+    (require 'ansi-color)
+
     (setq compilation-scroll-output 'first-error)
     (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 #+END_SRC
@@ -2831,6 +2835,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (when (fboundp 'koek-thm/set-frame-theme-variant)
         (mapc #'koek-thm/set-frame-theme-variant (frame-list))))
     :config
+    (require 'color)
+
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
                                      koek-thm/default-theme))
