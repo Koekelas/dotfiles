@@ -702,9 +702,10 @@ End files with empty line.
 Supercharge edit commands.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [remap downcase-word] #'downcase-dwim)
-  (bind-key [remap upcase-word] #'upcase-dwim)
-  (bind-key [remap capitalize-word] #'capitalize-dwim)
+  (bind-keys
+   ([remap downcase-word]   . downcase-dwim)
+   ([remap upcase-word]     . upcase-dwim)
+   ([remap capitalize-word] . capitalize-dwim))
 #+END_SRC
 
 ** Clipboard
@@ -2042,8 +2043,11 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
        :map lisp-interaction-mode-map
        ("C-c C-d" . helpful-at-point)))
 
-    (bind-key "C-c C-c" #'eval-buffer emacs-lisp-mode-map)
-    (bind-key "C-c C-c" #'eval-buffer lisp-interaction-mode-map)
+    (bind-keys
+     :map emacs-lisp-mode-map
+     ("C-c C-c" . eval-buffer)
+     :map lisp-interaction-mode-map
+     ("C-c C-c" . eval-buffer))
     :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
