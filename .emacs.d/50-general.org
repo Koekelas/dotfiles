@@ -1596,7 +1596,15 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     (use-package mu4e-utils
       :bind
       (:map mu4e-headers-mode-map
-       ("G" . mu4e-update-mail-and-index))))
+       ("G" . mu4e-update-mail-and-index)))
+
+    ;; Headers must at least be the length of the header's short name
+    ;; plus two for sort direction wide. For header short names, see
+    ;; `mu4e-header-info'.
+    (setq mu4e-headers-fields '((:human-date . 8)
+                                (:flags      . 6)
+                                (:from       . 22)
+                                (:subject    . nil))))
 
   (use-package mu4e-mark
     :defer t
