@@ -1384,7 +1384,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :bind
     (([remap describe-variable] . helpful-variable)
      ([remap describe-function] . helpful-callable)
-     ([remap describe-key] . helpful-key)))
+     ([remap describe-key]      . helpful-key)))
 #+END_SRC
 
 ** info - Info viewer
