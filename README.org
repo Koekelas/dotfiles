@@ -92,7 +92,7 @@ To install dependencies on Arch Linux, run:
   pacman -S gcc clang meson gdb
 
   ## Clojure & ClojureScript
-  # Install leiningen from AUR
+  pacman -S leiningen
 
   ## Common Lisp
   pacman -S sbcl
