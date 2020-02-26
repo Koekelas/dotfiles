@@ -61,7 +61,7 @@ PACKAGE-NAME is a symbol."
 ;; Installing latest org after loading builtin org breaks org. Install
 ;; latest org before loading literate configuration.
 (koek-pkg/ensure 'org-plus-contrib)
-;; org is configured elsewhere.
+;; org is configured elsewhere
 
 ;;; cus-edit - Configuration interface
 (setq custom-file (no-littering-expand-var-file-name "custom.el"))
