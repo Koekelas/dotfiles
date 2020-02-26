@@ -323,6 +323,13 @@ Move data directory out of the way.
   NLTK_DATA=${XDG_DATA_HOME:-$HOME/.local/share}/nltk/data
 #+END_SRC
 
+* Python
+Ensure FreeCAD's packages are found.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-python.conf
+  PYTHONPATH=/usr/lib/freecad/lib:$PYTHONPATH
+#+END_SRC
+
 * Steam
 Show Steam with native runtime as Steam.
 
