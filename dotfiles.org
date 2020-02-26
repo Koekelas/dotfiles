@@ -320,7 +320,7 @@ Configuration (CodeMirror)]].
 Move data directory out of the way.
 
 #+BEGIN_SRC conf :tangle .config/environment.d/50-nltk.conf
-  NLTK_DATA="$HOME/.nltk_data"
+  NLTK_DATA=${XDG_DATA_HOME:-$HOME/.local/share}/nltk/data
 #+END_SRC
 
 * Steam
