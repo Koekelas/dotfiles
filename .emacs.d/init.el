@@ -10,12 +10,8 @@
 ;; Increasing cons threshold makes garbage collection more efficient,
 ;; decreasing it makes garbage collection less noticeable. Increase
 ;; cons threshold during initialization so Emacs starts fast.
-(let ((cons-threshold gc-cons-threshold))
-  (add-hook 'after-init-hook
-            (lambda ()
-              (setq gc-cons-threshold cons-threshold))))
-
-(setq gc-cons-threshold (* gc-cons-threshold 128))
+(setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
+;; Once initialized, gcmh kicks in
 
 ;;; nsm - Network security manager
 (require 'nsm)

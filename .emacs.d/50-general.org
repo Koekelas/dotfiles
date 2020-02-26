@@ -1267,6 +1267,18 @@ Bury unneeded buffers, computers have more than enough memory.
 
 * Other
 
+** gcmh - Collect garbage when idle
+[[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gcmh
+    :ensure t
+    :hook (after-init . gcmh-mode)
+    :config
+    (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
+    :delight)
+#+END_SRC
+
 ** Global commands
 The setting ~repeat-on-final-keystroke~ is clunky. Rebind ~repeat~ to
 something short.
