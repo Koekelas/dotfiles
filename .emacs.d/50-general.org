@@ -1680,6 +1680,12 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
      ([remap end-of-buffer]       . nil))
 
     (setq mu4e-compose-context-policy 'ask-if-none))
+
+  (use-package org-mu4e
+    :init
+    (require 'mu4e)
+    :config
+    (setq org-mu4e-link-query-in-headers-mode t))
 #+END_SRC
 
 ** elfeed - News reader
