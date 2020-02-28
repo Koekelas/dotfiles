@@ -1312,6 +1312,8 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
       :config
       (setq ivy-initial-inputs-alist nil))
 
+    (unbind-key "C-o" ivy-minibuffer-map) ; hydra-ivy/body
+
     (setq ivy-re-builders-alist
           '((swiper-isearch . ivy--regex-plus)
             (counsel-ag . ivy--regex-plus)
