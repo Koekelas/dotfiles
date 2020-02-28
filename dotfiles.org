@@ -327,7 +327,7 @@ Move data directory out of the way.
 Ensure FreeCAD's packages are found.
 
 #+BEGIN_SRC conf :tangle .config/environment.d/50-python.conf
-  PYTHONPATH=/usr/lib/freecad/lib:$PYTHONPATH
+  PYTHONPATH=/usr/lib/freecad/lib${PYTHONPATH:+:$PYTHONPATH}
 #+END_SRC
 
 * Steam
