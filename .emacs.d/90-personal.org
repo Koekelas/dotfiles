@@ -62,9 +62,12 @@ Define well known file and directory names.
     "File name to projects directory.")
 
   (defconst koek/static-agenda-files
-    (mapcar (lambda (file-name)
-              (expand-file-name file-name koek/documents-dir))
-            '("Inbox.org" "Kalenders/Afspraken.org"))
+    (thread-last '("Inbox.org" "Kalenders/Afspraken.org")
+      (mapcar (lambda (file-name)
+                (expand-file-name file-name koek/documents-dir)))
+      ;; Opening a nonexistent file errors. Filter nonexistent files so
+      ;; Emacs starts on a foreign system.
+      (seq-filter #'file-exists-p))
     "List of file names to static agenda files.")
 #+END_SRC
 
