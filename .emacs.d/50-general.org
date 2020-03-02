@@ -1615,6 +1615,11 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
       (:map mu4e-headers-mode-map
        ("G" . mu4e-update-mail-and-index)))
 
+    (use-package org-mu4e
+      :bind
+      (:map mu4e-headers-mode-map
+       ("C-c o c" . org-mu4e-store-and-capture)))
+
     ;; Headers must at least be the length of the header's short name
     ;; plus two for sort direction wide. For header short names, see
     ;; `mu4e-header-info'.
@@ -1653,6 +1658,11 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
       (unless mu4e-msg2pdf
         (setq mu4e-view-actions
               (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
+
+    (use-package org-mu4e
+      :bind
+      (:map mu4e-view-mode-map
+       ("C-c o c" . org-mu4e-store-and-capture)))
 
     (add-to-list 'mu4e-view-actions
                  '("open in browser" . mu4e-action-view-in-browser) 'append)

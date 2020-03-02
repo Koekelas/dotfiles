@@ -129,8 +129,18 @@ Configure agendas.
                              "%?")
                            "\n")
              :empty-lines 1)
+            ("r" "Reply" entry (file+olp "Inbox.org" "Taken")
+             ,(string-join '("* TODO Beantwoord %:subject"
+                             "DEADLINE: %^t"
+                             ""
+                             "%a"
+                             ""
+                             "%?")
+                           "\n")
+             :empty-lines 1)
             ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
-             "- [[%x][%^{Title}]]%?"))))
+             "- [[%x][%^{Title}]]%?")))
+    (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 #+END_SRC
 
 ** Calendars
