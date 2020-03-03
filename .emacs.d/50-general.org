@@ -1440,7 +1440,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
   npm and Express
 - Octave: Octave
 - Python: Python, NumPy, pandas, StatsModels, scikit-learn,
-  scikit-image and Matplotlib
+  scikit-image, TensorFlow and Matplotlib
 - SQL: PostgreSQL
 
 #+BEGIN_SRC emacs-lisp
@@ -1476,6 +1476,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
             ("StatsModels" "statsmodels")
             ("scikit-learn" "scikit_learn")
             ("scikit-image" "scikit_image")
+            ("TensorFlow" "tensorflow~python")
             ("Matplotlib" "matplotlib~3.1")
             ("PostgreSQL" "postgresql~12")))
     (devdocs-setup))
@@ -2540,6 +2541,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
        ("C-c d C-s" . devdocs-lookup-statsmodels)
        ("C-c d C-l" . devdocs-lookup-scikit_learn)
        ("C-c d C-i" . devdocs-lookup-scikit_image)
+       ("C-c d C-t" . devdocs-lookup-tensorflow~python)
        ("C-c d C-a" . devdocs-lookup-matplotlib~3.1)))
 
     (add-hook 'python-mode-hook #'koek-py/disable-checker)
