@@ -1500,6 +1500,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
       "C-c !" "errors"
       "C-c &" "yasnippet"
       "C-c d" "documentation"
+      "C-c e" "editor"
       "C-c f" "files"
       "C-c j" "jump"
       "C-c o" "org"
@@ -2074,11 +2075,11 @@ Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
     (use-package pp
       :bind
       (:map emacs-lisp-mode-map
-       ("C-c x p" . pp-eval-last-sexp)
-       ("C-c x a" . pp-macroexpand-last-sexp)
+       ("C-c e e" . pp-eval-last-sexp)
+       ("C-c e m" . pp-macroexpand-last-sexp)
        :map lisp-interaction-mode-map
-       ("C-c x p" . pp-eval-last-sexp)
-       ("C-c x a" . pp-macroexpand-last-sexp)))
+       ("C-c e e" . pp-eval-last-sexp)
+       ("C-c e m" . pp-macroexpand-last-sexp)))
 
     (use-package helpful
       :bind
