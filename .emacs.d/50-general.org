@@ -1584,7 +1584,7 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     :init
     (bind-keys
      ([remap compose-mail] . koek-mu/compose)
-     ("C-c x c" . koek-mu/compose))
+     ("C-c x C-m" . koek-mu/compose))
 
     (setq mail-user-agent 'mu4e-user-agent))
 
