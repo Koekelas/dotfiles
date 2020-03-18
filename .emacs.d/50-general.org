@@ -1677,7 +1677,13 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     :preface
     (defun koek-msg/check-spelling ()
       "Check spelling of e-mail."
-      (let ((tick (buffer-chars-modified-tick)))
+      (let ((ispell-skip-region-alist     ; Dynamic variable
+             (let ((citation-line
+                    (list (rx line-start (one-or-more not-newline) "writes:" line-end)
+                          #'forward-line))
+                   (citation (list mu4e-cited-regexp #'forward-line)))
+               (append (list citation-line citation) ispell-skip-region-alist)))
+            (tick (buffer-chars-modified-tick)))
         (ispell-message)
         (unless (or (= (buffer-chars-modified-tick) tick)
                     (y-or-n-p "Spelling checked.  Send? "))
