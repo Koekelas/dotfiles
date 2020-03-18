@@ -2542,14 +2542,13 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
       :bind
       (:map python-mode-map
        ("C-c d d" . devdocs-lookup-python~3.8)
-       ;; C-a, C-m is interpreted as RET
        ("C-c d C-n" . devdocs-lookup-numpy~1.17)
        ("C-c d C-p" . devdocs-lookup-pandas~0.25)
        ("C-c d C-s" . devdocs-lookup-statsmodels)
        ("C-c d C-l" . devdocs-lookup-scikit_learn)
        ("C-c d C-i" . devdocs-lookup-scikit_image)
        ("C-c d C-t" . devdocs-lookup-tensorflow~python)
-       ("C-c d C-a" . devdocs-lookup-matplotlib~3.1)))
+       ("C-c d C-m" . devdocs-lookup-matplotlib~3.1)))
 
     (add-hook 'python-mode-hook #'koek-py/disable-checker)
     :delight (python-mode "Py" :major))
