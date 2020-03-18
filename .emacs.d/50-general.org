@@ -1759,7 +1759,8 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
-    :defer t
+    :bind
+    ("C-c x c" . calendar)
     :config
     (setq calendar-week-start-day 1))     ; Monday
 #+END_SRC
