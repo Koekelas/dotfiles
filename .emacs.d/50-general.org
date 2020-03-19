@@ -63,6 +63,10 @@ Move deleted files to trash.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
+    :demand t
+    :bind
+    (:map projectile-command-map
+     ("x t" . projectile-run-vterm))
     :config
     (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
 
@@ -1525,6 +1529,45 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+END_SRC
 
 Prefix map =projectile= is sorted before prefix map =documentation=.
+
+** vterm - Terminal emulator
+[[https://github.com/akermu/emacs-libvterm][vterm (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :ensure t
+    :commands vterm-mode
+    :preface
+    (defconst koek-term/buffer-base-name "*vterm*"
+      "Base name of vterm buffers.")
+
+    (defun koek-term/launch (&optional arg)
+      "Launch a vterm session or switch to it when one exists.
+  With numeric prefix argument ARG, launch a numbered session or
+  switch to it when it exists.  With `\\[universal-argument]'
+  prefix argument ARG, launch a new numbered session, taking the
+  first available number."
+      (interactive "P")
+      (pop-to-buffer-same-window
+       (cond
+        ((integerp arg)
+         (format "%s<%d>" koek-term/buffer-base-name arg))
+        (arg
+         (generate-new-buffer-name koek-term/buffer-base-name))
+        (t
+         koek-term/buffer-base-name)))
+      (unless (derived-mode-p 'vterm-mode)
+        (vterm-mode)))
+    :init
+    (bind-key "C-c x t" #'koek-term/launch)
+    :config
+    (setq vterm-kill-buffer-on-exit t))
+
+  (use-package vterm-module-make
+    :defer t
+    :init
+    (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=yes"))
+#+END_SRC
 
 ** eshell - Shell
 #+BEGIN_SRC emacs-lisp

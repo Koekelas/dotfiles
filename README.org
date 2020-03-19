@@ -21,6 +21,8 @@ Finally, copy the dotfiles to your home directory.
     - [[https://hunspell.github.io/][Hunspell]]
     - [[https://x.org/][xprop]]
     - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+  - Terminal emulator:
+    - [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
   - E-mail client:
     - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
   - News reader: [[https://curl.haxx.se/][curl]]
@@ -71,6 +73,9 @@ To install dependencies on Arch Linux, run:
 
   # Install PragmataPro Mono or
   pacman -S adobe-source-code-pro-fonts
+
+  ## Terminal emulator
+  pacman -S cmake libtool libvterm
 
   ## E-mail client
   pacman -S isync
