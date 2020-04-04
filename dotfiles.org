@@ -96,36 +96,27 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   .nrepl-port
 #+END_SRC
 
-* GNOME Shell app folders
+* GNOME Shell
+
+** App folders
 To apply configuration, run:
 
 #+BEGIN_SRC sh
   gnome-catgen -s
 #+END_SRC
 
-** Avahi
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Avahi.category
-:END:
-
-#+BEGIN_SRC fundamental
-  avahi-discover.desktop
-  bssh.desktop
-  bvnc.desktop
-#+END_SRC
-
-** Citrix
+*** Citrix
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Citrix.category
 :END:
 
 #+BEGIN_SRC fundamental
-  configmgr.desktop
-  conncentre.desktop
+  Citrix_subscribed_XD-C10-S01-Controller.DLG-SB2206-PRD-PROD $S1048-1056.desktop
+  Citrix_subscribed_XD-C10-S01-Controller.VDI Dedicated Default Office 20 $P9447.desktop
   wfcmgr.desktop
 #+END_SRC
 
-** Creative
+*** Creative
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Creative.category
 :END:
@@ -144,7 +135,7 @@ To apply configuration, run:
   valentina.desktop
 #+END_SRC
 
-** DisplayCAL
+*** DisplayCAL
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/DisplayCAL.category
 :END:
@@ -161,7 +152,7 @@ To apply configuration, run:
   displaycal.desktop
 #+END_SRC
 
-** Internet
+*** Internet
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Internet.category
 :END:
@@ -169,29 +160,26 @@ To apply configuration, run:
 #+BEGIN_SRC fundamental
   chromium.desktop
   firefox.desktop
+  io.github.qtox.qTox.desktop
   jami-gnome.desktop
   jdownloader.desktop
-  org.gnome.Polari.desktop
-  skypeforlinux.desktop
 #+END_SRC
 
-** Leisure
+*** Leisure
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Leisure.category
 :END:
 
 #+BEGIN_SRC fundamental
-  kodi.desktop
   makemkv.desktop
   org.gnome.Lollypop.desktop
   org.musicbrainz.Picard.desktop
   puddletag.desktop
   steam-native.desktop
-  steam.desktop
   vlc.desktop
 #+END_SRC
 
-** LibreOffice
+*** LibreOffice
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/LibreOffice.category
 :END:
@@ -206,46 +194,16 @@ To apply configuration, run:
   libreoffice-writer.desktop
 #+END_SRC
 
-** OpenJDK
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/OpenJDK.category
-:END:
-
-#+BEGIN_SRC fundamental
-  jconsole-java-openjdk.desktop
-  jshell-java-openjdk.desktop
-#+END_SRC
-
-** Qt
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Qt.category
-:END:
-
-#+BEGIN_SRC fundamental
-  assistant-qt4.desktop
-  assistant.desktop
-  designer-qt4.desktop
-  designer.desktop
-  linguist-qt4.desktop
-  linguist.desktop
-  qdbusviewer-qt4.desktop
-  qdbusviewer.desktop
-  qv4l2.desktop
-  qvidcap.desktop
-#+END_SRC
-
-** System
+*** System
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/System.category
 :END:
 
 #+BEGIN_SRC fundamental
-  cups.desktop
+  ca.desrt.dconf-editor.desktop
   gnome-control-center.desktop
   gnome-system-monitor.desktop
   gufw.desktop
-  lstopo.desktop
-  nm-connection-editor.desktop
   org.gnome.DiskUtility.desktop
   org.gnome.Logs.desktop
   org.gnome.Terminal.desktop
@@ -255,7 +213,7 @@ To apply configuration, run:
   yelp.desktop
 #+END_SRC
 
-** Utilities
+*** Utilities
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Utilities.category
 :END:
@@ -264,28 +222,25 @@ To apply configuration, run:
   com.obsproject.Studio.desktop
   eid-viewer.desktop
   electrum.desktop
-  eog.desktop
-  keepassx2.desktop
   org.gnome.Cheese.desktop
   org.gnome.Evince.desktop
   org.gnome.FileRoller.desktop
   org.gnome.Nautilus.desktop
   org.gnome.Screenshot.desktop
+  org.gnome.eog.desktop
+  org.keepassxc.KeePassXC.desktop
   simple-scan.desktop
   syncthing-gtk.desktop
-  xdvi.desktop
 #+END_SRC
 
-** Work
+*** Work
 :PROPERTIES:
 :header-args+: :tangle .local/share/applications-categories/Work.category
 :END:
 
 #+BEGIN_SRC fundamental
-  anki.desktop
   arduino.desktop
   emacs.desktop
-  ipython.desktop
   org.gnome.Boxes.desktop
   org.gnome.Calculator.desktop
   org.gnome.Maps.desktop
@@ -294,6 +249,109 @@ To apply configuration, run:
   org.octave.Octave.desktop
   wireshark.desktop
   wolfram-mathematica11.desktop
+#+END_SRC
+
+** Superfluous applications
+Hide superfluous applications.
+
+#+BEGIN_SRC conf :tangle .local/share/applications/assistant.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/avahi-discover.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/bssh.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/bvnc.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/cmake-gui.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/configmgr.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/conncentre.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/cups.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/designer.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/ipython.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/jconsole-java-openjdk.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/jshell-java-openjdk.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/linguist.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/lstopo.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/org.gnome.Extensions.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/qdbusviewer.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/qv4l2.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/qvidcap.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/steam.desktop
+  [Desktop Entry]
+  NoDisplay=true
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/xdvi.desktop
+  [Desktop Entry]
+  NoDisplay=true
 #+END_SRC
 
 * Jupyter Notebook
@@ -381,19 +439,4 @@ Show Steam with native runtime as Steam.
   [Desktop Action Friends]
   Name=Friends
   Exec=steam steam://open/friends
-#+END_SRC
-
-Hide Steam with bundled runtime.
-
-#+BEGIN_SRC conf :tangle .local/share/applications/steam.desktop
-  [Desktop Entry]
-  Name=Steam (Runtime)
-  Comment=Application for managing and playing games on Steam
-  Exec=/usr/bin/steam-runtime %U
-  Icon=steam
-  Terminal=false
-  Type=Application
-  Categories=Network;FileTransfer;Game;
-  MimeType=x-scheme-handler/steam;
-  NoDisplay=true
 #+END_SRC
