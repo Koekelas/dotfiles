@@ -3,10 +3,6 @@
 
 * E-mail
 
-** Domain
-To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
-(FastMail)]].
-
 ** isync
 :PROPERTIES:
 :header-args+: :tangle .mbsyncrc
@@ -20,6 +16,9 @@ Store =.mbsyncstate= with maildir sub directories, simplifying backup.
 #+END_SRC
 
 *** Personal account
+To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
+(FastMail)]].
+
 To create the maildir directory, run:
 
 #+BEGIN_SRC sh
