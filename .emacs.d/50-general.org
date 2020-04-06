@@ -2117,6 +2117,41 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 **** Sly and Slynk versions differ
 Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
 
+** Conf
+Conf mode's mode declaration requires precedence over Text mode's.
+Configure Text mode first.
+
+#+BEGIN_SRC emacs-lisp :noweb no-export
+  <<text-mode>>
+#+END_SRC
+
+Configure Conf mode afterwards.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package conf-mode
+    :mode (rx "cross.txt" string-end)
+    :preface
+    (defconst koek-conf/mode-names
+      '((conf-colon-mode . "Conf:")
+        (conf-desktop-mode . "Desktop")
+        (conf-javaprop-mode . "Properties")
+        (conf-ppd-mode . "PPD")
+        (conf-space-mode . "Conf·")
+        (conf-toml-mode . "TOML")
+        (conf-unix-mode . "Unix")
+        (conf-windows-mode . "INI")
+        (conf-xdefaults-mode . "Xdefaults"))
+      "Alist of Conf mode symbol to Conf mode name pairs.")
+
+    (define-advice conf-mode-initialize
+        (:after (&rest _args) koek-conf/update-mode-name)
+      (setq mode-name
+            '(:eval
+              (or (and (not (bound-and-true-p inhibit-mode-name-delight))
+                       (alist-get major-mode koek-conf/mode-names))
+                  "Conf")))))
+#+END_SRC
+
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
   (use-package elisp-mode
@@ -2716,39 +2751,10 @@ which requires AUCTeX.
 #+END_SRC
 
 ** Text
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb-ref text-mode :tangle no
   (use-package text-mode
     :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
     :delight (text-mode "Txt" :major))
-#+END_SRC
-
-** Conf
-Conf mode's mode declaration requires precedence over Text mode's.
-Configure Conf mode after Text mode.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package conf-mode
-    :mode (rx "cross.txt" string-end)
-    :preface
-    (defconst koek-conf/mode-names
-      '((conf-colon-mode . "Conf:")
-        (conf-desktop-mode . "Desktop")
-        (conf-javaprop-mode . "Properties")
-        (conf-ppd-mode . "PPD")
-        (conf-space-mode . "Conf·")
-        (conf-toml-mode . "TOML")
-        (conf-unix-mode . "Unix")
-        (conf-windows-mode . "INI")
-        (conf-xdefaults-mode . "Xdefaults"))
-      "Alist of Conf mode symbol to Conf mode name pairs.")
-
-    (define-advice conf-mode-initialize
-        (:after (&rest _args) koek-conf/update-mode-name)
-      (setq mode-name
-            '(:eval
-              (or (and (not (bound-and-true-p inhibit-mode-name-delight))
-                       (alist-get major-mode koek-conf/mode-names))
-                  "Conf")))))
 #+END_SRC
 
 ** Wolfram Language
