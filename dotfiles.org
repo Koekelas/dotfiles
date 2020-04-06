@@ -6,7 +6,6 @@
 ** isync
 :PROPERTIES:
 :header-args+: :tangle .mbsyncrc
-:header-args:sh: :tangle no
 :END:
 
 Store =.mbsyncstate= with maildir sub directories, simplifying backup.
@@ -21,7 +20,7 @@ To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-
 
 To create the maildir directory, run:
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :tangle no
   mkdir -p ~/Documenten/E-mail/Personal
 #+END_SRC
 
@@ -38,7 +37,7 @@ To generate the app password, follow [[https://www.fastmail.com/help/clients/app
 =Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
 securely, run:
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :tangle no
   secret-tool store --label="Emacs e-mail personal (IMAP)" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
   secret-tool store --label="Emacs e-mail personal (SMTP)" host "smtp.fastmail.com" port "465" user "nicolas@dejaeghe.re"
 #+END_SRC
