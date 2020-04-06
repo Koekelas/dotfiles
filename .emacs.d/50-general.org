@@ -1634,7 +1634,8 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e-vars
     :defer t
     :config
-    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-get-mail-command
+          (format "mbsync -c %s -a" (expand-file-name "~/.config/isync/mbsyncrc")))
     (setq mu4e-update-interval (* 60 30)) ; In seconds
     ;; When moving e-mail, isync requires them to be renamed
     (setq mu4e-change-filenames-when-moving t)

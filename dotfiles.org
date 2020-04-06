@@ -5,7 +5,7 @@
 
 ** isync
 :PROPERTIES:
-:header-args+: :tangle .mbsyncrc
+:header-args+: :tangle .config/isync/mbsyncrc
 :END:
 
 Store =.mbsyncstate= with maildir sub directories, simplifying backup.
