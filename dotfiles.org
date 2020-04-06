@@ -77,26 +77,18 @@ Ensure FreeCAD's packages are found.
 #+END_SRC
 
 * Git
-:PROPERTIES:
-:header-args+: :tangle .config/git/config
-:END:
-
 Set identity.
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle .config/git/config
   [user]
   name = Nicolas De Jaeghere
   email = nicolas@dejaeghe.re
 #+END_SRC
 
 ** Global ignore
-:PROPERTIES:
-:header-args+: :tangle .config/git/ignore
-:END:
-
 Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .config/git/ignore
   .shadow-cljs/
   build/
   node_modules/
@@ -113,22 +105,14 @@ To apply configuration, run:
 #+END_SRC
 
 *** Citrix
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Citrix.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Citrix.category
   Citrix_subscribed_XD-C10-S01-Controller.DLG-SB2206-PRD-PROD $S1048-1056.desktop
   Citrix_subscribed_XD-C10-S01-Controller.VDI Dedicated Default Office 20 $P9447.desktop
   wfcmgr.desktop
 #+END_SRC
 
 *** Creative
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Creative.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Creative.category
   ardour.desktop
   blender.desktop
   calf.desktop
@@ -143,11 +127,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** DisplayCAL
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/DisplayCAL.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/DisplayCAL.category
   displaycal-3dlut-maker.desktop
   displaycal-apply-profiles.desktop
   displaycal-curve-viewer.desktop
@@ -160,11 +140,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** Internet
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Internet.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Internet.category
   chromium.desktop
   firefox.desktop
   io.github.qtox.qTox.desktop
@@ -173,11 +149,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** Leisure
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Leisure.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Leisure.category
   makemkv.desktop
   org.gnome.Lollypop.desktop
   org.musicbrainz.Picard.desktop
@@ -187,11 +159,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** LibreOffice
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/LibreOffice.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/LibreOffice.category
   libreoffice-base.desktop
   libreoffice-calc.desktop
   libreoffice-draw.desktop
@@ -202,11 +170,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** System
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/System.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/System.category
   ca.desrt.dconf-editor.desktop
   gnome-control-center.desktop
   gnome-system-monitor.desktop
@@ -221,11 +185,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** Utilities
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Utilities.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Utilities.category
   com.obsproject.Studio.desktop
   eid-viewer.desktop
   electrum.desktop
@@ -241,11 +201,7 @@ To apply configuration, run:
 #+END_SRC
 
 *** Work
-:PROPERTIES:
-:header-args+: :tangle .local/share/applications-categories/Work.category
-:END:
-
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Work.category
   arduino.desktop
   emacs.desktop
   org.gnome.Boxes.desktop
