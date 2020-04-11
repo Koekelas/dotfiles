@@ -67,6 +67,55 @@ Define personal channel.
   CopyArrivalDate yes
 #+END_SRC
 
+* Firefox
+
+** Saka Key
+[[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
+
+Create a new profile. Change:
+
+#+CAPTION: General
+| Name                              | Value |
+|-----------------------------------+-------|
+| Saka Key enabled                  | Yes   |
+| Prevent pages from stealing focus | Yes   |
+| Automatically activate hint       | Yes   |
+| Detect hints using cursor style   | No    |
+| Smooth scroll                     | No    |
+| Scroll step                       | 32    |
+
+#+CAPTION: Keybindings
+| Name                          | Value    | Name                      | Value   |
+|-------------------------------+----------+---------------------------+---------|
+| Bind to physical keys         | No       | Scroll half page down     | <next>  |
+| Ignore modifier keys          | No       | Scroll half page up       | <prior> |
+| Hint characters               | qsdfjklm | Scroll to bottom          | M->     |
+| Open link                     | j j      | Scroll to top             | M-<     |
+| Open link in background tab   | j C-o    | New tab                   | o       |
+| Open link in foreground tab   | j o      | Restore tab               | M-o     |
+| Open link in new window       | j m      | Duplicate tab             | C-o     |
+| Open link in incognito window | j C-m    | New window                | m       |
+| Download link                 | j d      | New incognito window      | C-m     |
+| Focus input                   | j i      | Close tab                 | d       |
+| Go back                       | l        | Close other tabs          | C-d     |
+| Go forward                    | r        | Refresh tab               | g       |
+| Go up                         | u        | Hard refresh tab          | G       |
+| Go to root                    | U        | Move tab new window       | M-m     |
+| Scroll down                   | n        | Pass one key to page      | k       |
+| Scroll up                     | p        | Pass all keys to page     | C-k     |
+| Scroll page down              | SPC      | Stop passing keys to page | C-j     |
+| Scroll page up                | DEL      | Copy current URL          | M-w     |
+
+** uBlock Origin
+[[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
+
+Keep the defaults.
+
+** Video Downloader Professional
+[[https://addons.mozilla.org/en-US/firefox/addon/video-downloader-profession/][Video Downloader Professional (Firefox Add-ons)]]
+
+Keep the defaults.
+
 * FreeCAD
 Ensure FreeCAD's packages are found.
 
