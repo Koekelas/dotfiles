@@ -1792,8 +1792,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
   (use-package pdf-links
     :bind
     (:map pdf-links-minor-mode-map
-     ("C-c j j" . pdf-links-isearch-link)
-     ("C-c j l" . pdf-links-action-perform)))
+     ("C-c j j" . pdf-links-action-perform)))
 
   (use-package pdf-loader
     :config
