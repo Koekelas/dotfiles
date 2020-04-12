@@ -191,7 +191,7 @@ Keep the defaults.
 Ensure FreeCAD's packages are found.
 
 #+BEGIN_SRC conf :tangle .config/environment.d/50-freecad.conf
-  PYTHONPATH=/usr/lib/freecad/lib${PYTHONPATH:+:$PYTHONPATH}
+  PYTHONPATH="/usr/lib/freecad/lib"${PYTHONPATH:+:$PYTHONPATH}
 #+END_SRC
 
 * Git
