@@ -1,6 +1,59 @@
 #+TITLE: Dotfiles
 #+PROPERTY: header-args :mkdirp yes
 
+* Identity
+Set name and e-mail.
+
+#+BEGIN_SRC fundamental :noweb-ref name :exports none
+  Nicolas De Jaeghere
+#+END_SRC
+
+#+BEGIN_SRC fundamental :noweb-ref e-mail :exports none
+  nicolas@dejaeghe.re
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .config/environment.d/10-identity.conf :noweb yes
+  NAME="<<name>>"
+  EMAIL="<<e-mail>>"
+#+END_SRC
+
+* Well known directories
+Set [[https://specifications.freedesktop.org/basedir-spec/][base directories]].
+
+#+BEGIN_SRC conf :tangle .config/environment.d/10-base-dirs.conf
+  XDG_CACHE_HOME="$HOME/.cache"
+  XDG_CONFIG_HOME="$HOME/.config"
+  XDG_DATA_HOME="$HOME/.local/share"
+#+END_SRC
+
+Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directories]].
+
+#+BEGIN_SRC conf :noweb-ref user-dirs :tangle .config/user-dirs.dirs
+  XDG_DESKTOP_DIR="$HOME/.Bureaublad"
+  XDG_DOCUMENTS_DIR="$HOME/Documenten"
+  XDG_DOWNLOAD_DIR="$HOME/Inbox"
+  XDG_MUSIC_DIR="$HOME/Muziek"
+  XDG_PICTURES_DIR="$HOME/Afbeeldingen"
+  XDG_PUBLICSHARE_DIR="$HOME/Delen"
+  XDG_TEMPLATES_DIR="$HOME/Sjablonen"
+  XDG_VIDEOS_DIR="$HOME/Video's"
+#+END_SRC
+
+Again, but as environment variables.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/10-user-dirs.conf :noweb yes
+  <<user-dirs>>
+#+END_SRC
+
+Finally, set other directories.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/11-koek-dirs.conf
+  KOEK_CALENDARS_DIR="$XDG_DOCUMENTS_DIR/Kalenders"
+  KOEK_EMAIL_DIR="$XDG_DOCUMENTS_DIR/E-mail"
+  KOEK_NEWS_DIR="$XDG_DOCUMENTS_DIR/Nieuws"
+  KOEK_PROJECTS_DIR="$HOME/Projecten"
+#+END_SRC
+
 * E-mail
 
 ** isync
@@ -144,10 +197,10 @@ Ensure FreeCAD's packages are found.
 * Git
 Set identity.
 
-#+BEGIN_SRC conf :tangle .config/git/config
+#+BEGIN_SRC conf :tangle .config/git/config :noweb yes
   [user]
-  name = Nicolas De Jaeghere
-  email = nicolas@dejaeghe.re
+  name = <<name>>
+  email = <<e-mail>>
 #+END_SRC
 
 ** Global ignore

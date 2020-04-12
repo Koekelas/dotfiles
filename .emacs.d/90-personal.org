@@ -22,14 +22,40 @@ Require libraries.
   (require 'subr-x)
 #+END_SRC
 
-* Identity
-Set name and e-mail.
+* Well known directories
+Define well known directories.
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Nicolas De Jaeghere")
-  (setq user-mail-address "nicolas@dejaeghe.re")
+  (defun koek/resolve-directory (name default)
+    "Resolve directory in environment variable NAME.
+  When environment variable is unset, resolve directory DEFAULT."
+    (file-name-as-directory (file-truename (or (getenv name) default))))
+
+  (defconst koek/documents-dir
+    (koek/resolve-directory "XDG_DOCUMENTS_DIR" "~/Documenten/")
+    "File name to documents directory.")
+
+  (defconst koek/projects-dir
+    (koek/resolve-directory "KOEK_PROJECTS_DIR" "~/Projecten/")
+    "File name to projects directory.")
+
+  (defconst koek/calendars-dir
+    (koek/resolve-directory "KOEK_CALENDARS_DIR"
+                            (expand-file-name "Kalenders/" koek/documents-dir))
+    "File name to calendars directory.")
+
+  (defconst koek/email-dir
+    (koek/resolve-directory "KOEK_EMAIL_DIR"
+                            (expand-file-name "E-mail/" koek/documents-dir))
+    "File name to e-mail directory.")
+
+  (defconst koek/news-dir
+    (koek/resolve-directory "KOEK_NEWS_DIR"
+                            (expand-file-name "Nieuws/" koek/documents-dir))
+    "File name to news directory.")
 #+END_SRC
 
+* Secrets
 Retrieve secrets from the [[https://specifications.freedesktop.org/secret-service/][Secret Service]].
 
 #+BEGIN_SRC emacs-lisp
@@ -39,42 +65,9 @@ Retrieve secrets from the [[https://specifications.freedesktop.org/secret-servic
     (setq auth-sources '("secrets:Login")))
 #+END_SRC
 
-* File & directory names
-Define well known file and directory names.
-
-#+BEGIN_SRC emacs-lisp
-  (defconst koek/home-dir-kratos "d:/"
-    "File name to home directory on Kratos.")
-
-  (defconst koek/home-dir
-    (if (file-exists-p koek/home-dir-kratos)
-        koek/home-dir-kratos
-      "~/")
-    "File name to home directory.")
-
-  (defconst koek/documents-dir
-    ;; mu4e chokes on symbolic links
-    (file-truename (expand-file-name "Documenten/" koek/home-dir))
-    "File name to documents directory.")
-
-  (defconst koek/projects-dir
-    (file-truename (expand-file-name "Projecten/" koek/home-dir))
-    "File name to projects directory.")
-
-  (defconst koek/static-agenda-files
-    (thread-last '("Inbox.org" "Kalenders/Afspraken.org")
-      (mapcar (lambda (file-name)
-                (expand-file-name file-name koek/documents-dir)))
-      ;; Opening a nonexistent file errors. Filter nonexistent files so
-      ;; Emacs starts on a foreign system.
-      (seq-filter #'file-exists-p))
-    "List of file names to static agenda files.")
-#+END_SRC
-
 * Agendas
-When a file is member of ~koek/static-agenda-files~ or matches pattern
-=KOEK_PROJECTS_DIR/PROJECT_NAME/PROJECT_NAME.org=, it's an agenda
-file.
+Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and in
+subdirectories of ~koek/projects-dir~, are agenda files.
 
 Configure agendas.
 
@@ -82,8 +75,8 @@ Configure agendas.
   (use-package org
     :defer t
     :preface
-    (defun koek/fetch-directories (file-name &optional full)
-      "Return directories in directory FILE-NAME.
+    (defun koek/get-subdirectories (file-name &optional full)
+      "Return subdirectories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names."
       (thread-last (directory-files-and-attributes file-name full)
         (seq-filter (pcase-lambda (`(,file-name ,type))
@@ -93,22 +86,14 @@ Configure agendas.
         (mapcar (lambda (spec)
                   (file-name-as-directory (car spec))))))
 
-    (defun koek/fetch-agenda-files ()
-      "Return agenda files."
-      (append
-       koek/static-agenda-files
-       (thread-last (koek/fetch-directories koek/projects-dir 'full)
-         (mapcar
-          (lambda (file-name)
-            (expand-file-name
-             (concat (file-name-nondirectory (directory-file-name file-name))
-                     ".org")
-             file-name)))
-         (seq-filter #'file-exists-p))))
-
     (define-advice org-agenda-files
         (:before (&rest _args) koek/update-agenda-files)
-      (setq org-agenda-files (koek/fetch-agenda-files)))
+      (setq org-agenda-files
+            (seq-mapcat
+             (lambda (file-name)
+               (directory-files file-name 'full (rx ".org" line-end)))
+             (append (list koek/documents-dir koek/calendars-dir)
+                     (koek/get-subdirectories koek/projects-dir 'full)))))
     :config
     (setq org-directory koek/documents-dir)
     (setq org-refile-targets
@@ -167,11 +152,10 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     :defer t
     :config
     ;; Local copy
-    (let ((calendars-dir (expand-file-name "Kalenders/" koek/documents-dir)))
-      ;; Store sync state with calendars, simplifying backup
-      (setq org-caldav-save-directory calendars-dir)
-      (setq org-caldav-inbox (expand-file-name "Afspraken.org" calendars-dir))
-      (setq org-caldav-files (list org-caldav-inbox)))
+    ;; Store sync state with calendars, simplifying backup
+    (setq org-caldav-save-directory koek/calendars-dir)
+    (setq org-caldav-inbox (expand-file-name "Afspraken.org" koek/calendars-dir))
+    (setq org-caldav-files ())
 
     ;; Remote copy
     (setq org-caldav-url
@@ -193,8 +177,8 @@ the instructions on storing passwords.
     :defer t
     :config
     ;; maildir, refile-folder, drafts-folder, sent-folder and
-    ;; trash-folder are directory file names (i.e. no end /)
-    (setq mu4e-maildir (expand-file-name "E-mail" koek/documents-dir))
+    ;; trash-folder are directory file names (i.e. no trailing /)
+    (setq mu4e-maildir (directory-file-name koek/email-dir))
 
     (use-package mu4e-context
       :config
@@ -292,8 +276,7 @@ Configure news feeds.
       (setf (elfeed-meta (elfeed-db-get-feed url) :title) title)
       (push (cons url tags) elfeed-feeds))
     :config
-    (setq elfeed-db-directory
-          (expand-file-name "Nieuws/elfeed/" koek/documents-dir))
+    (setq elfeed-db-directory koek/news-dir)
 
     (use-package recentf
       :config
