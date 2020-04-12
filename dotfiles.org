@@ -120,6 +120,20 @@ Define personal channel.
   CopyArrivalDate yes
 #+END_SRC
 
+** mu
+Move data and maildir directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-mu.conf
+  MU_HOME="$XDG_DATA_HOME/mu"
+  MAILDIR="$KOEK_EMAIL_DIR"
+#+END_SRC
+
+To create the initial index, run:
+
+#+BEGIN_SRC sh
+  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu index
+#+END_SRC
+
 * Firefox
 
 ** Saka Key
