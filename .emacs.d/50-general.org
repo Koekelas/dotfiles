@@ -1756,9 +1756,9 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     (setq mu4e-compose-context-policy 'ask-if-none))
 
   (use-package org-mu4e
-    :init
-    (require 'mu4e)
+    :after org
     :config
+    (require 'mu4e)
     (setq org-mu4e-link-query-in-headers-mode t))
 #+END_SRC
 
