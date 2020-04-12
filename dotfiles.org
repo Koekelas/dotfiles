@@ -54,6 +54,13 @@ Finally, set other directories.
   KOEK_PROJECTS_DIR="$HOME/Projecten"
 #+END_SRC
 
+* CUDA
+Move cache directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-cuda.conf
+  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
+#+END_SRC
+
 * E-mail
 
 ** isync
