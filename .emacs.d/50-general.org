@@ -67,9 +67,16 @@ Move deleted files to trash.
     :bind
     (:map projectile-command-map
      ("x t" . projectile-run-vterm))
+    :preface
+    (declare-function recentf-include-p "recentf")
+
+    (defun koek-proj/forgetp (file-name)
+      "Return whether project with root FILE-NAME should be forgotten."
+      (not (recentf-include-p file-name)))
     :config
     (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
 
+    (setq projectile-ignored-project-function #'koek-proj/forgetp)
     (setq projectile-completion-system 'ivy)
     (projectile-mode)
     :delight)
