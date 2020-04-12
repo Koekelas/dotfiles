@@ -939,7 +939,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
     ;; Clojure & ClojureScript
     (defun koek-ys/determine-ns-name ()
-      "Return Clojure namespace name for current.
+      "Determine Clojure namespace name for current.
   Assumes source path is a child of project root."
       (let ((parts
              (let ((separator (thread-first (expand-file-name "a" "b")
@@ -1957,8 +1957,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
                                    version)
                    t))))
     "List of hardware specification whitelist predicates.
-  Predicates are passed a hardware specification.  When a predicate
-  returns t, the hardware specification is whitelisted.")
+  Predicates are passed a hardware specification.")
 
   (defun koek-ino/generate-project (file-name board-spec)
     "Generate Arduino project.
