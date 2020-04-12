@@ -450,11 +450,16 @@ Hide superfluous applications.
 #+END_SRC
 
 * Jupyter Notebook
-Jupyter is forced upon me. Documentation on configuring the frontend
-is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties, see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide -
-Configuration (CodeMirror)]].
+Move configuration directory out of the way.
 
-#+BEGIN_SRC json :tangle .jupyter/nbconfig/notebook.json
+#+BEGIN_SRC conf :tangle .config/environment.d/50-jupyter.conf
+  JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+#+END_SRC
+
+Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
+see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
+
+#+BEGIN_SRC json :tangle .config/jupyter/nbconfig/notebook.json
   {
       "CodeCell": {
           "cm_config": {
