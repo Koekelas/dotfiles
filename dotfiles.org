@@ -54,186 +54,6 @@ Finally, set other directories.
   KOEK_PROJECTS_DIR="$HOME/Projecten"
 #+END_SRC
 
-* CUDA
-Move cache directory out of the way.
-
-#+BEGIN_SRC conf :tangle .config/environment.d/50-cuda.conf
-  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
-#+END_SRC
-
-* E-mail
-
-** isync
-:PROPERTIES:
-:header-args+: :tangle .config/isync/mbsyncrc
-:END:
-
-Store =.mbsyncstate= with maildir sub directories, simplifying backup.
-
-#+BEGIN_SRC fundamental
-  SyncState *
-#+END_SRC
-
-*** Personal account
-To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
-(FastMail)]].
-
-To create the maildir directory, run:
-
-#+BEGIN_SRC sh :tangle no
-  mkdir -p ~/Documenten/E-mail/Personal
-#+END_SRC
-
-Define local personal store.
-
-#+BEGIN_SRC fundamental
-  MaildirStore personal-local
-  Inbox "~/Documenten/E-mail/Personal/INBOX/"
-  Path "~/Documenten/E-mail/Personal/"
-  SubFolders Verbatim
-#+END_SRC
-
-To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
-=Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
-securely, run:
-
-#+BEGIN_SRC sh :tangle no
-  secret-tool store --label="Emacs e-mail personal (IMAP)" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
-  secret-tool store --label="Emacs e-mail personal (SMTP)" host "smtp.fastmail.com" port "465" user "nicolas@dejaeghe.re"
-#+END_SRC
-
-Define remote personal store. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names and
-ports (FastMail)]].
-
-#+BEGIN_SRC fundamental
-  IMAPStore personal-remote
-  Host imap.fastmail.com
-  SSLType IMAPS
-  User nicolas@dejaeghe.re
-  PassCmd "secret-tool lookup host \"imap.fastmail.com\" port \"993\" user \"nicolas@dejaeghe.re\""
-#+END_SRC
-
-Define personal channel.
-
-#+BEGIN_SRC fundamental
-  Channel personal
-  Master :personal-remote:
-  Slave :personal-local:
-  Patterns *
-  Sync All
-  Create Both
-  Remove Both
-  Expunge Both
-  CopyArrivalDate yes
-#+END_SRC
-
-** mu
-Move data and maildir directory out of the way.
-
-#+BEGIN_SRC conf :tangle .config/environment.d/50-mu.conf
-  MU_HOME="$XDG_DATA_HOME/mu"
-  MAILDIR="$KOEK_EMAIL_DIR"
-#+END_SRC
-
-To create the initial index, run:
-
-#+BEGIN_SRC sh
-  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu index
-#+END_SRC
-
-* Firefox
-
-** Saka Key
-[[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
-
-Create a new profile. Change:
-
-#+CAPTION: General
-| Name                              | Value |
-|-----------------------------------+-------|
-| Saka Key enabled                  | Yes   |
-| Prevent pages from stealing focus | Yes   |
-| Automatically activate hint       | Yes   |
-| Detect hints using cursor style   | No    |
-| Smooth scroll                     | No    |
-| Scroll step                       | 32    |
-
-#+CAPTION: Keybindings
-| Name                          | Value     |
-|-------------------------------+-----------|
-| Bind to physical keys         | No        |
-| Ignore modifier keys          | No        |
-| Hint characters               | qsdfjklm  |
-| Open link                     | j j       |
-| Open link in background tab   | j C-o     |
-| Open link in foreground tab   | j o       |
-| Open link in new window       | j m       |
-| Open link in incognito window | j C-m     |
-| Download link                 | j d       |
-| Focus input                   | j i       |
-| Go back                       | l         |
-| Go forward                    | r         |
-| Go up                         | u         |
-| Go to root                    | U         |
-| Scroll down                   | n         |
-| Scroll up                     | p         |
-| Scroll page down              | SPC       |
-| Scroll page up                | DEL       |
-| Scroll half page down         | <next>    |
-| Scroll half page up           | <prior>   |
-| Scroll to bottom              | M->       |
-| Scroll to top                 | M-<       |
-| New tab                       | o         |
-| Restore tab                   | M-o       |
-| Duplicate tab                 | C-o       |
-| New window                    | m         |
-| New incognito window          | C-m       |
-| Close tab                     | d         |
-| Close other tabs              | C-d       |
-| Refresh tab                   | g         |
-| Hard refresh tab              | G         |
-| Move tab new window           | M-m       |
-| Pass one key to page          | k         |
-| Pass all keys to page         | C-k       |
-| Stop passing keys to page     | C-j       |
-| Copy current URL              | M-w       |
-
-** uBlock Origin
-[[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
-
-Keep the defaults.
-
-** Video Downloader Professional
-[[https://addons.mozilla.org/en-US/firefox/addon/video-downloader-profession/][Video Downloader Professional (Firefox Add-ons)]]
-
-Keep the defaults.
-
-* FreeCAD
-Ensure FreeCAD's packages are found.
-
-#+BEGIN_SRC conf :tangle .config/environment.d/50-freecad.conf
-  PYTHONPATH="/usr/lib/freecad/lib"${PYTHONPATH:+:$PYTHONPATH}
-#+END_SRC
-
-* Git
-Set identity.
-
-#+BEGIN_SRC conf :tangle .config/git/config :noweb yes
-  [user]
-  name = <<name>>
-  email = <<e-mail>>
-#+END_SRC
-
-** Global ignore
-Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
-
-#+BEGIN_SRC fundamental :tangle .config/git/ignore
-  .shadow-cljs/
-  build/
-  node_modules/
-  .nrepl-port
-#+END_SRC
-
 * GNOME Shell
 
 ** App folders
@@ -456,6 +276,25 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
+* Git
+Set identity.
+
+#+BEGIN_SRC conf :tangle .config/git/config :noweb yes
+  [user]
+  name = <<name>>
+  email = <<e-mail>>
+#+END_SRC
+
+** Global ignore
+Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
+
+#+BEGIN_SRC fundamental :tangle .config/git/ignore
+  .shadow-cljs/
+  build/
+  node_modules/
+  .nrepl-port
+#+END_SRC
+
 * GnuPG
 Move data directory out of the way.
 
@@ -463,36 +302,158 @@ Move data directory out of the way.
   GNUPGHOME="$XDG_DATA_HOME/gnupg"
 #+END_SRC
 
-* Jupyter Notebook
-Move configuration directory out of the way.
+* Firefox
 
-#+BEGIN_SRC conf :tangle .config/environment.d/50-jupyter.conf
-  JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+** Saka Key
+[[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
+
+Create a new profile. Change:
+
+#+CAPTION: General
+| Name                              | Value |
+|-----------------------------------+-------|
+| Saka Key enabled                  | Yes   |
+| Prevent pages from stealing focus | Yes   |
+| Automatically activate hint       | Yes   |
+| Detect hints using cursor style   | No    |
+| Smooth scroll                     | No    |
+| Scroll step                       | 32    |
+
+#+CAPTION: Keybindings
+| Name                          | Value     |
+|-------------------------------+-----------|
+| Bind to physical keys         | No        |
+| Ignore modifier keys          | No        |
+| Hint characters               | qsdfjklm  |
+| Open link                     | j j       |
+| Open link in background tab   | j C-o     |
+| Open link in foreground tab   | j o       |
+| Open link in new window       | j m       |
+| Open link in incognito window | j C-m     |
+| Download link                 | j d       |
+| Focus input                   | j i       |
+| Go back                       | l         |
+| Go forward                    | r         |
+| Go up                         | u         |
+| Go to root                    | U         |
+| Scroll down                   | n         |
+| Scroll up                     | p         |
+| Scroll page down              | SPC       |
+| Scroll page up                | DEL       |
+| Scroll half page down         | <next>    |
+| Scroll half page up           | <prior>   |
+| Scroll to bottom              | M->       |
+| Scroll to top                 | M-<       |
+| New tab                       | o         |
+| Restore tab                   | M-o       |
+| Duplicate tab                 | C-o       |
+| New window                    | m         |
+| New incognito window          | C-m       |
+| Close tab                     | d         |
+| Close other tabs              | C-d       |
+| Refresh tab                   | g         |
+| Hard refresh tab              | G         |
+| Move tab new window           | M-m       |
+| Pass one key to page          | k         |
+| Pass all keys to page         | C-k       |
+| Stop passing keys to page     | C-j       |
+| Copy current URL              | M-w       |
+
+** uBlock Origin
+[[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
+
+Keep the defaults.
+
+** Video Downloader Professional
+[[https://addons.mozilla.org/en-US/firefox/addon/video-downloader-profession/][Video Downloader Professional (Firefox Add-ons)]]
+
+Keep the defaults.
+
+* E-mail
+
+** isync
+:PROPERTIES:
+:header-args+: :tangle .config/isync/mbsyncrc
+:END:
+
+Store =.mbsyncstate= with maildir sub directories, simplifying backup.
+
+#+BEGIN_SRC fundamental
+  SyncState *
 #+END_SRC
 
-Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
-see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
+*** Personal account
+To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
+(FastMail)]].
 
-#+BEGIN_SRC json :tangle .config/jupyter/nbconfig/notebook.json
-  {
-      "CodeCell": {
-          "cm_config": {
-              "cursorBlinkRate": 0
-          }
-      },
-      "MarkdownCell": {
-          "cm_config": {
-              "cursorBlinkRate": 0
-          }
-      }
-  }
+To create the maildir directory, run:
+
+#+BEGIN_SRC sh :tangle no
+  mkdir -p ~/Documenten/E-mail/Personal
 #+END_SRC
 
-* NLTK
-Move data directory out of the way.
+Define local personal store.
 
-#+BEGIN_SRC conf :tangle .config/environment.d/50-nltk.conf
-  NLTK_DATA="$XDG_DATA_HOME/nltk"
+#+BEGIN_SRC fundamental
+  MaildirStore personal-local
+  Inbox "~/Documenten/E-mail/Personal/INBOX/"
+  Path "~/Documenten/E-mail/Personal/"
+  SubFolders Verbatim
+#+END_SRC
+
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+=Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
+securely, run:
+
+#+BEGIN_SRC sh :tangle no
+  secret-tool store --label="Emacs e-mail personal (IMAP)" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
+  secret-tool store --label="Emacs e-mail personal (SMTP)" host "smtp.fastmail.com" port "465" user "nicolas@dejaeghe.re"
+#+END_SRC
+
+Define remote personal store. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names and
+ports (FastMail)]].
+
+#+BEGIN_SRC fundamental
+  IMAPStore personal-remote
+  Host imap.fastmail.com
+  SSLType IMAPS
+  User nicolas@dejaeghe.re
+  PassCmd "secret-tool lookup host \"imap.fastmail.com\" port \"993\" user \"nicolas@dejaeghe.re\""
+#+END_SRC
+
+Define personal channel.
+
+#+BEGIN_SRC fundamental
+  Channel personal
+  Master :personal-remote:
+  Slave :personal-local:
+  Patterns *
+  Sync All
+  Create Both
+  Remove Both
+  Expunge Both
+  CopyArrivalDate yes
+#+END_SRC
+
+** mu
+Move data and maildir directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-mu.conf
+  MU_HOME="$XDG_DATA_HOME/mu"
+  MAILDIR="$KOEK_EMAIL_DIR"
+#+END_SRC
+
+To create the initial index, run:
+
+#+BEGIN_SRC sh
+  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu index
+#+END_SRC
+
+* FreeCAD
+Ensure FreeCAD's packages are found.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-freecad.conf
+  PYTHONPATH="/usr/lib/freecad/lib"${PYTHONPATH:+:$PYTHONPATH}
 #+END_SRC
 
 * Steam
@@ -546,4 +507,43 @@ Show Steam with native runtime as Steam.
   [Desktop Action Friends]
   Name=Friends
   Exec=steam steam://open/friends
+#+END_SRC
+
+* CUDA
+Move cache directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-cuda.conf
+  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
+#+END_SRC
+
+* Jupyter Notebook
+Move configuration directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-jupyter.conf
+  JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+#+END_SRC
+
+Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
+see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
+
+#+BEGIN_SRC json :tangle .config/jupyter/nbconfig/notebook.json
+  {
+      "CodeCell": {
+          "cm_config": {
+              "cursorBlinkRate": 0
+          }
+      },
+      "MarkdownCell": {
+          "cm_config": {
+              "cursorBlinkRate": 0
+          }
+      }
+  }
+#+END_SRC
+
+* NLTK
+Move data directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-nltk.conf
+  NLTK_DATA="$XDG_DATA_HOME/nltk"
 #+END_SRC
