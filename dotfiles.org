@@ -456,6 +456,13 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
+* GnuPG
+Move data directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-gnupg.conf
+  GNUPGHOME="$XDG_DATA_HOME/gnupg"
+#+END_SRC
+
 * Jupyter Notebook
 Move configuration directory out of the way.
 
