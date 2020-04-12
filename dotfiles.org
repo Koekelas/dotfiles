@@ -320,44 +320,20 @@ Create a new profile. Change:
 | Scroll step                       | 32    |
 
 #+CAPTION: Keybindings
-| Name                          | Value     |
-|-------------------------------+-----------|
-| Bind to physical keys         | No        |
-| Ignore modifier keys          | No        |
-| Hint characters               | qsdfjklm  |
-| Open link                     | j j       |
-| Open link in background tab   | j C-o     |
-| Open link in foreground tab   | j o       |
-| Open link in new window       | j m       |
-| Open link in incognito window | j C-m     |
-| Download link                 | j d       |
-| Focus input                   | j i       |
-| Go back                       | l         |
-| Go forward                    | r         |
-| Go up                         | u         |
-| Go to root                    | U         |
-| Scroll down                   | n         |
-| Scroll up                     | p         |
-| Scroll page down              | SPC       |
-| Scroll page up                | DEL       |
-| Scroll half page down         | <next>    |
-| Scroll half page up           | <prior>   |
-| Scroll to bottom              | M->       |
-| Scroll to top                 | M-<       |
-| New tab                       | o         |
-| Restore tab                   | M-o       |
-| Duplicate tab                 | C-o       |
-| New window                    | m         |
-| New incognito window          | C-m       |
-| Close tab                     | d         |
-| Close other tabs              | C-d       |
-| Refresh tab                   | g         |
-| Hard refresh tab              | G         |
-| Move tab new window           | M-m       |
-| Pass one key to page          | k         |
-| Pass all keys to page         | C-k       |
-| Stop passing keys to page     | C-j       |
-| Copy current URL              | M-w       |
+| Name                          | Value    | Name                  | Value   | Name                      | Value |
+|-------------------------------+----------+-----------------------+---------+---------------------------+-------|
+| Bind to physical keys         | No       | Go up                 | u       | Duplicate tab             | C-o   |
+| Ignore modifier keys          | No       | Go to root            | U       | New window                | m     |
+| Hint characters               | qsdfjklm | Scroll down           | n       | New incognito window      | C-m   |
+| Open link                     | j j      | Scroll up             | p       | Close tab                 | d     |
+| Open link in background tab   | j C-o    | Scroll page down      | SPC     | Close other tabs          | C-d   |
+| Open link in foreground tab   | j o      | Scroll page up        | DEL     | Refresh tab               | g     |
+| Open link in new window       | j m      | Scroll half page down | <next>  | Hard refresh tab          | G     |
+| Open link in incognito window | j C-m    | Scroll half page up   | <prior> | Move tab new window       | M-m   |
+| Download link                 | j d      | Scroll to bottom      | M->     | Pass one key to page      | k     |
+| Focus input                   | j i      | Scroll to top         | M-<     | Pass all keys to page     | C-k   |
+| Go back                       | l        | New tab               | o       | Stop passing keys to page | C-j   |
+| Go forward                    | r        | Restore tab           | M-o     | Copy current URL          | M-w   |
 
 ** uBlock Origin
 [[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
