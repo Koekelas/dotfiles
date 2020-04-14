@@ -18,8 +18,9 @@ only mode.
 Require libraries.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'map)
   (require 'subr-x)
+  (require 'seq)
+  (require 'map)
 #+END_SRC
 
 Declare variables and functions setup by [[file:init.el][init.el]].
