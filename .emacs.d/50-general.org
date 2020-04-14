@@ -836,8 +836,7 @@ When line is indented, press =TAB= to complete text before point.
                                                (one-or-more (or alnum punct))
                                                ".jar" line-end))))
             car)))
-      (let ((paths (split-string (or (getenv "CLASSPATH") "")
-                                 path-separator 'omit-nulls)))
+      (let ((paths (split-string (or (getenv "CLASSPATH") "") path-separator)))
         (unless (member launcher-program-name paths)
           (setenv "CLASSPATH"
                   (string-join (cons launcher-program-name paths)
