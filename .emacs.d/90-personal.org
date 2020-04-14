@@ -56,7 +56,7 @@ Define well known directories.
 #+END_SRC
 
 * Secrets
-Retrieve secrets from the [[https://specifications.freedesktop.org/secret-service/][Secret Service]].
+Retrieve secrets from the [[https://freedesktop.org/wiki/Specifications/secret-storage-spec/][Secret Service]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package auth-source

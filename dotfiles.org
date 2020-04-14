@@ -18,7 +18,7 @@ Set name and e-mail.
 #+END_SRC
 
 * Well known directories
-Set [[https://specifications.freedesktop.org/basedir-spec/][base directories]].
+Set [[https://freedesktop.org/wiki/Specifications/basedir-spec/][base directories]].
 
 #+BEGIN_SRC conf :tangle .config/environment.d/10-base-dirs.conf
   XDG_CACHE_HOME="$HOME/.cache"
