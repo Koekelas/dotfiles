@@ -206,9 +206,9 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
   (use-package swiper
     :ensure t
     :bind
-    (;; Why does [remap isearch-forward] prevent pdf-view-mode from
-     ;; rebinding C-s?
-     ("C-s" . swiper-isearch)
+    ;; Why does [remap isearch-forward] prevent pdf-view-mode from
+    ;; rebinding C-s?
+    (("C-s" . swiper-isearch)
      :map swiper-map
      ("C-c j" . swiper-avy)))
 #+END_SRC
