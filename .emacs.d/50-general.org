@@ -1005,23 +1005,15 @@ For the major mode, see [[*YASnippet][YASnippet]].
                                               (plist-get spec :org)))
                                       koek-ys/lang-specs)))
 
-    (defun koek-ys/make-ensure-result-directory (var-name)
+    (defun koek-ys/make-ensure-result-directory (name)
       "Return function to ensure result directory of current source block exists.
-  VAR-NAME is a string, the variable name which stores the result
-  file name."
+  NAME is a string, the variable name which stores the result file
+  name."
       (lambda ()
         (when-let ((file-name
-                    (when-let ((value (koek-org/get-src-block-var-value var-name)))
-                      (file-name-directory
-                       (replace-regexp-in-string (rx (or (and line-start "\"")
-                                                         (and "\"" line-end)))
-                                                 "" value)))))
-          (when-let ((file-name-root (buffer-file-name)))
-            (setq file-name
-                  (expand-file-name file-name
-                                    (file-name-directory file-name-root))))
-          (when (file-name-absolute-p file-name)
-            (make-directory file-name 'parents)))))
+                    (file-name-directory
+                     (or (koek-org/get-src-block-var-value name) ""))))
+          (make-directory file-name 'parents))))
     :config
     (declare-function yas-reload-all "yasnippet")
 
@@ -2523,21 +2515,24 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     :config
     (declare-function org-babel-get-src-block-info "ob-core")
 
-    (defun koek-org/get-src-block-var-value (var-name)
-      "Return value of variable VAR-NAME in current source block.
-  VAR-NAME is a string, the variable name."
+    (defun koek-org/get-src-block-var-value (name)
+      "Return value of variable NAME in current source block.
+  NAME is a string, the variable name."
       (thread-last (org-babel-get-src-block-info 'light)
         (nth 2)                           ; Header arguments
         (seq-filter (pcase-lambda (`(,type))
                       (eq type :var)))
-        (mapcar (pcase-lambda (`(,_type . ,value))
-                  ;; Variable value could include "=" (e.g. :var
-                  ;; foo="bar=baz")
-                  (let ((pos (string-match-p "=" value)))
-                    (cons (substring value 0 pos) (substring value (1+ pos))))))
-        (seq-filter (pcase-lambda (`(,name))
-                      (string= name var-name)))
-        cdar))
+        (mapcar #'cdr)
+        (mapcar
+         (lambda (value)
+           (let ((parts (split-string value "=")))
+             (cons (car parts)
+                   (replace-regexp-in-string (rx (or (and line-start "\"")
+                                                     (and "\"" line-end)))
+                                             "" (string-join (cdr parts) "="))))))
+        (seq-find (pcase-lambda (`(,nm))
+                    (string= nm name)))
+        cdr))
 
     ;; Evaluate code blocks in buffer after confirmation
     (let ((whitelist ()))
