@@ -1010,13 +1010,12 @@ For the major mode, see [[*YASnippet][YASnippet]].
   VAR-NAME is a string, the variable name which stores the result
   file name."
       (lambda ()
-        (when-let
-            ((file-name (when-let
-                            ((value (koek-org/get-src-block-var-value var-name)))
-                          (file-name-directory
-                           (replace-regexp-in-string (rx (or (and line-start "\"")
-                                                             (and "\"" line-end)))
-                                                     "" value)))))
+        (when-let ((file-name
+                    (when-let ((value (koek-org/get-src-block-var-value var-name)))
+                      (file-name-directory
+                       (replace-regexp-in-string (rx (or (and line-start "\"")
+                                                         (and "\"" line-end)))
+                                                 "" value)))))
           (when-let ((file-name-root (buffer-file-name)))
             (setq file-name
                   (expand-file-name file-name
@@ -2205,9 +2204,8 @@ Configure Conf mode afterwards.
     ;; c:/ProgramData/chocolatey/bin/.
     (when-let
         ((erlc-program-name
-          ;; Assume only one version installed
-          (car (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" '
-                                      full))))
+          (car                            ; Assume only one version installed
+           (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" 'full))))
       (push (file-name-directory erlc-program-name) exec-path))
     (when-let ((erlc-program-name (executable-find "erlc")))
       (setq erlang-root-dir
@@ -2961,11 +2959,11 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
 
 #+BEGIN_SRC emacs-lisp
-  (when-let
-      ((spec (seq-find (lambda (spec)
-                         (member (plist-get spec :family) (font-family-list)))
-                       '((:family "PragmataPro Mono" :size 15)
-                         (:family "Source Code Pro"  :size 15)))))
+  (when-let ((spec
+              (seq-find (lambda (spec)
+                          (member (plist-get spec :family) (font-family-list)))
+                        '((:family "PragmataPro Mono" :size 15)
+                          (:family "Source Code Pro"  :size 15)))))
     (set-frame-font (apply #'font-spec spec) nil t))
 #+END_SRC
 
