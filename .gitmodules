@@ -1,6 +1,12 @@
 [submodule "jslint-cli"]
 	path = .emacs.d/lisp/jslint-cli
 	url = https://github.com/Koekelas/jslint-cli.git
+[submodule "xelb"]
+	path = .emacs.d/lisp/xelb
+	url = https://github.com/ch11ng/xelb.git
+[submodule "exwm"]
+	path = .emacs.d/lisp/exwm
+	url = https://github.com/ch11ng/exwm.git
 [submodule "devdocs-lookup"]
 	path = .emacs.d/lisp/devdocs-lookup
 	url = https://github.com/skeeto/devdocs-lookup.git

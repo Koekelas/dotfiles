@@ -23,6 +23,26 @@ Require libraries.
   (require 'seq)
 #+END_SRC
 
+* Monitors
+#+BEGIN_SRC emacs-lisp
+  (use-package exwm-randr
+    :after exwm
+    :preface
+    (defun koek/setup-monitors ()
+      "Setup monitors."
+      (make-process :name "xrandr"
+                    :command '("xrandr" "--output" "HDMI-1" "--primary")))
+    :config
+    (declare-function exwm-enable "exwm")
+    (declare-function exwm-randr-enable "exwm-randr")
+
+    (setq exwm-randr-workspace-monitor-plist '(1 "eDP-1"))
+    (add-hook 'exwm-randr-screen-change-hook #'koek/setup-monitors)
+
+    (exwm-randr-enable)
+    (exwm-enable))
+#+END_SRC
+
 * Well known directories
 Define well known directories.
 

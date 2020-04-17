@@ -1220,7 +1220,8 @@ steps.
   (use-package eyebrowse
     :ensure t
     :bind
-    (("C-c w 1" . eyebrowse-switch-to-window-config-1)
+    (("C-c w 0" . eyebrowse-switch-to-window-config-0)
+     ("C-c w 1" . eyebrowse-switch-to-window-config-1)
      ("C-c w 2" . eyebrowse-switch-to-window-config-2)
      ("C-c w 3" . eyebrowse-switch-to-window-config-3)
      ("C-c w 4" . eyebrowse-switch-to-window-config-4)
@@ -1236,6 +1237,7 @@ steps.
     (setq minor-mode-map-alist
           (assq-delete-all 'eyebrowse-mode minor-mode-map-alist))
 
+    (setq eyebrowse-default-workspace-slot 0)
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
 #+END_SRC
@@ -1282,6 +1284,15 @@ Bury unneeded buffers, computers have more than enough memory.
     :config
     (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
     :delight)
+#+END_SRC
+
+** exwm - X window manager
+[[https://github.com/ch11ng/exwm][exwm (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exwm
+    :load-path ("lisp/xelb/" "lisp/exwm/")
+    :when (string= (getenv "XDG_CURRENT_DESKTOP") "Emacs"))
 #+END_SRC
 
 ** server - Emacs service
@@ -3117,7 +3128,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                               (unless (string= name "")
                                 name))))
                   (list :id id
-                        :label (concat (koek-ml/arabic-to-roman id)
+                        :label (concat (or (koek-ml/arabic-to-roman id) "N")
                                        (when name
                                          (concat ":" name))))))
               (eyebrowse--get 'window-configs)))
@@ -3131,7 +3142,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
         (when (and (bound-and-true-p eyebrowse-mode) (koek-ml/mru-window-p))
           (let ((workspaces (koek-ml/get-workspaces))
                 (selected-id (koek-ml/get-selected-workspace-id)))
-            (when (or (> (length workspaces) 1) (not (= selected-id 1)))
+            (when (or (> (length workspaces) 1) (not (= selected-id 0)))
               `(,(moody-ribbon
                   (mapconcat
                    (lambda (workspace)
