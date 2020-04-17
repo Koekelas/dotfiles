@@ -1284,6 +1284,24 @@ Bury unneeded buffers, computers have more than enough memory.
     :delight)
 #+END_SRC
 
+** server - Emacs service
+#+BEGIN_SRC emacs-lisp
+  (use-package server
+    :defer t
+    :preface
+    (defun koek-srvr/setup-socket ()
+      "Setup socket."
+      (setq server-name
+            (expand-file-name "emacs/server" (getenv "XDG_RUNTIME_DIR"))))
+    :config
+    ;; Emacs is unaware of the socket created by systemd. When told
+    ;; about it, Emacs tries to create it and fails. with-editor
+    ;; requires the socket file name to be known. Setup socket after
+    ;; server is started. Will be fixed in Emacs 27. See
+    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24218
+    (add-hook 'emacs-startup-hook #'koek-srvr/setup-socket))
+#+END_SRC
+
 ** Global commands
 The setting ~repeat-on-final-keystroke~ is clunky. Rebind ~repeat~ to
 something short.
@@ -2818,8 +2836,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
     :preface
-    (declare-function color-rgb-to-hex "color")
-
     (defconst koek-thm/theme-specs
       '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
         (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
@@ -2842,32 +2858,58 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
         "Set frame theme variant of FRAME.
   When window theme is a dark theme, the variant is set to dark,
   else, it's set to nothing."
-        (let* ((spec (seq-find (lambda (spec)
-                                 (eq (plist-get spec :theme)
-                                     (car custom-enabled-themes)))
-                               koek-thm/theme-specs))
-               (variant (or (and (plist-get spec :dark) "dark") "")))
-          (call-process "xprop" nil nil nil
-                        "-id" (frame-parameter frame 'outer-window-id)
-                        "-f" "_GTK_THEME_VARIANT" "8u"
-                        "-set" "_GTK_THEME_VARIANT" variant)))
+        ;; Only graphical frames have a window id. The server frame is a
+        ;; terminal frame.
+        (when-let ((id (frame-parameter frame 'outer-window-id)))
+          (let* ((spec (seq-find (lambda (spec)
+                                   (eq (plist-get spec :theme)
+                                       (car custom-enabled-themes)))
+                                 koek-thm/theme-specs))
+                 (variant (or (and (plist-get spec :dark) "dark") "")))
+            (make-process :name "xprop"
+                          :command `("xprop"
+                                     "-id" ,id "-f" "_GTK_THEME_VARIANT" "8u"
+                                     "-set" "_GTK_THEME_VARIANT" ,variant)))))
 
       (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant))
 
+    (defun koek-thm/hex-to-rgb (color)
+      "Convert hex color COLOR to RGB.
+  COLOR is a string, a color of format \"#RGB\".  R, G and B are
+  one or more hexadecimal digits, the red, green and blue color
+  component."
+      (let ((normalized
+             (progn
+               (string-match (rx (submatch-n 1 (one-or-more (any hex-digit))))
+                             color)
+               (match-string 1 color))))
+        (mapcar (lambda (component)
+                  (string-to-number component 16))
+                (seq-partition normalized (/ (length normalized) 3)))))
+
+    ;; `color-rgb-to-hex' respects the color depth of the frame. The
+    ;; color depth of the server frame is low.
+    (defun koek-thm/rgb-to-hex (color)
+      "Convert RGB color COLOR to hex.
+  COLOR is a list, a color of format '(R G B).  R, G and B are
+  floats from zero to 255, the red, green and blue color
+  component."
+      (apply #'format "#%02x%02x%02x" (mapcar #'round color)))
+
     (defun koek-thm/mix (color1 color2 &optional ratio)
       "Mix COLOR1 with COLOR2 according to RATIO.
-  COLOR1 and COLOR2 are strings, a color name or an RGB triplet,
-  see `color-name-to-rgb'.  Optional RATIO is a float from zero to
+  COLOR1 and COLOR2 are strings, a hex color, see
+  `koek-thm/hex-to-rgb'.  Optional RATIO is a float from zero to
   one and defaults to one half.  Zero means mix zero units of
   COLOR1 with one unit of COLOR2, one means mix one unit of COLOR1
   with zero units of COLOR2."
       (unless ratio
         (setq ratio 0.5))
       (let ((ratio´ (- 1 ratio)))
-        (apply #'color-rgb-to-hex
-               (seq-mapn (lambda (component component´)
-                           (+ (* component ratio) (* component´ ratio´)))
-                         (color-name-to-rgb color1) (color-name-to-rgb color2)))))
+        (koek-thm/rgb-to-hex
+         (seq-mapn (lambda (component component´)
+                     (+ (* component ratio) (* component´ ratio´)))
+                   (koek-thm/hex-to-rgb color1) (koek-thm/hex-to-rgb color2)))))
 
     (defun koek-thm/enable (theme-spec)
       "Enable theme THEME-SPEC.
@@ -2941,8 +2983,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (when (fboundp 'koek-thm/set-frame-theme-variant)
         (mapc #'koek-thm/set-frame-theme-variant (frame-list))))
     :config
-    (require 'color)
-
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
                                      koek-thm/default-theme))
@@ -2953,12 +2993,40 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
 
 #+BEGIN_SRC emacs-lisp
-  (when-let ((spec
-              (seq-find (lambda (spec)
-                          (member (plist-get spec :family) (font-family-list)))
-                        '((:family "PragmataPro Mono" :size 15)
-                          (:family "Source Code Pro"  :size 15)))))
-    (set-frame-font (apply #'font-spec spec) nil t))
+  (defconst koek-font/font-specs
+    '((:family "PragmataPro Mono" :size 15)
+      (:family "Source Code Pro"  :size 15))
+    "List of font specifications.
+  A font specification is a plist.  For keys, see `font-spec'.")
+
+  (defun koek-font/retry-setup (frame)
+    "Retry setup preferred font.
+  FRAME is a frame, the last created frame."
+    (koek-font/setup frame)               ; Frame isn't selected yet
+    (when-let ((font (alist-get 'font default-frame-alist)))
+      ;; Font is set but it's set after frame had its parameters set
+      (set-frame-parameter frame 'font font)))
+
+  (defun koek-font/setup (&optional frame)
+    "Setup preferred font.
+  FRAME is used internally."
+    (if-let ((families (font-family-list (or frame (selected-frame)))))
+        (progn
+          ;; Frame is the first graphical frame. When no font is set,
+          ;; none of the preferred fonts are installed.
+          (remove-hook 'after-make-frame-functions #'koek-font/retry-setup)
+          (when-let ((spec (seq-find (lambda (spec)
+                                       (member (plist-get spec :family) families))
+                                     koek-font/font-specs)))
+            ;; Why does `set-frame-font' only work for the first
+            ;; emacsclient frame?
+            (let ((font (font-xlfd-name (apply #'font-spec spec) 'fold-wildcards)))
+              (push `(font . ,font) default-frame-alist))))
+      ;; Frame is a terminal frame. Only graphical frames support fonts.
+      ;; The server frame is a terminal frame.
+      (add-hook 'after-make-frame-functions #'koek-font/retry-setup)))
+
+  (koek-font/setup)
 #+END_SRC
 
 Disable blink cursor mode, instead, enable highlight line mode.

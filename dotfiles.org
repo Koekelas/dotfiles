@@ -276,6 +276,54 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
+* Emacs
+~man 5 systemd.unit~, ~man 5 systemd.service~, ~man 5 systemd.socket~, ~kill-emacs~
+
+#+BEGIN_SRC conf :tangle .config/systemd/user/emacs.service
+  [Unit]
+  Description=Emacs
+
+  [Service]
+  ExecStart=emacs --fg-daemon
+  Restart=on-failure
+
+  [Install]
+  WantedBy=default.target
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .config/systemd/user/emacs.socket
+  [Unit]
+  Description=Emacs
+
+  [Socket]
+  ListenStream=%t/emacs/server
+
+  [Install]
+  WantedBy=sockets.target
+#+END_SRC
+
+#+BEGIN_SRC sh
+  systemctl --user enable emacs.socket
+#+END_SRC
+
+[[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]], [[https://www.iana.org/assignments/media-types/media-types.xhtml][Media Types (IANA)]]
+
+#+BEGIN_SRC conf :tangle .local/share/applications/emacs.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Emacs
+  Icon=emacs
+  TryExec=emacsclient
+  Exec=sh -c "emacsclient -s \"\\$XDG_RUNTIME_DIR/emacs/server\" -c %F"
+  Terminal=false
+  MimeType=text/plain;application/pdf;
+  StartupWMClass=Emacs
+#+END_SRC
+
+#+BEGIN_SRC sh
+  update-desktop-database .local/share/applications
+#+END_SRC
+
 * Bash
 
 ** Login
