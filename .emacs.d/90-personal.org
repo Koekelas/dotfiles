@@ -114,7 +114,7 @@ Configure agendas.
     (setq org-directory koek/documents-dir)
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
-            (koek/fetch-agenda-files . (:maxlevel . 3)))))
+            (org-agenda-files . (:maxlevel . 3)))))
 
   (use-package org-capture
     :defer t
