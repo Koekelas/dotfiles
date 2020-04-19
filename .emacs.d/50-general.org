@@ -1865,9 +1865,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
   (defun koek-ino/extract-keys (compound-key)
     "Extract keys from COMPOUND-KEY.
   COMPOUND-KEY is a string of dot separated keys."
-    (mapcar (lambda (key)
-              (intern (concat ":" key)))
-            (split-string compound-key (rx "."))))
+    (mapcar #'intern (split-string compound-key (rx "."))))
 
   (defun koek-ino/make-nested-alist (properties)
     "Return nested alist.
@@ -1902,13 +1900,13 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
       (mapcar #'file-name-directory)
       (mapcar
        (lambda (file-name)
-         `((:home        . ,file-name)
-           (:boards      . ,(koek-ino/read-properties
-                             (expand-file-name "boards.txt" file-name)))
-           (:platform    . ,(koek-ino/read-properties
-                             (expand-file-name "platform.txt" file-name)))
-           (:programmers . ,(koek-ino/read-properties
-                             (expand-file-name "programmers.txt" file-name))))))))
+         `((home        . ,file-name)
+           (boards      . ,(koek-ino/read-properties
+                            (expand-file-name "boards.txt" file-name)))
+           (platform    . ,(koek-ino/read-properties
+                            (expand-file-name "platform.txt" file-name)))
+           (programmers . ,(koek-ino/read-properties
+                            (expand-file-name "programmers.txt" file-name))))))))
 
   (defun koek-ino/insert-section-heading (name)
     "Insert section heading into current.
@@ -1973,8 +1971,8 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 
   (defconst koek-ino/hardware-whitelist-preds
     (list (lambda (spec)
-            (let ((name (koek-ino/get-in '(:platform :name) spec))
-                  (version (koek-ino/get-in '(:platform :version) spec)))
+            (let ((name (koek-ino/get-in '(platform name) spec))
+                  (version (koek-ino/get-in '(platform version) spec)))
               (and (string= name "Arch Linux Arduino AVR Boards")
                    (string-match-p (rx line-start "1.8." (one-or-more num) line-end)
                                    version)
@@ -1986,8 +1984,8 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
     "Generate Arduino project.
   FILE-NAME is a string, the file name to the project home
   directory.  BOARD-SPEC is an alist, the board specification.  It
-  has two keys, :hardware and :board.  :hardware points to a
-  hardware specification.  :board points to a board in :hardware."
+  has two keys, hardware and board.  hardware points to a
+  hardware specification.  board points to a board in hardware."
     (interactive
      (list
       (thread-last (read-directory-name "Project home: ")
@@ -2005,17 +2003,17 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
                 (lambda (hardware-spec)
                   (let ((platform-name
                          (format "%s %s"
-                                 (koek-ino/get-in '(:platform :name) hardware-spec)
-                                 (koek-ino/get-in '(:platform :version) hardware-spec))))
-                    (thread-last (koek-ino/get-in '(:boards) hardware-spec)
+                                 (koek-ino/get-in '(platform name) hardware-spec)
+                                 (koek-ino/get-in '(platform version) hardware-spec))))
+                    (thread-last (koek-ino/get-in '(boards) hardware-spec)
                       (mapcar #'cdr)
-                      (seq-filter (apply-partially #'koek-ino/get-in '(:name)))
+                      (seq-filter (apply-partially #'koek-ino/get-in '(name)))
                       (mapcar (lambda (board-spec)
                                 (cons (format "%s (%s)"
-                                              (koek-ino/get-in '(:name) board-spec)
+                                              (koek-ino/get-in '(name) board-spec)
                                               platform-name)
-                                      `((:board    . ,board-spec)
-                                        (:hardware . ,hardware-spec))))))))
+                                      `((board    . ,board-spec)
+                                        (hardware . ,hardware-spec))))))))
                 hardware-specs))))
         (cdr (assoc (completing-read "Board: " candidates nil t) candidates)))))
     (make-directory file-name 'parents)
@@ -2025,10 +2023,10 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
       cpp (executable-find "avr-g++")
       :properties
       ino_src (directory-files
-               (thread-last (koek-ino/get-in '(:hardware :home) board-spec)
+               (thread-last (koek-ino/get-in '(hardware home) board-spec)
                  (expand-file-name "cores/")
                  (expand-file-name
-                  (koek-ino/get-in '(:board :build :core) board-spec))
+                  (koek-ino/get-in '(board build core) board-spec))
                  file-name-as-directory)
                'full (rx (or ".c" ".cpp") line-end))
       :host_machine
