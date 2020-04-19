@@ -174,10 +174,13 @@ Move deleted files to trash.
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
     :config
-    (mapc (apply-partially #'add-to-list 'recentf-exclude)
-          (list "/share/emacs/"
-                ;; Elements are regexps, ~/ and /home/user/ differ
-                (expand-file-name (locate-user-emacs-file "elpa/"))
+    (mapc (lambda (file-name)
+            (add-to-list 'recentf-exclude
+                         (rx-to-string
+                          `(and line-start ,(expand-file-name file-name)))))
+          (list "/user/share/emacs/"
+                (locate-user-emacs-file "lisp/")
+                (locate-user-emacs-file "elpa/")
                 no-littering-etc-directory
                 no-littering-var-directory))
     (recentf-mode))
