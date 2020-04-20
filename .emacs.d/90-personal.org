@@ -290,10 +290,10 @@ Configure news feeds.
       "List of news feeds.
   News feed is a list of format:
 
-  (\"title\" \"url\" tag-1 tag-2 tag-n)
-  (\"title\" reddit \"id\" tag-1 tag-2 tag-n)
-  (\"title\" reddit month \"id\" tag-1 tag-2 tag-n)
-  (\"title\" youtube \"id\" tag-1 tag-2 tag-n)
+  '(\"title\" \"url\" tag-1 tag-2 tag-n) or
+  '(\"title\" reddit \"id\" tag-1 tag-2 tag-n) or
+  '(\"title\" reddit month \"id\" tag-1 tag-2 tag-n) or
+  '(\"title\" youtube \"id\" tag-1 tag-2 tag-n)
 
   Reddit news feeds are tagged with post and YouTube news feeds are
   tagged with video.")
