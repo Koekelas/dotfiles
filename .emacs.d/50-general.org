@@ -1976,7 +1976,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
             (let ((name (koek-ino/get-in '(:platform :name) spec))
                   (version (koek-ino/get-in '(:platform :version) spec)))
               (and (string= name "Arch Linux Arduino AVR Boards")
-                   (string-match-p (rx line-start "1.6." (one-or-more num) line-end)
+                   (string-match-p (rx line-start "1.8." (one-or-more num) line-end)
                                    version)
                    t))))
     "List of hardware specification whitelist predicates.
