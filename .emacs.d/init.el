@@ -7,9 +7,11 @@
 ;;; Code:
 
 ;;; Garbage collector
-;; Increasing cons threshold makes garbage collection more efficient,
-;; decreasing it makes garbage collection less noticeable. Increase
-;; cons threshold during initialization so Emacs starts fast.
+;; Increasing cons threshold makes garbage collection more efficient
+;; and decreasing it makes garbage collection less noticeable, i.e.,
+;; cons threshold is a tradeoff between the runtime of the garbage
+;; collector and the responsiveness of Emacs. Increase cons threshold
+;; during initialization.
 (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
 ;; Once initialized, gcmh kicks in
 
@@ -64,8 +66,8 @@ PACKAGE-NAME is a symbol."
 (load custom-file 'no-error)
 
 ;;; Literate configuration
-;; directory-files returns a sorted list so 00-*.org loads before
-;; 10-*.org, 10-*.org before 20-*.org, 20-*.org before 30-*.org, etc.
+;; directory-files returns a sorted list, i.e., 00-*.org is loaded
+;; before 10-*.org, 10-*.org before 20-*.org, etc.
 (mapc #'org-babel-load-file
       (directory-files user-emacs-directory 'full (rx ".org" line-end)))
 

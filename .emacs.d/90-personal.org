@@ -221,8 +221,8 @@ the instructions on storing passwords.
                      (smtpmail-smtp-service  . 465)
                      (smtpmail-stream-type   . ssl)
                      ;; refile-folder, drafts-folder, sent-folder and
-                     ;; trash-folder are directory file names (i.e. no
-                     ;; trailing /)
+                     ;; trash-folder are directory file names, i.e., no
+                     ;; trailing /
                      (mu4e-refile-folder     . "/Personal/Archive")
                      (mu4e-drafts-folder     . "/Personal/Drafts")
                      (mu4e-sent-folder       . "/Personal/Sent")

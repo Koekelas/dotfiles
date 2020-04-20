@@ -1722,8 +1722,8 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
       (:map mu4e-headers-mode-map
        ("C-c o c" . mu4e-org-store-and-capture)))
 
-    ;; Headers must at least be the length of the header's short name
-    ;; plus two for sort direction wide. For header short names, see
+    ;; Headers must at least be the width of the header short name plus
+    ;; two for sort direction. For header short names, see
     ;; `mu4e-header-info'.
     (setq mu4e-headers-fields '((:human-date . 8)
                                 (:from       . 22)
@@ -2754,8 +2754,8 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
       (funcall f)
       (whitespace-mode))
 
-    ;; When SQL dialect is setup, mode-name is overridden (i.e. delight
-    ;; is undone)
+    ;; When SQL dialect is setup, mode-name is overridden, i.e., delight
+    ;; is undone
     (define-advice sql-highlight-product (:after () koek-sql/update-mode-name)
       (setq mode-name
             '(:eval
