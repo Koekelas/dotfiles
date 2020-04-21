@@ -1692,10 +1692,10 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
       (:map mu4e-headers-mode-map
        ("G" . mu4e-update-mail-and-index)))
 
-    (use-package org-mu4e
+    (use-package mu4e-org
       :bind
       (:map mu4e-headers-mode-map
-       ("C-c o c" . org-mu4e-store-and-capture)))
+       ("C-c o c" . mu4e-org-store-and-capture)))
 
     ;; Headers must at least be the length of the header's short name
     ;; plus two for sort direction wide. For header short names, see
@@ -1736,10 +1736,10 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
         (setq mu4e-view-actions
               (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
 
-    (use-package org-mu4e
+    (use-package mu4e-org
       :bind
       (:map mu4e-view-mode-map
-       ("C-c o c" . org-mu4e-store-and-capture)))
+       ("C-c o c" . mu4e-org-store-and-capture)))
 
     (add-to-list 'mu4e-view-actions
                  '("open in browser" . mu4e-action-view-in-browser) 'append)
@@ -1779,11 +1779,11 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
 
     (setq mu4e-compose-context-policy 'ask-if-none))
 
-  (use-package org-mu4e
+  (use-package mu4e-org
     :after org
     :config
     (require 'mu4e)
-    (setq org-mu4e-link-query-in-headers-mode t))
+    (setq mu4e-org-link-query-in-headers-mode t))
 #+END_SRC
 
 ** elfeed - News reader

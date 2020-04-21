@@ -65,11 +65,6 @@ Define well known directories.
                             (expand-file-name "Kalenders/" koek/documents-dir))
     "File name to calendars directory.")
 
-  (defconst koek/email-dir
-    (koek/resolve-directory "KOEK_EMAIL_DIR"
-                            (expand-file-name "E-mail/" koek/documents-dir))
-    "File name to e-mail directory.")
-
   (defconst koek/news-dir
     (koek/resolve-directory "KOEK_NEWS_DIR"
                             (expand-file-name "Nieuws/" koek/documents-dir))
@@ -197,10 +192,6 @@ the instructions on storing passwords.
   (use-package mu4e-vars
     :defer t
     :config
-    ;; maildir, refile-folder, drafts-folder, sent-folder and
-    ;; trash-folder are directory file names (i.e. no trailing /)
-    (setq mu4e-maildir (directory-file-name koek/email-dir))
-
     (use-package mu4e-context
       :config
       (declare-function mu4e-message-field "mu4e-message")
@@ -217,6 +208,9 @@ the instructions on storing passwords.
                    `((smtpmail-smtp-server   . "smtp.fastmail.com")
                      (smtpmail-smtp-service  . 465)
                      (smtpmail-stream-type   . ssl)
+                     ;; refile-folder, drafts-folder, sent-folder and
+                     ;; trash-folder are directory file names (i.e. no
+                     ;; trailing /)
                      (mu4e-refile-folder     . "/Personal/Archive")
                      (mu4e-drafts-folder     . "/Personal/Drafts")
                      (mu4e-sent-folder       . "/Personal/Sent")
@@ -226,15 +220,15 @@ the instructions on storing passwords.
     (use-package mu4e-utils
       :config
       (setq mu4e-bookmarks
-            (list (make-mu4e-bookmark :name "Personal INBOX"
-                                      :query "maildir:/Personal/INBOX"
-                                      :key ?p)
-                  (make-mu4e-bookmark :name "Applied Artificial Intelligence"
-                                      :query "maildir:/Personal/Opleidingen/AAI"
-                                      :key ?a)
-                  (make-mu4e-bookmark :name "Unread"
-                                      :query "flag:unread"
-                                      :key ?u)))))
+            '((:name "Personal INBOX"
+               :query "maildir:/Personal/INBOX"
+               :key ?p)
+              (:name "Applied Artificial Intelligence"
+               :query "maildir:/Personal/Opleidingen/AAI"
+               :key ?a)
+              (:name "Unread"
+               :query "flag:unread"
+               :key ?u)))))
 #+END_SRC
 
 * News feeds
