@@ -619,6 +619,13 @@ Move configuration directory out of the way.
   IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
 #+END_SRC
 
+* Keras
+Move configuration directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-keras.conf
+  KERAS_HOME="$XDG_CONFIG_DIR/keras"
+#+END_SRC
+
 * NLTK
 Move data directory out of the way.
 
