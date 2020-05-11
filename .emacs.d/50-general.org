@@ -1021,7 +1021,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
     (defun koek-ys/make-ensure-result-directory (name)
       "Return function to ensure result directory of current source block exists.
-  NAME is a string, the variable name which stores the result file
+  NAME is a string, the variable name storing the result file
   name."
       (lambda ()
         (when-let ((file-name
@@ -2570,7 +2570,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (declare-function org-babel-get-src-block-info "ob-core")
 
     (defun koek-org/get-src-block-var-value (name)
-      "Return value of variable NAME in current source block.
+      "Return value of variable NAME for current source block.
   NAME is a string, the variable name."
       (thread-last (org-babel-get-src-block-info 'light)
         (nth 2)                           ; Header arguments
@@ -3255,7 +3255,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       "Flycheck mode line construct.")
 
     (defun koek-ml/get-flymake-state ()
-      "Return flymake state.
+      "Return state of flymake.
   State is the symbol running (some checkers running),
   finished (all checkers finished running), all-disabled (all
   compatible checkers disabled) or no-checker (no compatible
@@ -3359,8 +3359,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       "List of ediff buffer specifications.
   An ediff buffer specification is a plist with keys :type and
   :buffer.  :type is a symbol, a type of buffer.  :buffer is a
-  symbol, the variable name which stores the buffer of type
-  :type.")
+  symbol, the variable name storing the buffer of type :type.")
 
     (defun koek-ml/get-variants ()
       "Return variants of ediff session.
