@@ -517,7 +517,7 @@ Move data and maildir directory out of the way.
 To create the database, run:
 
 #+BEGIN_SRC sh :noweb yes
-  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu init --my-address="<<e-mail>>" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com"
+  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu init --my-address="<<e-mail>>" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
 #+END_SRC
 
 * FreeCAD
