@@ -91,7 +91,11 @@ Configure agendas.
   (use-package org
     :defer t
     :preface
-    (defun koek/get-subdirectories (file-name &optional full)
+    (defun koek/lock-file-p (file-name)
+      "Return whether file FILE-NAME is a lock file."
+      (string-match-p (rx line-start ".#") (file-name-nondirectory file-name)))
+
+    (defun koek/get-subdirs (file-name &optional full)
       "Return subdirectories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names."
       (thread-last (directory-files-and-attributes file-name full)
@@ -102,14 +106,22 @@ Configure agendas.
         (mapcar (lambda (spec)
                   (file-name-as-directory (car spec))))))
 
+    (defun koek/get-agenda-dirs ()
+      "Return directories storing agenda files."
+      (append (list koek/documents-dir koek/calendars-dir)
+              (koek/get-subdirs koek/projects-dir 'full)))
+
+    (defun koek/get-agenda-files ()
+      "Return agenda files."
+      (thread-last (koek/get-agenda-dirs)
+        (seq-mapcat (lambda (file-name)
+                      (directory-files file-name 'full (rx ".org" line-end))))
+        (seq-filter (lambda (file-name)
+                      (not (koek/lock-file-p file-name))))))
+
     (define-advice org-agenda-files
         (:before (&rest _args) koek/update-agenda-files)
-      (setq org-agenda-files
-            (seq-mapcat
-             (lambda (file-name)
-               (directory-files file-name 'full (rx ".org" line-end)))
-             (append (list koek/documents-dir koek/calendars-dir)
-                     (koek/get-subdirectories koek/projects-dir 'full)))))
+      (setq org-agenda-files (koek/get-agenda-files)))
     :config
     (setq org-directory koek/documents-dir)
     (setq org-refile-targets
