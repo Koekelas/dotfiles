@@ -278,6 +278,7 @@ Configure news feeds.
         ("Netflix TechBlog" "https://medium.com/feed/netflix-techblog" blog ai)
         ("Professor Leonard" youtube "UCoHhuummRZaIVX7bD4t2czg" mathematics)
         ("Programming" reddit month "programming" program)
+        ("Protesilaos Stavrou" youtube "UC0uTPqBCFIpZxlz_Lv1tk_g" emacs)
         ("ROBOHEMIAN!" youtube "GravityRoad" electronics)
         ("Rainfall Projects" youtube "UCPO4D4-UeeFQceK8XrgwXug" woodwork metalwork)
         ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
