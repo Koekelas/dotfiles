@@ -158,26 +158,3 @@ To install dependencies on Arch Linux, run:
   ### GNOME Shell
   # Install gnome-catgen-git from AUR
 #+END_SRC
-
-* Issues
-
-** Emacs and GNOME Shell keybindings conflict
-Run:
-
-#+BEGIN_SRC sh
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "[]"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>Page_Down']"
-#+END_SRC
-
-** Spell checking contractions fails
-Visit the dictionary's affix file. On Arch Linux, affix files are
-saved in =/usr/share/hunspell/=. Add:
-
-#+BEGIN_SRC fundamental
-  ICONV 1
-  ICONV ’ '
-  WORDCHARS '’
-#+END_SRC
-
-For more information, see ~man 5 hunspell~.
