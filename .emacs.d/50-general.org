@@ -38,7 +38,8 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 #+BEGIN_SRC emacs-lisp
   (use-package dired
     :bind
-    ("C-c f f" . dired)
+    (("C-c f f" . dired)
+     ("C-c f C-f" . dired-jump))
     :config
     (declare-function dired-hide-details-mode "dired")
 
