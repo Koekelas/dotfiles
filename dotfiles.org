@@ -54,125 +54,7 @@ Finally, set other directories.
   KOEK_PROJECTS_DIR="$HOME/Projecten"
 #+END_SRC
 
-* GNOME Shell
-
-** App folders
-To apply configuration, run:
-
-#+BEGIN_SRC sh
-  gnome-catgen -s
-#+END_SRC
-
-*** Citrix
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Citrix.category
-  Citrix_subscribed_XD-C10-S01-Controller.DLG-SB2206-PRD-PROD $S1048-1056.desktop
-  Citrix_subscribed_XD-C10-S01-Controller.VDI Dedicated Default Office 20 $P9447.desktop
-  wfcmgr.desktop
-#+END_SRC
-
-*** Creative
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Creative.category
-  ardour.desktop
-  blender.desktop
-  calf.desktop
-  freecad.desktop
-  gimp.desktop
-  inkscape.desktop
-  openscad.desktop
-  org.fontforge.FontForge.desktop
-  scribus.desktop
-  tape.desktop
-  valentina.desktop
-#+END_SRC
-
-*** DisplayCAL
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/DisplayCAL.category
-  displaycal-3dlut-maker.desktop
-  displaycal-apply-profiles.desktop
-  displaycal-curve-viewer.desktop
-  displaycal-profile-info.desktop
-  displaycal-scripting-client.desktop
-  displaycal-synthprofile.desktop
-  displaycal-testchart-editor.desktop
-  displaycal-vrml-to-x3d-converter.desktop
-  displaycal.desktop
-#+END_SRC
-
-*** Internet
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Internet.category
-  chromium.desktop
-  firefox.desktop
-  io.github.qtox.qTox.desktop
-  jami-gnome.desktop
-#+END_SRC
-
-*** Leisure
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Leisure.category
-  makemkv.desktop
-  org.gnome.Lollypop.desktop
-  org.musicbrainz.Picard.desktop
-  puddletag.desktop
-  steam-native.desktop
-  vlc.desktop
-#+END_SRC
-
-*** LibreOffice
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/LibreOffice.category
-  libreoffice-base.desktop
-  libreoffice-calc.desktop
-  libreoffice-draw.desktop
-  libreoffice-impress.desktop
-  libreoffice-math.desktop
-  libreoffice-startcenter.desktop
-  libreoffice-writer.desktop
-#+END_SRC
-
-*** System
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/System.category
-  ca.desrt.dconf-editor.desktop
-  gnome-control-center.desktop
-  gnome-system-monitor.desktop
-  gufw.desktop
-  org.gnome.DiskUtility.desktop
-  org.gnome.Logs.desktop
-  org.gnome.Terminal.desktop
-  org.gnome.font-viewer.desktop
-  org.gnome.seahorse.Application.desktop
-  org.gnome.tweaks.desktop
-  yelp.desktop
-#+END_SRC
-
-*** Utilities
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Utilities.category
-  com.obsproject.Studio.desktop
-  eid-viewer.desktop
-  electrum.desktop
-  org.gnome.Cheese.desktop
-  org.gnome.Evince.desktop
-  org.gnome.FileRoller.desktop
-  org.gnome.Nautilus.desktop
-  org.gnome.Screenshot.desktop
-  org.gnome.eog.desktop
-  org.keepassxc.KeePassXC.desktop
-  simple-scan.desktop
-  syncthing-gtk.desktop
-#+END_SRC
-
-*** Work
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Work.category
-  arduino.desktop
-  emacs.desktop
-  org.gnome.Boxes.desktop
-  org.gnome.Calculator.desktop
-  org.gnome.Maps.desktop
-  org.gnome.Weather.desktop
-  org.gnome.clocks.desktop
-  org.octave.Octave.desktop
-  wireshark.desktop
-  wolfram-mathematica11.desktop
-#+END_SRC
-
-** Superfluous applications
+* Superfluous applications
 Hide superfluous applications.
 
 #+BEGIN_SRC conf :noweb-ref desktop-nodisplay :exports none
@@ -279,6 +161,122 @@ Hide superfluous applications.
 #+BEGIN_SRC conf :tangle .local/share/applications/xdvi.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=XDvi
+#+END_SRC
+
+* GNOME Shell app folders
+To apply configuration, run:
+
+#+BEGIN_SRC sh
+  gnome-catgen -s
+#+END_SRC
+
+** Citrix
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Citrix.category
+  Citrix_subscribed_XD-C10-S01-Controller.DLG-SB2206-PRD-PROD $S1048-1056.desktop
+  Citrix_subscribed_XD-C10-S01-Controller.VDI Dedicated Default Office 20 $P9447.desktop
+  wfcmgr.desktop
+#+END_SRC
+
+** Creative
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Creative.category
+  ardour.desktop
+  blender.desktop
+  calf.desktop
+  freecad.desktop
+  gimp.desktop
+  inkscape.desktop
+  openscad.desktop
+  org.fontforge.FontForge.desktop
+  scribus.desktop
+  tape.desktop
+  valentina.desktop
+#+END_SRC
+
+** DisplayCAL
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/DisplayCAL.category
+  displaycal-3dlut-maker.desktop
+  displaycal-apply-profiles.desktop
+  displaycal-curve-viewer.desktop
+  displaycal-profile-info.desktop
+  displaycal-scripting-client.desktop
+  displaycal-synthprofile.desktop
+  displaycal-testchart-editor.desktop
+  displaycal-vrml-to-x3d-converter.desktop
+  displaycal.desktop
+#+END_SRC
+
+** Internet
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Internet.category
+  chromium.desktop
+  firefox.desktop
+  io.github.qtox.qTox.desktop
+  jami-gnome.desktop
+#+END_SRC
+
+** Leisure
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Leisure.category
+  makemkv.desktop
+  org.gnome.Lollypop.desktop
+  org.musicbrainz.Picard.desktop
+  puddletag.desktop
+  steam-native.desktop
+  vlc.desktop
+#+END_SRC
+
+** LibreOffice
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/LibreOffice.category
+  libreoffice-base.desktop
+  libreoffice-calc.desktop
+  libreoffice-draw.desktop
+  libreoffice-impress.desktop
+  libreoffice-math.desktop
+  libreoffice-startcenter.desktop
+  libreoffice-writer.desktop
+#+END_SRC
+
+** System
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/System.category
+  ca.desrt.dconf-editor.desktop
+  gnome-control-center.desktop
+  gnome-system-monitor.desktop
+  gufw.desktop
+  org.gnome.DiskUtility.desktop
+  org.gnome.Logs.desktop
+  org.gnome.Terminal.desktop
+  org.gnome.font-viewer.desktop
+  org.gnome.seahorse.Application.desktop
+  org.gnome.tweaks.desktop
+  yelp.desktop
+#+END_SRC
+
+** Utilities
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Utilities.category
+  com.obsproject.Studio.desktop
+  eid-viewer.desktop
+  electrum.desktop
+  org.gnome.Cheese.desktop
+  org.gnome.Evince.desktop
+  org.gnome.FileRoller.desktop
+  org.gnome.Nautilus.desktop
+  org.gnome.Screenshot.desktop
+  org.gnome.eog.desktop
+  org.keepassxc.KeePassXC.desktop
+  simple-scan.desktop
+  syncthing-gtk.desktop
+#+END_SRC
+
+** Work
+#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Work.category
+  arduino.desktop
+  emacs.desktop
+  org.gnome.Boxes.desktop
+  org.gnome.Calculator.desktop
+  org.gnome.Maps.desktop
+  org.gnome.Weather.desktop
+  org.gnome.clocks.desktop
+  org.octave.Octave.desktop
+  wireshark.desktop
+  wolfram-mathematica11.desktop
 #+END_SRC
 
 * Emacs
