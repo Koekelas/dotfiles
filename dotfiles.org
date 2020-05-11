@@ -426,6 +426,11 @@ Create a new profile. Change:
 | Go back                       | =l=      | New tab               | =o=       | Stop passing keys to page | =C-j= |
 | Go forward                    | =r=      | Restore tab           | =M-o=     | Copy current URL          | =M-w= |
 
+#+CAPTION: Blacklist
+#+BEGIN_SRC fundamental
+  ^http://localhost:8888/notebooks/
+#+END_SRC
+
 ** uBlock Origin
 [[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
 
