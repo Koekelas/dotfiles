@@ -276,6 +276,46 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
+* Bash
+
+** Login
+:PROPERTIES:
+:header-args+: :tangle .profile
+:END:
+
+Interactive and non interactive
+
+#+BEGIN_SRC sh
+  export PATH="$HOME/.local/bin"${PATH:+:$PATH}
+#+END_SRC
+
+#+BEGIN_SRC sh
+  [[ -f ~/.bashrc ]] && . ~/.bashrc
+#+END_SRC
+
+** Interactive
+:PROPERTIES:
+:header-args+: :tangle .bashrc
+:END:
+
+Non login
+
+#+BEGIN_SRC sh
+  [[ $- != *i* ]] && return
+#+END_SRC
+
+#+BEGIN_SRC sh
+  export HISTFILE="$XDG_DATA_HOME/bash/history"
+#+END_SRC
+
+#+BEGIN_SRC sh
+  alias ls='ls -lah --color=auto'
+#+END_SRC
+
+#+BEGIN_SRC sh
+  PS1='[\u@\h \W]\$ '
+#+END_SRC
+
 * Git
 Set identity.
 
