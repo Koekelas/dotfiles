@@ -612,6 +612,13 @@ see [[https://codemirror.net/doc/manual.html#config][User manual and reference g
   }
 #+END_SRC
 
+** IPython
+Move configuration directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-ipython.conf
+  IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
+#+END_SRC
+
 * NLTK
 Move data directory out of the way.
 
