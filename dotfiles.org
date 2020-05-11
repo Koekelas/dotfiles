@@ -434,12 +434,12 @@ Create a new profile. Change:
 ** uBlock Origin
 [[https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/][uBlock Origin (Firefox Add-ons)]]
 
-Keep the defaults.
+Keep defaults.
 
 ** Video Downloader Professional
 [[https://addons.mozilla.org/en-US/firefox/addon/video-downloader-profession/][Video Downloader Professional (Firefox Add-ons)]]
 
-Keep the defaults.
+Keep defaults.
 
 * E-mail
 
