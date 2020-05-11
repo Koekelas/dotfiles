@@ -175,104 +175,110 @@ To apply configuration, run:
 ** Superfluous applications
 Hide superfluous applications.
 
-#+BEGIN_SRC conf :tangle .local/share/applications/assistant.desktop
+#+BEGIN_SRC conf :noweb-ref desktop-nodisplay :exports none
   [Desktop Entry]
+  Type=Application
   NoDisplay=true
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/avahi-discover.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/assistant.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Assistant
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/bssh.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/avahi-discover.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Avahi Zeroconf Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/bvnc.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/bssh.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Avahi SSH Server Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/cmake-gui.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/bvnc.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Avahi VNC Server Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/configmgr.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/cmake-gui.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=CMake
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/conncentre.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/configmgr.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Citrix Receiver Preferences
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/cups.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/conncentre.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Citrix Connection Centre
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/designer.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/cups.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Manage Printing
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/ipython.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/designer.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Designer
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/jconsole-java-openjdk.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/ipython.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=ipython
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/jshell-java-openjdk.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/jconsole-java-openjdk.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=OpenJDK Java Console
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/linguist.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/jshell-java-openjdk.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=OpenJDK Java Shell
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/lstopo.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/linguist.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Linguist
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/org.gnome.Extensions.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/lstopo.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Hardware Locality lstopo
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/qdbusviewer.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/org.gnome.Extensions.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Extensions
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/qv4l2.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/qdbusviewer.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt QDbusViewer
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/qvidcap.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/qv4l2.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt V4L2 test utility
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/steam.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/qvidcap.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt V4L2 video capture utility
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/xdvi.desktop
-  [Desktop Entry]
-  NoDisplay=true
+#+BEGIN_SRC conf :tangle .local/share/applications/steam.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Steam (Runtime)
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .local/share/applications/xdvi.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=XDvi
 #+END_SRC
 
 * Emacs
