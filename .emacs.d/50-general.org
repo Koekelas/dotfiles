@@ -504,13 +504,6 @@ End files with empty line.
     :delight)
 #+END_SRC
 
-*** Issues
-
-**** Modifying display table affects overlays
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq whitespace-style '(space-mark tab-mark newline-mark))
-#+END_SRC
-
 ** Edit commands
 Supercharge edit commands.
 
