@@ -367,6 +367,47 @@ Non login
   PS1='[\u@\h \W]\$ '
 #+END_SRC
 
+* Syncthing
+Stores:
+- archive: Archief
+- documents: Bureaublad, Documenten, Inbox and Projecten
+- documents-extra: Boeken, Sjablonen and Varia
+- music: Muziek and Podcasts
+- pictures: Afbeeldingen
+- share: Delen
+- video: Video's
+
+To create the symbolic links, run:
+
+#+BEGIN_SRC sh
+  # archive
+  ln -s ~/.ststore/archive/Archief ~/Archief
+
+  # documents
+  ln -s ~/.ststore/archive/Bureaublad ~/Bureaublad
+  ln -s ~/.ststore/archive/Documenten ~/Documenten
+  ln -s ~/.ststore/archive/Inbox ~/Inbox
+  ln -s ~/.ststore/archive/Projecten ~/Projecten
+
+  # documents-extra
+  ln -s ~/.ststore/archive/Boeken ~/Boeken
+  ln -s ~/.ststore/archive/Sjablonen ~/Sjablonen
+  ln -s ~/.ststore/archive/Varia ~/Varia
+
+  # music
+  ln -s ~/.ststore/archive/Muziek ~/Muziek
+  ln -s ~/.ststore/archive/Podcasts ~/Podcasts
+
+  # pictures
+  ln -s ~/.ststore/archive/Afbeeldingen ~/Afbeeldingen
+
+  # share
+  ln -s ~/.ststore/archive/Delen ~/Delen
+
+  # video
+  ln -s "~/.ststore/archive/Video's" "~/Video's"
+#+END_SRC
+
 * Git
 Set identity.
 
