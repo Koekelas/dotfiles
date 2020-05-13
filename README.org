@@ -13,7 +13,6 @@ Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
 Finally, copy the dotfiles to your home directory.
 
 * Installing dependencies
-
 - Emacs:
   - General:
     - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
