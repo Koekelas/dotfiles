@@ -940,11 +940,6 @@ steps.
     (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
     (setq aw-dispatch-alist '((?o aw-flip-window)))
     (setq aw-leading-char-style 'path)
-    ;; When there are two windows, ace chooses the other window. When
-    ;; there are three or more windows, ace asks for a window. Enabling
-    ;; background (default) differentiates both cases. Don't disable
-    ;; background when jumping to a window.
-    ;; (setq aw-background nil)
     ;; Ace isn't a minor mode but it can be delighted [sic]
     :delight)
 #+END_SRC
