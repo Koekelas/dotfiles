@@ -2807,11 +2807,10 @@ Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], 
   (koek-font/setup)
 #+END_SRC
 
-Disable blink cursor mode, instead, enable highlight line mode.
+Disable blink cursor mode.
 
 #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode 0)
-  (global-hl-line-mode)
 #+END_SRC
 
 Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
