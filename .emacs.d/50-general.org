@@ -2154,7 +2154,7 @@ Configure Conf mode afterwards.
 *** Issues
 
 **** Built-in indentation styles are inappropriate for multiple line vectors
-See [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
+For creating indentation styles, see [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
 
 ** Org
 For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
