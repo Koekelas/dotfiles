@@ -127,36 +127,6 @@ Configure agendas.
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
             (org-agenda-files . (:maxlevel . 3)))))
-
-  (use-package org-capture
-    :defer t
-    :config
-    (setq org-capture-templates
-          `(("j" "Journal" entry (file+olp+datetree "Inbox.org" "Journaal")
-             "* %?"
-             :empty-lines 1)
-            ("t" "Task" entry (file+olp "Inbox.org" "Taken")
-             "* TODO %?"
-             :empty-lines 1)
-            ("a" "Appointment" entry (file "Kalenders/Afspraken.org")
-             ,(string-join '("* %^{Name}"
-                             "%^T"
-                             "%^{LOCATION}p" ; Inserted after heading
-                             "%?")
-                           "\n")
-             :empty-lines 1)
-            ("r" "Reply" entry (file+olp "Inbox.org" "Taken")
-             ,(string-join '("* TODO Beantwoord %:subject"
-                             "DEADLINE: %^t"
-                             ""
-                             "%a"
-                             ""
-                             "%?")
-                           "\n")
-             :empty-lines 1)
-            ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
-             "- [[%x][%^{Title}]]%?")))
-    (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 #+END_SRC
 
 ** Calendars
@@ -194,6 +164,95 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     :defer t
     :config
     (setq org-icalendar-timezone "Europe/Brussels"))
+#+END_SRC
+
+* Capture templates
+#+BEGIN_SRC js
+  (function (template) {
+      "use strict";
+
+      function toQuery(args) {
+          return (
+              Object
+                  .keys(args)
+                  .map((key) => `${key}=${encodeURIComponent(args[key])}`)
+                  .join("&")
+          );
+      }
+
+      const query = toQuery({
+          template,
+          url: location.href,
+          title: document.title,
+          body: window.getSelection()
+      });
+      location.href = `org-protocol://capture?${query}`;
+  }("t"));
+#+END_SRC
+
+#+CAPTION: Bladwijzer
+#+BEGIN_SRC js
+  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("b"));
+#+END_SRC
+
+#+CAPTION: Notitie
+#+BEGIN_SRC js
+  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("n"));
+#+END_SRC
+
+#+CAPTION: Boek
+#+BEGIN_SRC js
+  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("B"));
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-capture
+    :defer t
+    :config
+    (setq org-capture-templates
+          `(("j" "Journal" entry (file+olp+datetree "Inbox.org" "Journaal")
+             "* %?"
+             :empty-lines 1)
+            ("n" "Note" entry (file+olp "Inbox.org" "Notities")
+             ,(string-join '("* %^{Name} %^g"
+                             "%a"
+                             ""
+                             "#+BEGIN_QUOTE"
+                             "%i"
+                             "#+END_QUOTE"
+                             ""
+                             "%?")
+                           "\n")
+             :empty-lines 1)
+            ("t" "Task" entry (file+olp "Inbox.org" "Taken")
+             "* TODO %?"
+             :empty-lines 1)
+            ("r" "Reply" entry (file+olp "Inbox.org" "Taken")
+             ,(string-join '("* TODO Beantwoord %:subject"
+                             "DEADLINE: %^t"
+                             ""
+                             "%a"
+                             ""
+                             "%?")
+                           "\n")
+             :empty-lines 1)
+            ("a" "Appointment" entry (file "Kalenders/Afspraken.org")
+             ,(string-join '("* %^{Name}"
+                             "%^T"
+                             "%^{LOCATION}p" ; Inserted after heading
+                             "%?")
+                           "\n")
+             :empty-lines 1)
+            ("b" "Bookmark" entry (file+olp "Inbox.org" "Bladwijzers")
+             ,(string-join '("* %:description %^g"
+                             "%a"
+                             ""
+                             "%?")
+                           "\n")
+             :empty-lines 1)
+            ("B" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
+             "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
+    (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 #+END_SRC
 
 * E-mail accounts

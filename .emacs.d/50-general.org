@@ -2180,6 +2180,8 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   Candidates are collected from agenda files."
       (setq-local org-complete-tags-always-offer-all-agenda-tags t))
     :init
+    (require 'org-protocol)
+
     ;; Setup resume clock after showing initial buffer
     (add-hook 'window-setup-hook #'org-clock-persistence-insinuate)
     :config

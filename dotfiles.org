@@ -306,6 +306,20 @@ To apply configuration, run:
   StartupWMClass=Emacs
 #+END_SRC
 
+[[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info Specification (freedesktop)]]
+
+#+BEGIN_SRC conf :tangle .local/share/applications/org-protocol.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=org-protocol
+  Icon=emacs
+  TryExec=emacsclient
+  Exec=sh -c "emacsclient -s \"\\$XDG_RUNTIME_DIR/emacs/server\" %u"
+  Terminal=false
+  MimeType=x-scheme-handler/org-protocol;
+  NoDisplay=true
+#+END_SRC
+
 #+BEGIN_SRC sh
   update-desktop-database .local/share/applications
 #+END_SRC
