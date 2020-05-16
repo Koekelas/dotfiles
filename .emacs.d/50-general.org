@@ -1333,15 +1333,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
     :delight)
 #+END_SRC
 
-*** Issues
-
-**** Sorting on description fails
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq which-key-sort-order 'which-key-description-order)
-#+END_SRC
-
-Prefix map =projectile= is sorted before prefix map =documentation=.
-
 ** vterm - Terminal emulator
 [[https://github.com/akermu/emacs-libvterm][vterm (GitHub)]]
 
