@@ -1099,15 +1099,6 @@ For more information, see ~man 5 hunspell~.
     :delight)
 #+END_SRC
 
-*** flycheck-jslint - JSLint checker
-[[https://github.com/Koekelas/jslint-cli][flycheck-jslint (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck-jslint
-    :load-path "lisp/jslint-cli/"
-    :after (:all flycheck (:any js2-mode json-mode)))
-#+END_SRC
-
 * Windows & buffers
 
 ** Windows
@@ -3213,8 +3204,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
         (emacs-lisp . "El")
         (emacs-lisp-checkdoc . "Checkdoc")
         (erlang . "Erlc")
-        (html-tidy . "Tidy")
-        (javascript-jslint . "JSLint"))
+        (html-tidy . "Tidy"))
       "Alist of checker symbol to checker name pairs.")
 
     (defun koek-ml/state-to-description (state)
