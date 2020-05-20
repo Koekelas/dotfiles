@@ -797,7 +797,6 @@ When line is indented, press =TAB= to complete text before point.
     (let ((setup-code-backend
            (koek-cpny/make-setup-backends
             '((company-dabbrev-code company-files :with company-yasnippet)))))
-      (add-hook 'erlang-mode-hook setup-code-backend)
       (add-hook 'scad-mode-hook setup-code-backend))
     (let ((setup-dabbrev-backend
            (koek-cpny/make-setup-backends
@@ -834,7 +833,7 @@ When line is indented, press =TAB= to complete text before point.
      ("C-c r r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
-    ((c-mode c++-mode mhtml-mode css-mode java-mode js2-mode json-mode
+    ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode
       python-mode)
      . eglot-ensure)
     :config
@@ -1093,7 +1092,7 @@ For more information, see ~man 5 hunspell~.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    :hook ((emacs-lisp-mode erlang-mode) . flycheck-mode)
+    :hook (emacs-lisp-mode . flycheck-mode)
     :config
     (setq flycheck-emacs-lisp-load-path 'inherit)
     :delight)
@@ -3203,7 +3202,6 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       '((eglot-flymake-backend . "LSP")
         (emacs-lisp . "El")
         (emacs-lisp-checkdoc . "Checkdoc")
-        (erlang . "Erlc")
         (html-tidy . "Tidy"))
       "Alist of checker symbol to checker name pairs.")
 

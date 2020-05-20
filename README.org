@@ -36,7 +36,10 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.gnu.org/software/gdb/][GDB]]
   - Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
   - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
-  - Erlang: [[https://www.erlang.org/][Erlang/OTP]]
+  - Erlang:
+    - [[https://www.erlang.org/][Erlang/OTP]]
+    - [[https://www.rebar3.org/][Rebar3]]
+    - [[https://erlang-ls.github.io/][Erlang LS]]
   - HTML & CSS:
     - [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
     - [[http://www.html-tidy.org/][HTML Tidy]]
@@ -71,7 +74,7 @@ To install dependencies on Arch Linux, run:
   ## General
   pacman -S the_silver_searcher git hunspell hunspell-en_US xorg-xprop
 
-  # Install PragmataPro Mono or
+  # Install PragmataPro Mono from source or
   pacman -S adobe-source-code-pro-fonts
 
   ## X window manager
@@ -107,6 +110,7 @@ To install dependencies on Arch Linux, run:
 
   ## Erlang
   pacman -S erlang-nox
+  # Install rebar3 from AUR and Erlang LS from source
 
   ## HTML & CSS
   npm i -g vscode-html-languageserver-bin vscode-css-languageserver-bin
