@@ -2247,25 +2247,16 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     ;; Appearance
     (setq org-adapt-indentation nil)
     (setq org-highlight-latex-and-related '(native))
+    (push '("" "listings" nil) org-latex-packages-alist)
 
     ;; Appearance - Images
     (setq org-startup-with-inline-images t)
-    (let ((width (thread-last (display-monitor-attributes-list)
-                   car                   ; Primary display
-                   (alist-get 'geometry) ; Arrangement/resolution
-                   (nth 2))))            ; Width
-      (setq org-image-actual-width (floor (* width (/ 1 5.0)))))
     (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
 
     ;; Appearance - LaTeX previews
     (setq org-startup-with-latex-preview t)
     (setq org-preview-latex-image-directory
           (no-littering-expand-var-file-name "org/latex-previews/"))
-    (setq org-format-latex-options
-          (plist-put org-format-latex-options :scale (/ 4 3.0)))
-
-    ;; Appearance - Export
-    (push '("" "listings" nil) org-latex-packages-alist)
     :delight org-cdlatex-mode)
 
   (use-package org-agenda
