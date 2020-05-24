@@ -88,16 +88,6 @@ Hide superfluous applications.
   Name=CMake
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle .local/share/applications/configmgr.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=Citrix Receiver Preferences
-#+END_SRC
-
-#+BEGIN_SRC conf :tangle .local/share/applications/conncentre.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=Citrix Connection Centre
-#+END_SRC
-
 #+BEGIN_SRC conf :tangle .local/share/applications/cups.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Manage Printing
@@ -168,13 +158,6 @@ To apply configuration, run:
 
 #+BEGIN_SRC sh
   gnome-catgen -s
-#+END_SRC
-
-** Citrix
-#+BEGIN_SRC fundamental :tangle .local/share/applications-categories/Citrix.category
-  Citrix_subscribed_XD-C10-S01-Controller.DLG-SB2206-PRD-PROD $S1048-1056.desktop
-  Citrix_subscribed_XD-C10-S01-Controller.VDI Dedicated Default Office 20 $P9447.desktop
-  wfcmgr.desktop
 #+END_SRC
 
 ** Creative
