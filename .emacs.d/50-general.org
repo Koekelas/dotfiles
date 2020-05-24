@@ -861,23 +861,6 @@ When line is indented, press =TAB= to complete text before point.
     (push '(mhtml-mode . ("html-languageserver" "--stdio")) eglot-server-programs)
     (push '(css-mode . ("css-languageserver" "--stdio")) eglot-server-programs)
     (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
-
-  (use-package flymake
-    :bind
-    (:map flymake-mode-map
-     ("C-c ! n" . flymake-goto-next-error)
-     ("C-c ! p" . flymake-goto-prev-error)
-     ("C-c ! l" . flymake-show-diagnostics-buffer))
-    :config
-    (setq flymake-wrap-around nil)
-    :delight)
-
-  (use-package flymake-proc
-    :defer t
-    :config
-    (declare-function flymake-proc-legacy-flymake "flymake-proc")
-
-    (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
 
 *** Setting up Clang
@@ -1086,16 +1069,25 @@ saved in =/usr/share/hunspell/=. Add:
 
 For more information, see ~man 5 hunspell~.
 
-** flycheck - Show syntax & style errors
-[[https://github.com/flycheck/flycheck][flycheck (GitHub)]]
-
+** flymake - Show syntax & style errors
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :hook (emacs-lisp-mode . flycheck-mode)
+  (use-package flymake
+    :bind
+    (:map flymake-mode-map
+     ("C-c e n" . flymake-goto-next-error)
+     ("C-c e p" . flymake-goto-prev-error)
+     ("C-c e l" . flymake-show-diagnostics-buffer))
+    :hook (emacs-lisp-mode . flymake-mode)
     :config
-    (setq flycheck-emacs-lisp-load-path 'inherit)
+    (setq flymake-wrap-around nil)
     :delight)
+
+  (use-package flymake-proc
+    :defer t
+    :config
+    (declare-function flymake-proc-legacy-flymake "flymake-proc")
+
+    (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
 
 * Windows & buffers
@@ -1547,7 +1539,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
     :ensure t
     :config
     (which-key-add-key-based-replacements
-      "C-c !" "errors"
       "C-c &" "yasnippet"
       "C-c d" "documentation"
       "C-c e" "editor"
@@ -2533,25 +2524,12 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
         (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
       ;; Mirror helpful buffer names
       (format "*org-src: %s*" org-buffer-name))
-
-    (defconst koek-org/excluded-checkers
-      '((emacs-lisp-mode . (emacs-lisp-checkdoc)))
-      "Alist of excluded checker pairs.
-  Excluded checker pair is a cons. Its car is a major mode symbol,
-  its cdr is a list of checker symbols.")
-
-    (defun koek-org/disable-excluded-checkers ()
-      "Disable excluded checkers for current."
-      (dolist (checker (alist-get major-mode koek-org/excluded-checkers))
-        (unless (memq checker flycheck-disabled-checkers)
-          (push checker flycheck-disabled-checkers))))
     :config
     ;; Resolve keybinding conflict with cider
     (unbind-key "C-c '" org-src-mode-map)
     (unbind-key "C-c C-k" org-src-mode-map)
 
     (push '("js" . js2) org-src-lang-modes)
-    (add-hook 'org-src-mode-hook #'koek-org/disable-excluded-checkers)
     :delight)
 
   (use-package ob-core
@@ -3155,7 +3133,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/eyebrowse
       '(:eval
-        (when (and (bound-and-true-p eyebrowse-mode) (koek-ml/mru-window-p))
+        (when (and eyebrowse-mode (koek-ml/mru-window-p))
           (let ((workspaces (koek-ml/get-workspaces))
                 (selected-id (koek-ml/get-selected-workspace-id)))
             (when (or (> (length workspaces) 1) (not (= selected-id 0)))
@@ -3200,47 +3178,15 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/checker-names
       '((eglot-flymake-backend . "LSP")
-        (emacs-lisp . "El")
-        (emacs-lisp-checkdoc . "Checkdoc")
-        (html-tidy . "Tidy"))
+        (elisp-flymake-byte-compile . "El")
+        (elisp-flymake-checkdoc . "Checkdoc"))
       "Alist of checker symbol to checker name pairs.")
 
     (defun koek-ml/state-to-description (state)
       "Convert checker state STATE to a description.
-  STATE is a symbol, a flycheck or flymake state."
+  STATE is a symbol, a flymake state."
       (let ((words (split-string (symbol-name state) "-")))
         (string-join (cons (capitalize (car words)) (cdr words)) " ")))
-
-    (defconst koek-ml/flycheck-diag-specs
-      '((:type error   :face compilation-error)
-        (:type warning :face compilation-warning))
-      "List of flycheck diagnosis specifications.
-  A flycheck diagnosis specification is a plist with keys :type and
-  :face.  :type is a symbol, a type of error.  :face is a symbol,
-  the face for showing the number of errors of type :type in the
-  mode line.")
-
-    (defconst koek-ml/flycheck
-      '(:eval
-        (when (and (bound-and-true-p flycheck-mode) (koek-ml/mru-window-p))
-          `("" koek-ml/separator
-            ,(when-let ((name (alist-get (flycheck-get-checker-for-buffer)
-                                         koek-ml/checker-names)))
-               (concat name " "))
-            ,(pcase flycheck-last-status-change
-               (`running
-                "- -")
-               (`finished
-                (let ((n-diags (flycheck-count-errors flycheck-current-errors)))
-                  (mapconcat
-                   (lambda (spec)
-                     (propertize (number-to-string
-                                  (alist-get (plist-get spec :type) n-diags 0))
-                                 'face (plist-get spec :face)))
-                   koek-ml/flycheck-diag-specs " ")))
-               (`,state
-                (koek-ml/state-to-description state))))))
-      "Flycheck mode line construct.")
 
     (defun koek-ml/get-flymake-state ()
       "Return state of flymake.
@@ -3276,8 +3222,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/flymake
       '(:eval
-        ;; Why is flymake-mode unbound after load?
-        (when (and (bound-and-true-p flymake-mode) (koek-ml/mru-window-p))
+        (when (and flymake-mode (koek-ml/mru-window-p))
           `("" koek-ml/separator
             ,(when-let ((name
                          ;; Assume only one checker enabled
@@ -3301,7 +3246,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/vc
       '(:eval
-        (when (and (bound-and-true-p vc-mode) (koek-ml/mru-window-p))
+        (when (and vc-mode (koek-ml/mru-window-p))
           (let ((state (string-trim (substring-no-properties vc-mode))))
             ;; For format, see `vc-default-mode-line-string'
             (string-match
@@ -3416,8 +3361,8 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                   `(,@koek-ml/dummies " "
                     koek-ml/eldoc koek-ml/depth koek-ml/ediff koek-ml/eyebrowse
                     koek-ml/id koek-ml/state
-                    koek-ml/position koek-ml/input koek-ml/flycheck
-                    koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
+                    koek-ml/position koek-ml/input koek-ml/flymake
+                    koek-ml/vc koek-ml/task koek-ml/modes)))
 #+END_SRC
 
 * Footer

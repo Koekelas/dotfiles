@@ -40,9 +40,7 @@ Finally, copy the dotfiles to your home directory.
     - [[https://www.erlang.org/][Erlang/OTP]]
     - [[https://www.rebar3.org/][Rebar3]]
     - [[https://erlang-ls.github.io/][Erlang LS]]
-  - HTML & CSS:
-    - [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
-    - [[http://www.html-tidy.org/][HTML Tidy]]
+  - HTML & CSS: [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
   - Java:
     - [[https://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
     - [[https://maven.apache.org/][Apache Maven]]
@@ -114,7 +112,6 @@ To install dependencies on Arch Linux, run:
 
   ## HTML & CSS
   npm i -g vscode-html-languageserver-bin vscode-css-languageserver-bin
-  pacman -S tidy
 
   ## Java
   pacman -S jdk-openjdk maven
