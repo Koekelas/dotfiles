@@ -1941,6 +1941,8 @@ Configure Conf mode afterwards.
         (:after (&rest _args) koek-conf/update-mode-name)
       (setq mode-name
             '(:eval
+              ;; When mode-name is evaluated during mode line update,
+              ;; inhibit-mode-name-delight is unbound or false
               (or (and (not (bound-and-true-p inhibit-mode-name-delight))
                        (alist-get major-mode koek-conf/mode-names))
                   "Conf")))))
@@ -2479,8 +2481,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (define-advice sql-highlight-product (:after () koek-sql/update-mode-name)
       (setq mode-name
             '(:eval
-              ;; When mode-name is evaluated during mode line update,
-              ;; inhibit-mode-name-delight is unbound or false
               (if (or (bound-and-true-p inhibit-mode-name-delight)
                       (eq sql-product 'ansi))
                   "SQL"
