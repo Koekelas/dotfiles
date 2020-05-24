@@ -167,9 +167,9 @@ To apply configuration, run:
   calf.desktop
   freecad.desktop
   gimp.desktop
-  inkscape.desktop
   openscad.desktop
   org.fontforge.FontForge.desktop
+  org.inkscape.Inkscape.desktop
   scribus.desktop
   tape.desktop
   valentina.desktop
