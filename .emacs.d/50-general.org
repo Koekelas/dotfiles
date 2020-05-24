@@ -829,8 +829,8 @@ When line is indented, press =TAB= to complete text before point.
     :ensure t
     :bind
     (:map eglot-mode-map
-     ("C-c r f" . eglot-code-actions)
-     ("C-c r r" . eglot-rename)
+     ("C-c e f" . eglot-code-actions)
+     ("C-c e r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
     ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode
@@ -1546,7 +1546,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
       "C-c j" "jump"
       "C-c o" "org"
       "C-c p" "projectile"
-      "C-c r" "refactor"
       "C-c w" "windows"
       "C-c x" "other")
 
