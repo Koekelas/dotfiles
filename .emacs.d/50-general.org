@@ -1576,6 +1576,24 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
   (use-package pdf-view
     :ensure pdf-tools
     :mode ((rx ".pdf" string-end) . pdf-view-mode)
+    :preface
+    (defface koek-pdf/midnight
+      '((t . (:foreground "#000000" :background "#ffffff")))
+      "Face for `pdf-view-midnight-minor-mode'.")
+
+    (define-advice pdf-view-midnight-minor-mode
+        (:before (&rest _args) koek-pdf/update-colors)
+      (setq pdf-view-midnight-colors
+            (cons (face-attribute 'koek-pdf/midnight :foreground)
+                  (face-attribute 'koek-pdf/midnight :background))))
+
+    (defun koek-pdf/re-apply-midnight-colors ()
+      "Re-apply `pdf-view-midnight-minor-mode' colors in all buffers."
+      (dolist (buffer (buffer-list))
+        (with-current-buffer buffer
+          (when (and (derived-mode-p 'pdf-view-mode) pdf-view-midnight-minor-mode)
+            (pdf-view-midnight-minor-mode 0)
+            (pdf-view-midnight-minor-mode)))))
     :config
     ;; Only isearch is supported
     (use-package isearch
@@ -1584,6 +1602,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
        ("C-s" . isearch-forward)))
 
     (setq-default pdf-view-display-size 'fit-page)
+    (add-hook 'koek-thm/enable-hook #'koek-pdf/re-apply-midnight-colors)
     :delight (pdf-view-mode "PDF" :major))
 
   (use-package pdf-links
@@ -2595,6 +2614,9 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
     :preface
+    (defvar koek-thm/enable-hook nil
+      "Normal hook run after enabling theme.")
+
     (defconst koek-thm/theme-specs
       '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
         (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
@@ -2730,7 +2752,9 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                         :weight bold :slant normal)
                   (aw-background-face   :background ,background)
                   ;; eyebrowse
-                  (eyebrowse-mode-line-active :foreground ,foreground)))))
+                  (eyebrowse-mode-line-active :foreground ,foreground)
+                  ;; pdf-tools
+                  (koek-pdf/midnight :foreground ,foreground :background ,background)))))
         ;; Adding attributes to a face before it's defined, fails. Add
         ;; attributes to user theme.
         (apply #'custom-set-faces
@@ -2740,7 +2764,9 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 
       ;; Set frame theme
       (when (fboundp 'koek-thm/set-frame-theme-variant)
-        (mapc #'koek-thm/set-frame-theme-variant (frame-list))))
+        (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
+
+      (run-hooks 'koek-thm/enable-hook))
     :config
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
