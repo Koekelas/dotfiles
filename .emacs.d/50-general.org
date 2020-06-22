@@ -1420,16 +1420,8 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
   (use-package mu4e
     :bind
     ("C-c x m" . mu4e)
-    :preface
-    (defun koek-mu/compose ()
-      "Compose new e-mail."
-      (interactive)
-      (require 'mu4e)
-      (call-interactively #'compose-mail))
     :init
-    (bind-keys
-     ([remap compose-mail] . koek-mu/compose)
-     ("C-c x C-m" . koek-mu/compose))
+    (bind-key "C-c x C-m" #'compose-mail)
 
     (setq mail-user-agent 'mu4e-user-agent))
 
