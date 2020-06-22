@@ -1545,6 +1545,7 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
     :after org
     :config
     (require 'mu4e)
+
     (setq mu4e-org-link-query-in-headers-mode t))
 #+END_SRC
 
