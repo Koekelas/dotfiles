@@ -1118,10 +1118,13 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :ensure t
     :demand t
     :bind
-    (("C-r" . ivy-resume)
-     :map ivy-minibuffer-map
-     ("C-c j" . ivy-avy))
+    ("C-r" . ivy-resume)
     :config
+    (use-package ivy-avy
+      :bind
+      (:map ivy-minibuffer-map
+       ("C-c j" . ivy-avy)))
+
     ;; When counsel loads, various commands setup initial input
     (use-package counsel
       :defer t
@@ -1143,6 +1146,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :delight)
 
   ;; Optional dependencies
+  (koek-pkg/ensure 'ivy-avy)
   (koek-pkg/ensure 'flx)
   (koek-pkg/ensure 'wgrep)
 #+END_SRC
