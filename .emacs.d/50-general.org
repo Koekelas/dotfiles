@@ -2249,6 +2249,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
                                    (python . t)
                                    (scheme . t)
                                    (sql . t)))
+    (setq org-export-backends '(latex beamer odt html icalendar))
 
     ;; Appearance
     (setq org-adapt-indentation nil)
