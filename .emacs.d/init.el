@@ -20,45 +20,38 @@
 
 (setq network-security-level 'high)
 
-;;; package - Package manager
-(require 'package)
+;;; straight - Package manager
+(defvar bootstrap-version)              ; Must be a dynamic variable
 
-(defun koek-pkg/ensure (package-name)
-  "Ensure package PACKAGE-NAME is installed.
-PACKAGE-NAME is a symbol."
-  (unless (package-installed-p package-name)
-    (package-install package-name)))
-
-(let ((archives '(("gnu"   . "https://elpa.gnu.org/packages/")
-                  ("melpa" . "https://melpa.org/packages/")
-                  ("org"   . "https://orgmode.org/elpa/"))))
-  ;; HTTPS locations require GnuTLS to be available
-  (unless (gnutls-available-p)
-    (setq archives
-          (mapcar (pcase-lambda (`(,id . ,location))
-                    (setq location
-                          (replace-regexp-in-string (rx line-start "https")
-                                                    "http" location))
-                    (cons id location))
-                  archives)))
-  (setq package-archives archives))
-(package-initialize)
-(setq package-enable-at-startup nil)
-(unless package-archive-contents
-  (package-refresh-contents))
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el"
+                         user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 ;;; no-littering - Normalize configuration and data paths packages
-(koek-pkg/ensure 'no-littering)
+(straight-use-package 'no-littering)
 (require 'no-littering)
 
 ;;; use-package - Package configuration macro
-(koek-pkg/ensure 'use-package)
-(koek-pkg/ensure 'delight)              ; Optional dependency
+(straight-use-package 'use-package)
+(straight-use-package 'delight)         ; Optional dependency
 
 ;;; org - Notes, to-do lists and project planning
 ;; Installing latest org after loading builtin org breaks org. Install
 ;; latest org before loading literate configuration.
-(koek-pkg/ensure 'org-plus-contrib)
+(straight-use-package 'org-plus-contrib)
+;; org is a subset of org-plus-contrib. Packages depending on org will
+;; cause org to be installed even when org-plus-contrib is installed.
+;; Prevent packages from installing org.
+(straight-use-package '(org :type built-in))
 ;; org is configured elsewhere
 
 ;;; cus-edit - Configuration interface
