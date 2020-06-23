@@ -1920,13 +1920,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 #+BEGIN_SRC emacs-lisp
   (use-package sly
     :straight t
-    :after lisp-mode
-    :preface
-    (defun koek-sly/fix-install ()
-      "Fix Sly install."
-      (interactive)
-      (byte-recompile-directory (file-name-directory (find-library-name "sly"))
-                                nil 'force)))
+    :after lisp-mode)
 
   (use-package sly-mrepl
     :defer t
@@ -1934,11 +1928,6 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
     (setq sly-mrepl-history-file-name
           (no-littering-expand-var-file-name "sly-mrepl-history")))
 #+END_SRC
-
-*** Issues
-
-**** Sly and Slynk versions differ
-Run =M-x= ~koek-sly/fix-install~ and restart Emacs.
 
 ** Conf
 Conf mode's mode declaration requires precedence over Text mode's.
