@@ -618,13 +618,6 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
-* CUDA
-Move cache directory out of the way.
-
-#+BEGIN_SRC conf :tangle .config/environment.d/50-cuda.conf
-  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
-#+END_SRC
-
 * Jupyter Notebook
 Move configuration directory out of the way.
 
@@ -655,6 +648,13 @@ Move configuration directory out of the way.
 
 #+BEGIN_SRC conf :tangle .config/environment.d/50-ipython.conf
   IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
+#+END_SRC
+
+* CUDA
+Move cache directory out of the way.
+
+#+BEGIN_SRC conf :tangle .config/environment.d/50-cuda.conf
+  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
 #+END_SRC
 
 * Keras
