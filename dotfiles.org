@@ -262,7 +262,7 @@ To apply configuration, run:
   wolfram-mathematica11.desktop
 #+END_SRC
 
-* Bash
+* Bash                                                                  :wip:
 
 ** Login
 :PROPERTIES:
@@ -556,7 +556,7 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
-* Org protocol
+* Org protocol                                                          :wip:
 [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]], [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info
 Specification (freedesktop)]]
 

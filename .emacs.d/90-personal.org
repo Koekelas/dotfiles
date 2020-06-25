@@ -23,7 +23,7 @@ Require libraries.
   (require 'seq)
 #+END_SRC
 
-* Monitors
+* Monitors                                                              :wip:
 #+BEGIN_SRC emacs-lisp
   (use-package exwm-randr
     :after exwm
@@ -166,7 +166,7 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     (setq org-icalendar-timezone "Europe/Brussels"))
 #+END_SRC
 
-* Capture templates
+* Capture templates                                                     :wip:
 #+BEGIN_SRC js
   (function (template) {
       "use strict";

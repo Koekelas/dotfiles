@@ -1075,7 +1075,7 @@ Bury unneeded buffers, computers have more than enough memory.
     :delight)
 #+END_SRC
 
-** exwm - X window manager
+** exwm - X window manager                                              :wip:
 [[https://github.com/ch11ng/exwm][exwm (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -1621,7 +1621,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 
 * Languages
 
-** Arduino
+** Arduino                                                              :wip:
 #+BEGIN_SRC emacs-lisp
   (defun koek-ino/get-in (keys alist)
     "Return value for KEYS in nested ALIST.
