@@ -1084,22 +1084,13 @@ Bury unneeded buffers, computers have more than enough memory.
     :when (string= (getenv "XDG_CURRENT_DESKTOP") "Emacs"))
 #+END_SRC
 
-** server - Emacs service
+** server - Emacs server
 #+BEGIN_SRC emacs-lisp
   (use-package server
-    :defer t
-    :preface
-    (defun koek-srvr/setup-socket ()
-      "Setup socket."
-      (setq server-name
-            (expand-file-name "emacs/server" (getenv "XDG_RUNTIME_DIR"))))
     :config
-    ;; Emacs is unaware of the socket created by systemd. When told
-    ;; about it, Emacs tries to create it and fails. with-editor
-    ;; requires the socket file name to be known. Setup socket after
-    ;; server is started. Will be fixed in Emacs 27. See
-    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24218
-    (add-hook 'emacs-startup-hook #'koek-srvr/setup-socket))
+    (when-let ((runtime-dir (getenv "XDG_RUNTIME_DIR")))
+      (setq server-name (expand-file-name "emacs" runtime-dir)))
+    (server-start))
 #+END_SRC
 
 ** Global commands
@@ -2639,18 +2630,16 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
         "Set frame theme variant of FRAME.
   When window theme is a dark theme, the variant is set to dark,
   else, it's set to nothing."
-        ;; Only graphical frames have a window id. The server frame is a
-        ;; terminal frame.
-        (when-let ((id (frame-parameter frame 'outer-window-id)))
-          (let* ((spec (seq-find (lambda (spec)
-                                   (eq (plist-get spec :theme)
-                                       (car custom-enabled-themes)))
-                                 koek-thm/theme-specs))
-                 (variant (or (and (plist-get spec :dark) "dark") "")))
-            (make-process :name "xprop"
-                          :command `("xprop"
-                                     "-id" ,id "-f" "_GTK_THEME_VARIANT" "8u"
-                                     "-set" "_GTK_THEME_VARIANT" ,variant)))))
+        (let* ((spec (seq-find (lambda (spec)
+                                 (eq (plist-get spec :theme)
+                                     (car custom-enabled-themes)))
+                               koek-thm/theme-specs))
+               (variant (or (and (plist-get spec :dark) "dark") "")))
+          (make-process :name "xprop"
+                        :command `("xprop"
+                                   "-id" ,(frame-parameter frame 'outer-window-id)
+                                   "-f" "_GTK_THEME_VARIANT" "8u"
+                                   "-set" "_GTK_THEME_VARIANT" ,variant))))
 
       (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant))
 
@@ -2668,8 +2657,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                   (string-to-number component 16))
                 (seq-partition normalized (/ (length normalized) 3)))))
 
-    ;; `color-rgb-to-hex' respects the color depth of the frame. The
-    ;; color depth of the server frame is low.
     (defun koek-thm/rgb-to-hex (color)
       "Convert RGB color COLOR to hex.
   COLOR is a list, a color of format '(R G B).  R, G and B are
@@ -2784,34 +2771,11 @@ Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], 
     "List of font specifications.
   A font specification is a plist.  For keys, see `font-spec'.")
 
-  (defun koek-font/retry-setup (frame)
-    "Retry setup preferred font.
-  FRAME is a frame, the last created frame."
-    (koek-font/setup frame)               ; Frame isn't selected yet
-    (when-let ((font (alist-get 'font default-frame-alist)))
-      ;; Font is set but it's set after frame had its parameters set
-      (set-frame-parameter frame 'font font)))
-
-  (defun koek-font/setup (&optional frame)
-    "Setup preferred font.
-  FRAME is used internally."
-    (if-let ((families (font-family-list (or frame (selected-frame)))))
-        (progn
-          ;; Frame is the first graphical frame. When no font is set,
-          ;; none of the preferred fonts are installed.
-          (remove-hook 'after-make-frame-functions #'koek-font/retry-setup)
-          (when-let ((spec (seq-find (lambda (spec)
-                                       (member (plist-get spec :family) families))
-                                     koek-font/font-specs)))
-            ;; Why does `set-frame-font' only work for the first
-            ;; emacsclient frame?
-            (let ((font (font-xlfd-name (apply #'font-spec spec) 'fold-wildcards)))
-              (push `(font . ,font) default-frame-alist))))
-      ;; Frame is a terminal frame. Only graphical frames support fonts.
-      ;; The server frame is a terminal frame.
-      (add-hook 'after-make-frame-functions #'koek-font/retry-setup)))
-
-  (koek-font/setup)
+  (when-let ((spec
+              (seq-find (lambda (spec)
+                          (member (plist-get spec :family) (font-family-list)))
+                        koek-font/font-specs)))
+    (set-frame-font (apply #'font-spec spec) 'keep-size t))
 #+END_SRC
 
 Disable blink cursor mode.
