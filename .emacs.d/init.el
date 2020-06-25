@@ -18,6 +18,10 @@
 ;;; nsm - Network security manager
 (require 'nsm)
 
+;; no-littering requires straight which requires nsm. Set location of
+;; settings file myself.
+(setq nsm-settings-file
+      (expand-file-name "var/nsm-settings.el" user-emacs-directory))
 (setq network-security-level 'high)
 
 ;;; straight - Package manager
