@@ -1927,6 +1927,12 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
       (interactive)
       (byte-recompile-directory (file-name-directory (find-library-name "sly"))
                                 nil 'force)))
+
+  (use-package sly-mrepl
+    :defer t
+    :config
+    (setq sly-mrepl-history-file-name
+          (no-littering-expand-var-file-name "sly-mrepl-history")))
 #+END_SRC
 
 *** Issues
