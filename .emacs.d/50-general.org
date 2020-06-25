@@ -83,6 +83,16 @@ Move deleted files to trash.
     :delight)
 #+END_SRC
 
+** vc - Version control
+VC is a placeholder.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vc-hooks
+    :defer t
+    :config
+    (setq vc-follow-symlinks t))
+#+END_SRC
+
 ** magit - Git
 [[https://github.com/magit/magit][magit (GitHub)]]
 
