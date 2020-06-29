@@ -6,7 +6,7 @@
 To get started, run:
 
 #+BEGIN_SRC sh
-  git clone --recurse-submodules https://github.com/Koekelas/dotfiles.git
+  git clone https://github.com/Koekelas/dotfiles.git
 #+END_SRC
 
 Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
