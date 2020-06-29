@@ -268,7 +268,7 @@ Configure notes.
                             org-roam-capture-templates)
                   '(:immediate-finish t)))
     (setq org-roam-capture-ref-templates
-          `(("w" "Website" plain (function org-roam-capture--get-point)
+          `(("w" "Webpage" plain (function org-roam-capture--get-point)
              ""
              :file-name "${slug}"
              :head
