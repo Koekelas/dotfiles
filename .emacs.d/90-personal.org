@@ -65,6 +65,11 @@ Define well known directories.
                             (expand-file-name "Kalenders/" koek/documents-dir))
     "File name to calendars directory.")
 
+  (defconst koek/notes-dir
+    (koek/resolve-directory "KOEK_NOTES_DIR"
+                            (expand-file-name "Notities/" koek/documents-dir))
+    "File name to notes directory.")
+
   (defconst koek/news-dir
     (koek/resolve-directory "KOEK_NEWS_DIR"
                             (expand-file-name "Nieuws/" koek/documents-dir))
@@ -166,43 +171,45 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     (setq org-icalendar-timezone "Europe/Brussels"))
 #+END_SRC
 
+* Notes
+Configure notes.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-roam
+    :after org
+    :config
+    (setq org-roam-directory koek/notes-dir)
+    (setq org-roam-index-file (expand-file-name "index.org" koek/notes-dir))
+    (org-roam-mode)
+    (find-file-noselect org-roam-index-file 'nowarn))
+#+END_SRC
+
 * Capture templates                                                     :wip:
 #+BEGIN_SRC js
-  (function (template) {
+  ((args) => {
       "use strict";
-
-      function toQuery(args) {
-          return (
-              Object
-                  .keys(args)
-                  .map((key) => `${key}=${encodeURIComponent(args[key])}`)
-                  .join("&")
-          );
-      }
-
-      const query = toQuery({
-          template,
-          url: location.href,
-          title: document.title,
-          body: window.getSelection()
-      });
-      location.href = `org-protocol://capture?${query}`;
-  }("t"));
+      const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&");
+      const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {
+          acc[key] = encodeURIComponent(args[key]);
+          return acc;
+      }, {});
+      location.href = `org-protocol://${protocol}?${toQuery(rest)}`;
+  })({protocol: "capture", template: "t", url: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
 #+CAPTION: Bladwijzer
 #+BEGIN_SRC js
-  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("b"));
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "b", url: location.href, title: document.title});
 #+END_SRC
 
 #+CAPTION: Notitie
 #+BEGIN_SRC js
-  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("n"));
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
 #+CAPTION: Boek
 #+BEGIN_SRC js
-  javascript:(function (template) {"use strict"; function toQuery(args) {return Object.keys(args).map((key) => `${key}=${encodeURIComponent(args[key])}`).join("&");} const query = toQuery({template, url: location.href, title: document.title, body: window.getSelection()}); location.href = `org-protocol://capture?${query}`;}("B"));
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "B", url: location.href, body: window.getSelection()});
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -210,21 +217,7 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     :defer t
     :config
     (setq org-capture-templates
-          `(("j" "Journal" entry (file+olp+datetree "Inbox.org" "Journaal")
-             "* %?"
-             :empty-lines 1)
-            ("n" "Note" entry (file+olp "Inbox.org" "Notities")
-             ,(string-join '("* %^{Name} %^g"
-                             "%a"
-                             ""
-                             "#+BEGIN_QUOTE"
-                             "%i"
-                             "#+END_QUOTE"
-                             ""
-                             "%?")
-                           "\n")
-             :empty-lines 1)
-            ("t" "Task" entry (file+olp "Inbox.org" "Taken")
+          `(("t" "Task" entry (file+olp "Inbox.org" "Taken")
              "* TODO %?"
              :empty-lines 1)
             ("r" "Reply" entry (file+olp "Inbox.org" "Taken")
@@ -253,6 +246,44 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
             ("B" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
              "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
     (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
+
+  (use-package org-roam-capture
+    :defer t
+    :config
+    (setq org-roam-capture-templates
+          `(("n" "Note" plain (function org-roam-capture--get-point)
+             "%?"
+             :file-name "%<%s>-${slug}"
+             :head
+             ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
+                             ""
+                             "#+TITLE: ${title}"
+                             ""
+                             "")
+                           "\n")
+             :unnarrowed t)))
+    (setq org-roam-capture-immediate-template
+          (append (seq-find (pcase-lambda (`(,key))
+                              (string= key "n"))
+                            org-roam-capture-templates)
+                  '(:immediate-finish t)))
+    (setq org-roam-capture-ref-templates
+          `(("w" "Website" plain (function org-roam-capture--get-point)
+             ""
+             :file-name "${slug}"
+             :head
+             ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
+                             ""
+                             "#+TITLE: ${title}"
+                             "#+ROAM_KEY: ${ref}"
+                             ""
+                             "#+BEGIN_QUOTE"
+                             "${body}"
+                             "#+END_QUOTE"
+                             ""
+                             "")
+                           "\n")
+             :unnarrowed t))))
 #+END_SRC
 
 * E-mail accounts

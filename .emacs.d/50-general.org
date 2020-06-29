@@ -2204,6 +2204,17 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
       (:map org-mode-map
        ("C-c o i" . org-clock-in)))
 
+    (use-package org-roam
+      :bind
+      (:map org-mode-map
+       ("C-c o n" . org-roam-insert)
+       ("C-c o C-n" . org-roam-insert-immediate)))
+
+    (use-package org-roam-buffer
+      :bind
+      (:map org-mode-map
+       ("C-c o b" . org-roam-buffer-toggle-display)))
+
     (use-package outline
       :bind
       (:map org-mode-map
@@ -2266,6 +2277,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   Candidates are collected from agenda files."
       (setq-local org-complete-tags-always-offer-all-agenda-tags t))
     :config
+    (add-hook 'org-capture-mode-hook #'hack-local-variables)
     (add-hook 'org-capture-mode-hook #'koek-org/setup-tag-completion))
 
   (use-package org-clock
@@ -2389,6 +2401,35 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
                     "\n}\n"))))
 
   (straight-use-package 'htmlize)         ; Optional dependency
+#+END_SRC
+
+*** org-roam - Track backlinks
+[[https://github.com/org-roam/org-roam][org-roam (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-roam
+    :straight t
+    :bind
+    ("C-c o f" . org-roam-find-file)
+    :preface
+    (defun koek-org/title-to-slug (title)
+      "Convert note title TITLE to a file name slug.
+  TITLE is a string, a note title."
+      (let ((parts
+             (split-string (replace-regexp-in-string (rx (not (any alphanumeric)))
+                                                     " " title))))
+        (downcase (string-join parts "-"))))
+    :config
+    (setq org-roam-title-to-slug-function #'koek-org/title-to-slug)
+    :delight)
+
+  (use-package org-roam-completion
+    :defer t
+    :config
+    (setq org-roam-completion-system 'ivy))
+
+  (use-package org-roam-protocol
+    :after org-protocol)
 #+END_SRC
 
 *** org-caldav - Sync calendars
