@@ -734,8 +734,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
                (let ((file-name (file-name-sans-extension rel-file-name)))
                  (or (cdr (split-string file-name (regexp-quote separator)))
                      (list file-name))))))
-        (string-join
-         (mapcar (apply-partially #'replace-regexp-in-string "_" "-") parts) ".")))
+        (replace-regexp-in-string "_" "-" (string-join parts "."))))
 
     ;; Org & Markdown
     (defconst koek-ys/lang-specs
