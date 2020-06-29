@@ -2174,8 +2174,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   (use-package org
     :mode ((rx ".org" string-end) . org-mode)
     :bind
-    (("C-c o l" . org-store-link)
-     :map org-mode-map
+    (:map org-mode-map
      ("C-M-f" . org-forward-heading-same-level)
      ("C-M-b" . org-backward-heading-same-level)
      ("C-M-n" . org-next-visible-heading)
@@ -2183,11 +2182,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
      ("C-M-a" . org-previous-block)
      ("C-M-e" . org-next-block))
     :hook (org-mode . org-cdlatex-mode)
-    :preface
-    (defun koek-org/setup-tag-completion ()
-      "Setup tag completion for current.
-  Candidates are collected from agenda files."
-      (setq-local org-complete-tags-always-offer-all-agenda-tags t))
     :init
     (require 'org-protocol)
 
@@ -2216,14 +2210,10 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
       (:map org-mode-map
        ("C-M-u" . outline-up-heading)))
 
-    ;; Headings, keywords & tags
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-use-outline-path 'buffer-name)
+    ;; General
     (setq org-todo-keywords
           '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
-    (add-hook 'org-capture-mode-hook #'koek-org/setup-tag-completion)
-
-    ;; Other
+    (setq org-export-backends '(latex beamer odt html icalendar))
     (org-babel-do-load-languages 'org-babel-load-languages
                                  '((C . t) ; C and C++
                                    (clojure . t)
@@ -2235,7 +2225,6 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
                                    (python . t)
                                    (scheme . t)
                                    (sql . t)))
-    (setq org-export-backends '(latex beamer odt html icalendar))
 
     ;; Appearance
     (setq org-adapt-indentation nil)
@@ -2271,7 +2260,14 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   (use-package org-capture
     :bind
     (("C-c o c" . org-capture)
-     ("C-c j s" . org-capture-goto-last-stored)))
+     ("C-c j s" . org-capture-goto-last-stored))
+    :preface
+    (defun koek-org/setup-tag-completion ()
+      "Setup tag completion for current.
+  Candidates are collected from agenda files."
+      (setq-local org-complete-tags-always-offer-all-agenda-tags t))
+    :config
+    (add-hook 'org-capture-mode-hook #'koek-org/setup-tag-completion))
 
   (use-package org-clock
     :bind
@@ -2284,6 +2280,12 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (setq org-clock-persist 'clock)
 
     (org-clock-load))
+
+  (use-package org-refile
+    :defer t
+    :config
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-use-outline-path 'buffer-name))
 
   (use-package org-src
     :bind
@@ -2349,7 +2351,8 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     (setq org-babel-clojure-backend 'cider))
 
   (use-package ol
-    :defer t
+    :bind
+    ("C-c o l" . org-store-link)
     :config
     (setq org-link-keep-stored-after-insertion t))
 
