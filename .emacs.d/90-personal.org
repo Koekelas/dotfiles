@@ -369,7 +369,7 @@ Configure news feeds.
         ("Professor Leonard" youtube "UCoHhuummRZaIVX7bD4t2czg" mathematics)
         ("Programming" reddit month "programming" program)
         ("Protesilaos Stavrou" youtube "UC0uTPqBCFIpZxlz_Lv1tk_g" emacs)
-        ("ROBOHEMIAN!" youtube "GravityRoad" electronics)
+        ("ROBOHEMIAN!" youtube "UCPelotG5UTbWYKrMfG0ynKg" electronics)
         ("Rainfall Projects" youtube "UCPO4D4-UeeFQceK8XrgwXug" woodwork metalwork)
         ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
         ("Two-Bit History" "https://twobithistory.org/feed.xml" blog history)
