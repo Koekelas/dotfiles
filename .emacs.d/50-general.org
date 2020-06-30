@@ -1609,6 +1609,18 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
     (pdf-loader-install 'no-ask 'no-install-deps))
 #+END_SRC
 
+** shr - HTML viewer
+Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfeed - News reader][elfeed]]) to render HTML.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package shr
+    :defer t
+    :config
+    (setq shr-use-colors nil)
+    (setq shr-max-image-proportion 0.6)
+    (setq shr-image-animate nil))
+#+END_SRC
+
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
