@@ -3036,8 +3036,8 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
         (when (and flymake-mode (koek-ml/mru-window-p))
           `("" koek-ml/separator
             ,(when-let ((name
-                         ;; Assume only one checker enabled
-                         (alist-get (car (flymake-running-backends))
+                         ;; First enabled checker
+                         (alist-get (car (reverse (flymake-running-backends)))
                                     koek-ml/checker-names)))
                (concat name " "))
             ,(pcase (koek-ml/get-flymake-state)
