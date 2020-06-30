@@ -204,7 +204,7 @@ Configure notes.
 
 #+CAPTION: Notitie
 #+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title, body: window.getSelection()});
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
 #+END_SRC
 
 #+CAPTION: Boek
@@ -269,17 +269,13 @@ Configure notes.
                   '(:immediate-finish t)))
     (setq org-roam-capture-ref-templates
           `(("w" "Webpage" plain (function org-roam-capture--get-point)
-             ""
-             :file-name "${slug}"
+             "%?"
+             :file-name "%(secure-hash 'md5 \"${ref}\")" ; One note per reference
              :head
              ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
                              ""
                              "#+TITLE: ${title}"
                              "#+ROAM_KEY: ${ref}"
-                             ""
-                             "#+BEGIN_QUOTE"
-                             "${body}"
-                             "#+END_QUOTE"
                              ""
                              "")
                            "\n")
