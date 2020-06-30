@@ -269,8 +269,7 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode
-      indium-repl-mode)
+    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
      . subword-mode)
     :delight)
 #+END_SRC
@@ -356,8 +355,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode
-       indium-repl-mode)
+    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
       . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
@@ -624,8 +622,7 @@ When line is indented, press =TAB= to complete text before point.
      ("C-c e r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
-    ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode
-      python-mode)
+    ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode)
      . eglot-ensure)
     :config
     ;; Eclipse JDT Language Server lacks an executable. Eglot requires
