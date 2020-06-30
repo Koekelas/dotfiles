@@ -512,7 +512,15 @@ End files with empty line.
 #+END_SRC
 
 ** Edit commands
-Supercharge edit commands.
+Bind sort and align region.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ("C-c e s" . sort-lines)
+   ("C-c e a" . align-regexp))
+#+END_SRC
+
+Upgrade case commands.
 
 #+BEGIN_SRC emacs-lisp
   (bind-keys
