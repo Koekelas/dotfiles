@@ -2101,6 +2101,13 @@ Configure Conf mode afterwards.
 [[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
+  ;; Chrome profile directory is created on evaluation. Packages are
+  ;; evaluated on installation. Prevent indium from creating Chrome
+  ;; profile directory.
+  (defvar indium-chrome-data-dir)
+
+  (setq indium-chrome-data-dir nil)
+
   (use-package indium-interaction
     :straight indium
     :hook (js2-mode . indium-interaction-mode)
@@ -2108,6 +2115,13 @@ Configure Conf mode afterwards.
     ;; Resolve keybinding conflict with documentation keymap
     (unbind-key "C-c d" indium-interaction-mode-map)
     :delight)
+
+  (use-package indium-chrome
+    :defer t
+    :config
+    (setq indium-chrome-data-dir
+          (no-littering-expand-var-file-name "indium/chrome-profile/"))
+    (make-directory indium-chrome-data-dir 'parents))
 #+END_SRC
 
 ** JSON
