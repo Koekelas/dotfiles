@@ -992,15 +992,7 @@ steps.
     (("C-c w l" . winner-undo)
      ("C-c w r" . winner-redo))
     :config
-    (declare-function winner-save-unconditionally "winner")
-
-    (winner-mode)
-
-    ;; Reading from the minibuffer doesn't change the window layout.
-    ;; Storing the window layout when it didn't change, stores a
-    ;; consecutive identical layout. Don't store the window layout when
-    ;; reading from the minibuffer.
-    (remove-hook 'minibuffer-setup-hook #'winner-save-unconditionally))
+    (winner-mode))
 #+END_SRC
 
 ** eyebrowse - Workspaces
