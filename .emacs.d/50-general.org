@@ -2411,6 +2411,7 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   (use-package ox
     :defer t
     :config
+    (setq org-export-time-stamp-file nil)
     (setq org-export-headline-levels 4)
     (setq org-export-with-date nil)
     (setq org-export-with-toc 3))
