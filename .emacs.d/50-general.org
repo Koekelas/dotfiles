@@ -102,6 +102,10 @@ VC is a placeholder.
     :bind
     ("C-c f g" . magit-status))
 
+  (use-package magit-log
+    :bind
+    ("C-c f h" . magit-log-buffer-file))
+
   (use-package git-commit
     :defer t
     :preface
