@@ -549,8 +549,7 @@ When line is indented, press =TAB= to complete text before point.
     :straight t
     :bind
     (:map company-mode-map
-     ;; Why does [remap indent-for-tab-command] only work in prog-mode?
-     ("TAB" . company-indent-or-complete-common)
+     ([remap indent-for-tab-command] . company-indent-or-complete-common)
      :map company-active-map
      ("C-n" . company-select-next)
      ("C-p" . company-select-previous))
@@ -1905,6 +1904,9 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
   (use-package cider-repl
     :defer t
     :config
+    ;; Resolve keybinding conflict with company
+    (unbind-key "TAB" cider-repl-mode-map)
+
     (setq cider-repl-use-pretty-printing t))
 #+END_SRC
 
@@ -1930,6 +1932,9 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
   (use-package sly-mrepl
     :defer t
     :config
+    ;; Resolve keybinding conflict with company
+    (unbind-key "TAB" sly-mrepl-mode-map)
+
     (setq sly-mrepl-history-file-name
           (no-littering-expand-var-file-name "sly-mrepl-history")))
 #+END_SRC
@@ -2117,6 +2122,12 @@ Configure Conf mode afterwards.
     (setq indium-chrome-data-dir
           (no-littering-expand-var-file-name "indium/chrome-profile/"))
     (make-directory indium-chrome-data-dir 'parents))
+
+  (use-package indium-repl
+    :defer t
+    :config
+    ;; Resolve keybinding conflict with company
+    (unbind-key "TAB" indium-repl-mode-map))
 #+END_SRC
 
 ** JSON
@@ -2545,6 +2556,9 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
   (use-package geiser-repl
     :defer t
     :config
+    ;; Resolve keybinding conflict with company
+    (unbind-key "TAB" geiser-repl-mode-map)
+
     (setq geiser-repl-query-on-exit-p t))
 #+END_SRC
 
