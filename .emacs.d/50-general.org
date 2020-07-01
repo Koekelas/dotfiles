@@ -556,11 +556,19 @@ When line is indented, press =TAB= to complete text before point.
      ("C-p" . company-select-previous))
     :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
     :preface
-    (defun koek-cpny/make-setup-backends (backends)
-      "Return function to setup backends for current.
-  BACKENDS is a list of backends, see `company-backends'."
-      (lambda ()
-        (setq-local company-backends backends)))
+    (defmacro koek-cpny/setup-backends (&rest args)
+      "Setup backends in modes.
+  ARGS are one or more mode name symbols followed by a list of
+  backends, see `company-backends'."
+      (let ((setup-backends-name (gensym))
+            (modes (butlast args))
+            (backends (car (last args))))
+        `(let ((,setup-backends-name (lambda ()
+                                       (setq-local company-backends ',backends))))
+           ,@(mapcar (lambda (mode)
+                       `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
+                                  ,setup-backends-name))
+                     modes))))
 
     ;; Prevent geiser from modifying company-backends
     (define-advice geiser-company--setup-company
@@ -573,24 +581,14 @@ When line is indented, press =TAB= to complete text before point.
           '((company-capf company-files :with company-yasnippet)))
     (setq company-idle-delay 1)           ; In seconds
     (setq company-show-numbers t)
-
-    ;; Setup mode specific backends
-    (add-hook 'indium-repl-mode-hook
-              (koek-cpny/make-setup-backends
-               '((company-indium-repl company-files :with company-yasnippet))))
-    (let ((setup-geiser-backend
-           (koek-cpny/make-setup-backends
-            '((geiser-company-backend company-files :with company-yasnippet)))))
-      (add-hook 'geiser-mode-hook setup-geiser-backend)
-      (add-hook 'geiser-repl-mode-hook setup-geiser-backend))
-    (let ((setup-code-backend
-           (koek-cpny/make-setup-backends
-            '((company-dabbrev-code company-files :with company-yasnippet)))))
-      (add-hook 'scad-mode-hook setup-code-backend))
-    (let ((setup-dabbrev-backend
-           (koek-cpny/make-setup-backends
-            '((company-dabbrev company-files :with company-yasnippet)))))
-      (add-hook 'conf-mode-hook setup-dabbrev-backend))
+    (koek-cpny/setup-backends indium-repl-mode
+     ((company-indium-repl company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends geiser-mode geiser-repl-mode
+     ((geiser-company-backend company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends scad-mode
+     ((company-dabbrev-code company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends conf-mode
+     ((company-dabbrev company-files :with company-yasnippet)))
     :delight)
 
   (use-package company-dabbrev
