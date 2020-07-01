@@ -112,7 +112,8 @@ To install dependencies on Arch Linux, run:
   # Install rebar3 from AUR and Erlang LS from source
 
   ## HTML & CSS
-  npm i -g vscode-html-languageserver-bin vscode-css-languageserver-bin
+  # Install vscode-html-languageserver-bin and
+  # vscode-css-languageserver-bin from AUR
 
   ## Java
   pacman -S jdk-openjdk maven
@@ -120,10 +121,11 @@ To install dependencies on Arch Linux, run:
 
   ## JavaScript
   pacman -S nodejs npm python2 chromium
-  npm i -g javascript-typescript-langserver indium
+  npm i -g indium
+  # Install javascript-typescript-langserver from AUR
 
   ## JSON
-  npm i -g vscode-json-languageserver-bin
+  # Install vscode-json-languageserver-bin from AUR
 
   ## Octave & MATLAB
   pacman -S octave
