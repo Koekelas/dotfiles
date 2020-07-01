@@ -2420,7 +2420,8 @@ For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
     :defer t
     :config
     (setq org-html-doctype "html5")
-    (setq org-html-html5-fancy t))
+    (setq org-html-html5-fancy t)
+    (setq org-html-validation-link nil))
 
   (use-package ox-latex
     :defer t
