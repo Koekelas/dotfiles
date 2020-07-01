@@ -121,8 +121,6 @@ To install dependencies on Arch Linux, run:
   ## JavaScript
   pacman -S nodejs npm python2 chromium
   npm i -g javascript-typescript-langserver indium
-  cd ~/.emacs.d/lisp/jslint-cli/
-  npm i -g
 
   ## JSON
   npm i -g vscode-json-languageserver-bin
