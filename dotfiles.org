@@ -324,35 +324,10 @@ Stores:
 - share: Delen
 - video: Video's
 
-To create the symbolic links, run:
+To stow all stores, run:
 
 #+BEGIN_SRC sh
-  # archive
-  ln -s ~/.ststore/archive/Archief ~/Archief
-
-  # documents
-  ln -s ~/.ststore/archive/Bureaublad ~/Bureaublad
-  ln -s ~/.ststore/archive/Documenten ~/Documenten
-  ln -s ~/.ststore/archive/Inbox ~/Inbox
-  ln -s ~/.ststore/archive/Projecten ~/Projecten
-
-  # documents-extra
-  ln -s ~/.ststore/archive/Boeken ~/Boeken
-  ln -s ~/.ststore/archive/Sjablonen ~/Sjablonen
-  ln -s ~/.ststore/archive/Varia ~/Varia
-
-  # music
-  ln -s ~/.ststore/archive/Muziek ~/Muziek
-  ln -s ~/.ststore/archive/Podcasts ~/Podcasts
-
-  # pictures
-  ln -s ~/.ststore/archive/Afbeeldingen ~/Afbeeldingen
-
-  # share
-  ln -s ~/.ststore/archive/Delen ~/Delen
-
-  # video
-  ln -s "~/.ststore/archive/Video's" "~/Video's"
+  stow -t ~/ archive documents documents-extra music pictures share video
 #+END_SRC
 
 * Git
