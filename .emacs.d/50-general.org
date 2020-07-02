@@ -2857,7 +2857,7 @@ Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], 
 #+BEGIN_SRC emacs-lisp
   (defconst koek-font/font-specs
     '((:family "PragmataPro Mono" :size 15)
-      (:family "Source Code Pro"  :size 15))
+      (:family "Source Code Pro"  :size 13))
     "List of font specifications.
   A font specification is a plist.  For keys, see `font-spec'.")
 
