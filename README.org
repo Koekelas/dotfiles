@@ -78,7 +78,7 @@ Only Git is required, everything else is optional.
   - [[https://pandoc.org/][pandoc]]
 - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
 
-To install dependencies on Arch Linux, run:
+To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
 #+BEGIN_SRC sh
   ## General
