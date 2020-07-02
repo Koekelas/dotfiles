@@ -13,6 +13,8 @@ Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
 Finally, copy the dotfiles to your home directory.
 
 * Installing dependencies
+Only Git is required, everything else is optional.
+
 - General:
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
