@@ -9,8 +9,21 @@ To get started, run:
   git clone https://github.com/Koekelas/dotfiles.git
 #+END_SRC
 
-Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
-Finally, copy the dotfiles to your home directory.
+Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from this directory:
+
+#+BEGIN_SRC sh
+  ## General
+  stow env xdg bash git gnupg
+
+  ## Emacs
+  stow emacs isync mu
+
+  ## Languages
+  stow jupyter cuda keras nltk
+
+  ## Other
+  stow freecad calf avahi cmake cups gnome hwloc java qt steam tex catgen
+#+END_SRC
 
 * Installing dependencies
 Only Git is required, everything else is optional.

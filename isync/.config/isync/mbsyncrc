@@ -1,0 +1,22 @@
+SyncState *
+
+MaildirStore personal-local
+Inbox "~/Documenten/E-mail/Personal/INBOX/"
+Path "~/Documenten/E-mail/Personal/"
+SubFolders Verbatim
+
+IMAPStore personal-remote
+Host imap.fastmail.com
+SSLType IMAPS
+User nicolas@dejaeghe.re
+PassCmd "secret-tool lookup host \"imap.fastmail.com\" port \"993\" user \"nicolas@dejaeghe.re\""
+
+Channel personal
+Master :personal-remote:
+Slave :personal-local:
+Patterns *
+Sync All
+Create Both
+Remove Both
+Expunge Both
+CopyArrivalDate yes
