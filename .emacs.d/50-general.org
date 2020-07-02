@@ -1218,6 +1218,17 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (setq helpful-max-buffers nil))
 #+END_SRC
 
+*** elisp-demos - Code examples
+[[https://github.com/xuchunyang/elisp-demos][elisp-demos (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elisp-demos
+    :straight t
+    :after helpful
+    :config
+    (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
+#+END_SRC
+
 ** info - Info viewer
 #+BEGIN_SRC emacs-lisp
   (use-package info
