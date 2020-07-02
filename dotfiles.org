@@ -1,6 +1,10 @@
 #+TITLE: Dotfiles
 #+PROPERTY: header-args :mkdirp yes
 
+#+BEGIN_QUOTE
+Thou shalt not pollute your neighbor's ~/ -- Exodus 20:17
+#+END_QUOTE
+
 * Identity
 Set name and e-mail.
 
