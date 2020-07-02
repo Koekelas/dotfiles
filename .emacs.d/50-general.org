@@ -2894,10 +2894,6 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       (make-string (* (length koek-ml/separator) 5) ?\s)
       "Mode line left right separator.")
 
-    (defun koek-ml/mru-window-p ()
-      "Return whether selected window is most recently used window."
-      (eq (selected-window) (get-mru-window nil 'dedicated)))
-
     (defconst koek-ml/dummies '((eldoc-mode-line-string nil))
       "Dummies mode line construct.
   A dummy prevents a package from modifying the mode line.")
@@ -2923,7 +2919,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (defconst koek-ml/depth
       '(:eval
         (let ((depth (- (recursion-depth) (minibuffer-depth))))
-          (when (and (> depth 0) (koek-ml/mru-window-p))
+          (when (and (> depth 0) (moody-window-active-p))
             `(,(moody-ribbon (format "[%d]" depth) nil 'up)
               koek-ml/separator))))
       "Recursive edit depth mode line construct.")
@@ -2966,7 +2962,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/eyebrowse
       '(:eval
-        (when (and eyebrowse-mode (koek-ml/mru-window-p))
+        (when (and eyebrowse-mode (moody-window-active-p))
           (let ((workspaces (koek-ml/get-workspaces))
                 (selected-id (koek-ml/get-selected-workspace-id)))
             (when (or (> (length workspaces) 1) (not (= selected-id 0)))
@@ -3004,7 +3000,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/input
       '(:eval
-        (when (and current-input-method (koek-ml/mru-window-p))
+        (when (and current-input-method (moody-window-active-p))
           `("" koek-ml/separator
             ,(moody-ribbon current-input-method-title nil 'up))))
       "Input mode line construct.")
@@ -3055,7 +3051,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/flymake
       '(:eval
-        (when (and flymake-mode (koek-ml/mru-window-p))
+        (when (and flymake-mode (moody-window-active-p))
           `("" koek-ml/separator
             ,(when-let ((name
                          ;; First enabled checker
@@ -3079,7 +3075,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/vc
       '(:eval
-        (when (and vc-mode (koek-ml/mru-window-p))
+        (when (and vc-mode (moody-window-active-p))
           (let ((state (string-trim (substring-no-properties vc-mode))))
             ;; For format, see `vc-default-mode-line-string'
             (string-match
@@ -3093,7 +3089,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/task
       '(:eval
-        (when (and (org-clock-is-active) (koek-ml/mru-window-p))
+        (when (and (org-clock-is-active) (moody-window-active-p))
           `("" koek-ml/separator
             ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
       "Task mode line construct.")
