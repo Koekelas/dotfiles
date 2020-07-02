@@ -561,9 +561,10 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
-* Org protocol                                                          :wip:
-[[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]], [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info
-Specification (freedesktop)]]
+* Org protocol
+Define org protocol scheme handler. For desktop entry or scheme
+handler format, see [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]]
+respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info Specification (freedesktop)]].
 
 #+BEGIN_SRC conf :tangle .local/share/applications/org-protocol.desktop
   [Desktop Entry]
@@ -576,6 +577,8 @@ Specification (freedesktop)]]
   MimeType=x-scheme-handler/org-protocol;
   NoDisplay=true
 #+END_SRC
+
+To register the scheme handler, run:
 
 #+BEGIN_SRC sh
   update-desktop-database .local/share/applications
