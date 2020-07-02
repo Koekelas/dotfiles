@@ -13,63 +13,59 @@ Then, with Emacs, visit =dotfiles.org=. Run =M-x= ~org-babel-tangle~.
 Finally, copy the dotfiles to your home directory.
 
 * Installing dependencies
-- Emacs:
-  - General:
-    - [[https://git-scm.com/][Git]]
-    - [[https://hunspell.github.io/][Hunspell]]
-    - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
-    - [[https://x.org/][xprop]]
-    - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
-  - X window manager: [[https://x.org/][xrandr]]
-  - Terminal emulator:
-    - [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
-  - E-mail client:
-    - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
-  - News reader: [[https://curl.haxx.se/][curl]]
-  - PDF viewer:
-    - [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
-  - Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
-  - C family:
-    - [[https://gcc.gnu.org/][GCC]]
-    - [[https://clang.llvm.org/][Clang]]
-    - [[https://mesonbuild.com/][Meson]]
-    - [[https://www.gnu.org/software/gdb/][GDB]]
-  - Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
-  - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
-  - Erlang:
-    - [[https://www.erlang.org/][Erlang/OTP]]
-    - [[https://www.rebar3.org/][Rebar3]]
-    - [[https://erlang-ls.github.io/][Erlang LS]]
-  - HTML & CSS: [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
-  - Java:
-    - [[https://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
-    - [[https://maven.apache.org/][Apache Maven]]
-    - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
-  - JavaScript:
-    - [[https://nodejs.org/][Node.js]]
-    - [[https://www.chromium.org/][Chromium]]
-    - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
-    - [[https://github.com/NicolasPetton/Indium][Indium]]
-  - JSON: [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
-  - Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
-  - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
-  - Python:
-    - [[https://www.python.org/][Python]]
-    - [[https://github.com/palantir/python-language-server][Python Language Server]]
-  - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
-  - SQL: [[https://www.postgresql.org/][PostgreSQL]]
-  - TeX, Org & Markdown:
-    - [[https://www.sqlite.org/][SQLite]]
-    - [[https://www.latex-project.org/][LaTeX]]
-    - [[https://pandoc.org/][pandoc]]
-  - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
-- GNOME Shell: [[https://github.com/prurigro/gnome-catgen][gnome-catgen]]
+- General:
+  - [[https://git-scm.com/][Git]]
+  - [[https://hunspell.github.io/][Hunspell]]
+  - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
+  - [[https://x.org/][xprop]]
+  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+- X window manager: [[https://x.org/][xrandr]]
+- Terminal emulator:
+  - [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
+- E-mail client:
+  - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
+- News reader: [[https://curl.haxx.se/][curl]]
+- PDF viewer:
+  - [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
+- Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
+- C family:
+  - [[https://gcc.gnu.org/][GCC]]
+  - [[https://clang.llvm.org/][Clang]]
+  - [[https://mesonbuild.com/][Meson]]
+  - [[https://www.gnu.org/software/gdb/][GDB]]
+- Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
+- Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
+- Erlang:
+  - [[https://www.erlang.org/][Erlang/OTP]]
+  - [[https://www.rebar3.org/][Rebar3]]
+  - [[https://erlang-ls.github.io/][Erlang LS]]
+- HTML & CSS: [[https://github.com/vscode-langservers/vscode-html-languageserver-bin][vscode-html-languageserver-bin]] and [[https://github.com/vscode-langservers/vscode-css-languageserver-bin][vscode-css-languageserver-bin]]
+- Java:
+  - [[https://www.oracle.com/technetwork/java/javase/downloads/index.html][Java SE JDK]]
+  - [[https://maven.apache.org/][Apache Maven]]
+  - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
+- JavaScript:
+  - [[https://nodejs.org/][Node.js]]
+  - [[https://www.chromium.org/][Chromium]]
+  - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
+  - [[https://github.com/NicolasPetton/Indium][Indium]]
+- JSON: [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
+- Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
+- OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
+- Python:
+  - [[https://www.python.org/][Python]]
+  - [[https://github.com/palantir/python-language-server][Python Language Server]]
+- Scheme: [[https://www.gnu.org/software/guile/][Guile]]
+- SQL: [[https://www.postgresql.org/][PostgreSQL]]
+- TeX, Org & Markdown:
+  - [[https://www.sqlite.org/][SQLite]]
+  - [[https://www.latex-project.org/][LaTeX]]
+  - [[https://pandoc.org/][pandoc]]
+- Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
 
 To install dependencies on Arch Linux, run:
 
 #+BEGIN_SRC sh
-  ### Emacs
-
   ## General
   pacman -S git hunspell hunspell-en_US the_silver_searcher xorg-xprop
 
@@ -155,7 +151,4 @@ To install dependencies on Arch Linux, run:
 
   ## Wolfram Language
   # Install mathematica from AUR
-
-  ### GNOME Shell
-  # Install gnome-catgen-git from AUR
 #+END_SRC
