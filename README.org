@@ -2,6 +2,15 @@
 
 [[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
 
+* For the curious
+Take a look at [[file:dotfiles.org][dotfiles.org]] and all files in [[file:emacs/.emacs.d][.emacs.d]]. Everything else
+is the result of [[info:org#Extracting source code][tangling]].
+
+* For the masochist
+You want to use this? Take a look at [[file:dotfiles.org::*Identity][Identity]] and [[file:dotfiles.org::*Well known directories][Well known
+directories]]. Tangle the file and re-login. Then, take a look at
+[[file:emacs/.emacs.d/90-personal.org][personal.org]].
+
 * Getting started
 To get started, run:
 
