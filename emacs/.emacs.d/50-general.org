@@ -1180,8 +1180,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
     (setq counsel-linux-app-format-function
           #'counsel-linux-app-format-function-name-first)
-    (setq counsel-org-goto-all-outline-path-prefix 'buffer-name)
-    (setq counsel-outline-face-style 'org))
+    (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
 
   (straight-use-package 'request)         ; Optional dependency
 #+END_SRC
