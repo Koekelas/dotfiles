@@ -27,7 +27,6 @@ Declare variables and functions setup by [[file:init.el][init.el]].
 
 #+BEGIN_SRC emacs-lisp
   (defvar no-littering-etc-directory)
-  (defvar no-littering-var-directory)
   (declare-function no-littering-expand-var-file-name "no-littering")
 #+END_SRC
 
@@ -191,9 +190,8 @@ VC is a placeholder.
             (add-to-list 'recentf-exclude
                          (rx-to-string `(and line-start ,file-name))))
           (list "/user/share/emacs/"
-                (expand-file-name "straight/" user-emacs-directory)
-                no-littering-etc-directory
-                no-littering-var-directory))
+                (file-truename
+                 (expand-file-name "straight/" user-emacs-directory))))
     (recentf-mode))
 #+END_SRC
 
