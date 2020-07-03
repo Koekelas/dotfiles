@@ -26,7 +26,7 @@ Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from thi
 #+END_SRC
 
 * Installing dependencies
-Only Git is required, everything else is optional.
+Git is mandatory, everything else is optional.
 
 - General:
   - [[https://git-scm.com/][Git]]
