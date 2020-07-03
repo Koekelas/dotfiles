@@ -2973,7 +2973,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/eyebrowse
       '(:eval
-        (when (and eyebrowse-mode (moody-window-active-p))
+        (when (and (bound-and-true-p eyebrowse-mode) (moody-window-active-p))
           (let ((workspaces (koek-ml/get-workspaces))
                 (selected-id (koek-ml/get-selected-workspace-id)))
             (when (or (> (length workspaces) 1) (not (= selected-id 0)))
@@ -3062,7 +3062,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/flymake
       '(:eval
-        (when (and flymake-mode (moody-window-active-p))
+        (when (and (bound-and-true-p flymake-mode) (moody-window-active-p))
           `("" koek-ml/separator
             ,(when-let ((name
                          ;; First enabled checker
@@ -3086,7 +3086,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/vc
       '(:eval
-        (when (and vc-mode (moody-window-active-p))
+        (when (and (bound-and-true-p vc-mode) (moody-window-active-p))
           (let ((state (string-trim (substring-no-properties vc-mode))))
             ;; For format, see `vc-default-mode-line-string'
             (string-match
