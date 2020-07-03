@@ -1133,6 +1133,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
             (t . ivy--regex-fuzzy)))
     (setq ivy-use-virtual-buffers t)
     (setq ivy-virtual-abbreviate 'abbreviate)
+    (setq ivy-on-del-error-function 'ignore)
     (setq ivy-use-selectable-prompt t)
     (setq ivy-count-format "%d/%d ")
     (ivy-mode)
