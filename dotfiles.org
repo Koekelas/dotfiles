@@ -327,7 +327,7 @@ Stores:
 To stow all stores, run:
 
 #+BEGIN_SRC sh
-  stow -t ~/ archive documents documents-extra music pictures share video
+  stow -d ~/.ststore/ -t ~/ archive documents documents-extra music pictures share video
 #+END_SRC
 
 * Git
