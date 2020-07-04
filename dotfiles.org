@@ -411,9 +411,9 @@ Keep defaults.
 :header-args+: :tangle isync/.config/isync/mbsyncrc
 :END:
 
-Store =.mbsyncstate= with maildir sub directories, simplifying backup.
+Store sync state with maildir sub directories, simplifying backup.
 
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC conf
   SyncState *
 #+END_SRC
 
@@ -424,15 +424,16 @@ To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-
 To create the maildir directory, run:
 
 #+BEGIN_SRC sh :tangle no
-  mkdir -p ~/Documenten/E-mail/Personal
+  mkdir -p "$KOEK_EMAIL_DIR/Personal"
 #+END_SRC
 
-Define local personal store.
+Define local personal store. Only tilde is expanded, not environment
+variables.
 
-#+BEGIN_SRC fundamental
-  MaildirStore personal-local
-  Inbox "~/Documenten/E-mail/Personal/INBOX/"
+#+BEGIN_SRC conf
+  MaildirStore personal_local
   Path "~/Documenten/E-mail/Personal/"
+  Inbox "~/Documenten/E-mail/Personal/INBOX/"
   SubFolders Verbatim
 #+END_SRC
 
@@ -448,8 +449,8 @@ securely, run:
 Define remote personal store. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names and
 ports (FastMail)]].
 
-#+BEGIN_SRC fundamental
-  IMAPStore personal-remote
+#+BEGIN_SRC conf
+  IMAPStore personal_remote
   Host imap.fastmail.com
   SSLType IMAPS
   User nicolas@dejaeghe.re
@@ -458,10 +459,10 @@ ports (FastMail)]].
 
 Define personal channel.
 
-#+BEGIN_SRC fundamental
+#+BEGIN_SRC conf
   Channel personal
-  Master :personal-remote:
-  Slave :personal-local:
+  Master :personal_remote:
+  Slave :personal_local:
   Patterns *
   Sync All
   Create Both
@@ -471,7 +472,7 @@ Define personal channel.
 #+END_SRC
 
 ** mu
-Move data and maildir directory out of the way.
+Move maildir directory out of the way.
 
 #+BEGIN_SRC conf :tangle mu/.config/environment.d/50-mu.conf
   MAILDIR="$KOEK_EMAIL_DIR"
