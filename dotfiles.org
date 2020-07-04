@@ -53,6 +53,7 @@ Finally, set other directories.
 
 #+BEGIN_SRC conf :tangle env/.config/environment.d/11-koek-dirs.conf
   KOEK_CALENDARS_DIR="$XDG_DOCUMENTS_DIR/Kalenders"
+  KOEK_CONTACTS_DIR="$XDG_DOCUMENTS_DIR/Contacten"
   KOEK_EMAIL_DIR="$XDG_DOCUMENTS_DIR/E-mail"
   KOEK_NEWS_DIR="$XDG_DOCUMENTS_DIR/Nieuws"
   KOEK_NOTES_DIR="$XDG_DOCUMENTS_DIR/Notities"
@@ -482,6 +483,69 @@ To create the database, run:
 
 #+BEGIN_SRC sh :noweb yes
   mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu init --my-address="nicolas@dejaeghe.re" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
+#+END_SRC
+
+* vdirsyncer
+:PROPERTIES:
+:header-args+: :tangle vdirsyncer/.config/vdirsyncer/config
+:END:
+
+Store sync state with vdir directories, simplifying backup. Only tilde
+is expanded, not environment variables.
+
+#+BEGIN_SRC conf
+  [general]
+  status_path = "~/Documenten/Contacten/.vdirsyncer/"
+#+END_SRC
+
+** Personal account
+To create the vdir directory, run:
+
+#+BEGIN_SRC sh :tangle no
+  mkdir -p "$KOEK_CONTACTS_DIR/Personal"
+#+END_SRC
+
+Define local personal storage.
+
+#+BEGIN_SRC conf
+  [storage personal_local]
+  type = "filesystem"
+  path = "~/Documenten/Contacten/Personal/"
+  fileext = ".vcf"
+#+END_SRC
+
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+=Emacs contacts= and give it access to CardDAV. Then, to store it
+securely, run:
+
+#+BEGIN_SRC sh :tangle no
+  secret-tool store --label="Emacs contacts personal" host "carddav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
+#+END_SRC
+
+Define remote personal storage. For server details, see [[https://www.fastmail.com/help/technical/servernamesandports.html][Server names
+and ports (FastMail)]].
+
+#+BEGIN_SRC conf
+  [storage personal_remote]
+  type = "carddav"
+  url = "https://carddav.fastmail.com/"
+  username = "nicolas@dejaeghe.re"
+  password.fetch = ["command", "secret-tool", "lookup", "host", "carddav.fastmail.com:443", "port", "https", "user", "nicolas@dejaeghe.re"]
+#+END_SRC
+
+Define personal pair.
+
+#+BEGIN_SRC conf
+  [pair personal]
+  a = "personal_remote"
+  b = "personal_local"
+  collections = ["from a", "from b"]
+#+END_SRC
+
+To create the collections, run:
+
+#+BEGIN_SRC sh :tangle no
+  vdirsyncer discover && vdirsyncer sync
 #+END_SRC
 
 * FreeCAD

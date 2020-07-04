@@ -25,7 +25,7 @@ Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from thi
   stow env xdg bash git gnupg
 
   ## Emacs
-  stow emacs isync mu
+  stow emacs isync mu vdirsyncer
 
   ## Languages
   stow jupyter cuda keras nltk
@@ -46,6 +46,7 @@ Git is mandatory, everything else is optional.
 - X window manager: [[https://x.org/][xrandr]]
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
 - E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
+- Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
 - News reader: [[https://curl.haxx.se/][curl]]
 - PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
 - Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
@@ -102,6 +103,9 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   ## E-mail client
   pacman -S isync
   # Install mu from AUR
+
+  ## Address book
+  pacman -S vdirsyncer
 
   ## News reader
   pacman -S curl
