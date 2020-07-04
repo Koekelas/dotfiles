@@ -38,19 +38,16 @@ Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from thi
 Git is mandatory, everything else is optional.
 
 - General:
+  - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
-  - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://x.org/][xprop]]
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
 - X window manager: [[https://x.org/][xrandr]]
-- Terminal emulator:
-  - [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
-- E-mail client:
-  - [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
+- Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
+- E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
 - News reader: [[https://curl.haxx.se/][curl]]
-- PDF viewer:
-  - [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
+- PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
 - Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
 - C family:
   - [[https://gcc.gnu.org/][GCC]]
@@ -91,7 +88,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
 #+BEGIN_SRC sh
   ## General
-  pacman -S git hunspell hunspell-en_US the_silver_searcher xorg-xprop
+  pacman -S the_silver_searcher git hunspell hunspell-en_US xorg-xprop
 
   # Install PragmataPro Mono from source or
   pacman -S adobe-source-code-pro-fonts
