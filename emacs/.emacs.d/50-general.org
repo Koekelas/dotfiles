@@ -504,6 +504,8 @@ End files with empty line.
 ** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
+    :bind
+    ("C-c e c" . whitespace-cleanup)
     :hook ((prog-mode conf-mode) . whitespace-mode)
     :config
     (setq whitespace-action '(auto-cleanup))
