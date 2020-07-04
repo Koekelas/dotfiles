@@ -12,13 +12,13 @@ Set name and e-mail.
   Nicolas De Jaeghere
 #+END_SRC
 
-#+BEGIN_SRC fundamental :noweb-ref e-mail :exports none
+#+BEGIN_SRC fundamental :noweb-ref email :exports none
   nicolas@dejaeghe.re
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle env/.config/environment.d/10-identity.conf :noweb yes
   NAME="<<name>>"
-  EMAIL="<<e-mail>>"
+  EMAIL="<<email>>"
 #+END_SRC
 
 * Well known directories
@@ -336,7 +336,7 @@ Set identity.
 #+BEGIN_SRC conf :tangle git/.config/git/config :noweb yes
   [user]
   name = <<name>>
-  email = <<e-mail>>
+  email = <<email>>
 #+END_SRC
 
 ** Global ignore
