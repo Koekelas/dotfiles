@@ -947,11 +947,18 @@ steps.
     :straight t
     :bind
     ([remap other-window] . ace-window)
+    :preface
+    (define-advice ace-window-display-mode
+        (:around (f &rest args) koek-ace/disable-setup-mode-line)
+      (let ((format (default-value 'mode-line-format)))
+        (apply f args)
+        (setq-default mode-line-format format)))
     :config
     (setq aw-swap-invert t)
     (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
     (setq aw-dispatch-alist '((?o aw-flip-window)))
     (setq aw-leading-char-style 'path)
+    (ace-window-display-mode)
     ;; Ace isn't a minor mode but it can be delighted [sic]
     :delight)
 #+END_SRC
@@ -2839,6 +2846,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                   (aw-leading-char-face :background ,background
                                         :weight bold :slant normal)
                   (aw-background-face   :background ,background)
+                  (aw-mode-line-face    :inherit aw-leading-char-face)
                   ;; eyebrowse
                   (eyebrowse-mode-line-active :foreground ,foreground)
                   ;; pdf-tools
@@ -2912,6 +2920,19 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (defconst koek-ml/eldoc
       '(eldoc-mode-line-string ("" eldoc-mode-line-string koek-ml/separator))
       "Eldoc mode line construct.")
+
+    (defun koek-ml/get-window-label ()
+      "Return window label of selected window."
+      (substring-no-properties (window-parameter nil 'ace-window-path)))
+
+    (defconst koek-ml/ace
+      '(:eval
+        (when ace-window-mode
+          `(,(moody-ribbon
+              (propertize (koek-ml/get-window-label) 'face 'aw-mode-line-face)
+              nil 'up)
+            koek-ml/separator)))
+      "Ace mode line construct.")
 
     (defvar-local koek-ml/variant nil
       "Ediff variant.")
@@ -3175,7 +3196,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
         (:override () koek-ml/update-variants)
       (setq mode-line-format
             `(,@koek-ml/dummies " "
-              koek-ml/eldoc koek-ml/depth koek-ml/eyebrowse koek-ml/id
+              koek-ml/eldoc koek-ml/ace koek-ml/depth koek-ml/eyebrowse koek-ml/id
               koek-ml/diff koek-ml/task koek-ml/modes))
       (force-mode-line-update)
       (dolist (variant (koek-ml/get-variants))
@@ -3199,7 +3220,8 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (setq moody-mode-line-height 24)
     (setq-default mode-line-format
                   `(,@koek-ml/dummies " "
-                    koek-ml/eldoc koek-ml/ediff koek-ml/depth koek-ml/eyebrowse
+                    koek-ml/eldoc koek-ml/ace koek-ml/ediff
+                    koek-ml/depth koek-ml/eyebrowse
                     koek-ml/id koek-ml/state
                     koek-ml/position koek-ml/input koek-ml/flymake
                     koek-ml/vc koek-ml/task koek-ml/modes)))
