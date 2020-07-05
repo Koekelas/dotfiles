@@ -3199,7 +3199,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (setq moody-mode-line-height 24)
     (setq-default mode-line-format
                   `(,@koek-ml/dummies " "
-                    koek-ml/eldoc koek-ml/depth koek-ml/ediff koek-ml/eyebrowse
+                    koek-ml/eldoc koek-ml/ediff koek-ml/depth koek-ml/eyebrowse
                     koek-ml/id koek-ml/state
                     koek-ml/position koek-ml/input koek-ml/flymake
                     koek-ml/vc koek-ml/task koek-ml/modes)))
