@@ -609,9 +609,10 @@ Show Steam with native runtime as Steam.
 #+END_SRC
 
 * Org protocol
-Define org protocol scheme handler. For desktop entry or scheme
-handler format, see [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]]
-respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info Specification (freedesktop)]].
+Define org protocol scheme handler. Must invoke a shell to expand
+environment variables. For desktop entry or scheme handler format, see
+[[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME
+Info Specification (freedesktop)]].
 
 #+BEGIN_SRC conf :tangle emacs/.local/share/applications/org-protocol.desktop
   [Desktop Entry]
