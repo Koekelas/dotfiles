@@ -659,6 +659,7 @@ Run =M-x= ~make-symbolic-link~. Create a link to
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
   (use-package xref
+    :straight t
     :defer t
     :config
     (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
@@ -861,6 +862,7 @@ For more information, see ~man 5 hunspell~.
 ** flymake - Show syntax & style errors
 #+BEGIN_SRC emacs-lisp
   (use-package flymake
+    :straight t
     :bind
     (:map flymake-mode-map
      ("C-c e n" . flymake-goto-next-error)
@@ -1316,6 +1318,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
 ** eldoc - Show docstring
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
+    :straight t
     :defer t
     :delight)
 #+END_SRC
