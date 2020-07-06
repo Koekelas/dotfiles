@@ -832,7 +832,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
 ** ispell - Spell checker
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
-    :defer t
+    :bind
+    ("C-c e d" . ispell-change-dictionary)
     :config
     (setq ispell-program-name "hunspell")
     (let ((dictionary-name "en_US"))
