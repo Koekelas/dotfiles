@@ -2221,7 +2221,8 @@ Configure Conf mode afterwards.
 For creating indentation styles, see [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
 
 ** Org
-For agendas, see [[file:90-personal.org::*Agendas][Agendas]].
+For agendas or capture templates, see [[file:90-personal.org::*Agendas][Agendas]] respectively [[file:90-personal.org::*Capture templates][Capture
+templates]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package org

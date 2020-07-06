@@ -184,8 +184,8 @@ Configure notes.
     (find-file-noselect org-roam-index-file 'nowarn))
 #+END_SRC
 
-* Capture templates                                                     :wip:
-#+BEGIN_SRC js
+* Capture templates
+#+BEGIN_SRC js :exports none
   ((args) => {
       "use strict";
       const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&");
@@ -197,20 +197,32 @@ Configure notes.
   })({protocol: "capture", template: "t", url: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
-#+CAPTION: Bladwijzer
+To capture =Bookmark=, =Webpage= and =Book= from the browser, create
+three [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
+
+#+CAPTION: Bladwijzer (bookmark)
 #+BEGIN_SRC js
   javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "b", url: location.href, title: document.title});
 #+END_SRC
 
-#+CAPTION: Notitie
+#+CAPTION: Notitie (webpage)
 #+BEGIN_SRC js
   javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
 #+END_SRC
 
-#+CAPTION: Boek
+#+CAPTION: Boek (book)
 #+BEGIN_SRC js
   javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "B", url: location.href, body: window.getSelection()});
 #+END_SRC
+
+In [[https://www.mozilla.org/en-US/firefox/new/][Firefox]], to show bookmarklets to the left of the menu ([[https://en.wikipedia.org/wiki/Hamburger_button][hamburger]]):
+
+1. Right click toolbar and show bookmarks toolbar
+2. Click the menu, Customize and move bookmarks toolbar items to
+   toolbar
+3. Close customize, right click toolbar and hide bookmarks toolbar
+
+Configure org capture templates.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-capture
@@ -246,7 +258,11 @@ Configure notes.
             ("B" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
              "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
     (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
+#+END_SRC
 
+Configure roam capture templates.
+
+#+BEGIN_SRC emacs-lisp
   (use-package org-roam-capture
     :defer t
     :config
