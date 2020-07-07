@@ -41,7 +41,7 @@ Git is mandatory, everything else is optional.
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
-  - [[https://x.org/][xprop]]
+  - [[https://x.org/][xprop]] (GTK theme variant)
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
 - X window manager: [[https://x.org/][xrandr]]
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
@@ -52,8 +52,8 @@ Git is mandatory, everything else is optional.
 - Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
 - C family:
   - [[https://gcc.gnu.org/][GCC]]
-  - [[https://clang.llvm.org/][Clang]]
   - [[https://mesonbuild.com/][Meson]]
+  - [[https://clang.llvm.org/][Clang]] (language server)
   - [[https://www.gnu.org/software/gdb/][GDB]]
 - Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
 - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
@@ -68,9 +68,9 @@ Git is mandatory, everything else is optional.
   - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
 - JavaScript:
   - [[https://nodejs.org/][Node.js]]
-  - [[https://www.chromium.org/][Chromium]]
   - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
   - [[https://github.com/NicolasPetton/Indium][Indium]]
+  - [[https://www.chromium.org/][Chromium]] (debugger, with Indium)
 - JSON: [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
 - Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
 - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
@@ -81,7 +81,7 @@ Git is mandatory, everything else is optional.
 - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
 - SQL: [[https://www.postgresql.org/][PostgreSQL]]
 - TeX, Org & Markdown:
-  - [[https://www.sqlite.org/][SQLite]]
+  - [[https://www.sqlite.org/][SQLite]] (roam)
   - [[https://www.latex-project.org/][LaTeX]]
   - [[https://pandoc.org/][pandoc]]
 - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
@@ -121,7 +121,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   gpasswd -a `whoami` uucp
 
   ## C family
-  pacman -S gcc clang meson gdb
+  pacman -S gcc meson clang gdb
 
   ## Clojure & ClojureScript
   pacman -S leiningen
