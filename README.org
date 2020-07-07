@@ -76,6 +76,7 @@ Git is mandatory, everything else is optional.
 - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
 - Python:
   - [[https://www.python.org/][Python]]
+  - [[https://pipenv.pypa.io/][Pipenv]]
   - [[https://github.com/palantir/python-language-server][Python Language Server]]
 - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
 - SQL: [[https://www.postgresql.org/][PostgreSQL]]
