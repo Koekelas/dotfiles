@@ -2932,7 +2932,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/ace
       '(:eval
-        (when ace-window-mode
+        (when (bound-and-true-p ace-window-mode)
           `(,(moody-ribbon
               (propertize (koek-ml/get-window-label) 'face 'aw-mode-line-face)
               nil 'up)
