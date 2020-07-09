@@ -159,7 +159,7 @@ Hide superfluous applications.
   Name=XDvi
 #+END_SRC
 
-* GNOME catgen
+* GNOME catgen                                                        :setup:
 To apply configuration, run:
 
 #+BEGIN_SRC sh
@@ -315,7 +315,7 @@ Set target directory.
   --target=~/
 #+END_SRC
 
-* Syncthing
+* Syncthing                                                           :setup:
 Stores:
 - archive: Archief
 - documents: Bureaublad, Documenten, Inbox and Projecten
@@ -418,7 +418,7 @@ Store sync state with maildir sub directories, simplifying backup.
   SyncState *
 #+END_SRC
 
-*** Personal account
+*** Personal account                                                  :setup:
 To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
 (FastMail)]].
 
@@ -472,7 +472,7 @@ Define personal channel.
   CopyArrivalDate yes
 #+END_SRC
 
-** mu
+** mu                                                                 :setup:
 Move maildir directory out of the way.
 
 #+BEGIN_SRC conf :tangle mu/.config/environment.d/50-mu.conf
@@ -498,7 +498,7 @@ is expanded, not environment variables.
   status_path = "~/Documenten/Contacten/.vdirsyncer/"
 #+END_SRC
 
-** Personal account
+** Personal account                                                   :setup:
 To create the vdir directory, run:
 
 #+BEGIN_SRC sh :tangle no
@@ -608,7 +608,7 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
-* Org protocol
+* Org protocol                                                        :setup:
 Define org protocol scheme handler. Must invoke a shell to expand
 environment variables. For desktop entry or scheme handler format, see
 [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME

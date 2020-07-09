@@ -134,7 +134,7 @@ Configure agendas.
             (org-agenda-files . (:maxlevel . 3)))))
 #+END_SRC
 
-** Calendars
+** Calendars                                                          :setup:
 To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
 =Emacs calendars= and give it access to CalDAV. Then, to store it
 securely, run:

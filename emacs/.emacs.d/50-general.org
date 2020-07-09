@@ -445,7 +445,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 *** Issues
 
-**** Smartparens and GNOME Shell keybindings conflict
+**** Smartparens and GNOME Shell keybindings conflict                 :setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -847,7 +847,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
 *** Issues
 
-**** Spell checking contractions fails
+**** Spell checking contractions fails                                :setup:
 Visit the dictionary's affix file. On Arch Linux, affix files are
 saved in =/usr/share/hunspell/=. Add:
 
