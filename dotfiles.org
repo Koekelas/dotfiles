@@ -629,7 +629,7 @@ Info Specification (freedesktop)]].
 To register the scheme handler, run:
 
 #+BEGIN_SRC sh
-  update-desktop-database .local/share/applications
+  update-desktop-database ~/.local/share/applications
 #+END_SRC
 
 * Jupyter Notebook
