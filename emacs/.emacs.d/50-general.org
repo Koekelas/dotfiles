@@ -1260,7 +1260,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     ("C-c d a" . apropos))
 #+END_SRC
 
-** devdocs-lookup - Search DevDocs
+** devdocs-lookup - Search DevDocs                                    :setup:
 [[https://github.com/skeeto/devdocs-lookup][devdocs-lookup (GitHub)]]
 
 On [[https://devdocs.io/][DevDocs]], enable:
