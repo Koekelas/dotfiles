@@ -285,7 +285,7 @@ Interactive and non interactive
   [[ -f ~/.bashrc ]] && . ~/.bashrc
 #+END_SRC
 
-** Interactive
+** Interactive                                                        :setup:
 :PROPERTIES:
 :header-args+: :tangle bash/.bashrc
 :END:
@@ -294,6 +294,10 @@ Non login
 
 #+BEGIN_SRC sh
   [[ $- != *i* ]] && return
+#+END_SRC
+
+#+BEGIN_SRC sh :tangle no
+  mkdir -p "$XDG_DATA_HOME/bash"
 #+END_SRC
 
 #+BEGIN_SRC sh
@@ -350,7 +354,14 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   .nrepl-port
 #+END_SRC
 
-* GnuPG
+* GnuPG                                                               :setup:
+When setting GnuPG's home, the directory must be created manually. To
+create it, run:
+
+#+BEGIN_SRC sh
+  mkdir -p "$XDG_DATA_HOME/gnupg"
+#+END_SRC
+
 Move data directory out of the way.
 
 #+BEGIN_SRC conf :tangle gnupg/.config/environment.d/50-gnupg.conf
