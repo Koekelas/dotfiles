@@ -1194,6 +1194,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
     (setq counsel-linux-app-format-function
           #'counsel-linux-app-format-function-name-first)
+    (setq counsel-yank-pop-separator (concat "\n" (make-string 80 ?―) "\n"))
     (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
 
   (straight-use-package 'request)         ; Optional dependency
