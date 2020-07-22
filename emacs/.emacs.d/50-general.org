@@ -957,6 +957,7 @@ steps.
         (apply f args)
         (setq-default mode-line-format format)))
     :config
+    (setq aw-scope 'frame)
     (setq aw-swap-invert t)
     (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
     (setq aw-dispatch-alist '((?o aw-flip-window)))
