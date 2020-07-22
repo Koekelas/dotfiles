@@ -619,6 +619,19 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
+* DisplayCAL                                                          :setup:
+Calibration settings:
+- Whitepoint: 6500 K
+- White level: 120 cd/m^2
+- Tone curve: Gamma 2.2
+
+To set the brightness of AU Optronics Corp. AUO B140HAN01.3 to the
+value determined during calibration, run:
+
+#+BEGIN_SRC sh
+  echo 362 > /sys/class/backlight/intel_backlight/brightness
+#+END_SRC
+
 * Org protocol                                                        :setup:
 Define org protocol scheme handler. Must invoke a shell to expand
 environment variables. For desktop entry or scheme handler format, see
