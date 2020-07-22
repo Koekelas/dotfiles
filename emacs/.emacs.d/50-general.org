@@ -805,7 +805,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
     (declare-function yas-reload-all "yasnippet")
 
     ;; Load own snippets
-    (setq yas-snippet-dirs (delq 'yas-installed-snippets-dir yas-snippet-dirs))
+    (setq yas-snippet-dirs (remq 'yas-installed-snippets-dir yas-snippet-dirs))
     (yas-reload-all)
 
     ;; Set new snippet file snippet
