@@ -389,8 +389,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
       "Setup separate-sexp handler in MODE for OPEN-DELIMITERS.
   MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
   strings."
-      (dolist (open-delimiter open-delimiters)
-        (sp-local-pair mode open-delimiter nil
+      (dolist (delimiter open-delimiters)
+        (sp-local-pair mode delimiter nil
                        :post-handlers '(:add koek-sp/separate-sexp))))
 
     (defun koek-sp/format-c-block (open-delimiter action _context)
@@ -413,8 +413,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
       "Setup format-c-block handler in MODE for OPEN-DELIMITERS.
   MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
   strings."
-      (dolist (open-delimiter open-delimiters)
-        (sp-local-pair mode open-delimiter nil
+      (dolist (delimiter open-delimiters)
+        (sp-local-pair mode delimiter nil
                        ;; For event names, see `single-key-description'
                        :post-handlers '(:add (koek-sp/format-c-block "RET")))))
     :init
