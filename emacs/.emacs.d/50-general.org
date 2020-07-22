@@ -1018,6 +1018,7 @@ steps.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
     :straight t
+    :unless (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
     :bind
     (("C-c w 0" . eyebrowse-switch-to-window-config-0)
      ("C-c w 1" . eyebrowse-switch-to-window-config-1)
@@ -1031,10 +1032,11 @@ steps.
      ("C-c w 9" . eyebrowse-switch-to-window-config-9)
      ("C-c w w" . eyebrowse-last-window-config)
      ("C-c w k" . eyebrowse-close-window-config))
+    :init
+    (setq eyebrowse-keymap-prefix (kbd "C-c w"))
     :config
-    ;; Resolve keybinding conflict with org
-    (setq minor-mode-map-alist
-          (assq-delete-all 'eyebrowse-mode minor-mode-map-alist))
+    ;; Resolve keybinding conflict with transpose-frame
+    (unbind-key "C-c w c" eyebrowse-mode-map)
 
     (setq eyebrowse-default-workspace-slot 0)
     (setq eyebrowse-mode-line-style 'hide)
@@ -1085,13 +1087,175 @@ Bury unneeded buffers, computers have more than enough memory.
     :delight)
 #+END_SRC
 
-** exwm - X window manager                                              :wip:
+** exwm - X window manager
 [[https://github.com/ch11ng/exwm][exwm (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
+  ;; Prevent exwm from asking to replace window manager after
+  ;; installation
+  (defvar exwm-replace)
+
+  (setq exwm-replace nil)
+
   (use-package exwm
     :straight t
-    :when (string= (getenv "XDG_CURRENT_DESKTOP") "Emacs"))
+    :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM"))
+
+  (use-package exwm-input
+    :defer t
+    :preface
+    (define-advice exwm-input--update-mode-line
+        (:around (f &rest args) koek-wm/disable-update-process-status)
+      (let ((status mode-line-process))
+        (apply f args)
+        (setq mode-line-process status)
+        (force-mode-line-update)))
+    :config
+    ;; Keybindings in exwm and non exwm buffers, even in char mode,
+    ;; i.e., keybindings mustn't conflict with non Emacs keybindings
+    ;; (e.g. copy, cut and paste). Keybindings associated with desktop
+    ;; environments (e.g. maximize window, close window and switch
+    ;; between windows) meet these requirements.
+    (setq exwm-input-global-keys
+          (mapcar (pcase-lambda (`(,key . ,command))
+                    (cons (kbd key) command))
+                  '(("s-s" . exwm-input-toggle-keyboard)
+                    ("<f11>" . exwm-layout-toggle-fullscreen))))
+
+    ;; Translate Emacs to non Emacs keybindings in line mode
+    (setq exwm-input-simulation-keys
+          (mapcar (pcase-lambda (`(,from . ,to))
+                    (cons (kbd from) (kbd to)))
+                  '(("C-f" . "<right>")
+                    ("C-b" . "<left>")
+                    ("C-n" . "<down>")
+                    ("C-p" . "<up>")
+                    ("M-f" . "C-<right>")
+                    ("M-b" . "C-<left>")
+                    ("C-e" . "<end>")
+                    ("C-a" . "<home>")
+                    ("C-v" . "<next>")
+                    ("M-v" . "<prior>")
+                    ("M->" . "C-<end>")
+                    ("M-<" . "C-<home>")
+                    ("C-s" . "C-f")
+                    ("C-d" . "<delete>")
+                    ("M-d" . "S-C-<right> C-x")
+                    ("M-DEL" . "S-C-<left> C-x")
+                    ("C-k" . "S-<end> C-x")
+                    ("M-@" . "S-C-<right>")
+                    ("M-h" . "C-a")
+                    ("M-w" . "C-c")
+                    ("C-w" . "C-x")
+                    ("C-y" . "C-v")
+                    ("C-/" . "C-z")
+                    ("M-/" . "C-y"))))
+
+    ;; Grab C-z (repeat) in line mode
+    (push ?\C-z exwm-input-prefix-keys))
+
+  (use-package exwm-workspace
+    :defer t
+    :preface
+    (defvar koek-wm/previous-workspace-n nil
+      "Previously selected workspace number.")
+
+    (defface koek-wm/selected-workspace '((t . (:foreground "#ffffff")))
+      "Face for selected workspace label in mode line.")
+
+    (defface koek-wm/unselected-workspace '((t . (:foreground "#000000")))
+      "Face for unselected workspace label in mode line.")
+
+    (define-advice exwm-workspace-switch
+        (:before (&rest _args) koek-wm/update-previous-workspace-n)
+      (setq koek-wm/previous-workspace-n exwm-workspace-current-index))
+
+    (defmacro koek-wm/def-switch-workspace (n)
+      "Define function to switch to workspace N.
+  N is an integer, the workspace to switch to."
+      `(defun ,(intern (format "koek-wm/switch-workspace-%d" n)) ()
+         ,(format "Switch to workspace %d." n)
+         (interactive)
+         (exwm-workspace-switch-create ,n)))
+
+    (koek-wm/def-switch-workspace 0)
+    (koek-wm/def-switch-workspace 1)
+    (koek-wm/def-switch-workspace 2)
+    (koek-wm/def-switch-workspace 3)
+    (koek-wm/def-switch-workspace 4)
+    (koek-wm/def-switch-workspace 5)
+    (koek-wm/def-switch-workspace 6)
+    (koek-wm/def-switch-workspace 7)
+    (koek-wm/def-switch-workspace 8)
+    (koek-wm/def-switch-workspace 9)
+
+    (defun koek-wm/switch-previous-workspace ()
+      "Switch to previously selected workspace."
+      (interactive)
+      (when koek-wm/previous-workspace-n
+        (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
+
+    (defun koek-wm/rename-current ()
+      "Rename current according to its class or title."
+      ;; Class is the name of an application while instance is the name
+      ;; of an instance of the application. For more information, see
+      ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+      (let ((class (downcase exwm-class-name)))
+        (exwm-workspace-rename-buffer
+         (cond
+          ((string-prefix-p "firefox" class)
+           (replace-regexp-in-string
+            (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
+            "Firefox" (or exwm-title "Firefox")))
+          ((string-prefix-p "microsoft teams" class)
+           "Teams")
+          (t
+           exwm-class-name)))))
+
+    (defun koek-wm/n-to-label (n)
+      "Convert workspace number N to a workspace label.
+  N is an integer, a workspace number."
+      (or (koek-ml/arabic-to-roman n) "N"))
+    :init
+    (bind-keys
+     ("C-c w 0" . koek-wm/switch-workspace-0)
+     ("C-c w 1" . koek-wm/switch-workspace-1)
+     ("C-c w 2" . koek-wm/switch-workspace-2)
+     ("C-c w 3" . koek-wm/switch-workspace-3)
+     ("C-c w 4" . koek-wm/switch-workspace-4)
+     ("C-c w 5" . koek-wm/switch-workspace-5)
+     ("C-c w 6" . koek-wm/switch-workspace-6)
+     ("C-c w 7" . koek-wm/switch-workspace-7)
+     ("C-c w 8" . koek-wm/switch-workspace-8)
+     ("C-c w 9" . koek-wm/switch-workspace-9)
+     ("C-c w w" . koek-wm/switch-previous-workspace)
+     ("C-c w e" . exwm-workspace-swap)
+     ("C-c w k" . exwm-workspace-delete))
+    :config
+    (setq exwm-workspace-number 2)
+    (setq exwm-workspace-show-all-buffers t)
+    (setq exwm-workspace-index-map #'koek-wm/n-to-label)
+    (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
+    (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
+
+  (use-package exwm-layout
+    :defer t
+    :config
+    (setq exwm-layout-show-all-buffers t))
+
+  (use-package exwm-floating
+    :defer t
+    :preface
+    (defface koek-wm/floating-border '((t . (:foreground "#000000")))
+      "Face for border of floating frames.")
+
+    (defun koek-wm/set-floating-border-color ()
+      "Set border color of floating frames."
+      (setq exwm-floating-border-color
+            (face-attribute 'koek-wm/floating-border :foreground)))
+    :config
+    (add-hook 'koek-thm/enable-hook #'koek-wm/set-floating-border-color)
+    (koek-wm/set-floating-border-color))
 #+END_SRC
 
 ** server - Emacs server
@@ -2653,7 +2817,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                 (append personal theme)))
              (specs
               (map-let
-                  (foreground background current-line selection red alt-bg lc-fg)
+                  (foreground background current-line selection comment red alt-bg lc-fg)
                   palette
                 `(;; Default
                   (show-paren-match    :foreground ,foreground :background ,selection)
@@ -2687,6 +2851,10 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                   (aw-mode-line-face    :inherit aw-leading-char-face)
                   ;; eyebrowse
                   (eyebrowse-mode-line-active :foreground ,foreground)
+                  ;; exwm
+                  (koek-wm/floating-border      :foreground ,selection)
+                  (koek-wm/selected-workspace   :foreground ,foreground :weight bold)
+                  (koek-wm/unselected-workspace :foreground ,comment)
                   ;; pdf-tools
                   (koek-pdf/midnight :foreground ,foreground :background ,background)))))
         ;; Adding attributes to a face before it's defined, fails. Add
@@ -2812,34 +2980,58 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
               (concat roman (koek-ml/arabic-to-roman (- n arabic) roman-numerals))
             (koek-ml/arabic-to-roman n (cdr roman-numerals))))))
 
-    (defun koek-ml/get-workspaces ()
+    (defun koek-ml/get-exwm-workspaces ()
+      "Return workspaces of selected monitor."
+      (thread-last (number-sequence 0 (1- (length exwm-workspace--workareas)))
+        (seq-group-by (lambda (n)
+                        (nth n exwm-workspace--workareas)))
+        (mapcar #'cdr)
+        (seq-find (lambda (ns)
+                    (member exwm-workspace-current-index ns)))
+        (mapcar (lambda (n)
+                  (list :n n :label (or (koek-ml/arabic-to-roman n) "N"))))))
+
+    (defconst koek-ml/exwm-workspaces
+      '(:eval
+        (when (and (boundp 'exwm-workspace-current-index) (moody-window-active-p))
+          (let ((workspaces (koek-ml/get-exwm-workspaces)))
+            (when (> (length workspaces) 1)
+              `(,(moody-ribbon
+                  (mapconcat
+                   (lambda (workspace)
+                     (let ((face (if (= (plist-get workspace :n)
+                                        exwm-workspace-current-index)
+                                     'koek-wm/selected-workspace
+                                   'koek-wm/unselected-workspace)))
+                       (propertize (plist-get workspace :label) 'face face)))
+                   workspaces " ")
+                  nil 'up)
+                koek-ml/separator)))))
+      "Exwm workspaces mode line construct.")
+
+    (defun koek-ml/get-eyebrowse-workspaces ()
       "Return workspaces of selected frame."
       (mapcar (lambda (workspace)
-                (let ((id (nth 0 workspace))
+                (let ((n (nth 0 workspace))
                       (name (let ((name (nth 2 workspace)))
                               (unless (string= name "")
                                 name))))
-                  (list :id id
-                        :label (concat (or (koek-ml/arabic-to-roman id) "N")
+                  (list :n n
+                        :label (concat (or (koek-ml/arabic-to-roman n) "N")
                                        (when name
                                          (concat ":" name))))))
               (eyebrowse--get 'window-configs)))
 
-    (defun koek-ml/get-selected-workspace-id ()
-      "Return selected workspace id of selected frame."
-      (eyebrowse--get 'current-slot))
-
     (defconst koek-ml/eyebrowse
       '(:eval
         (when (and (bound-and-true-p eyebrowse-mode) (moody-window-active-p))
-          (let ((workspaces (koek-ml/get-workspaces))
-                (selected-id (koek-ml/get-selected-workspace-id)))
-            (when (or (> (length workspaces) 1) (not (= selected-id 0)))
+          (let ((workspaces (koek-ml/get-eyebrowse-workspaces))
+                (selected-n (eyebrowse--get 'current-slot)))
+            (when (or (> (length workspaces) 1) (not (= selected-n 0)))
               `(,(moody-ribbon
                   (mapconcat
                    (lambda (workspace)
-                     (let ((face (if (= (plist-get workspace :id)
-                                        selected-id)
+                     (let ((face (if (= (plist-get workspace :n) selected-n)
                                      'eyebrowse-mode-line-active
                                    'eyebrowse-mode-line-inactive)))
                        (propertize (plist-get workspace :label) 'face face)))
@@ -2866,6 +3058,14 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
              (list (moody-ribbon "Narrowed" nil 'up) " "))
           "%p" " " "%l,%c"))
       "Position mode line construct.")
+
+    (defconst koek-ml/exwm-input
+      '(:eval
+        (when (and (boundp 'exwm--input-mode) (eq exwm--input-mode 'char-mode)
+                   (moody-window-active-p))
+          `("" koek-ml/separator
+            ,(moody-ribbon "Char" nil 'up))))
+      "Exwm input mode line construct.")
 
     (defconst koek-ml/input
       '(:eval
@@ -3035,8 +3235,9 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
         (:override () koek-ml/update-variants)
       (setq mode-line-format
             `(,@koek-ml/dummies " "
-              koek-ml/eldoc koek-ml/ace koek-ml/depth koek-ml/eyebrowse koek-ml/id
-              koek-ml/diff koek-ml/task koek-ml/modes))
+              koek-ml/eldoc koek-ml/ace koek-ml/depth
+              koek-ml/exwm-workspaces koek-ml/eyebrowse
+              koek-ml/id koek-ml/diff koek-ml/task koek-ml/modes))
       (force-mode-line-update)
       (dolist (variant (koek-ml/get-variants))
         (let ((state (koek-ml/get-variant-state variant)))
@@ -3060,10 +3261,10 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (setq-default mode-line-format
                   `(,@koek-ml/dummies " "
                     koek-ml/eldoc koek-ml/ace koek-ml/ediff
-                    koek-ml/depth koek-ml/eyebrowse
+                    koek-ml/depth koek-ml/exwm-workspaces koek-ml/eyebrowse
                     koek-ml/id koek-ml/state
-                    koek-ml/position koek-ml/input koek-ml/flymake
-                    koek-ml/vc koek-ml/task koek-ml/modes)))
+                    koek-ml/position koek-ml/exwm-input koek-ml/input
+                    koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
 #+END_SRC
 
 * Footer
