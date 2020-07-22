@@ -2565,11 +2565,18 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
     (defconst koek-thm/default-theme 'sanityinc-tomorrow-eighties
       "Default theme.")
 
-    (when (executable-find "xprop")
-      (defun koek-thm/set-frame-theme-variant (frame)
-        "Set frame theme variant of FRAME.
+    (defun koek-thm/set-frame-theme-variant (frame)
+      "Set theme variant of frame FRAME.
   When window theme is a dark theme, the variant is set to dark,
   else, it's set to nothing."
+      (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
+        (koek-thm/set-frame-theme-variant-xprop frame)))
+
+    (when (executable-find "xprop")
+      (defun koek-thm/set-frame-theme-variant-xprop (frame)
+        "Set theme variant of frame FRAME.
+  Mustn't be called directly, see
+  `koek-thm/set-frame-theme-variant'."
         (let* ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
                                      (car custom-enabled-themes)))
@@ -2579,9 +2586,9 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                         :command `("xprop"
                                    "-id" ,(frame-parameter frame 'outer-window-id)
                                    "-f" "_GTK_THEME_VARIANT" "8u"
-                                   "-set" "_GTK_THEME_VARIANT" ,variant))))
+                                   "-set" "_GTK_THEME_VARIANT" ,variant)))))
 
-      (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant))
+    (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
 
     (defun koek-thm/hex-to-rgb (color)
       "Convert hex color COLOR to RGB.
@@ -2691,8 +2698,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                        specs)))
 
       ;; Set frame theme
-      (when (fboundp 'koek-thm/set-frame-theme-variant)
-        (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
+      (mapc #'koek-thm/set-frame-theme-variant (frame-list))
 
       (run-hooks 'koek-thm/enable-hook))
     :config
