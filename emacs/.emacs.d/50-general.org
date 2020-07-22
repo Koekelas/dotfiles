@@ -1974,7 +1974,7 @@ Configure Conf mode afterwards.
 
 #+BEGIN_SRC emacs-lisp
   (use-package conf-mode
-    :mode (rx "cross.txt" string-end)
+    :mode (rx (or ".desktop" "cross.txt") string-end)
     :preface
     (defconst koek-conf/mode-names
       '((conf-colon-mode . "Conf:")
