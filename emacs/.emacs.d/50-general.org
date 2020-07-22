@@ -271,8 +271,8 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-     . subword-mode)
+    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
+     subword-mode)
     :delight)
 #+END_SRC
 
@@ -357,8 +357,8 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-      . smartparens-mode)
+    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
+      smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (declare-function sp--get-context "smartparens")
@@ -625,8 +625,8 @@ When line is indented, press =TAB= to complete text before point.
      ("C-c e r" . eglot-rename)
      ("C-c C-d" . eglot-help-at-point))
     :hook
-    ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode)
-     . eglot-ensure)
+    ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode) .
+     eglot-ensure)
     :config
     ;; Eclipse JDT Language Server lacks an executable. Eglot requires
     ;; the jdtls launcher to be added to the CLASSPATH environment
@@ -1543,8 +1543,9 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
       "Check spelling of e-mail."
       (let ((ispell-skip-region-alist     ; Dynamic variable
              (let ((citation-line
-                    (list (rx line-start (one-or-more not-newline) "writes:" line-end)
-                          #'forward-line))
+                    (list
+                     (rx line-start (one-or-more not-newline) "writes:" line-end)
+                     #'forward-line))
                    (citation (list mu4e-cited-regexp #'forward-line)))
                (append (list citation-line citation) ispell-skip-region-alist)))
             (tick (buffer-chars-modified-tick)))
@@ -3016,12 +3017,14 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
            ((eq type 'C)
             (concat
              (ediff-get-state-of-diff ediff-current-difference type)
-             (when-let ((merge (ediff-get-state-of-merge ediff-current-difference)))
+             (when-let ((merge
+                         (ediff-get-state-of-merge ediff-current-difference)))
                (concat " " merge))
              (when (ediff-get-state-of-ancestor ediff-current-difference)
                " AncEmpty")))
            ((eq type 'Anc)
-            (when-let ((merge (ediff-get-state-of-merge ediff-current-difference)))
+            (when-let ((merge
+                        (ediff-get-state-of-merge ediff-current-difference)))
               (cond
                ((string= merge "prefer-A")
                 "=diff(B)")
