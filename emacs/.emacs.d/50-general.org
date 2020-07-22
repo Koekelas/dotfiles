@@ -597,7 +597,9 @@ When line is indented, press =TAB= to complete text before point.
   (use-package company-dabbrev
     :defer t
     :config
-    (setq company-dabbrev-other-buffers t)) ; Same major mode
+    (setq company-dabbrev-other-buffers t) ; Same major mode
+    (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
+    (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
 #+END_SRC
 
 *** company-flx - Match candidates fuzzily
