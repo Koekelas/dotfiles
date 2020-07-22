@@ -1181,9 +1181,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     :config
     (declare-function counsel-linux-app-format-function-name-first "counsel")
     (declare-function ivy-add-actions "ivy")
-    (put 'counsel-ag-base-command 'safe-local-variable
-         (lambda (value)
-           (string= value "ag --nocolor --nogroup --hidden %s")))
 
     (ivy-add-actions 'counsel-M-x
                      `(("h"

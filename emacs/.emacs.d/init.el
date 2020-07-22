@@ -6,6 +6,13 @@
 
 ;;; Code:
 
+;;; File variables
+;; Setting file variables to unsafe values must be confirmed. When
+;; this happens during initialization of exwm, Emacs hangs. Mark
+;; project's file variables safe.
+(push '(counsel-ag-base-command . "ag --nocolor --nogroup --hidden %s")
+      safe-local-variable-values)
+
 ;;; Garbage collector
 ;; Increasing cons threshold makes garbage collection more efficient
 ;; and decreasing it makes garbage collection less noticeable, i.e.,
