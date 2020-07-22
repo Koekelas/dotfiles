@@ -628,9 +628,8 @@ When line is indented, press =TAB= to complete text before point.
     ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode) .
      eglot-ensure)
     :config
-    ;; Eclipse JDT Language Server lacks an executable. Eglot requires
-    ;; the jdtls launcher to be added to the CLASSPATH environment
-    ;; variable.
+    ;; Eclipse JDT Language Server lacks an executable. Eglot expects to
+    ;; find the jdtls launcher on the CLASSPATH environment variable.
     (when-let
         ((launcher-program-name
           (thread-last '("/usr/share/java/jdtls/plugins/" "c:/bin/jdtls/plugins/")
@@ -840,7 +839,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :config
     (setq ispell-program-name "hunspell")
     (let ((dictionary-name "en_US"))
-      ;; On Windows, Hunspell requires the DICTIONARY environment
+      ;; On Windows, Hunspell expects the DICTIONARY environment
       ;; variable to be set
       (when (eq system-type 'windows-nt)
         (setenv "DICTIONARY" dictionary-name))
@@ -1458,7 +1457,7 @@ For e-mail accounts, see [[file:90-personal.org::*E-mail accounts][E-mail accoun
                              (or (getenv "XDG_CONFIG_HOME") "~/.config/"))))
       (setq mu4e-get-mail-command (format "mbsync -c %s -a" config)))
     (setq mu4e-update-interval (* 60 30)) ; In seconds
-    ;; When moving e-mail, isync requires them to be renamed
+    ;; When moving e-mail, isync expects them to be renamed
     (setq mu4e-change-filenames-when-moving t)
 
     (setq mu4e-completing-read-function #'completing-read)
@@ -1786,8 +1785,8 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
 #+END_SRC
 
 ** Conf
-Conf mode's mode declaration requires precedence over Text mode's.
-Configure Text mode first.
+Conf mode's mode declaration must precede over Text mode's. Configure
+Text mode first.
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
   <<text-mode>>

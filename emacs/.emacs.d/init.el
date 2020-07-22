@@ -26,7 +26,7 @@
 (require 'nsm)
 
 ;; no-littering requires straight which requires nsm. Set location of
-;; settings file myself.
+;; settings file manually.
 (setq nsm-settings-file
       (expand-file-name "var/nsm-settings.el" user-emacs-directory))
 (setq network-security-level 'high)
