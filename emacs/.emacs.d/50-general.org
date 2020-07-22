@@ -186,12 +186,13 @@ VC is a placeholder.
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
     :config
-    (mapc (lambda (file-name)
-            (add-to-list 'recentf-exclude
-                         (rx-to-string `(and line-start ,file-name))))
-          (list "/user/share/emacs/"
-                (file-truename
-                 (expand-file-name "straight/" user-emacs-directory))))
+    (let ((file-names
+           (list
+            "/user/share/emacs/"
+            (file-truename (expand-file-name "straight/" user-emacs-directory)))))
+      (dolist (file-name file-names)
+        (add-to-list 'recentf-exclude
+                     (rx-to-string `(and line-start ,file-name)))))
     (recentf-mode))
 #+END_SRC
 

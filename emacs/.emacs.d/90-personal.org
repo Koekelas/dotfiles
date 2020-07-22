@@ -415,25 +415,24 @@ Configure news feeds.
       :config
       (push elfeed-db-directory recentf-exclude))
 
-    (mapc (lambda (feed)
-            (let ((args
-                   (pcase feed
-                     (`(,title reddit month ,id . ,tags)
-                      `(,(concat title " (Reddit - Month)")
-                        ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
-                        post ,@tags))
-                     (`(,title reddit ,id . ,tags)
-                      `(,(concat title " (Reddit)")
-                        ,(format "https://www.reddit.com/r/%s/top.rss?t=week" id)
-                        post ,@tags))
-                     (`(,title youtube ,id . ,tags)
-                      `(,(concat title " (YouTube)")
-                        ,(format "https://www.youtube.com/feeds/videos.xml?channel_id=%s" id)
-                        video ,@tags))
-                     (_feed
-                      feed))))
-              (apply #'koek/add-feed args)))
-          koek/feeds))
+    (dolist (feed koek/feeds)
+      (let ((args
+             (pcase feed
+               (`(,title reddit month ,id . ,tags)
+                `(,(concat title " (Reddit - Month)")
+                  ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
+                  post ,@tags))
+               (`(,title reddit ,id . ,tags)
+                `(,(concat title " (Reddit)")
+                  ,(format "https://www.reddit.com/r/%s/top.rss?t=week" id)
+                  post ,@tags))
+               (`(,title youtube ,id . ,tags)
+                `(,(concat title " (YouTube)")
+                  ,(format "https://www.youtube.com/feeds/videos.xml?channel_id=%s" id)
+                  video ,@tags))
+               (_feed
+                feed))))
+        (apply #'koek/add-feed args))))
 #+END_SRC
 
 * Initial buffer
