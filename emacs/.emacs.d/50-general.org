@@ -1613,8 +1613,9 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
 
     (defun koek-pdf/re-apply-midnight-colors ()
       "Re-apply `pdf-view-midnight-minor-mode' colors in all buffers."
-      (dolist (buffer (buffer-list))
-        (with-current-buffer buffer
+      (save-current-buffer
+        (dolist (buffer (buffer-list))
+          (set-buffer buffer)
           (when (and (derived-mode-p 'pdf-view-mode) pdf-view-midnight-minor-mode)
             (pdf-view-midnight-minor-mode 0)
             (pdf-view-midnight-minor-mode)))))
