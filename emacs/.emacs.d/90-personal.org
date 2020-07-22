@@ -23,26 +23,6 @@ Require libraries.
   (require 'seq)
 #+END_SRC
 
-* Monitors                                                              :wip:
-#+BEGIN_SRC emacs-lisp
-  (use-package exwm-randr
-    :after exwm
-    :preface
-    (defun koek/setup-monitors ()
-      "Setup monitors."
-      (make-process :name "xrandr"
-                    :command '("xrandr" "--output" "HDMI-1" "--primary")))
-    :config
-    (declare-function exwm-enable "exwm")
-    (declare-function exwm-randr-enable "exwm-randr")
-
-    (setq exwm-randr-workspace-monitor-plist '(1 "eDP-1"))
-    (add-hook 'exwm-randr-screen-change-hook #'koek/setup-monitors)
-
-    (exwm-randr-enable)
-    (exwm-enable))
-#+END_SRC
-
 * Well known directories
 Define well known directories.
 
@@ -74,6 +54,37 @@ Define well known directories.
     (koek/resolve-directory "KOEK_NEWS_DIR"
                             (expand-file-name "Nieuws/" koek/documents-dir))
     "File name to news directory.")
+#+END_SRC
+
+* Monitors
+Configure monitors and monitor layouts.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exar
+    :load-path "lisp/exar"
+    :after exwm
+    :config
+    (declare-function exwm-enable "exwm")
+
+    (let ((icc-dir
+           (expand-file-name "icc/"
+                             (or (getenv "XDG_DATA_HOME") "~/.local/share/"))))
+      (setq exar-monitors
+            `(:laptop (:edid "0x06af3d13000000002617" :name "Laptop"
+                       :color ,(expand-file-name "laptop.icc" icc-dir))
+              :home (:edid "0x35491800000000000013" :name "Home"
+                     :color ,(expand-file-name "home.icc" icc-dir))))
+      (setq exar-layouts
+            '((:name "Home (primary) and laptop"
+               :monitors
+               (:home (:top 0 :left 1920 :width 1920 :height 1080)
+                :laptop (:top 0 :left 0 :width 1920 :height 1080 :workspaces (1 5))))
+              (:name "Home"
+               :monitors (:home (:top 0 :left 0 :width 1920 :height 1080)))
+              (:name "Laptop"
+               :monitors (:laptop (:top 0 :left 0 :width 1920 :height 1080))))))
+    (exar-enable)
+    (exwm-enable))
 #+END_SRC
 
 * Secrets

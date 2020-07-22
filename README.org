@@ -45,7 +45,7 @@ Git is mandatory, everything else is optional.
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
-  - [[https://x.org/][xrandr]]
+  - [[https://www.argyllcms.com/][ArgyllCMS]] (color profile)
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
 - E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
@@ -98,7 +98,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   pacman -S adobe-source-code-pro-fonts
 
   ## X window manager
-  pacman -S xorg-xrandr
+  pacman -S argyllcms
   # Install exwm-gdm from source
 
   ## Terminal emulator

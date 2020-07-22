@@ -1090,6 +1090,8 @@ Bury unneeded buffers, computers have more than enough memory.
 ** exwm - X window manager
 [[https://github.com/ch11ng/exwm][exwm (GitHub)]]
 
+For monitors and monitor layouts, see [[file:90-personal.org::*Monitors][Monitors]].
+
 #+BEGIN_SRC emacs-lisp
   ;; Prevent exwm from asking to replace window manager after
   ;; installation
