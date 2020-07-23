@@ -1353,6 +1353,9 @@ On [[https://devdocs.io/][DevDocs]], enable:
   (use-package vterm
     :straight t
     :commands vterm-mode
+    :bind
+    (:map vterm-mode-map
+     ("C-c C-z" . vterm-send-C-z))
     :preface
     (defconst koek-term/buffer-base-name "*vterm*"
       "Base name of vterm buffers.")
@@ -1377,6 +1380,9 @@ On [[https://devdocs.io/][DevDocs]], enable:
     :init
     (bind-key "C-c x t" #'koek-term/launch)
     :config
+    ;; Resolve keybinding conflict with repeat
+    (unbind-key "C-z" vterm-mode-map)
+
     (setq vterm-kill-buffer-on-exit t))
 
   (use-package vterm-module-make
