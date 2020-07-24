@@ -191,8 +191,7 @@ VC is a placeholder.
             "/user/share/emacs/"
             (file-truename (expand-file-name "straight/" user-emacs-directory)))))
       (dolist (file-name file-names)
-        (add-to-list 'recentf-exclude
-                     (rx-to-string `(and line-start ,file-name)))))
+        (push (rx-to-string `(and line-start ,file-name)) recentf-exclude)))
     (recentf-mode))
 #+END_SRC
 
