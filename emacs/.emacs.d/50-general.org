@@ -3239,26 +3239,27 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       "Return state of variant VARIANT.
   Must be called from control buffer."
       (when (ediff-valid-difference-p)
-        (let ((type (plist-get variant :type)))
-          (cond
-           ((eq type 'C)
-            (concat
-             (ediff-get-state-of-diff ediff-current-difference type)
-             (when-let ((merge
+        (let ((state
+               (pcase (plist-get variant :type)
+                 ('C
+                  (concat
+                   (ediff-get-state-of-diff ediff-current-difference 'C)
+                   (when-let
+                       ((merge
                          (ediff-get-state-of-merge ediff-current-difference)))
-               (concat " " merge))
-             (when (ediff-get-state-of-ancestor ediff-current-difference)
-               " AncEmpty")))
-           ((eq type 'Anc)
-            (when-let ((merge
-                        (ediff-get-state-of-merge ediff-current-difference)))
-              (cond
-               ((string= merge "prefer-A")
-                "=diff(B)")
-               ((string= merge "prefer-B")
-                "=diff(A)"))))
-           (t
-            (ediff-get-state-of-diff ediff-current-difference type))))))
+                     (concat " " merge))
+                   (when (ediff-get-state-of-ancestor ediff-current-difference)
+                     " AncEmpty")))
+                 ('Anc
+                  (pcase (ediff-get-state-of-merge ediff-current-difference)
+                    ("prefer-A"
+                     "=diff(B)")
+                    ("prefer-B"
+                     "=diff(A)")))
+                 (type
+                  (ediff-get-state-of-diff ediff-current-difference type)))))
+          (unless (string-empty-p state)
+            state))))
 
     (define-advice ediff-refresh-mode-lines
         (:override () koek-ml/update-variants)
