@@ -1946,9 +1946,8 @@ Configure Conf mode afterwards.
 [[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  ;; Chrome profile directory is created on evaluation. Packages are
-  ;; evaluated on installation. Prevent indium from creating Chrome
-  ;; profile directory.
+  ;; Prevent indium from creating Chrome profile directory during
+  ;; installation
   (defvar indium-chrome-data-dir)
 
   (setq indium-chrome-data-dir nil)
