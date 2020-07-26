@@ -1604,7 +1604,7 @@ For news feeds, see [[file:90-personal.org::*News feeds][News feeds]].
     :preface
     (defface koek-pdf/midnight
       '((t . (:foreground "#000000" :background "#ffffff")))
-      "Face for `pdf-view-midnight-minor-mode'.")
+      "Face for page when `pdf-view-midnight-minor-mode' is enabled.")
 
     (define-advice pdf-view-midnight-minor-mode
         (:before (&rest _args) koek-pdf/update-colors)
