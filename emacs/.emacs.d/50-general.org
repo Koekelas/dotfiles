@@ -3070,10 +3070,11 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/id
       '(:eval
-        (moody-tab (concat (when (projectile-project-p)
-                             (concat (projectile-project-name) "/"))
-                           (propertize (buffer-name)
-                                       'face 'mode-line-buffer-id))))
+        (moody-tab
+         (concat (when (and (projectile-project-p) (derived-mode-p 'prog-mode))
+                   (concat (projectile-project-name) "/"))
+                 (propertize (buffer-name)
+                             'face 'mode-line-buffer-id))))
       "Id mode line construct.")
 
     (defconst koek-ml/state '(" " "%*%+")
