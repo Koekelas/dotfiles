@@ -3069,12 +3069,18 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                 koek-ml/separator)))))
       "Eyebrowse mode line construct.")
 
+    (defun koek-ml/truncate (s length)
+      "Truncate string S to length LENGTH.
+  S is a string, the string to truncate.  LENGTH is an integer, the
+  maximum length of S."
+      (substring s 0 (min length (length s))))
+
     (defconst koek-ml/id
       '(:eval
         (moody-tab
          (concat (when (and (projectile-project-p) (derived-mode-p 'prog-mode))
-                   (concat (projectile-project-name) "/"))
-                 (propertize (buffer-name)
+                   (concat (koek-ml/truncate (projectile-project-name) 16) "/"))
+                 (propertize (koek-ml/truncate (buffer-name) 32)
                              'face 'mode-line-buffer-id))))
       "Id mode line construct.")
 
