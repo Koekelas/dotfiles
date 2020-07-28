@@ -1104,6 +1104,54 @@ Bury unneeded buffers, computers have more than enough memory.
   (use-package exwm-input
     :defer t
     :preface
+    (defvar koek-wm/simulation-keys
+      '(("C-f" . "<right>")
+        ("C-b" . "<left>")
+        ("C-n" . "<down>")
+        ("C-p" . "<up>")
+        ("M-f" . "C-<right>")
+        ("M-b" . "C-<left>")
+        ("C-e" . "<end>")
+        ("C-a" . "<home>")
+        ("C-v" . "<next>")
+        ("M-v" . "<prior>")
+        ("M->" . "C-<end>")
+        ("M-<" . "C-<home>")
+        ("C-s" . "C-f")
+        ("C-d" . "<delete>")
+        ("M-d" . "S-C-<right> C-x")
+        ("M-DEL" . "S-C-<left> C-x")
+        ("C-k" . "S-<end> C-x")
+        ("M-@" . "S-C-<right>")
+        ("M-h" . "C-a")
+        ("M-w" . "C-c")
+        ("C-w" . "C-x")
+        ("C-y" . "C-v")
+        ("C-/" . "C-z")
+        ("M-/" . "C-y"))
+      "Alist of Emacs keybinding to non Emacs keybinding pairs.
+  Keybinding is a string, see `edmacro-mode'.")
+
+    (defvar koek-wm/firefox-keys
+      (append '(("M-o" . "C-n")
+                ("M-p" . "S-C-p")
+                ("M-k" . "C-w"))
+              koek-wm/simulation-keys)
+      "Alist of Emacs keybinding to Firefox keybinding pairs.
+  Keybinding is a string, see `koek-wm/simulation-keybindings'.")
+
+    (defun koek-wm/setup-application-keys ()
+      "Setup application keybindings for current."
+      (let* ((class (downcase exwm-class-name))
+             (keys (cond
+                    ((string-prefix-p "firefox" class)
+                     koek-wm/firefox-keys))))
+        (when keys
+          (exwm-input-set-local-simulation-keys
+           (mapcar (pcase-lambda (`(,from . ,to))
+                     (cons (kbd from) (kbd to)))
+                   keys)))))
+
     (define-advice exwm-input--update-mode-line
         (:around (f &rest args) koek-wm/disable-update-process-status)
       (let ((status mode-line-process))
@@ -1126,33 +1174,12 @@ Bury unneeded buffers, computers have more than enough memory.
     (setq exwm-input-simulation-keys
           (mapcar (pcase-lambda (`(,from . ,to))
                     (cons (kbd from) (kbd to)))
-                  '(("C-f" . "<right>")
-                    ("C-b" . "<left>")
-                    ("C-n" . "<down>")
-                    ("C-p" . "<up>")
-                    ("M-f" . "C-<right>")
-                    ("M-b" . "C-<left>")
-                    ("C-e" . "<end>")
-                    ("C-a" . "<home>")
-                    ("C-v" . "<next>")
-                    ("M-v" . "<prior>")
-                    ("M->" . "C-<end>")
-                    ("M-<" . "C-<home>")
-                    ("C-s" . "C-f")
-                    ("C-d" . "<delete>")
-                    ("M-d" . "S-C-<right> C-x")
-                    ("M-DEL" . "S-C-<left> C-x")
-                    ("C-k" . "S-<end> C-x")
-                    ("M-@" . "S-C-<right>")
-                    ("M-h" . "C-a")
-                    ("M-w" . "C-c")
-                    ("C-w" . "C-x")
-                    ("C-y" . "C-v")
-                    ("C-/" . "C-z")
-                    ("M-/" . "C-y"))))
+                  koek-wm/simulation-keys))
 
     ;; Grab C-z (repeat) in line mode
-    (push ?\C-z exwm-input-prefix-keys))
+    (push ?\C-z exwm-input-prefix-keys)
+
+    (add-hook 'exwm-manage-finish-hook #'koek-wm/setup-application-keys))
 
   (use-package exwm-workspace
     :defer t
