@@ -2736,9 +2736,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :straight t
     :preface
-    (defvar koek-thm/enable-hook nil
-      "Normal hook run after enabling theme.")
-
     (defconst koek-thm/theme-specs
       '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
         (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
@@ -2755,6 +2752,12 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 
     (defconst koek-thm/default-theme 'sanityinc-tomorrow-eighties
       "Default theme.")
+
+    (defvar koek-thm/enable-hook nil
+      "Normal hook run after enabling theme.")
+
+    (define-advice load-theme (:after (&rest _args) koek-thm/run-enable-hooks)
+      (run-hooks 'koek-thm/enable-hook))
 
     (defun koek-thm/set-frame-theme-variant (frame)
       "Set theme variant of frame FRAME.
@@ -2893,9 +2896,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                        specs)))
 
       ;; Set frame theme
-      (mapc #'koek-thm/set-frame-theme-variant (frame-list))
-
-      (run-hooks 'koek-thm/enable-hook))
+      (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
     :config
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
