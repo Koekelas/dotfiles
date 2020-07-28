@@ -369,7 +369,7 @@ Configure news feeds.
     (declare-function elfeed-db-get-feed "elfeed-db")
     (declare-function elfeed-meta--put "elfeed-db")
 
-    (defconst koek/feeds
+    (defvar koek/feeds
       '(("3Blue1Brown" youtube "UCYO_jab_esuFRV4b17AJtAw" mathematics)
         ("Arch Linux" "https://www.archlinux.org/feeds/news/" notice linux)
         ("Baggers" youtube "UCMV8p6Lb-bd6UZtTc_QD4zA" lisp)

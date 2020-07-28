@@ -315,7 +315,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 ** auto-fill - Break long sentences
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-af/excluded-modes '(snippet-mode)
+  (defvar koek-af/excluded-modes '(snippet-mode)
     "List of major mode symbols, see `koek-af/maybe-enable'.")
 
   (defun koek-af/maybe-enable ()
@@ -745,7 +745,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
         (replace-regexp-in-string "_" "-" (string-join parts "."))))
 
     ;; Org & Markdown
-    (defconst koek-ys/lang-specs
+    (defvar koek-ys/lang-specs
       '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
         (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
         (:ietf "fr-FR" :org "fr"    :tex "frenchb"  :hun "fr_FR")
@@ -910,7 +910,7 @@ Resizing a window by characters or pixels is slow. Resize windows in
 steps.
 
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-wind/n-hor-steps 32
+  (defvar koek-wind/n-hor-steps 32
     "Number of horizontal steps to resize a window from monitor width to zero.")
 
   (defun koek-wind/resize (shrink vertical)
@@ -1553,7 +1553,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
     (:map vterm-mode-map
      ("C-c C-z" . vterm-send-C-z))
     :preface
-    (defconst koek-term/buffer-base-name "*vterm*"
+    (defvar koek-term/buffer-base-name "*vterm*"
       "Base name of vterm buffers.")
 
     (defun koek-term/launch (&optional arg)
@@ -1990,7 +1990,7 @@ Configure Conf mode afterwards.
   (use-package conf-mode
     :mode (rx (or ".desktop" "cross.txt") string-end)
     :preface
-    (defconst koek-conf/mode-names
+    (defvar koek-conf/mode-names
       '((conf-colon-mode . "Conf:")
         (conf-desktop-mode . "Desktop")
         (conf-javaprop-mode . "Properties")
@@ -2736,7 +2736,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   (use-package color-theme-sanityinc-tomorrow
     :straight t
     :preface
-    (defconst koek-thm/theme-specs
+    (defvar koek-thm/theme-specs
       '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
         (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
         (:theme sanityinc-tomorrow-day      :name "Day"      :palette day      :dark nil)
@@ -2750,7 +2750,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
   `color-theme-sanityinc-tomorrow-colors'.  :dark is a symbol,
   whether the theme is dark.")
 
-    (defconst koek-thm/default-theme 'sanityinc-tomorrow-eighties
+    (defvar koek-thm/default-theme 'sanityinc-tomorrow-eighties
       "Default theme.")
 
     (defvar koek-thm/enable-hook nil
@@ -2908,7 +2908,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
 Set font. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]], then [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]].
 
 #+BEGIN_SRC emacs-lisp
-  (defconst koek-font/font-specs
+  (defvar koek-font/font-specs
     '((:family "PragmataPro Mono" :size 15)
       (:family "Source Code Pro"  :size 13))
     "List of font specifications.
@@ -2990,7 +2990,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
               koek-ml/separator))))
       "Recursive edit depth mode line construct.")
 
-    (defconst koek-ml/roman-numerals
+    (defvar koek-ml/roman-numerals
       '((9 . "IX")
         (5 . "V")
         (4 . "IV")
@@ -3104,7 +3104,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
             ,(moody-ribbon current-input-method-title nil 'up))))
       "Input mode line construct.")
 
-    (defconst koek-ml/checker-names
+    (defvar koek-ml/checker-names
       '((eglot-flymake-backend . "LSP")
         (elisp-flymake-byte-compile . "El")
         (elisp-flymake-checkdoc . "Checkdoc"))
@@ -3212,7 +3212,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                (format "%d/%d" diff-n n-diffs))))))
       "Ediff diff mode line construct.")
 
-    (defconst koek-ml/ediff-buffer-specs
+    (defvar koek-ml/ediff-buffer-specs
       '((:type A   :buffer ediff-buffer-A)
         (:type B   :buffer ediff-buffer-B)
         (:type C   :buffer ediff-buffer-C)
