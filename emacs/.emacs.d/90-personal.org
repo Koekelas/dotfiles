@@ -23,6 +23,16 @@ Require libraries.
   (require 'seq)
 #+END_SRC
 
+* Secrets
+Retrieve secrets from [[https://freedesktop.org/wiki/Specifications/secret-storage-spec/][Secret Service]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auth-source
+    :defer t
+    :config
+    (setq auth-sources '("secrets:Login")))
+#+END_SRC
+
 * Well known directories
 Define well known directories.
 
@@ -85,16 +95,6 @@ Configure monitors and monitor layouts.
                :monitors (:laptop (:top 0 :left 0 :width 1920 :height 1080))))))
     (exar-enable)
     (exwm-enable))
-#+END_SRC
-
-* Secrets
-Retrieve secrets from the [[https://freedesktop.org/wiki/Specifications/secret-storage-spec/][Secret Service]].
-
-#+BEGIN_SRC emacs-lisp
-  (use-package auth-source
-    :defer t
-    :config
-    (setq auth-sources '("secrets:Login")))
 #+END_SRC
 
 * Agendas
