@@ -143,6 +143,11 @@ Configure agendas.
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
             (org-agenda-files . (:maxlevel . 3)))))
+
+  (use-package calendar
+    :defer t
+    :config
+    (setq calendar-week-start-day 1))     ; Monday
 #+END_SRC
 
 ** Calendars                                                          :setup:

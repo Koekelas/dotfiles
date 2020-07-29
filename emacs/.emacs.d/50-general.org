@@ -1857,9 +1857,7 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
     :bind
-    ("C-c x c" . calendar)
-    :config
-    (setq calendar-week-start-day 1))     ; Monday
+    ("C-c x c" . calendar))
 #+END_SRC
 
 * Languages
