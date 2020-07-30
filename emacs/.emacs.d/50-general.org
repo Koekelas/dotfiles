@@ -249,7 +249,33 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
   (use-package link-hint
     :straight t
     :bind
-    ("C-c j l" . link-hint-open-link))
+    ("C-c j l" . link-hint-open-link)
+    :preface
+    (defun koek-lh/next-dictionary-link (limit)
+      "Return position of next dictionary link.
+  LIMIT is a position, a search limit limiting dictionary links to
+  dictionary links before LIMIT."
+      (link-hint--next-property 'link limit))
+
+    (defun koek-lh/point-at-dictionary-link-p ()
+      "Return whether point is at a dictionary link."
+      (get-text-property (point) 'link))
+
+    (defun koek-lh/dictionary-mode-p ()
+      "Return whether current major mode is derived from dictionary-mode."
+      (derived-mode-p 'dictionary-mode))
+
+    (defun koek-lh/open-dictionary-link ()
+      "Open dictionary link at point."
+      (link-selected))
+    :config
+    (link-hint-define-type 'dictionary-link
+      :next #'koek-lh/next-dictionary-link
+      :at-point-p #'koek-lh/point-at-dictionary-link-p
+      ;; dictionary-mode
+      :predicates (list #'koek-lh/dictionary-mode-p)
+      :open #'koek-lh/open-dictionary-link)
+    (push 'link-hint-dictionary-link link-hint-types))
 #+END_SRC
 
 ** Jump to recent mark positions
@@ -1853,6 +1879,18 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
     (setq shr-image-animate nil))
 #+END_SRC
 
+** dictionary - Dictionary
+[[https://github.com/myrkr/dictionary-el][dictionary (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dictionary
+    :straight t
+    :bind
+    ("C-c x d" . dictionary-search)
+    :config
+    (setq dictionary-create-buttons nil))
+#+END_SRC
+
 ** calendar - Calendar
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
@@ -2894,7 +2932,11 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                   (koek-wm/selected-workspace   :foreground ,foreground :weight bold)
                   (koek-wm/unselected-workspace :foreground ,comment)
                   ;; pdf-tools
-                  (koek-pdf/midnight :foreground ,foreground :background ,background)))))
+                  (koek-pdf/midnight :foreground ,foreground :background ,background)
+                  ;; dictionary
+                  (dictionary-word-entry-face      :weight bold)
+                  (dictionary-word-definition-face :family unspecified)
+                  (dictionary-reference-face       :inherit link)))))
         ;; Adding attributes to a face before it's defined, fails. Add
         ;; attributes to user theme.
         (apply #'custom-set-faces
