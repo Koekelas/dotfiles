@@ -272,7 +272,7 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
     (link-hint-define-type 'dictionary-link
       :next #'koek-lh/next-dictionary-link
       :at-point-p #'koek-lh/point-at-dictionary-link-p
-      ;; dictionary-mode
+      ;; dictionary-mode doesn't bind the symbol dictionary-mode
       :predicates (list #'koek-lh/dictionary-mode-p)
       :open #'koek-lh/open-dictionary-link)
     (push 'link-hint-dictionary-link link-hint-types))
