@@ -648,8 +648,7 @@ When line is indented, press =TAB= to complete text before point.
     :bind
     (:map eglot-mode-map
      ("C-c e f" . eglot-code-actions)
-     ("C-c e r" . eglot-rename)
-     ("C-c C-d" . eglot-help-at-point))
+     ("C-c e r" . eglot-rename))
     :hook
     ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode) .
      eglot-ensure)
