@@ -47,10 +47,11 @@
 
 ;; Four byte ints, eight bit bytes, big endian
 (defun exar--decode-int (bytes)
-  (thread-last (exar--reverse-endian bytes)
-    (seq-map-indexed (lambda (byte i)
-                       (* byte (expt (expt 2 8) i))))
-    (apply #'+)))
+  (let ((base (expt 2 8)))
+    (thread-last (exar--reverse-endian bytes)
+      (seq-map-indexed (lambda (byte i)
+                         (* byte (expt base i))))
+      (apply #'+))))
 
 (defun exar--decode-string (bytes)
   (decode-coding-string (apply #'unibyte-string bytes) 'utf-8))
