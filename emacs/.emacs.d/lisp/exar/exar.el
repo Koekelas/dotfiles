@@ -59,7 +59,7 @@
 (defun exar--decode-terminated-string (bytes)
   (exar--decode-string
    (seq-take-while (lambda (byte)
-                     (not (= byte 10)))
+                     (not (= byte ?\C-j)))
                    bytes)))
 
 (defun exar--decode-manufacturer (bytes)
