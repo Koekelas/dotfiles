@@ -109,7 +109,7 @@ Configure agendas.
     :preface
     (defun koek/lock-file-p (file-name)
       "Return whether file FILE-NAME is a lock file."
-      (string-match-p (rx line-start ".#") (file-name-nondirectory file-name)))
+      (string-prefix-p ".#" (file-name-nondirectory file-name)))
 
     (defun koek/get-subdirs (file-name &optional full)
       "Return subdirectories in directory FILE-NAME.
