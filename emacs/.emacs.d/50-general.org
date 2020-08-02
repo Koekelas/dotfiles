@@ -1125,7 +1125,26 @@ For monitors and monitor layouts, see [[file:90-personal.org::*Monitors][Monitor
 
   (use-package exwm
     :straight t
-    :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM"))
+    :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+    :init
+    ;; :init of deferred subpackages are evaluated in both exwm and non
+    ;; exwm sessions. :init of guarded (:when) main package is evaluated
+    ;; only in exwm sessions. Bind global keys in :init of guarded main
+    ;; package.
+    (bind-keys
+     ("C-c w 0" . koek-wm/switch-workspace-0)
+     ("C-c w 1" . koek-wm/switch-workspace-1)
+     ("C-c w 2" . koek-wm/switch-workspace-2)
+     ("C-c w 3" . koek-wm/switch-workspace-3)
+     ("C-c w 4" . koek-wm/switch-workspace-4)
+     ("C-c w 5" . koek-wm/switch-workspace-5)
+     ("C-c w 6" . koek-wm/switch-workspace-6)
+     ("C-c w 7" . koek-wm/switch-workspace-7)
+     ("C-c w 8" . koek-wm/switch-workspace-8)
+     ("C-c w 9" . koek-wm/switch-workspace-9)
+     ("C-c w w" . koek-wm/switch-previous-workspace)
+     ("C-c w e" . exwm-workspace-swap)
+     ("C-c w k" . exwm-workspace-delete)))
 
   (use-package exwm-input
     :defer t
@@ -1269,21 +1288,6 @@ For monitors and monitor layouts, see [[file:90-personal.org::*Monitors][Monitor
       "Convert workspace number N to a workspace label.
   N is an integer, a workspace number."
       (or (koek-ml/arabic-to-roman n) "N"))
-    :init
-    (bind-keys
-     ("C-c w 0" . koek-wm/switch-workspace-0)
-     ("C-c w 1" . koek-wm/switch-workspace-1)
-     ("C-c w 2" . koek-wm/switch-workspace-2)
-     ("C-c w 3" . koek-wm/switch-workspace-3)
-     ("C-c w 4" . koek-wm/switch-workspace-4)
-     ("C-c w 5" . koek-wm/switch-workspace-5)
-     ("C-c w 6" . koek-wm/switch-workspace-6)
-     ("C-c w 7" . koek-wm/switch-workspace-7)
-     ("C-c w 8" . koek-wm/switch-workspace-8)
-     ("C-c w 9" . koek-wm/switch-workspace-9)
-     ("C-c w w" . koek-wm/switch-previous-workspace)
-     ("C-c w e" . exwm-workspace-swap)
-     ("C-c w k" . exwm-workspace-delete))
     :config
     (setq exwm-workspace-number 2)
     (setq exwm-workspace-show-all-buffers t)
