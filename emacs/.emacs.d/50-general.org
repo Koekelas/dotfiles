@@ -2375,7 +2375,7 @@ templates]].
     ;; Appearance - Images
     (setq org-startup-with-inline-images t)
     (let ((width (thread-last (display-monitor-attributes-list)
-                   car                    ; Primary display
+                   car                    ; Primary monitor
                    (alist-get 'geometry)  ; Arrangement/resolution
                    (nth 2))))             ; Width
       (setq org-image-actual-width (floor (* width (/ 1 5.0)))))
