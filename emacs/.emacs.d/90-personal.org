@@ -200,7 +200,7 @@ Configure notes.
     (find-file-noselect org-roam-index-file 'nowarn))
 #+END_SRC
 
-* Capture templates
+* Capture templates                                                   :setup:
 #+BEGIN_SRC js :exports none
   ((args) => {
       "use strict";
