@@ -1316,6 +1316,11 @@ For monitors and monitor layouts, see [[file:90-personal.org::*Monitors][Monitor
 #+END_SRC
 
 ** server - Emacs server
+The advantage of starting the server during initialization compared to
+starting Emacs as daemon is initialization happens in a graphical
+frame, i.e., it's possible to query resolution, color depth, fonts,
+etc.
+
 #+BEGIN_SRC emacs-lisp
   (use-package server
     :config
