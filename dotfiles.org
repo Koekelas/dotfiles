@@ -503,7 +503,7 @@ Move maildir directory out of the way.
 
 To create the database, run:
 
-#+BEGIN_SRC sh :noweb yes
+#+BEGIN_SRC sh
   mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu init --my-address="nicolas@dejaeghe.re" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
 #+END_SRC
 
