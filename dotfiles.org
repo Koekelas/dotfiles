@@ -368,7 +368,7 @@ Move data directory out of the way.
   GNUPGHOME="$XDG_DATA_HOME/gnupg"
 #+END_SRC
 
-* Firefox
+* Firefox                                                             :setup:
 
 ** Saka Key
 [[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
