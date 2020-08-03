@@ -710,7 +710,7 @@ Move cache directory out of the way.
 Move configuration directory out of the way.
 
 #+BEGIN_SRC conf :tangle keras/.config/environment.d/50-keras.conf
-  KERAS_HOME="$XDG_CONFIG_DIR/keras"
+  KERAS_HOME="$XDG_CONFIG_HOME/keras"
 #+END_SRC
 
 * NLTK
