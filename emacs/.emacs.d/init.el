@@ -25,7 +25,7 @@
 ;;; nsm - Network security manager
 (require 'nsm)
 
-;; no-littering requires straight which requires nsm. Set location of
+;; No-littering requires straight which requires nsm. Set location of
 ;; settings file manually.
 (setq nsm-settings-file
       (expand-file-name "var/nsm-settings.el" user-emacs-directory))
