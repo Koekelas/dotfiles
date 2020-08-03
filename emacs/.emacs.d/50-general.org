@@ -469,9 +469,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     :delight)
 #+END_SRC
 
-*** Issues
-
-**** Smartparens and GNOME Shell keybindings conflict                 :setup:
+*** Smartparens and GNOME Shell keybindings conflict            :issue:setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -871,9 +869,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
       (setq ispell-dictionary dictionary-name)))
 #+END_SRC
 
-*** Issues
-
-**** Spell checking contractions fails                                :setup:
+*** Spell checking contractions fails                           :issue:setup:
 Visit the dictionary's affix file. On Arch Linux, affix files are
 saved in =/usr/share/hunspell/=. Add:
 
@@ -2290,9 +2286,7 @@ Configure Conf mode afterwards.
     (setq scad-indent-style "stroustrup"))
 #+END_SRC
 
-*** Issues
-
-**** Built-in indentation styles are inappropriate for multiple line vectors
+*** Built-in indentation styles are inappropriate for multiple line vectors :issue:
 For creating indentation styles, see [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
 
 ** Org
