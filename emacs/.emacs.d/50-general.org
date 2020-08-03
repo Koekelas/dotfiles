@@ -20,7 +20,6 @@ Require libraries.
 #+BEGIN_SRC emacs-lisp
   (require 'subr-x)
   (require 'seq)
-  (require 'map)
 #+END_SRC
 
 Declare variables and functions setup by [[file:init.el][init.el]].
@@ -2955,6 +2954,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       ;; Set frame theme
       (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
     :config
+    (require 'map)
+
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
                                      koek-thm/default-theme))
