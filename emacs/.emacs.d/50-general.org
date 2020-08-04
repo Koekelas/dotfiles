@@ -1,6 +1,6 @@
 :PROPERTIES:
 :header-args: :mkdirp yes
-:header-args:emacs-lisp: :lexical yes
+:header-args:emacs-lisp: :tangle init.el :lexical yes
 :END:
 #+TITLE: General
 
@@ -9,14 +9,26 @@ Enable lexical binding. When visiting the tangled file, enable read
 only mode.
 
 #+BEGIN_SRC emacs-lisp
-  ;;; 50-general.el --- General configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+  ;;; init.el --- Koekelas' Emacs configuration -*- lexical-binding: t; buffer-read-only: t; -*-
 
   ;;; Commentary:
 
-  ;; General configuration, part of Koekelas' Emacs configuration.
+  ;; Koekelas' Emacs configuration.
 
   ;;; Code:
 #+END_SRC
+
+Increasing cons threshold makes garbage collection more efficient and
+decreasing it makes garbage collection less noticeable, i.e., cons
+threshold is a tradeoff between the runtime of the garbage collector
+and the responsiveness of Emacs. Increase cons threshold during
+initialization.
+
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
+#+END_SRC
+
+Once initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
 
 Require libraries.
 
@@ -25,12 +37,73 @@ Require libraries.
   (require 'seq)
 #+END_SRC
 
-Declare variables and functions setup by [[file:init.el][init.el]].
+* Bootstrap
+
+** nsm - Network security manager
+No-littering requires straight which requires nsm. Set location of
+settings file manually.
 
 #+BEGIN_SRC emacs-lisp
-  (defvar no-littering-etc-directory)
-  (declare-function no-littering-expand-var-file-name "no-littering")
+  (require 'nsm)
+
+  (setq nsm-settings-file
+        (expand-file-name "var/nsm-settings.el" user-emacs-directory))
+  (setq network-security-level 'high)
 #+END_SRC
+
+** straight - Package manager
+[[https://github.com/raxod502/straight.el][straight (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (defvar bootstrap-version)              ; Must be a dynamic variable
+
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el"
+                           user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+END_SRC
+
+** no-littering - Normalize configuration and data paths packages
+[[https://github.com/emacscollective/no-littering][no-littering (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'no-littering)
+  (require 'no-littering)
+#+END_SRC
+
+** use-package - Package configuration macro
+[[https://github.com/jwiegley/use-package][use-package (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'use-package)
+  (straight-use-package 'delight)         ; Optional dependency
+#+END_SRC
+
+** org - Notes, to-do lists and project planning
+Installing latest org after loading builtin org breaks org. Install
+latest org before loading org.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'org-plus-contrib)
+#+END_SRC
+
+Org is a subset of org-plus-contrib. Packages depending on org will
+cause org to be installed even when org-plus-contrib is installed.
+Prevent packages from installing org.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package '(org :type built-in))
+#+END_SRC
+
+For org configuration, see [[*Org][Org]].
 
 * Files
 
@@ -5703,5 +5776,5 @@ Show agenda as initial buffer.
 
 * Footer
 #+BEGIN_SRC emacs-lisp
-  ;;; 50-general.el ends here
+  ;;; init.el ends here
 #+END_SRC
