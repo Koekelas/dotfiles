@@ -3506,6 +3506,12 @@ On [[https://devdocs.io/][DevDocs]], enable:
     (setq eshell-rm-interactive-query t))
 #+END_SRC
 
+*** Aliases
+#+BEGIN_SRC fundamental :tangle var/eshell/alias
+  alias ls ls -lah $*
+  alias nb jupyter notebook $*
+#+END_SRC
+
 ** compile - Run asynchronous processes
 #+BEGIN_SRC emacs-lisp
   (use-package compile
