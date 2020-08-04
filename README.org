@@ -9,7 +9,7 @@ is the result of [[info:org#Extracting source code][tangling]].
 * For the masochist
 You want to use this? Take a look at [[file:dotfiles.org::*Identity][Identity]] and [[file:dotfiles.org::*Well known directories][Well known
 directories]]. Tangle the file and re-login. Then, take a look at all
-headings tagged =setup= and [[file:emacs/.emacs.d/90-personal.org][personal.org]].
+headings tagged =setup= and [[file:emacs/.emacs.d/50-general.org::*Personal][Personal]].
 
 * Getting started
 To get started, run:
