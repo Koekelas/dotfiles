@@ -1,5 +1,7 @@
+:PROPERTIES:
+:header-args: :mkdirp yes
+:END:
 #+TITLE: Dotfiles
-#+PROPERTY: header-args :mkdirp yes
 
 #+BEGIN_QUOTE
 Thou shalt not pollute your neighbor's ~/ -- Exodus 20:17
@@ -272,7 +274,7 @@ To apply configuration, run:
 
 ** Login
 :PROPERTIES:
-:header-args+: :tangle bash/.profile
+:header-args:sh: :tangle bash/.profile
 :END:
 
 Interactive and non interactive
@@ -287,7 +289,7 @@ Interactive and non interactive
 
 ** Interactive                                                        :setup:
 :PROPERTIES:
-:header-args+: :tangle bash/.bashrc
+:header-args:sh: :tangle bash/.bashrc
 :END:
 
 Non login
@@ -431,7 +433,7 @@ Keep defaults.
 
 ** isync
 :PROPERTIES:
-:header-args+: :tangle isync/.config/isync/mbsyncrc
+:header-args:conf: :tangle isync/.config/isync/mbsyncrc
 :END:
 
 Store sync state with maildir sub directories, simplifying backup.
@@ -446,7 +448,7 @@ To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-
 
 To create the maildir directory, run:
 
-#+BEGIN_SRC sh :tangle no
+#+BEGIN_SRC sh
   mkdir -p "$KOEK_EMAIL_DIR/Personal"
 #+END_SRC
 
@@ -464,7 +466,7 @@ To generate the app password, follow [[https://www.fastmail.com/help/clients/app
 =Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
 securely, run:
 
-#+BEGIN_SRC sh :tangle no
+#+BEGIN_SRC sh
   secret-tool store --label="Emacs e-mail personal (IMAP)" host "imap.fastmail.com" port "993" user "nicolas@dejaeghe.re"
   secret-tool store --label="Emacs e-mail personal (SMTP)" host "smtp.fastmail.com" port "465" user "nicolas@dejaeghe.re"
 #+END_SRC
@@ -509,7 +511,7 @@ To create the database, run:
 
 * vdirsyncer
 :PROPERTIES:
-:header-args+: :tangle vdirsyncer/.config/vdirsyncer/config
+:header-args:conf: :tangle vdirsyncer/.config/vdirsyncer/config
 :END:
 
 Store sync state with vdir directories, simplifying backup. Only tilde
@@ -523,7 +525,7 @@ is expanded, not environment variables.
 ** Personal account                                                   :setup:
 To create the vdir directory, run:
 
-#+BEGIN_SRC sh :tangle no
+#+BEGIN_SRC sh
   mkdir -p "$KOEK_CONTACTS_DIR/Personal"
 #+END_SRC
 
@@ -540,7 +542,7 @@ To generate the app password, follow [[https://www.fastmail.com/help/clients/app
 =Emacs contacts= and give it access to CardDAV. Then, to store it
 securely, run:
 
-#+BEGIN_SRC sh :tangle no
+#+BEGIN_SRC sh
   secret-tool store --label="Emacs contacts personal" host "carddav.fastmail.com:443" port "https" user "nicolas@dejaeghe.re"
 #+END_SRC
 
@@ -566,7 +568,7 @@ Define personal pair.
 
 To create the collections, run:
 
-#+BEGIN_SRC sh :tangle no
+#+BEGIN_SRC sh
   vdirsyncer discover && vdirsyncer sync
 #+END_SRC
 
