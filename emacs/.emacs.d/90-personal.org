@@ -108,7 +108,7 @@ Configure agendas.
     :defer t
     :preface
     (defun koek/lock-file-p (file-name)
-      "Return whether file FILE-NAME is a lock file."
+      "Return whether FILE-NAME is a lock file."
       (string-prefix-p ".#" (file-name-nondirectory file-name)))
 
     (defun koek/get-subdirs (file-name &optional full)
@@ -420,7 +420,7 @@ Configure news feeds.
   tagged with video.")
 
     (defun koek/add-feed (title url &rest tags)
-      "Add news feed to the database.
+      "Add news feed to database.
   TITLE and URL are strings.  TAGS are zero or more symbols."
       (setf (elfeed-meta (elfeed-db-get-feed url) :title) title)
       (push (cons url tags) elfeed-feeds))

@@ -2813,15 +2813,15 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (run-hooks 'koek-thm/enable-hook))
 
     (defun koek-thm/set-frame-theme-variant (frame)
-      "Set theme variant of frame FRAME.
-  When window theme is a dark theme, the variant is set to dark,
-  else, it's set to nothing."
+      "Set theme variant of FRAME.
+  When window theme is dark, theme variant is set to dark, else,
+  it's set to nothing."
       (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
         (koek-thm/set-frame-theme-variant-xprop frame)))
 
     (when (executable-find "xprop")
       (defun koek-thm/set-frame-theme-variant-xprop (frame)
-        "Set theme variant of frame FRAME.
+        "Set theme variant of FRAME.
   Mustn't be called directly, see
   `koek-thm/set-frame-theme-variant'."
         (let* ((spec (seq-find (lambda (spec)
@@ -2859,7 +2859,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (apply #'format "#%02x%02x%02x" (mapcar #'round color)))
 
     (defun koek-thm/mix (color1 color2 &optional ratio)
-      "Mix COLOR1 with COLOR2 according to RATIO.
+      "Mix COLOR1 with COLOR2.
   COLOR1 and COLOR2 are strings, a hex color, see
   `koek-thm/hex-to-rgb'.  Optional RATIO is a float from zero to
   one and defaults to one half.  Zero means mix zero units of
@@ -2874,7 +2874,7 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                    (koek-thm/hex-to-rgb color1) (koek-thm/hex-to-rgb color2)))))
 
     (defun koek-thm/enable (theme-spec)
-      "Enable theme THEME-SPEC.
+      "Enable THEME-SPEC.
   THEME-SPEC is a theme specification, see
   `koek-thm/tmrw-theme-specs'."
       (interactive
@@ -3129,7 +3129,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       "Eyebrowse mode line construct.")
 
     (defun koek-ml/truncate (s length)
-      "Truncate string S to length LENGTH.
+      "Truncate string S to LENGTH.
   S is a string, the string to truncate.  LENGTH is an integer, the
   maximum length of S."
       (substring s 0 (min length (length s))))
@@ -3311,7 +3311,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                   koek-ml/ediff-buffer-specs ()))
 
     (defun koek-ml/get-variant-state (variant)
-      "Return state of variant VARIANT.
+      "Return state of VARIANT.
   Must be called from control buffer."
       (when (ediff-valid-difference-p)
         (let ((state
