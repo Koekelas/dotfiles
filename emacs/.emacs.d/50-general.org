@@ -732,7 +732,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
     :straight t
     :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
     :preface
-    (declare-function koek-org/get-src-block-var-value "50-general")
+    (declare-function koek-org/get-code-block-var-value "50-general")
     (declare-function projectile-project-p "projectile")
     (declare-function projectile-project-root "projectile")
     (declare-function yas-choose-value "yasnippet")
@@ -815,13 +815,13 @@ For the major mode, see [[*YASnippet][YASnippet]].
                                       koek-ys/lang-specs)))
 
     (defun koek-ys/make-ensure-result-directory (name)
-      "Return function to ensure result directory of current source block exists.
+      "Return function to ensure result directory of current code block exists.
   NAME is a string, the variable name storing the result file
   name."
       (lambda ()
         (when-let ((file-name
                     (file-name-directory
-                     (or (koek-org/get-src-block-var-value name) ""))))
+                     (or (koek-org/get-code-block-var-value name) ""))))
           (make-directory file-name 'parents))))
     :config
     (declare-function yas-reload-all "yasnippet")
@@ -2446,9 +2446,9 @@ templates]].
     :config
     (declare-function org-babel-get-src-block-info "ob-core")
 
-    (defun koek-org/get-src-block-var-value (name)
-      "Return value of variable NAME for current source block.
-  NAME is a string, the variable name."
+    (defun koek-org/get-code-block-var-value (name)
+      "Return value of variable NAME for current code block.
+  NAME is a string, the variable's name."
       (thread-last (org-babel-get-src-block-info 'light)
         (nth 2)                           ; Header arguments
         (seq-filter (pcase-lambda (`(,type))
