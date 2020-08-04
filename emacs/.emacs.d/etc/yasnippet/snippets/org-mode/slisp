@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Common Lisp code block
+# key: sc
+# --
+#+BEGIN_SRC lisp
+$0
+#+END_SRC

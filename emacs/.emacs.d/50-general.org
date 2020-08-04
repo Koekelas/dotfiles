@@ -1107,6 +1107,18 @@ Inherit Clojure snippets.
   ,#+END_SRC
 #+END_SRC
 
+*** Common Lisp code block
+#+BEGIN_SRC snippet :tangle etc/yasnippet/snippets/org-mode/slisp
+  # -*- mode: snippet; -*-
+  # name: Common Lisp code block
+  # key: sc
+  # --
+  ,#+BEGIN_SRC lisp
+  $0
+  ,#+END_SRC
+
+#+END_SRC
+
 *** Conf code block
 #+BEGIN_SRC snippet :tangle etc/yasnippet/snippets/org-mode/sconf
   # -*- mode: snippet; -*-
@@ -1287,6 +1299,17 @@ Inherit Clojure snippets.
   # key: ssql
   # --
   ,#+BEGIN_SRC sql
+  $0
+  ,#+END_SRC
+#+END_SRC
+
+*** YASnippet code block
+#+BEGIN_SRC snippet :tangle etc/yasnippet/snippets/org-mode/sy
+  # -*- mode: snippet; -*-
+  # name: YASnippet code block
+  # key: sy
+  # --
+  ,#+BEGIN_SRC snippet
   $0
   ,#+END_SRC
 #+END_SRC

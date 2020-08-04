@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: YASnippet code block
+# key: sy
+# --
+#+BEGIN_SRC snippet
+$0
+#+END_SRC
