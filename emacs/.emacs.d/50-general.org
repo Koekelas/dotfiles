@@ -117,7 +117,8 @@ VC is a placeholder.
              (result (ispell-buffer)))
         (cond
          (force t)
-         (result ; When spell check was completed, result is truthy
+         ;; When spell check was completed, result is truthy
+         (result
           ;; When nothing was corrected, character tick counter is
           ;; unchanged
           (or (= (buffer-chars-modified-tick) tick)
