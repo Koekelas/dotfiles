@@ -3,13 +3,13 @@
 [[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
 
 * For the curious
-Take a look at [[file:dotfiles.org][dotfiles.org]] and all files in [[file:emacs/.emacs.d][.emacs.d]]. Everything else
-is the result of [[info:org#Extracting source code][tangling]].
+Take a look at [[file:dotfiles.org][dotfiles.org]] and [[file:emacs.org][emacs.org]]. Everything else is the
+result of [[info:org#Extracting source code][tangling]].
 
 * For the masochist
-You want to use this? Take a look at [[file:dotfiles.org::*Identity][Identity]] and [[file:dotfiles.org::*Well known directories][Well known
-directories]]. Tangle the file and re-login. Then, take a look at all
-headings tagged =setup= and [[file:emacs/.emacs.d/50-general.org::*Personal][Personal]].
+You enjoy pain? Take a look at [[file:dotfiles.org::*Identity][Identity]] and [[file:dotfiles.org::*Well known directories][Well known directories]].
+Tangle the file and re-login. Then, take a look at all headings tagged
+=setup= and [[file:emacs.org::*Personal][Personal]]. Tangle the file and restart Emacs.
 
 * Getting started
 To get started, run:

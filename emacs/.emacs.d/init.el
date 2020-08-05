@@ -1,8 +1,8 @@
-;;; init.el --- Koekelas' Emacs configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; buffer-read-only: t; -*-
 
 ;;; Commentary:
 
-;; Koekelas' Emacs configuration.
+;; Nicolas' Emacs configuration.
 
 ;;; Code:
 
@@ -578,7 +578,7 @@ backends, see `company-backends'."
   :straight t
   :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
   :preface
-  (declare-function koek-org/get-code-block-var-value "50-general")
+  (declare-function koek-org/get-code-block-var-value "init")
   (declare-function projectile-project-p "projectile")
   (declare-function projectile-project-root "projectile")
   (declare-function yas-choose-value "yasnippet")
