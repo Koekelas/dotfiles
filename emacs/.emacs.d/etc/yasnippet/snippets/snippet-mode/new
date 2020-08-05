@@ -4,6 +4,6 @@
 # --
 # -*- mode: snippet; -*-
 # name: ${1:Snippet name}
-# key: ${2:`(let ((buffer-name (buffer-name))) (if (not (string= buffer-name yas-new-snippet-buffer-name)) buffer-name "key"))`}
+# key: ${2:`(let ((buffer-name (buffer-name))) (if (or (string= buffer-name yas-new-snippet-buffer-name) (string-match-p (rx "*org-src: " (one-or-more not-newline) "*") buffer-name)) "key" buffer-name))`}
 # --
 $0
