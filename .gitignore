@@ -1,4 +1,4 @@
-!/emacs/.emacs.d/var/eshell/alias
-/emacs/.emacs.d/straight/
-/emacs/.emacs.d/var/
+/stow/emacs/.emacs.d/straight/
+/stow/emacs/.emacs.d/var/*
+!/stow/emacs/.emacs.d/var/eshell/alias
 /ssh/

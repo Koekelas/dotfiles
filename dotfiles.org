@@ -18,7 +18,7 @@ Set name and e-mail.
   nicolas@dejaeghe.re
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle env/.config/environment.d/10-identity.conf :noweb yes
+#+BEGIN_SRC conf :tangle stow/env/.config/environment.d/10-identity.conf :noweb yes
   NAME="<<name>>"
   EMAIL="<<email>>"
 #+END_SRC
@@ -26,7 +26,7 @@ Set name and e-mail.
 * Well known directories
 Set [[https://freedesktop.org/wiki/Specifications/basedir-spec/][base directories]].
 
-#+BEGIN_SRC conf :tangle xdg/.config/environment.d/10-base-dirs.conf
+#+BEGIN_SRC conf :tangle stow/xdg/.config/environment.d/10-base-dirs.conf
   XDG_CACHE_HOME="$HOME/.cache"
   XDG_CONFIG_HOME="$HOME/.config"
   XDG_DATA_HOME="$HOME/.local/share"
@@ -34,7 +34,7 @@ Set [[https://freedesktop.org/wiki/Specifications/basedir-spec/][base directorie
 
 Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directories]].
 
-#+BEGIN_SRC conf :noweb-ref user-dirs :tangle xdg/.config/user-dirs.dirs
+#+BEGIN_SRC conf :noweb-ref user-dirs :tangle stow/xdg/.config/user-dirs.dirs
   XDG_DESKTOP_DIR="$HOME/.Bureaublad"
   XDG_DOCUMENTS_DIR="$HOME/Documenten"
   XDG_DOWNLOAD_DIR="$HOME/Inbox"
@@ -47,13 +47,13 @@ Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directori
 
 Again, but as environment variables.
 
-#+BEGIN_SRC conf :tangle xdg/.config/environment.d/10-user-dirs.conf :noweb yes
+#+BEGIN_SRC conf :tangle stow/xdg/.config/environment.d/10-user-dirs.conf :noweb yes
   <<user-dirs>>
 #+END_SRC
 
 Finally, set other directories.
 
-#+BEGIN_SRC conf :tangle env/.config/environment.d/11-koek-dirs.conf
+#+BEGIN_SRC conf :tangle stow/env/.config/environment.d/11-koek-dirs.conf
   KOEK_CALENDARS_DIR="$XDG_DOCUMENTS_DIR/Kalenders"
   KOEK_CONTACTS_DIR="$XDG_DOCUMENTS_DIR/Contacten"
   KOEK_EMAIL_DIR="$XDG_DOCUMENTS_DIR/E-mail"
@@ -71,92 +71,92 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/assistant.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/assistant.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt Assistant
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle avahi/.local/share/applications/avahi-discover.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/avahi/.local/share/applications/avahi-discover.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Avahi Zeroconf Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle avahi/.local/share/applications/bssh.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/avahi/.local/share/applications/bssh.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Avahi SSH Server Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle avahi/.local/share/applications/bvnc.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/avahi/.local/share/applications/bvnc.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Avahi VNC Server Browser
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle cmake/.local/share/applications/cmake-gui.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/cmake/.local/share/applications/cmake-gui.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=CMake
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle cups/.local/share/applications/cups.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/cups/.local/share/applications/cups.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Manage Printing
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/designer.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/designer.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt Designer
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle jupyter/.local/share/applications/ipython.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/ipython.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=ipython
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle java/.local/share/applications/jconsole-java-openjdk.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/java/.local/share/applications/jconsole-java-openjdk.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=OpenJDK Java Console
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle java/.local/share/applications/jshell-java-openjdk.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/java/.local/share/applications/jshell-java-openjdk.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=OpenJDK Java Shell
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/linguist.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/linguist.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt Linguist
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle hwloc/.local/share/applications/lstopo.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/hwloc/.local/share/applications/lstopo.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Hardware Locality lstopo
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle gnome/.local/share/applications/org.gnome.Extensions.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/gnome/.local/share/applications/org.gnome.Extensions.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Extensions
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/qdbusviewer.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/qdbusviewer.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt QDbusViewer
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/qv4l2.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/qv4l2.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt V4L2 test utility
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle qt/.local/share/applications/qvidcap.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/qvidcap.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Qt V4L2 video capture utility
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle steam/.local/share/applications/steam.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/steam/.local/share/applications/steam.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Steam (Runtime)
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle tex/.local/share/applications/xdvi.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/tex/.local/share/applications/xdvi.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=XDvi
 #+END_SRC
@@ -169,7 +169,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** Creative
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/Creative.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Creative.category
   ardour.desktop
   blender.desktop
   calf.desktop
@@ -184,7 +184,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** DisplayCAL
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/DisplayCAL.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/DisplayCAL.category
   displaycal-3dlut-maker.desktop
   displaycal-apply-profiles.desktop
   displaycal-curve-viewer.desktop
@@ -197,7 +197,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** Internet
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/Internet.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Internet.category
   chromium.desktop
   firefox.desktop
   io.github.qtox.qTox.desktop
@@ -205,7 +205,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** Leisure
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/Leisure.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Leisure.category
   makemkv.desktop
   org.gnome.Lollypop.desktop
   org.musicbrainz.Picard.desktop
@@ -215,7 +215,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** LibreOffice
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/LibreOffice.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/LibreOffice.category
   libreoffice-base.desktop
   libreoffice-calc.desktop
   libreoffice-draw.desktop
@@ -226,7 +226,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** System
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/System.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/System.category
   ca.desrt.dconf-editor.desktop
   gnome-control-center.desktop
   gnome-system-monitor.desktop
@@ -241,7 +241,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** Utilities
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/Utilities.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Utilities.category
   com.obsproject.Studio.desktop
   eid-viewer.desktop
   electrum.desktop
@@ -257,7 +257,7 @@ To apply configuration, run:
 #+END_SRC
 
 ** Work
-#+BEGIN_SRC fundamental :tangle catgen/.local/share/applications-categories/Work.category
+#+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Work.category
   arduino.desktop
   emacs.desktop
   org.gnome.Boxes.desktop
@@ -274,7 +274,7 @@ To apply configuration, run:
 
 ** Login
 :PROPERTIES:
-:header-args:sh: :tangle bash/.profile
+:header-args:sh: :tangle stow/bash/.profile
 :END:
 
 Interactive and non interactive
@@ -289,7 +289,7 @@ Interactive and non interactive
 
 ** Interactive                                                        :setup:
 :PROPERTIES:
-:header-args:sh: :tangle bash/.bashrc
+:header-args:sh: :tangle stow/bash/.bashrc
 :END:
 
 Non login
@@ -314,13 +314,6 @@ Non login
   PS1='[\u@\h \W]\$ '
 #+END_SRC
 
-* Stow
-Set target directory.
-
-#+BEGIN_SRC fundamental :tangle .stowrc
-  --target=~/
-#+END_SRC
-
 * Syncthing                                                           :setup:
 Stores:
 - archive: Archief
@@ -340,7 +333,7 @@ To stow all stores, run:
 * Git
 Set identity.
 
-#+BEGIN_SRC conf :tangle git/.config/git/config :noweb yes
+#+BEGIN_SRC conf :tangle stow/git/.config/git/config :noweb yes
   [user]
   name = <<name>>
   email = <<email>>
@@ -349,7 +342,7 @@ Set identity.
 ** Global ignore
 Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
-#+BEGIN_SRC fundamental :tangle git/.config/git/ignore
+#+BEGIN_SRC fundamental :tangle stow/git/.config/git/ignore
   .shadow-cljs/
   build/
   node_modules/
@@ -366,7 +359,7 @@ create it, run:
 
 Move data directory out of the way.
 
-#+BEGIN_SRC conf :tangle gnupg/.config/environment.d/50-gnupg.conf
+#+BEGIN_SRC conf :tangle stow/gnupg/.config/environment.d/50-gnupg.conf
   GNUPGHOME="$XDG_DATA_HOME/gnupg"
 #+END_SRC
 
@@ -433,7 +426,7 @@ Keep defaults.
 
 ** isync
 :PROPERTIES:
-:header-args:conf: :tangle isync/.config/isync/mbsyncrc
+:header-args:conf: :tangle stow/isync/.config/isync/mbsyncrc
 :END:
 
 Store sync state with maildir sub directories, simplifying backup.
@@ -499,7 +492,7 @@ Define personal channel.
 ** mu                                                                 :setup:
 Move maildir directory out of the way.
 
-#+BEGIN_SRC conf :tangle mu/.config/environment.d/50-mu.conf
+#+BEGIN_SRC conf :tangle stow/mu/.config/environment.d/50-mu.conf
   MAILDIR="$KOEK_EMAIL_DIR"
 #+END_SRC
 
@@ -511,7 +504,7 @@ To create the database, run:
 
 * vdirsyncer
 :PROPERTIES:
-:header-args:conf: :tangle vdirsyncer/.config/vdirsyncer/config
+:header-args:conf: :tangle stow/vdirsyncer/.config/vdirsyncer/config
 :END:
 
 Store sync state with vdir directories, simplifying backup. Only tilde
@@ -575,14 +568,14 @@ To create the collections, run:
 * FreeCAD
 Ensure FreeCAD's packages are found.
 
-#+BEGIN_SRC conf :tangle freecad/.config/environment.d/50-freecad.conf
+#+BEGIN_SRC conf :tangle stow/freecad/.config/environment.d/50-freecad.conf
   PYTHONPATH="/usr/lib/freecad/lib"${PYTHONPATH:+:$PYTHONPATH}
 #+END_SRC
 
 * Steam
 Show Steam with native runtime as Steam.
 
-#+BEGIN_SRC conf :tangle steam/.local/share/applications/steam-native.desktop
+#+BEGIN_SRC conf :tangle stow/steam/.local/share/applications/steam-native.desktop
   [Desktop Entry]
   Name=Steam
   Comment=Application for managing and playing games on Steam
@@ -651,7 +644,7 @@ environment variables. For desktop entry or scheme handler format, see
 [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME
 Info Specification (freedesktop)]].
 
-#+BEGIN_SRC conf :tangle emacs/.local/share/applications/org-protocol.desktop
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/org-protocol.desktop
   [Desktop Entry]
   Type=Application
   Name=org-protocol
@@ -672,14 +665,14 @@ To register the scheme handler, run:
 * Jupyter Notebook
 Move configuration directory out of the way.
 
-#+BEGIN_SRC conf :tangle jupyter/.config/environment.d/50-jupyter.conf
+#+BEGIN_SRC conf :tangle stow/jupyter/.config/environment.d/50-jupyter.conf
   JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 #+END_SRC
 
 Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
 see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
 
-#+BEGIN_SRC json :tangle jupyter/.config/jupyter/nbconfig/notebook.json
+#+BEGIN_SRC json :tangle stow/jupyter/.config/jupyter/nbconfig/notebook.json
   {
       "CodeCell": {
           "cm_config": {
@@ -697,27 +690,27 @@ see [[https://codemirror.net/doc/manual.html#config][User manual and reference g
 ** IPython
 Move configuration directory out of the way.
 
-#+BEGIN_SRC conf :tangle jupyter/.config/environment.d/50-ipython.conf
+#+BEGIN_SRC conf :tangle stow/jupyter/.config/environment.d/50-ipython.conf
   IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
 #+END_SRC
 
 * CUDA
 Move cache directory out of the way.
 
-#+BEGIN_SRC conf :tangle cuda/.config/environment.d/50-cuda.conf
+#+BEGIN_SRC conf :tangle stow/cuda/.config/environment.d/50-cuda.conf
   CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
 #+END_SRC
 
 * Keras
 Move configuration directory out of the way.
 
-#+BEGIN_SRC conf :tangle keras/.config/environment.d/50-keras.conf
+#+BEGIN_SRC conf :tangle stow/keras/.config/environment.d/50-keras.conf
   KERAS_HOME="$XDG_CONFIG_HOME/keras"
 #+END_SRC
 
 * NLTK
 Move data directory out of the way.
 
-#+BEGIN_SRC conf :tangle nltk/.config/environment.d/50-nltk.conf
+#+BEGIN_SRC conf :tangle stow/nltk/.config/environment.d/50-nltk.conf
   NLTK_DATA="$XDG_DATA_HOME/nltk"
 #+END_SRC
