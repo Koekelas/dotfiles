@@ -417,6 +417,8 @@ Create a new profile. Change:
 | Go to root                    | =M-u=    |
 | Scroll down                   | =n=      |
 | Scroll up                     | =p=      |
+| Scroll right                  | =f=      |
+| Scroll left                   | =b=      |
 | Scroll half page down         | =SPC=    |
 | Scroll half page up           | =DEL=    |
 | Refresh tab                   | =g=      |
