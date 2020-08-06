@@ -1871,6 +1871,7 @@ Output is between `compilation-filter-start' and point."
 
   ;; Appearance
   (setq org-adapt-indentation nil)
+  (setq org-startup-folded t)
   (setq org-highlight-latex-and-related '(native))
   (push '("" "listings" nil) org-latex-packages-alist)
 
