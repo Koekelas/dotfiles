@@ -5883,7 +5883,7 @@ Configure monitors and monitor layouts.
 #+END_SRC
 
 ** Agendas
-Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and in
+Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and
 subdirectories of ~koek/projects-dir~, are agenda files.
 
 Configure agendas.
