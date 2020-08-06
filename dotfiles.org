@@ -161,6 +161,24 @@ Hide superfluous applications.
   Name=XDvi
 #+END_SRC
 
+* EXWM
+:PROPERTIES:
+:header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc :shebang #!/bin/bash
+:END:
+
+Set pointer cursor. For cursor names, contrary to what the man page
+says, see [[file:/usr/include/X11/cursorfont.h][cursorfont.h]].
+
+#+BEGIN_SRC sh
+  xsetroot -cursor_name left_ptr
+#+END_SRC
+
+Launch Emacs.
+
+#+BEGIN_SRC sh
+  . /etc/exwm/exwmrc
+#+END_SRC
+
 * GNOME catgen                                                        :setup:
 To apply configuration, run:
 
