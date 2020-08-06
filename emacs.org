@@ -4727,9 +4727,6 @@ Configure Conf mode afterwards.
     (setq scad-indent-style "stroustrup"))
 #+END_SRC
 
-*** Built-in indentation styles are inappropriate for multiple line vectors :issue:
-For creating indentation styles, see [[info:ccmode#Customizing Indentation][Customizing Indentation (info)]].
-
 ** Org
 For agendas or capture templates, see [[*Agendas][Agendas]] respectively [[*Capture templates][Capture
 templates]].
