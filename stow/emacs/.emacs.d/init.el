@@ -37,6 +37,9 @@
 
 (straight-use-package 'use-package)
 (straight-use-package 'delight)         ; Optional dependency
+(eval-when-compile
+  (require 'use-package))
+(require 'bind-key)
 
 (straight-use-package 'org-plus-contrib)
 
@@ -47,8 +50,6 @@
   (("C-c f f" . dired)
    ("C-c f C-f" . dired-jump))
   :config
-  (declare-function dired-hide-details-mode "dired")
-
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
   (setq dired-dwim-target t)
@@ -66,8 +67,6 @@
   (:map projectile-command-map
    ("x t" . projectile-run-vterm))
   :preface
-  (declare-function recentf-include-p "recentf")
-
   (defun koek-proj/forgetp (file-name)
     "Return whether project with root FILE-NAME should be forgotten."
     (not (recentf-include-p file-name)))
@@ -123,8 +122,6 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package ediff-init
   :defer t
   :preface
-  (declare-function outline-show-all "outline")
-
   (defun koek-diff/unfold-outline ()
     "Unfold outline in outline and derived modes."
     (when (derived-mode-p 'outline-mode) ; org is derived from outline
@@ -153,8 +150,6 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package ediff-wind
   :defer t
   :config
-  (declare-function ediff-setup-windows-plain "ediff-wind")
-
   (setq ediff-grab-mouse nil)
   (setq ediff-window-setup-function #'ediff-setup-windows-plain)
   (setq ediff-split-window-function #'split-window-right))
@@ -319,10 +314,6 @@ enable `auto-fill-mode'."
     smartparens-mode)
    (smartparens-mode . show-smartparens-mode))
   :preface
-  (declare-function sp--get-context "smartparens")
-  (declare-function sp-get-pair "smartparens")
-  (declare-function sp-local-pair "smartparens")
-
   (defun koek-sp/separate-sexp (open-delimiter action _context)
     "Separate just inserted sexp from previous and/or next sexp.
 OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
@@ -547,8 +538,6 @@ backends, see `company-backends'."
 (use-package abbrev
   :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
   :config
-  (declare-function find-library-name "find-func")
-
   ;; Prime abbrev tables
   (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
     (require 'find-func)
@@ -578,11 +567,6 @@ backends, see `company-backends'."
   :straight t
   :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
   :preface
-  (declare-function koek-org/get-code-block-var-value "init")
-  (declare-function projectile-project-p "projectile")
-  (declare-function projectile-project-root "projectile")
-  (declare-function yas-choose-value "yasnippet")
-
   ;; General
   (defun koek-ys/indent-snippet ()
     "Indent last expanded snippet.
@@ -670,8 +654,6 @@ name."
                    (or (koek-org/get-code-block-var-value name) ""))))
         (make-directory file-name 'parents))))
   :config
-  (declare-function yas-reload-all "yasnippet")
-
   ;; Load own snippets
   (setq yas-snippet-dirs (remq 'yas-installed-snippets-dir yas-snippet-dirs))
   (yas-reload-all)
@@ -723,8 +705,6 @@ name."
 (use-package flymake-proc
   :defer t
   :config
-  (declare-function flymake-proc-legacy-flymake "flymake-proc")
-
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 
 (setq window-resize-pixelwise t)
@@ -878,8 +858,6 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
 
 ;; Prevent exwm from asking to replace window manager after
 ;; installation
-(defvar exwm-replace)
-
 (setq exwm-replace nil)
 
 (use-package exwm
@@ -992,10 +970,12 @@ Keybinding is a string, see `koek-wm/simulation-keybindings'.")
     "Previously selected workspace number.")
 
   (defface koek-wm/selected-workspace '((t . (:foreground "#ffffff")))
-    "Face for selected workspace label in mode line.")
+    "Face for selected workspace label in mode line."
+    :group 'exwm-workspace)
 
   (defface koek-wm/unselected-workspace '((t . (:foreground "#000000")))
-    "Face for unselected workspace label in mode line.")
+    "Face for unselected workspace label in mode line."
+    :group 'exwm-workspace)
 
   (define-advice exwm-workspace-switch
       (:before (&rest _args) koek-wm/update-previous-workspace-n)
@@ -1063,7 +1043,8 @@ N is an integer, a workspace number."
   :defer t
   :preface
   (defface koek-wm/floating-border '((t . (:foreground "#000000")))
-    "Face for border of floating frames.")
+    "Face for border of floating frames."
+    :group 'exwm-floating)
 
   (defun koek-wm/set-floating-border-color ()
     "Set border color of floating frames."
@@ -1138,9 +1119,6 @@ N is an integer, a workspace number."
    :map minibuffer-local-map
    ("C-r" . counsel-minibuffer-history))
   :config
-  (declare-function counsel-linux-app-format-function-name-first "counsel")
-  (declare-function ivy-add-actions "ivy")
-
   (ivy-add-actions 'counsel-M-x
                    `(("h"
                       ,(lambda (candidate)
@@ -1197,8 +1175,6 @@ N is an integer, a workspace number."
   :bind
   ("C-c d d" . devdocs-lookup)
   :config
-  (declare-function devdocs-setup "devdocs-lookup")
-
   ;; DevDocs is updated more frequently than devdocs-lookup. Update
   ;; subjects.
   (setq devdocs-subjects
@@ -1317,8 +1293,6 @@ first available number."
   (("C-c x r" . compile)
    ("C-c x C-r" . recompile))
   :preface
-  (declare-function ansi-color-apply-on-region "ansi-color")
-
   (defun koek-cmpl/style-output ()
     "Style process output.
 Output is between `compilation-filter-start' and point."
@@ -1384,9 +1358,6 @@ Output is between `compilation-filter-start' and point."
 (use-package mu4e-mark
   :defer t
   :config
-  (declare-function mu4e~mark-check-target "mu4e-mark")
-  (declare-function mu4e~proc-move "mu4e-proc")
-
   ;; When trashing e-mail, e-mail is flagged trashed. E-mail flagged
   ;; trashed is deleted by most e-mail providers. Move to trash but
   ;; don't flag trashed.
@@ -1479,7 +1450,8 @@ Output is between `compilation-filter-start' and point."
   :preface
   (defface koek-pdf/midnight
     '((t . (:foreground "#000000" :background "#ffffff")))
-    "Face for page when `pdf-view-midnight-minor-mode' is enabled.")
+    "Face for page when `pdf-view-midnight-minor-mode' is enabled."
+    :group 'pdf-view)
 
   (define-advice pdf-view-midnight-minor-mode
       (:before (&rest _args) koek-pdf/update-colors)
@@ -1761,8 +1733,6 @@ Output is between `compilation-filter-start' and point."
 
 ;; Prevent indium from creating Chrome profile directory during
 ;; installation
-(defvar indium-chrome-data-dir)
-
 (setq indium-chrome-data-dir nil)
 
 (use-package indium-interaction
@@ -1851,8 +1821,6 @@ Output is between `compilation-filter-start' and point."
   ;; Setup resume clock after showing initial buffer
   (add-hook 'window-setup-hook #'org-clock-persistence-insinuate)
   :config
-  (declare-function org-redisplay-inline-images "org")
-
   (use-package avy
     :bind
     (:map org-mode-map
@@ -1951,8 +1919,6 @@ Candidates are collected from agenda files."
    ("C-c o o" . org-clock-out)
    ("C-c o x" . org-clock-cancel))
   :config
-  (declare-function org-clock-load "org-clock")
-
   (setq org-clock-persist 'clock)
 
   (org-clock-load))
@@ -1984,8 +1950,6 @@ Candidates are collected from agenda files."
 (use-package ob-core
   :defer t
   :config
-  (declare-function org-babel-get-src-block-info "ob-core")
-
   (defun koek-org/get-code-block-var-value (name)
     "Return value of variable NAME for current code block.
 NAME is a string, the variable's name."
@@ -2032,7 +1996,7 @@ nil, delete empty line at end of file."
       (save-excursion
         (goto-char (point-max))
         (unless (bobp)
-          (delete-backward-char 1)
+          (delete-char -1)
           (save-buffer)))))
   :config
   (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
@@ -2117,8 +2081,6 @@ TITLE is a string, a note title."
 (use-package python
   :mode ((rx ".py" string-end) . python-mode)
   :preface
-  (declare-function python-flymake "python")
-
   (defun koek-py/disable-checker ()
     "Disable Python checker for current."
     (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
@@ -2451,13 +2413,6 @@ A font specification is a plist.  For keys, see `font-spec'.")
 (use-package moody
   :straight t
   :preface
-  (declare-function eyebrowse--get "eyebrowse")
-  (declare-function flymake--backend-state-diags "flymake")
-  (declare-function flymake--lookup-type-property "flymake")
-  (declare-function flymake-disabled-backends "flymake")
-  (declare-function flymake-reporting-backends "flymake")
-  (declare-function flymake-running-backends "flymake")
-
   (defconst koek-ml/separator (make-string 3 ?\s)
     "Mode line group separator.")
 
@@ -2867,8 +2822,6 @@ When environment variable is unset, resolve directory DEFAULT."
   :load-path "lisp/exar"
   :after exwm
   :config
-  (declare-function exwm-enable "exwm")
-
   (let ((icc-dir
          (expand-file-name "icc/"
                            (or (getenv "XDG_DATA_HOME") "~/.local/share/"))))
@@ -3034,8 +2987,6 @@ When optional FULL is truthy, return absolute file names."
   :config
   (use-package mu4e-context
     :config
-    (declare-function mu4e-message-field "mu4e-message")
-
     (setq mu4e-contexts
           (list (make-mu4e-context
                  :name "Personal"
@@ -3073,9 +3024,6 @@ When optional FULL is truthy, return absolute file names."
 (use-package elfeed
   :defer t
   :preface
-  (declare-function elfeed-db-get-feed "elfeed-db")
-  (declare-function elfeed-meta--put "elfeed-db")
-
   (defvar koek/feeds
     '(("3Blue1Brown" youtube "UCYO_jab_esuFRV4b17AJtAw" mathematics)
       ("Arch Linux" "https://www.archlinux.org/feeds/news/" notice linux)
