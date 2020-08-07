@@ -883,6 +883,11 @@ system."
            (append kill-emacs-hook
                    (list (or (and arg #'koek-wm/reboot) #'koek-wm/power-off)))))
       (save-buffers-kill-terminal)))
+
+  (defun koek-wm/suspend ()
+    "Suspend system."
+    (interactive)
+    (make-process :name "suspend" :command '("systemctl" "suspend")))
   :init
   ;; :init of deferred subpackages are evaluated in both exwm and non
   ;; exwm sessions. :init of guarded (:when) main package is evaluated
@@ -890,6 +895,7 @@ system."
   ;; package.
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
+   ("C-c z z" . koek-wm/suspend)
    ("C-c w 0" . koek-wm/switch-workspace-0)
    ("C-c w 1" . koek-wm/switch-workspace-1)
    ("C-c w 2" . koek-wm/switch-workspace-2)
