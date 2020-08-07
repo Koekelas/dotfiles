@@ -3040,12 +3040,33 @@ Bury unneeded buffers, computers have more than enough memory.
   (use-package exwm
     :straight t
     :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+    :preface
+    ;; For systemctl power management commands, see
+    ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
+    (defun koek-wm/power-off ()
+      "Power off system."
+      (make-process :name "poweroff" :command '("systemctl" "poweroff")))
+
+    (defun koek-wm/reboot ()
+      "Reboot system."
+      (make-process :name "reboot" :command '("systemctl" "reboot")))
+
+    (defun koek-wm/kill-power-off (&optional arg)
+      "Kill Emacs and power off system.
+  With `\\[universal-argument]' prefix argument ARG, reboot
+  system."
+      (interactive "P")
+      (let ((kill-emacs-hook ; Dynamic variable, restore when kill is aborted
+             (append kill-emacs-hook
+                     (list (or (and arg #'koek-wm/reboot) #'koek-wm/power-off)))))
+        (save-buffers-kill-terminal)))
     :init
     ;; :init of deferred subpackages are evaluated in both exwm and non
     ;; exwm sessions. :init of guarded (:when) main package is evaluated
     ;; only in exwm sessions. Bind global keys in :init of guarded main
     ;; package.
     (bind-keys
+     ("C-c z p" . koek-wm/kill-power-off)
      ("C-c w 0" . koek-wm/switch-workspace-0)
      ("C-c w 1" . koek-wm/switch-workspace-1)
      ("C-c w 2" . koek-wm/switch-workspace-2)
@@ -3796,7 +3817,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
       "C-c o" "org"
       "C-c p" "projectile"
       "C-c w" "windows"
-      "C-c x" "other")
+      "C-c x" "other"
+      "C-c z" "system")
 
     ;; Resolve rename keybinding conflict with org
     (which-key-add-major-mode-key-based-replacements 'org-mode
