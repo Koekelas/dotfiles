@@ -166,8 +166,8 @@ Hide superfluous applications.
 :header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc :shebang #!/bin/bash
 :END:
 
-Set pointer cursor. For cursor names, contrary to what the man page
-says, see [[file:/usr/include/X11/cursorfont.h][cursorfont.h]].
+Set pointer cursor. For cursor names, contrary to what the xsetroot
+man page says, see [[file:/usr/include/X11/cursorfont.h][cursorfont.h]].
 
 #+BEGIN_SRC sh
   xsetroot -cursor_name left_ptr
