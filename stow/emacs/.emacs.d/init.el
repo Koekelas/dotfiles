@@ -3107,7 +3107,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
 
   (use-package recentf
     :config
-    (push elfeed-db-directory recentf-exclude))
+    (push (rx-to-string `(and line-start ,elfeed-db-directory)) recentf-exclude))
 
   (dolist (feed koek/feeds)
     (let ((args
