@@ -1078,8 +1078,7 @@ N is an integer, a workspace number."
     (setq exwm-floating-border-color
           (face-attribute 'koek-wm/floating-border :foreground)))
   :config
-  (add-hook 'koek-thm/enable-hook #'koek-wm/set-floating-border-color)
-  (koek-wm/set-floating-border-color))
+  (add-hook 'koek-thm/enable-hook #'koek-wm/set-floating-border-color))
 
 (use-package server
   :config
@@ -2352,7 +2351,6 @@ THEME-SPEC is a theme specification, see
         (cdr (assoc (completing-read "Theme: " candidates nil t) candidates)))))
     ;; Set window theme
     (mapc #'disable-theme custom-enabled-themes)
-    (load-theme (plist-get theme-spec :theme) 'no-confirm)
     (let* ((palette
             (let* ((theme (alist-get (plist-get theme-spec :palette)
                                      color-theme-sanityinc-tomorrow-colors))
@@ -2413,6 +2411,7 @@ THEME-SPEC is a theme specification, see
              (mapcar (pcase-lambda (`(,name . ,attrs))
                        `(,name ((t . ,attrs))))
                      specs)))
+    (load-theme (plist-get theme-spec :theme) 'no-confirm)
 
     ;; Set frame theme
     (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
