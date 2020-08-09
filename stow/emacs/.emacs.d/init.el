@@ -48,7 +48,9 @@
 (use-package dired
   :bind
   (("C-c f f" . dired)
-   ("C-c f C-f" . dired-jump))
+   ("C-c f C-f" . dired-jump)
+   :map dired-mode-map
+   ("C-c j d" . dired-goto-file))       ; Complement default keybinding
   :config
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
