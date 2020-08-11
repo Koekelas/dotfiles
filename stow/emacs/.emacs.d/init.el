@@ -53,9 +53,9 @@
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
   (setq dired-dwim-target t)
-  ;; For switches supported by ls-lisp, see
-  ;; `ls-lisp--insert-directory'
-  (setq dired-listing-switches "-lah")
+  (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
+         (unsafe (concat safe " --group-directories-first")))
+    (setq dired-listing-switches (or (and (executable-find "ls") unsafe) safe)))
   (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
 (setq delete-by-moving-to-trash t)
