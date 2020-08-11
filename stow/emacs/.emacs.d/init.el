@@ -1508,7 +1508,7 @@ Output is between `compilation-filter-start' and point."
 (use-package pdf-links
   :bind
   (:map pdf-links-minor-mode-map
-   ("C-c j l" . pdf-links-action-perform)))
+   ([remap link-hint-open-link] . pdf-links-action-perform)))
 
 (use-package pdf-loader
   :config
