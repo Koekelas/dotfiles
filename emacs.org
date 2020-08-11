@@ -3710,6 +3710,11 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      ([remap describe-function] . helpful-callable)
      ([remap describe-key]      . helpful-key))
     :config
+    (use-package link-hint
+      :bind
+      (:map helpful-mode-map
+       ("j" . link-hint-open-link)))
+
     (setq helpful-max-buffers nil))
 #+END_SRC
 
@@ -3728,7 +3733,12 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 #+BEGIN_SRC emacs-lisp
   (use-package info
     :bind
-    ("C-c d i" . info-apropos))
+    ("C-c d i" . info-apropos)
+    :config
+    (use-package link-hint
+      :bind
+      (:map Info-mode-map
+       ("j" . link-hint-open-link))))
 #+END_SRC
 
 ** man - Manual viewer
@@ -4075,6 +4085,14 @@ For news feeds, see [[*News feeds][News feeds]].
     :defer t
     :config
     (setq elfeed-search-filter (concat elfeed-search-filter " ")))
+
+  (use-package elfeed-show
+    :defer t
+    :config
+    (use-package link-hint
+      :bind
+      (:map elfeed-show-mode-map
+       ("j" . link-hint-open-link))))
 #+END_SRC
 
 ** pdf-tools - PDF viewer
@@ -4118,7 +4136,12 @@ For news feeds, see [[*News feeds][News feeds]].
   (use-package pdf-links
     :bind
     (:map pdf-links-minor-mode-map
-     ([remap link-hint-open-link] . pdf-links-action-perform)))
+     ([remap link-hint-open-link] . pdf-links-action-perform))
+    :config
+    (use-package link-hint
+      :bind
+      (:map pdf-links-minor-mode-map
+       ("j" . pdf-links-action-perform))))
 
   (use-package pdf-loader
     :config
@@ -4155,6 +4178,11 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
     :bind
     ("C-c x d" . dictionary-search)
     :config
+    (use-package link-hint
+      :bind
+      (:map dictionary-mode-map
+       ("j" . link-hint-open-link)))
+
     (setq dictionary-create-buttons nil))
 #+END_SRC
 

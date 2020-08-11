@@ -1176,6 +1176,11 @@ N is an integer, a workspace number."
    ([remap describe-function] . helpful-callable)
    ([remap describe-key]      . helpful-key))
   :config
+  (use-package link-hint
+    :bind
+    (:map helpful-mode-map
+     ("j" . link-hint-open-link)))
+
   (setq helpful-max-buffers nil))
 
 (use-package elisp-demos
@@ -1186,7 +1191,12 @@ N is an integer, a workspace number."
 
 (use-package info
   :bind
-  ("C-c d i" . info-apropos))
+  ("C-c d i" . info-apropos)
+  :config
+  (use-package link-hint
+    :bind
+    (:map Info-mode-map
+     ("j" . link-hint-open-link))))
 
 (use-package man
   :bind
@@ -1471,6 +1481,14 @@ Output is between `compilation-filter-start' and point."
   :config
   (setq elfeed-search-filter (concat elfeed-search-filter " ")))
 
+(use-package elfeed-show
+  :defer t
+  :config
+  (use-package link-hint
+    :bind
+    (:map elfeed-show-mode-map
+     ("j" . link-hint-open-link))))
+
 (use-package pdf-view
   :straight pdf-tools
   :mode ((rx ".pdf" string-end) . pdf-view-mode)
@@ -1508,7 +1526,12 @@ Output is between `compilation-filter-start' and point."
 (use-package pdf-links
   :bind
   (:map pdf-links-minor-mode-map
-   ([remap link-hint-open-link] . pdf-links-action-perform)))
+   ([remap link-hint-open-link] . pdf-links-action-perform))
+  :config
+  (use-package link-hint
+    :bind
+    (:map pdf-links-minor-mode-map
+     ("j" . pdf-links-action-perform))))
 
 (use-package pdf-loader
   :config
@@ -1530,6 +1553,11 @@ Output is between `compilation-filter-start' and point."
   :bind
   ("C-c x d" . dictionary-search)
   :config
+  (use-package link-hint
+    :bind
+    (:map dictionary-mode-map
+     ("j" . link-hint-open-link)))
+
   (setq dictionary-create-buttons nil))
 
 (use-package calendar
