@@ -58,6 +58,12 @@
     (setq dired-listing-switches (or (and (executable-find "ls") unsafe) safe)))
   (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
+(use-package diredfl
+  :straight t
+  :after dired
+  :config
+  (diredfl-global-mode))
+
 (setq delete-by-moving-to-trash t)
 
 (use-package projectile

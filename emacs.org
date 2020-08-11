@@ -126,6 +126,17 @@ For org configuration, see [[*Org][Org]].
     (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 #+END_SRC
 
+*** diredfl - Visualize file properties
+[[https://github.com/purcell/diredfl][diredfl (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diredfl
+    :straight t
+    :after dired
+    :config
+    (diredfl-global-mode))
+#+END_SRC
+
 ** Trash
 Move deleted files to trash.
 
