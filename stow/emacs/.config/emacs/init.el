@@ -1270,6 +1270,7 @@ N is an integer, a workspace number."
     "C-c e" "editor"
     "C-c f" "files"
     "C-c j" "jump"
+    "C-c k" "media"
     "C-c o" "org"
     "C-c p" "projectile"
     "C-c w" "windows"
@@ -1610,6 +1611,97 @@ nil.")
 (use-package calendar
   :bind
   ("C-c x a" . calendar))
+
+(use-package bongo
+  :straight t
+  :bind
+  (("C-c x k" . bongo)
+   ("C-c k s" . bongo-seek)
+   ("C-c k f" . bongo-seek-forward-10)
+   ("C-c k b" . bongo-seek-backward-10)
+   ("C-c k a" . bongo-replay-current)
+   ("C-c k e" . bongo-perform-next-action)
+   ("C-c k n" . bongo-play-next)
+   ("C-c k p" . bongo-play-previous)
+   ("C-c k x" . bongo-stop))
+  :hook (dired-mode . bongo-dired-library-mode)
+  :preface
+  (define-advice bongo-default-library-buffer
+      (:override () koek-bngo/get-create-default-library-buffer)
+    (require 'dired)
+    (dired-noselect bongo-default-directory))
+
+  ;; Disable banner
+  (define-advice bongo-default-playlist-buffer
+      (:override () koek-bngo/get-create-default-playlist-buffer)
+    (with-current-buffer (get-buffer-create bongo-default-playlist-buffer-name)
+      (unless (derived-mode-p 'bongo-playlist-mode)
+        (bongo-playlist-mode))
+      (current-buffer)))
+
+  (defun koek-bngo/play-pause ()
+    "Pause or resume playback.
+When playback is stopped, play from beginning."
+    (interactive)
+    (if (bongo-playing-p)
+        (bongo-pause/resume)
+      (with-bongo-playlist-buffer
+        (save-excursion
+          (goto-char (point-min))
+          (bongo-play)))))
+
+  (defun koek-bngo/enqueue (file-names &optional next)
+    "Enqueue FILE-NAMES.
+When NEXT is truthy, enqueue after playing track, else, enqueue
+after last track."
+    (with-temp-bongo-library-buffer
+      (dolist (file-name file-names)
+        (bongo-insert-file file-name))
+      (bongo-enqueue-region (or (and next 'insert) 'append)
+                            (point-min) (point-max)
+                            'maybe-display-playlist)))
+
+  ;; Contrary to what its signature suggests,
+  ;; `bongo-dired-enqueue-lines' enqueues only the current line
+  (defun koek-bngo/dired-enqueue-dwim (&optional arg)
+    "Enqueue current line or marked lines.
+With `\\[universal-argument]' prefix argument ARG, enqueue after
+playing track, else, enqueue after last track."
+    (interactive "P")
+    (let* ((file-names (dired-get-marked-files))
+           (mark-active
+            (or (> (length file-names) 1)
+                (eq (car (dired-get-marked-files nil nil nil 'distinguish))
+                    t))))
+      (koek-bngo/enqueue file-names arg)
+      (unless mark-active
+        (dired-next-line 1))))
+
+  (defun koek-bngo/dired-enqueue-next-dwim ()
+    "Enqueue current line or marked lines after playing track."
+    (interactive)
+    (koek-bngo/dired-enqueue-dwim t))
+  :config
+  (bind-keys
+   ("C-c k k" . koek-bngo/play-pause)
+   :map bongo-dired-library-mode-map
+   ([remap bongo-dired-append-enqueue-lines] . koek-bngo/dired-enqueue-dwim)
+   ([remap bongo-dired-insert-enqueue-lines] . koek-bngo/dired-enqueue-next-dwim))
+
+  ;; General
+  (setq bongo-enabled-backends '(vlc))
+  (setq bongo-prefer-library-buffers nil)
+  (setq bongo-insert-whole-directory-trees t)
+  (setq bongo-join-inserted-tracks nil)
+  (setq bongo-display-playlist-after-enqueue nil)
+
+  ;; Appearance
+  (setq bongo-header-line-mode nil)
+  (setq bongo-mode-line-indicator-mode nil)
+  (setq bongo-mark-played-tracks t)
+  (setq bongo-track-mark-icon-file-name nil)
+  (setq bongo-display-track-icons nil)
+  :delight bongo-dired-library-mode)
 
 (use-package gino
   :load-path "lisp/gino"
@@ -2897,6 +2989,9 @@ Must be called from control buffer."
 (defconst koek/download-dir (koek/resolve-directory "XDG_DOWNLOAD_DIR")
   "File name to download directory.")
 
+(defconst koek/music-dir (koek/resolve-directory "XDG_MUSIC_DIR")
+  "File name to music directory.")
+
 (defconst koek/projects-dir (koek/resolve-directory "KOEK_PROJECTS_DIR")
   "File name to projects directory.")
 
@@ -3195,6 +3290,11 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
              (_feed
               feed))))
       (apply #'koek/add-feed args))))
+
+(use-package bongo
+  :defer t
+  :config
+  (setq bongo-default-directory koek/music-dir))
 
 (defun koek/make-initial-buffer ()
   "Return initial buffer."

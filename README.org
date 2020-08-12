@@ -43,6 +43,7 @@ Git is mandatory, everything else is optional.
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
 - News reader: [[https://curl.haxx.se/][curl]]
 - PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
+- Media player: [[https://www.videolan.org/vlc/][VLC media player]]
 - Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
 - C family:
   - [[https://gcc.gnu.org/][GCC]]
@@ -108,6 +109,9 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
   ## PDF viewer
   pacman -S poppler-glib libpng zlib imagemagick
+
+  ## Media player
+  pacman -S vlc
 
   ## Arduino
   pacman -S arduino arduino-avr-core
