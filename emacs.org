@@ -1,6 +1,6 @@
 :PROPERTIES:
 :header-args: :mkdirp yes
-:header-args:emacs-lisp: :tangle stow/emacs/.emacs.d/init.el :lexical yes
+:header-args:emacs-lisp: :tangle stow/emacs/.config/emacs/init.el :lexical yes
 :END:
 #+TITLE: Emacs
 
@@ -911,7 +911,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+END_SRC
 
 *** New Clojure file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/clojure-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/clojure-mode/new
   # -*- mode: snippet; -*-
   # name: New Clojure file
   # key: new
@@ -922,7 +922,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+END_SRC
 
 *** New shadow-cljs configuration
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/clojure-mode/shadow
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/clojure-mode/shadow
   # -*- mode: snippet; -*-
   # name: New shadow-cljs configuration
   # key: shadow
@@ -933,7 +933,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+END_SRC
 
 *** shadow-cljs Node.js target
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/clojure-mode/node
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/clojure-mode/node
   # -*- mode: snippet; -*-
   # name: shadow-cljs Node.js target
   # key: node
@@ -946,7 +946,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 #+END_SRC
 
 *** shadow-cljs Node.js test target
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/clojure-mode/nodet
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/clojure-mode/nodet
   # -*- mode: snippet; -*-
   # name: shadow-cljs Node.js test target
   # key: nodet
@@ -960,12 +960,12 @@ For the major mode, see [[*YASnippet][YASnippet]].
 *** ClojureScript
 Inherit Clojure snippets.
 
-#+BEGIN_SRC fundamental :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/clojurescript-mode/.yas-parents
+#+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/clojurescript-mode/.yas-parents
   clojure-mode
 #+END_SRC
 
 *** New Emacs Lisp file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/emacs-lisp-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/emacs-lisp-mode/new
   # -*- mode: snippet; -*-
   # name: New Emacs Lisp file
   # key: new
@@ -987,7 +987,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New HTML file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/mhtml-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/mhtml-mode/new
   # -*- mode: snippet; -*-
   # name: New HTML file
   # key: new
@@ -1008,7 +1008,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New JavaScript Node.js file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/js2-mode/node
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/js2-mode/node
   # -*- mode: snippet; -*-
   # name: New JavaScript Node.js file
   # key: node
@@ -1025,7 +1025,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New JavaScript browser file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/js2-mode/browser
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/js2-mode/browser
   # -*- mode: snippet; -*-
   # name: New JavaScript browser file
   # key: browser
@@ -1042,7 +1042,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New Markdown file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/markdown-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/markdown-mode/new
   # -*- mode: snippet; -*-
   # name: New Markdown file
   # key: new
@@ -1060,7 +1060,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New Org file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/new
   # -*- mode: snippet; -*-
   # name: New Org file
   # key: new
@@ -1079,7 +1079,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Quote block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/q
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/q
   # -*- mode: snippet; -*-
   # name: Quote block
   # key: q
@@ -1090,7 +1090,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** LaTeX math environment
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/math
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/math
   # -*- mode: snippet; -*-
   # name: LaTeX math environment
   # key: $
@@ -1099,7 +1099,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** LaTeX displaymath environment
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/displaymath
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/displaymath
   # -*- mode: snippet; -*-
   # name: LaTeX displaymath environment
   # key: $$
@@ -1108,7 +1108,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/s
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/s
   # -*- mode: snippet; -*-
   # name: Code block
   # key: s
@@ -1119,7 +1119,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** C code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sc
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sc
   # -*- mode: snippet; -*-
   # name: C code block
   # key: sc
@@ -1130,7 +1130,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** C++ code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/scpp
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/scpp
   # -*- mode: snippet; -*-
   # name: C++ code block
   # key: scpp
@@ -1141,7 +1141,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Java code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sjava
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sjava
   # -*- mode: snippet; -*-
   # name: Java code block
   # key: sjava
@@ -1152,7 +1152,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Clojure code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sclj
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sclj
   # -*- mode: snippet; -*-
   # name: Clojure code block
   # key: sclj
@@ -1163,7 +1163,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** ClojureScript code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/scljs
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/scljs
   # -*- mode: snippet; -*-
   # name: ClojureScript code block
   # key: scljs
@@ -1174,7 +1174,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Common Lisp code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/slisp
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/slisp
   # -*- mode: snippet; -*-
   # name: Common Lisp code block
   # key: sc
@@ -1186,7 +1186,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Conf code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sconf
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sconf
   # -*- mode: snippet; -*-
   # name: Conf code block
   # key: sconf
@@ -1197,7 +1197,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Emacs Lisp code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sel
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sel
   # -*- mode: snippet; -*-
   # name: Emacs Lisp code block
   # key: sel
@@ -1208,7 +1208,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Erlang code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/serl
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/serl
   # -*- mode: snippet; -*-
   # name: Erlang code block
   # key: serl
@@ -1219,7 +1219,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** HTML code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/shtml
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/shtml
   # -*- mode: snippet; -*-
   # name: HTML code block
   # key: shtml
@@ -1230,7 +1230,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** CSS code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/scss
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/scss
   # -*- mode: snippet; -*-
   # name: CSS code block
   # key: scss
@@ -1241,7 +1241,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** JavaScript code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sjs
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sjs
   # -*- mode: snippet; -*-
   # name: JavaScript code block
   # key: sjs
@@ -1252,7 +1252,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** JSON code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sjson
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sjson
   # -*- mode: snippet; -*-
   # name: JSON code block
   # key: sjson
@@ -1263,7 +1263,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Meson code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/smeson
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/smeson
   # -*- mode: snippet; -*-
   # name: Meson code block
   # key: smeson
@@ -1274,7 +1274,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Octave code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sm
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sm
   # -*- mode: snippet; -*-
   # name: Octave code block
   # key: sm
@@ -1285,7 +1285,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Octave plot code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/smplot
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/smplot
   # -*- mode: snippet; -*-
   # name: Octave plot code block
   # key: smplot
@@ -1303,7 +1303,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** OpenSCAD code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sscad
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sscad
   # -*- mode: snippet; -*-
   # name: OpenSCAD code block
   # key: sscad
@@ -1314,7 +1314,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Python code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/spy
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/spy
   # -*- mode: snippet; -*-
   # name: Python code block
   # key: spy
@@ -1325,7 +1325,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Python plot code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/spyplot
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/spyplot
   # -*- mode: snippet; -*-
   # name: Python plot code block
   # key: spyplot
@@ -1348,7 +1348,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** Scheme code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sscm
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sscm
   # -*- mode: snippet; -*-
   # name: Scheme code block
   # key: sscm
@@ -1359,7 +1359,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** SQL code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/ssql
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/ssql
   # -*- mode: snippet; -*-
   # name: SQL code block
   # key: ssql
@@ -1370,7 +1370,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** YASnippet code block
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/org-mode/sy
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sy
   # -*- mode: snippet; -*-
   # name: YASnippet code block
   # key: sy
@@ -1381,7 +1381,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** GNU GPLv3 license
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/text-mode/gpl
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/text-mode/gpl
   # -*- mode: snippet; -*-
   # name: GNU GPLv3 license
   # key: gpl
@@ -2064,7 +2064,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** GNU AGPLv3 license
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/text-mode/agpl
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/text-mode/agpl
   # -*- mode: snippet; -*-
   # name: GNU AGPLv3 license
   # key: agpl
@@ -2734,7 +2734,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** MIT license
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/text-mode/mit
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/text-mode/mit
   # -*- mode: snippet; -*-
   # name: MIT license
   # key: mit
@@ -2764,7 +2764,7 @@ Inherit Clojure snippets.
 #+END_SRC
 
 *** New snippet file
-#+BEGIN_SRC snippet :tangle stow/emacs/.emacs.d/etc/yasnippet/snippets/snippet-mode/new
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/snippet-mode/new
   # -*- mode: snippet; -*-
   # name: New snippet file
   # key: new
@@ -3272,7 +3272,7 @@ Bury unneeded buffers, computers have more than enough memory.
 *** exar - Monitor layouts                                              :wip:
 For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
-#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.emacs.d/lisp/exar/exar.el
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
   ;;; exar.el --- Emacs, X Window System and RandR -*- lexical-binding: t; -*-
 
   ;;; Commentary:
@@ -3920,7 +3920,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+END_SRC
 
 *** Aliases
-#+BEGIN_SRC fundamental :tangle stow/emacs/.emacs.d/var/eshell/alias
+#+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/var/eshell/alias
   alias ls ls -lah $*
   alias nb jupyter notebook $*
 #+END_SRC
@@ -4214,7 +4214,7 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
 #+END_SRC
 
 *** gino - Generate project                                             :wip:
-#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.emacs.d/lisp/gino/gino.el
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/gino/gino.el
   ;;; gino.el --- Generate Arduino project -*- lexical-binding: t; -*-
 
   ;;; Commentary:
