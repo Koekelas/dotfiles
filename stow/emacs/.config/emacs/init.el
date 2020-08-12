@@ -1875,8 +1875,6 @@ Output is between `compilation-filter-start' and point."
    ("C-M-e" . org-next-block))
   :hook (org-mode . org-cdlatex-mode)
   :init
-  (require 'org-protocol)
-
   ;; Setup resume clock after showing initial buffer
   (add-hook 'window-setup-hook #'org-clock-persistence-insinuate)
   :config
@@ -1913,9 +1911,8 @@ Output is between `compilation-filter-start' and point."
      ("C-M-u" . outline-up-heading)))
 
   ;; General
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
-  (setq org-export-backends '(latex beamer odt html icalendar))
+  (push 'org-protocol org-modules)
+  (push 'beamer org-export-backends)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((C . t) ; C and C++
                                  (clojure . t)
@@ -1927,6 +1924,8 @@ Output is between `compilation-filter-start' and point."
                                  (python . t)
                                  (scheme . t)
                                  (sql . t)))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
 
   ;; Appearance
   (setq org-adapt-indentation nil)
