@@ -678,7 +678,7 @@ Info Specification (freedesktop)]].
   Name=org-protocol
   Icon=emacs
   TryExec=emacsclient
-  Exec=sh -c "emacsclient -s \"\\$XDG_RUNTIME_DIR/emacs\" %u"
+  Exec=sh -c "emacsclient -s \"\\$XDG_RUNTIME_DIR/emacs/server\" %u"
   Terminal=false
   MimeType=x-scheme-handler/org-protocol;
   NoDisplay=true

@@ -1088,8 +1088,6 @@ N is an integer, a workspace number."
 
 (use-package server
   :config
-  (when-let ((runtime-dir (getenv "XDG_RUNTIME_DIR")))
-    (setq server-name (expand-file-name "emacs" runtime-dir)))
   (server-start))
 
 (bind-key "C-z" #'repeat)
