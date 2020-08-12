@@ -46,6 +46,7 @@ Git is mandatory, everything else is optional.
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
   - [[https://x.org/][xsetroot]]
+  - [[https://github.com/Airblader/unclutter-xfixes][unclutter]]
   - [[https://www.argyllcms.com/][ArgyllCMS]] (color profile)
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
 - E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
@@ -99,7 +100,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   pacman -S adobe-source-code-pro-fonts
 
   ## X window manager
-  pacman -S xorg-xsetroot argyllcms
+  pacman -S xorg-xsetroot unclutter argyllcms
   # Install exwm-gdm from source
 
   ## Terminal emulator

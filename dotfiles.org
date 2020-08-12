@@ -173,6 +173,14 @@ man page says, see [[file:/usr/include/X11/cursorfont.h][cursorfont.h]].
   xsetroot -cursor_name left_ptr
 #+END_SRC
 
+Hide pointer cursor shortly after it stops moving. Unhide it after it
+moved some distance, it's common to bump into the [[https://en.wikipedia.org/wiki/Pointing_stick][pointing stick]] while
+typing.
+
+#+BEGIN_SRC sh
+  unclutter --jitter 3 &
+#+END_SRC
+
 Launch Emacs.
 
 #+BEGIN_SRC sh
