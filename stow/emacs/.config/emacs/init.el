@@ -6,8 +6,6 @@
 
 ;;; Code:
 
-(setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
-
 (require 'subr-x)
 (require 'seq)
 
@@ -18,6 +16,8 @@
 (setq network-security-level 'high)
 
 (defvar bootstrap-version)              ; Must be a dynamic variable
+
+(setq straight-check-for-modifications '(check-on-save find-when-checking))
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el"
@@ -2265,8 +2265,6 @@ TITLE is a string, a note title."
 (use-package yasnippet
   :mode ("/snippets/" . snippet-mode))
 
-(push '(fullscreen . maximized) default-frame-alist)
-
 (setq frame-title-format
       '((:eval
          ;; Resolve conflict between `file-truename' and
@@ -2285,10 +2283,6 @@ TITLE is a string, a note title."
               (t
                "%b")))))
         " - Emacs"))
-
-(menu-bar-mode 0)
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
 
 (use-package color-theme-sanityinc-tomorrow
   :straight t

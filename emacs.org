@@ -19,12 +19,12 @@ only mode.
 #+END_SRC
 
 Increasing cons threshold makes garbage collection more efficient and
-decreasing it makes garbage collection less noticeable, i.e., cons
-threshold is a tradeoff between the runtime of the garbage collector
-and the responsiveness of Emacs. Increase cons threshold during
-initialization.
+decreasing it makes garbage collection less noticeable, i.e., a cons
+threshold x freezes Emacs longer than half x collected one time but
+shorter than half x collected two times. Increase cons threshold
+during initialization. Reduces startup time.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
   (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
 #+END_SRC
 
@@ -65,6 +65,8 @@ limited to what's available in a package archive. Configure straight.
 
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)              ; Must be a dynamic variable
+
+  (setq straight-check-for-modifications '(check-on-save find-when-checking))
 
   (let ((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el"
@@ -5271,9 +5273,10 @@ For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
 #+END_SRC
 
 * Appearance
-Maximize frames.
+Maximize frames. Configuring this during early initialization reduces
+startup time.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
   (push '(fullscreen . maximized) default-frame-alist)
 #+END_SRC
 
@@ -5300,12 +5303,15 @@ Show file name in title bar.
           " - Emacs"))
 #+END_SRC
 
-Disable menu bar, tool bar and scroll bars.
+Disable menu bar, tool bar and scroll bars. Configuring this during
+early initialization reduces startup time.
 
-#+BEGIN_SRC emacs-lisp
-  (menu-bar-mode 0)
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0)
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
+  ;; Prefer setting frame parameters to disabling menu-bar-mode,
+  ;; tool-bar-mode and scroll-bar-mode during early initialization
+  (push '(menu-bar-lines . 0) default-frame-alist)
+  (push '(tool-bar-lines . 0) default-frame-alist)
+  (push '(vertical-scroll-bars . nil) default-frame-alist)
 #+END_SRC
 
 Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] theme.
