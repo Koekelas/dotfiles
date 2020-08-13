@@ -1342,8 +1342,7 @@ first available number."
 
 (use-package compile
   :bind
-  (("C-c x r" . compile)
-   ("C-c x C-r" . recompile))
+  ("C-c x c" . compile)
   :preface
   (defun koek-cmpl/style-output ()
     "Style process output.
@@ -1610,7 +1609,7 @@ nil.")
 
 (use-package calendar
   :bind
-  ("C-c x c" . calendar))
+  ("C-c x a" . calendar))
 
 (use-package gino
   :load-path "lisp/gino"

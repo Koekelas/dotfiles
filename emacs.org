@@ -3949,8 +3949,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+BEGIN_SRC emacs-lisp
   (use-package compile
     :bind
-    (("C-c x r" . compile)
-     ("C-c x C-r" . recompile))
+    ("C-c x c" . compile)
     :preface
     (defun koek-cmpl/style-output ()
       "Style process output.
@@ -4257,7 +4256,7 @@ For news feeds, see [[*News feeds][News feeds]].
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
     :bind
-    ("C-c x c" . calendar))
+    ("C-c x a" . calendar))
 #+END_SRC
 
 * Languages
