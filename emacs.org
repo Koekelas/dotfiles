@@ -5945,9 +5945,8 @@ Configure monitors and monitor layouts.
 
 ** Agendas
 Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and
-subdirectories of ~koek/projects-dir~, are agenda files.
-
-Configure agendas.
+subdirectories of ~koek/projects-dir~, are agenda files. Configure
+agendas.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
