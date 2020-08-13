@@ -54,6 +54,15 @@ settings file manually.
 ** straight - Package manager
 [[https://github.com/raxod502/straight.el][straight (GitHub)]]
 
+Disable builtin package manager.
+
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
+  (setq package-enable-at-startup nil)
+#+END_SRC
+
+Straight can install any commit of any Git repository, it's not
+limited to what's available in a package archive. Configure straight.
+
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)              ; Must be a dynamic variable
 
