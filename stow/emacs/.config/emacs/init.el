@@ -47,8 +47,7 @@
 
 (use-package dired
   :bind
-  (("C-c f f" . dired)
-   ("C-c f C-f" . dired-jump))
+  ("C-c f f" . dired)
   :hook (dired-mode . dired-hide-details-mode)
   :config
   (setq dired-recursive-copies 'always)
@@ -58,6 +57,11 @@
          (unsafe (concat safe " --group-directories-first")))
     (setq dired-listing-switches
           (or (and (executable-find "ls") unsafe) safe))))
+
+(use-package dired-x
+  :after dired
+  :bind
+  ("C-c f C-f" . dired-jump))
 
 (use-package diredfl
   :straight t
