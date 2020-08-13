@@ -49,14 +49,15 @@
   :bind
   (("C-c f f" . dired)
    ("C-c f C-f" . dired-jump))
+  :hook (dired-mode . dired-hide-details-mode)
   :config
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
   (setq dired-dwim-target t)
   (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
          (unsafe (concat safe " --group-directories-first")))
-    (setq dired-listing-switches (or (and (executable-find "ls") unsafe) safe)))
-  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+    (setq dired-listing-switches
+          (or (and (executable-find "ls") unsafe) safe))))
 
 (use-package diredfl
   :straight t
@@ -1873,10 +1874,10 @@ Output is between `compilation-filter-start' and point."
    ("C-M-p" . org-previous-visible-heading)
    ("C-M-a" . org-previous-block)
    ("C-M-e" . org-next-block))
-  :hook (org-mode . org-cdlatex-mode)
-  :init
-  ;; Setup resume clock after showing initial buffer
-  (add-hook 'window-setup-hook #'org-clock-persistence-insinuate)
+  :hook
+  ((window-setup . org-clock-persistence-insinuate) ; After initial buffer
+   (org-mode . org-cdlatex-mode)
+   (org-babel-after-execute . org-redisplay-inline-images))
   :config
   (use-package avy
     :bind
@@ -1940,7 +1941,6 @@ Output is between `compilation-filter-start' and point."
                  (alist-get 'geometry)  ; Arrangement/resolution
                  (nth 2))))             ; Width
     (setq org-image-actual-width (floor (* width (/ 1 5.0)))))
-  (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
 
   ;; Appearance - LaTeX previews
   (setq org-startup-with-latex-preview t)
