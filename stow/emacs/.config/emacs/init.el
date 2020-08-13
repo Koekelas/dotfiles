@@ -52,11 +52,17 @@
   :config
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
-  (setq dired-dwim-target t)
   (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
          (unsafe (concat safe " --group-directories-first")))
     (setq dired-listing-switches
           (or (and (executable-find "ls") unsafe) safe))))
+
+(use-package dired-aux
+  :after dired
+  :config
+  (setq dired-vc-rename-file t)
+  (setq dired-dwim-target #'dired-dwim-target-recent)
+  (setq dired-create-destination-dirs 'ask))
 
 (use-package dired-x
   :after dired
