@@ -1413,12 +1413,14 @@ Output is between `compilation-filter-start' and point."
   ;; When trashing e-mail, e-mail is flagged trashed. E-mail flagged
   ;; trashed is deleted by most e-mail providers. Move to trash but
   ;; don't flag trashed.
-  (setf (alist-get 'trash mu4e-marks)
-        (plist-put
-         (alist-get 'trash mu4e-marks)
-         :action
-         (lambda (docid _msg target)
-           (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))))
+  (push
+   (cons
+    'trash
+    (plist-put (alist-get 'trash mu4e-marks)
+               :action
+               (lambda (docid _msg target)
+                 (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
+   mu4e-marks))
 
 (use-package mu4e-view
   :defer t
