@@ -3963,6 +3963,52 @@ On [[https://devdocs.io/][DevDocs]], enable:
     (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 #+END_SRC
 
+** eww - Web browser
+#+BEGIN_SRC emacs-lisp
+  (use-package eww
+    :bind
+    ("C-c x b" . eww)
+    :preface
+    (defvar koek-eww/redirect-fs
+      (list (lambda (url)
+              (require 'url)
+              (let ((u (url-generic-parse-url (eww--dwim-expand-url url))))
+                (when (string-match-p
+                       (rx line-start (zero-or-one "www.") "reddit.com" line-end)
+                       (or (url-host u) ""))
+                  (setf (url-host u) "old.reddit.com")
+                  (url-recreate-url u)))))
+      "List of redirect functions.
+  Functions are passed a URL and should return a redirect URL or
+  nil.")
+
+    (define-advice eww (:filter-args (args) koek-eww/redirect)
+      (let ((url (car args)))
+        (cons (or (seq-find #'identity
+                            (mapcar (lambda (f)
+                                      (funcall f url))
+                                    koek-eww/redirect-fs))
+                  url)
+              (cdr args))))
+    :config
+    (use-package link-hint
+      :bind
+      (:map eww-mode-map
+       ("j" . link-hint-open-link))))
+#+END_SRC
+
+*** shr - HTML renderer
+Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfeed - News reader][elfeed]]) besides eww.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package shr
+    :defer t
+    :config
+    (setq shr-use-colors nil)
+    (setq shr-max-image-proportion 0.6)
+    (setq shr-image-animate nil))
+#+END_SRC
+
 ** mu4e - E-mail client
 [[https://github.com/djcb/mu][mu4e (GitHub)]]
 
@@ -4188,18 +4234,6 @@ For news feeds, see [[*News feeds][News feeds]].
   (use-package saveplace-pdf-view
     :straight t
     :after pdf-view)
-#+END_SRC
-
-** shr - HTML viewer
-Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfeed - News reader][elfeed]]) to render HTML.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package shr
-    :defer t
-    :config
-    (setq shr-use-colors nil)
-    (setq shr-max-image-proportion 0.6)
-    (setq shr-image-animate nil))
 #+END_SRC
 
 ** dictionary - Dictionary
@@ -5921,6 +5955,9 @@ Define well known directories.
   (defconst koek/documents-dir (koek/resolve-directory "XDG_DOCUMENTS_DIR")
     "File name to documents directory.")
 
+  (defconst koek/download-dir (koek/resolve-directory "XDG_DOWNLOAD_DIR")
+    "File name to download directory.")
+
   (defconst koek/projects-dir (koek/resolve-directory "KOEK_PROJECTS_DIR")
     "File name to projects directory.")
 
@@ -6180,6 +6217,16 @@ Configure roam capture templates.
                              "")
                            "\n")
              :unnarrowed t))))
+#+END_SRC
+
+** Downloads
+Configure downloads.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eww
+    :defer t
+    :config
+    (setq eww-download-directory koek/download-dir))
 #+END_SRC
 
 ** E-mail accounts

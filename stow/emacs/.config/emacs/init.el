@@ -1355,6 +1355,44 @@ Output is between `compilation-filter-start' and point."
   (setq compilation-scroll-output 'first-error)
   (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 
+(use-package eww
+  :bind
+  ("C-c x b" . eww)
+  :preface
+  (defvar koek-eww/redirect-fs
+    (list (lambda (url)
+            (require 'url)
+            (let ((u (url-generic-parse-url (eww--dwim-expand-url url))))
+              (when (string-match-p
+                     (rx line-start (zero-or-one "www.") "reddit.com" line-end)
+                     (or (url-host u) ""))
+                (setf (url-host u) "old.reddit.com")
+                (url-recreate-url u)))))
+    "List of redirect functions.
+Functions are passed a URL and should return a redirect URL or
+nil.")
+
+  (define-advice eww (:filter-args (args) koek-eww/redirect)
+    (let ((url (car args)))
+      (cons (or (seq-find #'identity
+                          (mapcar (lambda (f)
+                                    (funcall f url))
+                                  koek-eww/redirect-fs))
+                url)
+            (cdr args))))
+  :config
+  (use-package link-hint
+    :bind
+    (:map eww-mode-map
+     ("j" . link-hint-open-link))))
+
+(use-package shr
+  :defer t
+  :config
+  (setq shr-use-colors nil)
+  (setq shr-max-image-proportion 0.6)
+  (setq shr-image-animate nil))
+
 (use-package mu4e
   :bind
   ("C-c x m" . mu4e)
@@ -1557,13 +1595,6 @@ Output is between `compilation-filter-start' and point."
 (use-package saveplace-pdf-view
   :straight t
   :after pdf-view)
-
-(use-package shr
-  :defer t
-  :config
-  (setq shr-use-colors nil)
-  (setq shr-max-image-proportion 0.6)
-  (setq shr-image-animate nil))
 
 (use-package dictionary
   :straight t
@@ -2864,6 +2895,9 @@ Must be called from control buffer."
 (defconst koek/documents-dir (koek/resolve-directory "XDG_DOCUMENTS_DIR")
   "File name to documents directory.")
 
+(defconst koek/download-dir (koek/resolve-directory "XDG_DOWNLOAD_DIR")
+  "File name to download directory.")
+
 (defconst koek/projects-dir (koek/resolve-directory "KOEK_PROJECTS_DIR")
   "File name to projects directory.")
 
@@ -3039,6 +3073,11 @@ When optional FULL is truthy, return absolute file names."
                            "")
                          "\n")
            :unnarrowed t))))
+
+(use-package eww
+  :defer t
+  :config
+  (setq eww-download-directory koek/download-dir))
 
 (use-package mu4e-vars
   :defer t
