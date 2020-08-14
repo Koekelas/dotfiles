@@ -1529,11 +1529,82 @@ nil.")
 (use-package elfeed
   :straight t
   :bind
-  ("C-c x n" . elfeed))
+  ("C-c x n" . elfeed)
+  :preface
+  (defun koek-feed/get-entries ()
+    "Return selected entries.
+When called from show buffer, return current entry.  When called
+from search buffer, return entries in region or entry on current
+line."
+    (if elfeed-show-entry
+        (list elfeed-show-entry)
+      (elfeed-search-selected)))
+
+  (defun koek-feed/visit (entries)
+    "Visit ENTRIES in eww."
+    (require 'eww)
+    (thread-last entries
+      (mapcar (lambda (entry)
+                (with-current-buffer
+                    (generate-new-buffer
+                     (format "*eww: %s*" (elfeed-entry-title entry)))
+                  (eww-mode)
+                  (eww (elfeed-entry-link entry))
+                  (current-buffer))))
+      (mapc #'pop-to-buffer-same-window)))
+
+  (defun koek-feed/visit-dwim ()
+    "Visit selected entries in eww."
+    (interactive)
+    (let ((entries (koek-feed/get-entries)))
+      (when (derived-mode-p 'elfeed-search-mode)
+        (elfeed-untag entries 'unread)
+        (mapc #'elfeed-search-update-entry entries)
+        (unless (or elfeed-search-remain-on-entry (use-region-p))
+          (forward-line)))
+      (koek-feed/visit entries)))
+
+  (defun koek-feed/enqueue (entries &optional next)
+    "Enqueue ENTRIES in bongo.
+When NEXT is truthy, enqueue after playing track, else, enqueue
+after last track."
+    (require 'bongo)
+    (with-temp-bongo-library-buffer
+      (dolist (entry entries)
+        (bongo-insert-uri (elfeed-entry-link entry)
+                          (elfeed-entry-title entry)))
+      (bongo-enqueue-region (or (and next 'insert) 'append)
+                            (point-min) (point-max)
+                            'maybe-display-playlist)))
+
+  (defun koek-feed/enqueue-dwim (&optional arg)
+    "Enqueue selected entries in bongo.
+With `\\[universal-argument]' prefix argument ARG, enqueue after
+playing track, else, enqueue after last track."
+    (interactive "P")
+    (let ((entries (koek-feed/get-entries)))
+      (when (derived-mode-p 'elfeed-search-mode)
+        (elfeed-untag entries 'unread)
+        (mapc #'elfeed-search-update-entry entries)
+        (unless (or elfeed-search-remain-on-entry (use-region-p))
+          (forward-line)))
+      (koek-feed/enqueue entries arg)))
+
+  (defun koek-feed/enqueue-next-dwim ()
+    "Enqueue selected entries in bongo after playing track."
+    (interactive)
+    (koek-feed/enqueue-dwim t)))
 
 (use-package elfeed-search
   :defer t
   :config
+  (bind-keys
+   :map elfeed-search-mode-map
+   ("b" . koek-feed/visit-dwim)
+   ("B" . elfeed-search-browse-url)
+   ("e" . koek-feed/enqueue-dwim)
+   ("E" . koek-feed/enqueue-next-dwim))
+
   (setq elfeed-search-filter (concat elfeed-search-filter " ")))
 
 (use-package elfeed-show
@@ -1542,7 +1613,14 @@ nil.")
   (use-package link-hint
     :bind
     (:map elfeed-show-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (bind-keys
+   :map elfeed-show-mode-map
+   ("b" . koek-feed/visit-dwim)
+   ("B" . elfeed-show-visit)
+   ("e" . koek-feed/enqueue-dwim)
+   ("E" . koek-feed/enqueue-next-dwim)))
 
 (use-package pdf-view
   :straight pdf-tools
