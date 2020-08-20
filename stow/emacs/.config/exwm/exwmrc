@@ -1,4 +1,3 @@
-#!/bin/bash
 xsetroot -cursor_name left_ptr
 
 unclutter --jitter 3 &

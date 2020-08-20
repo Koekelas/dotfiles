@@ -163,7 +163,7 @@ Hide superfluous applications.
 
 * EXWM
 :PROPERTIES:
-:header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc :shebang #!/bin/bash
+:header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc
 :END:
 
 Set pointer cursor. For cursor names, contrary to what the xsetroot
