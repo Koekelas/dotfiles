@@ -2855,32 +2855,25 @@ Must be called from control buffer."
   :config
   (setq auth-sources '("secrets:Login")))
 
-(defun koek/resolve-directory (name default)
-  "Resolve directory in environment variable NAME.
-When environment variable is unset, resolve directory DEFAULT."
-  (file-name-as-directory (file-truename (or (getenv name) default))))
+(defun koek/resolve-directory (name)
+  "Resolve directory in environment variable NAME."
+  (thread-first (or (getenv name) (expand-file-name "~/"))
+    file-truename
+    file-name-as-directory))
 
-(defconst koek/documents-dir
-  (koek/resolve-directory "XDG_DOCUMENTS_DIR" "~/Documenten/")
+(defconst koek/documents-dir (koek/resolve-directory "XDG_DOCUMENTS_DIR")
   "File name to documents directory.")
 
-(defconst koek/projects-dir
-  (koek/resolve-directory "KOEK_PROJECTS_DIR" "~/Projecten/")
+(defconst koek/projects-dir (koek/resolve-directory "KOEK_PROJECTS_DIR")
   "File name to projects directory.")
 
-(defconst koek/calendars-dir
-  (koek/resolve-directory "KOEK_CALENDARS_DIR"
-                          (expand-file-name "Kalenders/" koek/documents-dir))
+(defconst koek/calendars-dir (koek/resolve-directory "KOEK_CALENDARS_DIR")
   "File name to calendars directory.")
 
-(defconst koek/notes-dir
-  (koek/resolve-directory "KOEK_NOTES_DIR"
-                          (expand-file-name "Notities/" koek/documents-dir))
+(defconst koek/notes-dir (koek/resolve-directory "KOEK_NOTES_DIR")
   "File name to notes directory.")
 
-(defconst koek/news-dir
-  (koek/resolve-directory "KOEK_NEWS_DIR"
-                          (expand-file-name "Nieuws/" koek/documents-dir))
+(defconst koek/news-dir (koek/resolve-directory "KOEK_NEWS_DIR")
   "File name to news directory.")
 
 (use-package exar
