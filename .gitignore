@@ -1,4 +1,4 @@
+/secrets/
 /stow/emacs/.config/emacs/straight/
 /stow/emacs/.config/emacs/var/*
 !/stow/emacs/.config/emacs/var/eshell/alias
-/ssh/
