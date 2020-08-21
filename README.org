@@ -21,17 +21,7 @@ To get started, run:
 Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from this directory:
 
 #+BEGIN_SRC sh
-  ## General
-  stow env xdg bash git gnupg
-
-  ## Emacs
-  stow emacs isync mu vdirsyncer
-
-  ## Languages
-  stow jupyter cuda keras nltk
-
-  ## Other
-  stow freecad calf avahi cmake cups gnome hwloc java qt steam tex catgen
+  make install
 #+END_SRC
 
 * Installing dependencies
