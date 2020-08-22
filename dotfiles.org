@@ -357,12 +357,24 @@ To stow all stores, run:
 #+END_SRC
 
 * Git
+:PROPERTIES:
+:header-args:conf: :tangle stow/git/.config/git/config
+:END:
+
 Set identity.
 
-#+BEGIN_SRC conf :tangle stow/git/.config/git/config :noweb yes
+#+BEGIN_SRC conf :noweb yes
   [user]
   name = <<name>>
   email = <<email>>
+  signingkey = 08153F0DF65B934C
+#+END_SRC
+
+Sign commits.
+
+#+BEGIN_SRC conf
+  [commit]
+  gpgsign = true
 #+END_SRC
 
 ** Global ignore

@@ -1,3 +1,7 @@
 [user]
 name = Nicolas De Jaeghere
 email = nicolas@dejaeghe.re
+signingkey = 08153F0DF65B934C
+
+[commit]
+gpgsign = true
