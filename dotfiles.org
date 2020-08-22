@@ -340,6 +340,20 @@ Non login
   PS1='[\u@\h \W]\$ '
 #+END_SRC
 
+* GnuPG                                                               :setup:
+When setting GnuPG's home, the directory must be created manually. To
+create it, run:
+
+#+BEGIN_SRC sh
+  mkdir -p "$XDG_DATA_HOME/gnupg"
+#+END_SRC
+
+Move data directory out of the way.
+
+#+BEGIN_SRC conf :tangle stow/gnupg/.config/environment.d/50-gnupg.conf
+  GNUPGHOME="$XDG_DATA_HOME/gnupg"
+#+END_SRC
+
 * Syncthing                                                           :setup:
 Stores:
 - archive: Archief
@@ -385,20 +399,6 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   build/
   node_modules/
   .nrepl-port
-#+END_SRC
-
-* GnuPG                                                               :setup:
-When setting GnuPG's home, the directory must be created manually. To
-create it, run:
-
-#+BEGIN_SRC sh
-  mkdir -p "$XDG_DATA_HOME/gnupg"
-#+END_SRC
-
-Move data directory out of the way.
-
-#+BEGIN_SRC conf :tangle stow/gnupg/.config/environment.d/50-gnupg.conf
-  GNUPGHOME="$XDG_DATA_HOME/gnupg"
 #+END_SRC
 
 * Firefox                                                             :setup:
