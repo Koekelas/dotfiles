@@ -333,7 +333,7 @@ Non login
 #+END_SRC
 
 #+BEGIN_SRC sh
-  alias ls='ls -lah --color=auto'
+  alias ls='ls -lah --group-directories-first --color=auto'
 #+END_SRC
 
 #+BEGIN_SRC sh
