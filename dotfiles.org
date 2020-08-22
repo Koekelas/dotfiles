@@ -340,6 +340,22 @@ Non login
   PS1='[\u@\h \W]\$ '
 #+END_SRC
 
+* SSH
+For hosts, see [[file:secrets.org::*Hosts][Hosts]].
+
+To generate an SSH key, run:
+
+#+BEGIN_SRC sh
+  # Ed25519
+  ssh-keygen -t ed25519 -C "nicolas@dejaeghe.re"
+
+  # RSA
+  ssh-keygen -t rsa -b 4096 -C "nicolas@dejaeghe.re"
+#+END_SRC
+
+Ed25519 is preferred when supported. Unlike passwords, SSH keys can be
+reused.
+
 * GnuPG                                                               :setup:
 When setting GnuPG's home, the directory must be created manually. To
 create it, run:
