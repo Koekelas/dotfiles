@@ -117,7 +117,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   pacman -S arduino arduino-avr-core
 
   # Setup Arduino
-  gpasswd -a `whoami` uucp
+  gpasswd -a $(whoami) uucp
 
   ## C family
   pacman -S gcc meson clang gdb
@@ -168,7 +168,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   sudo -u postgres initdb -D /var/lib/postgres/data/
   systemctl enable postgresql.service
   systemctl start postgresql.service
-  sudo -u postgres createuser -s `whoami`
+  sudo -u postgres createuser -s $(whoami)
   createdb
 
   ## TeX, Org & Markdown
