@@ -362,6 +362,7 @@ create it, run:
 
 #+BEGIN_SRC sh
   mkdir -p "$XDG_DATA_HOME/gnupg"
+  chmod 700 "$XDG_DATA_HOME/gnupg"
 #+END_SRC
 
 Move data directory out of the way.
@@ -369,6 +370,21 @@ Move data directory out of the way.
 #+BEGIN_SRC conf :tangle stow/gnupg/.config/environment.d/50-gnupg.conf
   GNUPGHOME="$XDG_DATA_HOME/gnupg"
 #+END_SRC
+
+To generate a PGP key, run:
+
+#+BEGIN_SRC sh
+  gpg --full-gen-key
+#+END_SRC
+
+- Type: RSA and RSA
+- Size: 4096
+- Expires in: key does not expire
+- Name: Nicolas De Jaeghere
+- E-mail: nicolas@dejaeghe.re
+- Comment:
+
+For a guide on encrypted e-mail, see [[https://emailselfdefense.fsf.org/][Email Self-Defense (FSF)]].
 
 * Syncthing                                                           :setup:
 Stores:
