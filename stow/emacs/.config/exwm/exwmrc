@@ -1,3 +1,6 @@
+eval $(gnome-keyring-daemon -s)
+export SSH_AUTH_SOCK
+
 xsetroot -cursor_name left_ptr
 
 unclutter --jitter 3 &

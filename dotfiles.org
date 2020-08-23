@@ -166,6 +166,13 @@ Hide superfluous applications.
 :header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc
 :END:
 
+Set SSH agent.
+
+#+BEGIN_SRC sh
+  eval $(gnome-keyring-daemon -s)
+  export SSH_AUTH_SOCK
+#+END_SRC
+
 Set pointer cursor. For cursor names, contrary to what the xsetroot
 man page says, see [[file:/usr/include/X11/cursorfont.h][cursorfont.h]].
 
