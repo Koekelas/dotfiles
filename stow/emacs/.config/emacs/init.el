@@ -1220,7 +1220,12 @@ N is an integer, a workspace number."
 
 (use-package apropos
   :bind
-  ("C-c d a" . apropos))
+  ("C-c d a" . apropos)
+  :config
+  (use-package link-hint
+    :bind
+    (:map apropos-mode-map
+     ("j" . link-hint-open-link))))
 
 (use-package devdocs-lookup
   :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
