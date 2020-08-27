@@ -37,7 +37,7 @@ Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directori
 #+BEGIN_SRC conf :noweb-ref user-dirs :tangle stow/xdg/.config/user-dirs.dirs
   XDG_DESKTOP_DIR="$HOME/.Bureaublad"
   XDG_DOCUMENTS_DIR="$HOME/Documenten"
-  XDG_DOWNLOAD_DIR="$HOME/Inbox"
+  XDG_DOWNLOAD_DIR="$HOME/Inbox/tmp"
   XDG_MUSIC_DIR="$HOME/Muziek"
   XDG_PICTURES_DIR="$HOME/Afbeeldingen"
   XDG_PUBLICSHARE_DIR="$HOME/Delen"
