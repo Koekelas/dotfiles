@@ -1354,10 +1354,9 @@ first available number."
   (defun koek-cmpl/style-output ()
     "Style process output.
 Output is between `compilation-filter-start' and point."
+    (require 'ansi-color)
     (ansi-color-apply-on-region compilation-filter-start (point)))
   :config
-  (require 'ansi-color)
-
   (setq compilation-scroll-output 'first-error)
   (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 
@@ -2591,6 +2590,8 @@ THEME-SPEC is a theme specification, see
                              spec))
                      koek-thm/theme-specs)))
         (cdr (assoc (completing-read "Theme: " candidates nil t) candidates)))))
+    (require 'map)
+
     ;; Set window theme
     (mapc #'disable-theme custom-enabled-themes)
     (let* ((palette
@@ -2658,8 +2659,6 @@ THEME-SPEC is a theme specification, see
     ;; Set frame theme
     (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
   :config
-  (require 'map)
-
   (when-let ((spec (seq-find (lambda (spec)
                                (eq (plist-get spec :theme)
                                    koek-thm/default-theme))

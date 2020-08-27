@@ -3961,10 +3961,9 @@ On [[https://devdocs.io/][DevDocs]], enable:
     (defun koek-cmpl/style-output ()
       "Style process output.
   Output is between `compilation-filter-start' and point."
+      (require 'ansi-color)
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
-    (require 'ansi-color)
-
     (setq compilation-scroll-output 'first-error)
     (add-hook 'compilation-filter-hook #'koek-cmpl/style-output))
 #+END_SRC
@@ -5640,6 +5639,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
                                spec))
                        koek-thm/theme-specs)))
           (cdr (assoc (completing-read "Theme: " candidates nil t) candidates)))))
+      (require 'map)
+
       ;; Set window theme
       (mapc #'disable-theme custom-enabled-themes)
       (let* ((palette
@@ -5707,8 +5708,6 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       ;; Set frame theme
       (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
     :config
-    (require 'map)
-
     (when-let ((spec (seq-find (lambda (spec)
                                  (eq (plist-get spec :theme)
                                      koek-thm/default-theme))
