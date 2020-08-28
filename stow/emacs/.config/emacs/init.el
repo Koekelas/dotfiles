@@ -1741,7 +1741,7 @@ after last track."
                             'maybe-display-playlist)))
 
   ;; Contrary to what its signature suggests,
-  ;; `bongo-dired-enqueue-lines' enqueues only the current line
+  ;; `bongo-dired-enqueue-lines' enqueues only current line
   (defun koek-bngo/dired-enqueue-dwim (&optional arg)
     "Enqueue current line or marked lines.
 With `\\[universal-argument]' prefix argument ARG, enqueue after
