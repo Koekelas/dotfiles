@@ -2869,8 +2869,8 @@ Resize windows pixelwise, not characterwise.
 
 ** Window commands
 The default keybindings assume a QWERTY keyboard layout. Some
-keybindings are clunky on other keyboard layouts. Rebind clunky window
-commands.
+keybindings are cumbersome on other keyboard layouts. Rebind
+cumbersome window commands.
 
 #+BEGIN_SRC emacs-lisp
   (bind-keys
@@ -3623,8 +3623,8 @@ etc.
 #+END_SRC
 
 ** Global commands
-The setting ~repeat-on-final-keystroke~ is clunky. Rebind ~repeat~ to
-something short.
+The setting ~repeat-on-final-keystroke~ is cumbersome. Rebind ~repeat~
+to something short.
 
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-z" #'repeat)
