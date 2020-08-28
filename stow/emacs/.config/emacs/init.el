@@ -739,8 +739,9 @@ name."
 
 (defun koek-wind/resize (shrink vertical)
   "Resize selected window.
-Unless SHRINK is nil, shrink window, else, grow window.  Unless
-VERTICAL is nil, resize vertically, else, resize horizontally."
+When SHRINK is truthy, shrink window, else, grow window.  When
+VERTICAL is truthy, resize vertically, else, resize
+horizontally."
   (let* ((width (nth 2 (frame-monitor-geometry)))
          (step (/ width koek-wind/n-hor-steps))
          (delta (if shrink
