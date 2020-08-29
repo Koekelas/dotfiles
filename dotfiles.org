@@ -185,7 +185,7 @@ moved some distance, it's common to bump into the [[https://en.wikipedia.org/wik
 typing.
 
 #+BEGIN_SRC sh
-  unclutter --jitter 3 &
+  unclutter --jitter 3 --ignore-scrolling &
 #+END_SRC
 
 Launch Emacs.

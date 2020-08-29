@@ -3,6 +3,6 @@ export SSH_AUTH_SOCK
 
 xsetroot -cursor_name left_ptr
 
-unclutter --jitter 3 &
+unclutter --jitter 3 --ignore-scrolling &
 
 . /etc/exwm/exwmrc
