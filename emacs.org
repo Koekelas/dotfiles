@@ -2997,7 +2997,7 @@ steps.
 #+END_SRC
 
 ** eyebrowse - Workspaces
-[[https://github.com/wasamasa/eyebrowse][eyebrowse (GitHub)]]
+[[https://depp.brause.cc/eyebrowse/][eyebrowse]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
