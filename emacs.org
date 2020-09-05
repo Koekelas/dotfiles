@@ -3880,11 +3880,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
       "C-c w" "windows"
       "C-c x" "other"
       "C-c z" "system")
-
-    ;; Resolve rename keybinding conflict with org
-    (which-key-add-major-mode-key-based-replacements 'org-mode
-      "C-c !" nil)
-
     (which-key-mode)
     :delight)
 #+END_SRC

@@ -1287,11 +1287,6 @@ N is an integer, a workspace number."
     "C-c w" "windows"
     "C-c x" "other"
     "C-c z" "system")
-
-  ;; Resolve rename keybinding conflict with org
-  (which-key-add-major-mode-key-based-replacements 'org-mode
-    "C-c !" nil)
-
   (which-key-mode)
   :delight)
 
