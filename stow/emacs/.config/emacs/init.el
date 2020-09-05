@@ -1788,6 +1788,15 @@ playing track, else, enqueue after last track."
   (setq bongo-display-track-icons nil)
   :delight bongo-dired-library-mode)
 
+(use-package keycast
+  :straight t
+  :defer t
+  :config
+  (setq keycast-window-predicate #'moody-window-active-p)
+  (setq keycast-insert-after 'keycast-marker)
+  (setq keycast-separator-width 3)
+  (setq keycast-remove-tail-elements nil))
+
 (use-package gino
   :load-path "lisp/gino"
   :commands gino-generate-project)
@@ -3028,7 +3037,7 @@ Must be called from control buffer."
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace koek-ml/depth
             koek-ml/exwm-workspaces koek-ml/eyebrowse
-            koek-ml/id koek-ml/diff koek-ml/task koek-ml/modes))
+            koek-ml/id koek-ml/diff keycast-marker koek-ml/task koek-ml/modes))
     (force-mode-line-update)
     (dolist (variant (koek-ml/get-variants))
       (let ((state (koek-ml/get-variant-state variant)))
@@ -3053,8 +3062,8 @@ Must be called from control buffer."
                 `(,@koek-ml/dummies " "
                   koek-ml/eldoc koek-ml/ace koek-ml/ediff
                   koek-ml/depth koek-ml/exwm-workspaces koek-ml/eyebrowse
-                  koek-ml/id koek-ml/state
-                  koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
+                  koek-ml/id koek-ml/state koek-ml/position koek-ml/pdf
+                  keycast-marker koek-ml/exwm-input koek-ml/input
                   koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
 
 (use-package auth-source
