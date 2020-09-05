@@ -394,7 +394,7 @@ strings."
   (require 'smartparens-config)
 
   (setq sp-navigate-interactive-always-progress-point t)
-  (setq sp-navigate-reindent-after-up ())
+  (setq sp-navigate-reindent-after-up nil)
   (setq sp-highlight-pair-overlay nil)
   (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
   (koek-sp/setup-separate-sexp-handler 'lisp-mode "(" "\"")
@@ -3176,7 +3176,7 @@ When optional FULL is truthy, return absolute file names."
   ;; Store sync state with calendars, simplifying backup
   (setq org-caldav-save-directory koek/calendars-dir)
   (setq org-caldav-inbox (expand-file-name "Afspraken.org" koek/calendars-dir))
-  (setq org-caldav-files ())
+  (setq org-caldav-files nil)
 
   ;; Remote copy
   (setq org-caldav-url
