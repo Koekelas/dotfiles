@@ -1017,11 +1017,11 @@ Keybinding is a string, see `koek-wm/simulation-keybindings'.")
   (defvar koek-wm/previous-workspace-n nil
     "Previously selected workspace number.")
 
-  (defface koek-wm/selected-workspace '((t :foreground "#ffffff"))
+  (defface koek-wm/selected-workspace '((t :inherit mode-line-emphasis))
     "Face for selected workspace label in mode line."
     :group 'exwm-workspace)
 
-  (defface koek-wm/unselected-workspace '((t :foreground "#000000"))
+  (defface koek-wm/unselected-workspace nil
     "Face for unselected workspace label in mode line."
     :group 'exwm-workspace)
 
@@ -1090,7 +1090,7 @@ N is an integer, a workspace number."
 (use-package exwm-floating
   :defer t
   :preface
-  (defface koek-wm/floating-border '((t :foreground "#000000"))
+  (defface koek-wm/floating-border '((t :foreground "white"))
     "Face for border of floating frames."
     :group 'exwm-floating)
 
@@ -1634,7 +1634,7 @@ playing track, else, enqueue after last track."
   :straight pdf-tools
   :mode ((rx ".pdf" string-end) . pdf-view-mode)
   :preface
-  (defface koek-pdf/midnight '((t :foreground "#000000" :background "#ffffff"))
+  (defface koek-pdf/midnight '((t :foreground "white" :background "black"))
     "Face for page when `pdf-view-midnight-minor-mode' is enabled."
     :group 'pdf-view)
 
