@@ -1116,7 +1116,7 @@ N is an integer, a workspace number."
     (setq exwm-floating-border-color
           (face-attribute 'koek-wm/floating-border :foreground)))
   :config
-  (add-hook 'koek-thm/enable-hook #'koek-wm/set-floating-border-color))
+  (add-hook 'koek-thm/load-hook #'koek-wm/set-floating-border-color))
 
 (use-package exwm-manage
   :defer t
@@ -1687,7 +1687,7 @@ playing track, else, enqueue after last track."
      ("C-s" . isearch-forward)))
 
   (setq-default pdf-view-display-size 'fit-page)
-  (add-hook 'koek-thm/enable-hook #'koek-pdf/re-apply-midnight-colors)
+  (add-hook 'koek-thm/load-hook #'koek-pdf/re-apply-midnight-colors)
   :delight (pdf-view-mode "PDF" :major))
 
 (use-package pdf-links
@@ -2531,182 +2531,111 @@ TITLE is a string, a note title."
                "%b")))))
         " - Emacs"))
 
-(use-package color-theme-sanityinc-tomorrow
-  :straight t
-  :preface
-  (defvar koek-thm/theme-specs
-    '((:theme sanityinc-tomorrow-blue     :name "Blue"     :palette blue     :dark t)
-      (:theme sanityinc-tomorrow-bright   :name "Bright"   :palette bright   :dark t)
-      (:theme sanityinc-tomorrow-day      :name "Day"      :palette day      :dark nil)
-      (:theme sanityinc-tomorrow-eighties :name "Eighties" :palette eighties :dark t)
-      (:theme sanityinc-tomorrow-night    :name "Night"    :palette night    :dark t))
-    "List of theme specifications.
-A theme specification is a plist with keys :theme, :name,
-:palette and :dark.  :theme is a symbol, a Tomorrow theme
-variant.  :name is a string, the theme name.  :palette is a
-symbol, the theme color palette, see
-`color-theme-sanityinc-tomorrow-colors'.  :dark is a symbol,
-whether the theme is dark.")
+(defvar koek-thm/load-hook nil
+  "Normal hook run after loading theme.")
 
-  (defvar koek-thm/default-theme 'sanityinc-tomorrow-eighties
-    "Default theme.")
+(define-advice load-theme (:after (&rest _args) koek-thm/run-load-hooks)
+  (run-hooks 'koek-thm/load-hook))
 
-  (defvar koek-thm/enable-hook nil
-    "Normal hook run after enabling theme.")
+(defvar koek-thm/dark-themes nil
+  "List of theme symbols, see `koek-thm/set-frame-theme-variant'.")
 
-  (define-advice load-theme (:after (&rest _args) koek-thm/run-enable-hooks)
-    (run-hooks 'koek-thm/enable-hook))
+(defun koek-thm/set-frame-theme-variant (frame)
+  "Set theme variant of FRAME.
+When current theme is member of `koek-thm/dark-themes', set frame
+theme variant to dark, else, clear frame theme variant."
+  (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
+    (koek-thm/set-frame-theme-variant-xprop frame)))
 
-  (defun koek-thm/set-frame-theme-variant (frame)
+(when (executable-find "xprop")
+  (defun koek-thm/set-frame-theme-variant-xprop (frame)
     "Set theme variant of FRAME.
-When window theme is dark, theme variant is set to dark, else,
-it's set to nothing."
-    (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
-      (koek-thm/set-frame-theme-variant-xprop frame)))
-
-  (when (executable-find "xprop")
-    (defun koek-thm/set-frame-theme-variant-xprop (frame)
-      "Set theme variant of FRAME.
 Mustn't be called directly, see
 `koek-thm/set-frame-theme-variant'."
-      (let* ((spec (seq-find (lambda (spec)
-                               (eq (plist-get spec :theme)
-                                   (car custom-enabled-themes)))
-                             koek-thm/theme-specs))
-             (variant (or (and (plist-get spec :dark) "dark") "")))
-        (make-process :name "xprop"
-                      :command `("xprop"
-                                 "-id" ,(frame-parameter frame 'outer-window-id)
-                                 "-f" "_GTK_THEME_VARIANT" "8u"
-                                 "-set" "_GTK_THEME_VARIANT" ,variant)))))
+    (make-process
+     :name "xprop"
+     :command
+     `("xprop"
+       "-id" ,(frame-parameter frame 'outer-window-id)
+       "-f" "_GTK_THEME_VARIANT" "8u"
+       "-set" "_GTK_THEME_VARIANT"
+       ,(or (and (member (car custom-enabled-themes) koek-thm/dark-themes) "dark")
+            "")))))
 
-  (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
+(defun koek-thm/update-frame-theme-variant ()
+  "Update theme variant of all frames."
+  (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
 
-  (defun koek-thm/hex-to-rgb (color)
-    "Convert hex color COLOR to RGB.
-COLOR is a string, a color of format \"#RGB\".  R, G and B are
-one or more hexadecimal digits, the red, green and blue color
-component."
-    (let ((normalized
-           (progn
-             (string-match (rx (submatch-n 1 (one-or-more (any hex-digit))))
-                           color)
-             (match-string 1 color))))
-      (mapcar (lambda (component)
-                (string-to-number component 16))
-              (seq-partition normalized (/ (length normalized) 3)))))
+(add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
+(add-hook 'koek-thm/load-hook #'koek-thm/update-frame-theme-variant)
 
-  (defun koek-thm/rgb-to-hex (color)
-    "Convert RGB color COLOR to hex.
-COLOR is a list, a color of format '(R G B).  R, G and B are
-floats from zero to 255, the red, green and blue color
-component."
-    (apply #'format "#%02x%02x%02x" (mapcar #'round color)))
+(use-package modus-operandi-theme
+  :straight t
+  :defer t
+  :init
+  (setq modus-operandi-theme-bold-constructs t)
+  (setq modus-operandi-theme-slanted-constructs t)
+  (setq modus-operandi-theme-mode-line 'moody)
+  (setq modus-operandi-theme-headings '((t . section)))
+  (setq modus-operandi-theme-variable-pitch-headings t)
+  (setq modus-operandi-theme-scale-headings t)
+  (setq modus-operandi-theme-org-blocks 'greyscale))
 
-  (defun koek-thm/mix (color1 color2 &optional ratio)
-    "Mix COLOR1 with COLOR2.
-COLOR1 and COLOR2 are strings, a hex color, see
-`koek-thm/hex-to-rgb'.  Optional RATIO is a float from zero to
-one and defaults to one half.  Zero means mix zero units of
-COLOR1 with one unit of COLOR2, one means mix one unit of COLOR1
-with zero units of COLOR2."
-    (unless ratio
-      (setq ratio 0.5))
-    (let ((ratio´ (- 1 ratio)))
-      (koek-thm/rgb-to-hex
-       (seq-mapn (lambda (component component´)
-                   (+ (* component ratio) (* component´ ratio´)))
-                 (koek-thm/hex-to-rgb color1) (koek-thm/hex-to-rgb color2)))))
+(use-package modus-vivendi-theme
+  :straight t
+  :defer t
+  :init
+  (setq modus-vivendi-theme-bold-constructs t)
+  (setq modus-vivendi-theme-slanted-constructs t)
+  (setq modus-vivendi-theme-mode-line 'moody)
+  (setq modus-vivendi-theme-headings '((t . section)))
+  (setq modus-vivendi-theme-variable-pitch-headings t)
+  (setq modus-vivendi-theme-scale-headings t)
+  (setq modus-vivendi-theme-org-blocks 'greyscale)
+  (push 'modus-vivendi koek-thm/dark-themes))
 
-  (defun koek-thm/enable (theme-spec)
-    "Enable THEME-SPEC.
-THEME-SPEC is a theme specification, see
-`koek-thm/tmrw-theme-specs'."
-    (interactive
-     (list
-      (let ((candidates
-             (mapcar (lambda (spec)
-                       (cons (format "%s (%s)"
-                                     (plist-get spec :name)
-                                     (or (and (plist-get spec :dark) "dark")
-                                         "light"))
-                             spec))
-                     koek-thm/theme-specs)))
-        (cdr (assoc (completing-read "Theme: " candidates nil t) candidates)))))
-    (require 'map)
+(defmacro koek-thm/with-modus-vars (variant &rest body)
+  "Evaluate BODY with Modus theme variables bound.
+VARIANT is a symbol, the theme variant, either operandi or
+vivendi."
+  (declare (indent 1))
+  `(if (eq ,variant 'operandi)
+       (modus-operandi-theme-with-color-variables
+        ,@body)
+     (modus-vivendi-theme-with-color-variables
+       ,@body)))
 
-    ;; Set window theme
+(defun koek-thm/load-modus (variant)
+  "Load and enable Modus theme.
+VARIANT is a symbol, the theme variant, either operandi or
+vivendi."
+  (let ((koek-thm/load-hook nil)        ; Dynamic variable
+        (theme (or (and (eq variant 'operandi) 'modus-operandi)
+                   'modus-vivendi)))
+    (unless (member theme custom-known-themes)
+      ;; load-theme will load a theme even when it's already loaded
+      (load-theme theme 'no-confirm 'no-enable))
     (mapc #'disable-theme custom-enabled-themes)
-    (let* ((palette
-            (let* ((theme (alist-get (plist-get theme-spec :palette)
-                                     color-theme-sanityinc-tomorrow-colors))
-                   (personal
-                    (map-let (foreground background) theme
-                      `((alt-bg . ,(koek-thm/mix background foreground 0.98))
-                        (lc-fg  . ,(koek-thm/mix foreground background))))))
-              (append personal theme)))
-           (specs
-            (map-let
-                (foreground background current-line selection comment red alt-bg lc-fg)
-                palette
-              `(;; Default
-                (show-paren-match    :foreground ,foreground :background ,selection)
-                (show-paren-mismatch :foreground ,foreground :background unspecified
-                                     :underline (:style wave :color ,red))
-                (header-line         :background unspecified)
-                (fringe              :background ,alt-bg)
-                (mode-line           :background ,current-line
-                                     :underline ,selection :overline ,selection
-                                     :box unspecified :weight unspecified)
-                (mode-line-inactive  :background ,alt-bg
-                                     ;; Moody doesn't see inherited
-                                     ;; attributes
-                                     :underline ,selection :overline ,selection
-                                     :weight unspecified)
-                ;; avy
-                (avy-lead-face   :weight normal :slant normal)
-                (avy-lead-face-0 :inherit avy-lead-face)
-                (avy-lead-face-1 :inherit avy-lead-face)
-                (avy-lead-face-2 :inherit avy-lead-face)
-                ;; paren-face
-                (parenthesis :foreground ,lc-fg)
-                ;; whitespace
-                (whitespace-trailing :foreground unspecified :background ,selection)
-                (whitespace-empty    :foreground unspecified :background ,selection)
-                (whitespace-line     :foreground unspecified :background ,selection)
-                ;; ace-window
-                (aw-leading-char-face :background ,background
-                                      :weight bold :slant normal)
-                (aw-background-face   :background ,background)
-                (aw-mode-line-face    :inherit aw-leading-char-face)
-                ;; eyebrowse
-                (eyebrowse-mode-line-active :foreground ,foreground)
-                ;; exwm
-                (koek-wm/floating-border      :foreground ,selection)
-                (koek-wm/selected-workspace   :foreground ,foreground :weight bold)
-                (koek-wm/unselected-workspace :foreground ,comment)
-                ;; pdf-tools
-                (koek-pdf/midnight :foreground ,foreground :background ,background)
-                ;; dictionary
-                (dictionary-word-entry-face      :weight bold)
-                (dictionary-word-definition-face :family unspecified)
-                (dictionary-reference-face       :inherit link)))))
-      ;; Adding attributes to a face before it's defined, fails. Add
-      ;; attributes to user theme.
-      (apply #'custom-set-faces
-             (mapcar (pcase-lambda (`(,name . ,attrs))
-                       `(,name ((t . ,attrs))))
-                     specs)))
-    (load-theme (plist-get theme-spec :theme) 'no-confirm)
+    (enable-theme theme)
+    (koek-thm/with-modus-vars variant
+      (custom-set-faces
+       `(eyebrowse-mode-line-active   ((,class :inherit bold :foreground ,bg-main)))
+       `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
+       `(koek-wm/floating-border      ((,class :foreground ,fg-main)))
+       `(koek-wm/selected-workspace   ((,class :inherit bold :foreground ,bg-main)))
+       `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
+       `(koek-pdf/midnight            ((,class :foreground ,fg-main :background ,bg-main))))))
+  (run-hooks 'koek-thm/load-hook))
 
-    ;; Set frame theme
-    (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
-  :config
-  (when-let ((spec (seq-find (lambda (spec)
-                               (eq (plist-get spec :theme)
-                                   koek-thm/default-theme))
-                             koek-thm/theme-specs)))
-    (koek-thm/enable spec)))
+(defun koek-thm/toggle-modus-variant ()
+  "Toggle Modus theme variant."
+  (interactive)
+  (koek-thm/load-modus
+   (or (and (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi)
+       'operandi)))
+
+(setq face-near-same-color-threshold 45000)
+(koek-thm/load-modus 'vivendi)
 
 (defvar koek-font/pairs
   '(((:family "PragmataPro Mono" :height 110)
