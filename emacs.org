@@ -290,12 +290,14 @@ VC is a placeholder.
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
     :config
+    (require 'find-func)
     (let ((file-names
            (list
-            "/user/share/emacs/"
-            (file-truename (expand-file-name "straight/" user-emacs-directory)))))
+            (locate-dominating-file (find-library-name "files") emacs-version)
+            user-emacs-directory)))
       (dolist (file-name file-names)
-        (push (rx-to-string `(and line-start ,file-name)) recentf-exclude)))
+        (push (rx-to-string `(and line-start ,(file-truename file-name)))
+              recentf-exclude)))
     (recentf-mode))
 #+END_SRC
 

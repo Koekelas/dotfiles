@@ -178,12 +178,14 @@ When FORCE is truthy, continue commit unconditionally."
 
 (use-package recentf
   :config
+  (require 'find-func)
   (let ((file-names
          (list
-          "/user/share/emacs/"
-          (file-truename (expand-file-name "straight/" user-emacs-directory)))))
+          (locate-dominating-file (find-library-name "files") emacs-version)
+          user-emacs-directory)))
     (dolist (file-name file-names)
-      (push (rx-to-string `(and line-start ,file-name)) recentf-exclude)))
+      (push (rx-to-string `(and line-start ,(file-truename file-name)))
+            recentf-exclude)))
   (recentf-mode))
 
 (use-package saveplace
