@@ -2696,17 +2696,33 @@ THEME-SPEC is a theme specification, see
                              koek-thm/theme-specs)))
     (koek-thm/enable spec)))
 
-(defvar koek-font/font-specs
-  '((:family "PragmataPro Mono" :size 15)
-    (:family "Source Code Pro"  :size 13))
-  "List of font specifications.
-A font specification is a plist.  For keys, see `font-spec'.")
+(defvar koek-font/pairs
+  '(((:family "PragmataPro Mono" :height 110)
+     (:family "FiraGO" :height 1.0))
+    ((:family "Iosevka" :height 110)
+     (:family "FiraGO" :height 1.0)))
+  "List of font pairs.
+A font pair is a list of two font specifications, one for fixed
+pitch and one for variable pitch faces.  A font specification is
+a plist of face attributes, see `set-face-attribute'.  Both font
+specifications must set the family face attribute.  The fixed
+pitch font specification must set an absolute height, the
+variable pitch optionally a relative height.")
 
-(when-let ((spec
-            (seq-find (lambda (spec)
-                        (member (plist-get spec :family) (font-family-list)))
-                      koek-font/font-specs)))
-  (set-frame-font (apply #'font-spec spec) 'keep-size t))
+(when-let* ((pair
+             (let ((families (seq-uniq (font-family-list))))
+               (seq-find
+                (lambda (pair)
+                  (seq-every-p (lambda (attrs)
+                                 (member (plist-get attrs :family) families))
+                               pair))
+                koek-font/pairs)))
+            (fixed (car pair))
+            (variable (cadr pair)))
+  (apply #'set-face-attribute 'default nil fixed)
+  (apply #'set-face-attribute
+         'fixed-pitch nil (plist-put (copy-sequence fixed) :height 1.0))
+  (apply #'set-face-attribute 'variable-pitch nil variable))
 
 (blink-cursor-mode 0)
 

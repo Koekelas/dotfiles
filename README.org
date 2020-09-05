@@ -32,7 +32,7 @@ Git is mandatory, everything else is optional.
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
   - [[https://x.org/][xprop]] (GTK theme variant)
-  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://adobe-fonts.github.io/source-code-pro/][Source Code Pro]]
+  - [[https://bboxtype.com/typefaces/FiraGO][FiraGO]] and [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]]
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
   - [[https://x.org/][xsetroot]]
@@ -87,8 +87,8 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   ## General
   pacman -S the_silver_searcher git hunspell hunspell-en_US xorg-xprop
 
-  # Install PragmataPro Mono from source or
-  pacman -S adobe-source-code-pro-fonts
+  # Install ttf-fira-go from AUR and PragmataPro Mono from source or
+  # ttf-iosevka from AUR
 
   ## X window manager
   pacman -S xorg-xsetroot unclutter argyllcms
