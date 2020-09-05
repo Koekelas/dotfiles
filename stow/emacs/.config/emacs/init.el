@@ -441,6 +441,9 @@ strings."
   (setq whitespace-style '(face trailing empty lines-tail))
   :delight)
 
+(use-package hl-line
+  :hook (prog-mode . hl-line-mode))
+
 (bind-keys
  ("C-c e s" . sort-lines)
  ("C-c e a" . align-regexp))
