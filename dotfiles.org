@@ -194,7 +194,7 @@ Launch Emacs.
   . /etc/exwm/exwmrc
 #+END_SRC
 
-* GNOME catgen                                                        :setup:
+* GNOME catgen :setup:
 To apply configuration, run:
 
 #+BEGIN_SRC sh
@@ -305,7 +305,7 @@ To apply configuration, run:
   wolfram-mathematica11.desktop
 #+END_SRC
 
-* Bash                                                                  :wip:
+* Bash :wip:
 
 ** Login
 :PROPERTIES:
@@ -322,7 +322,7 @@ Interactive and non interactive
   [[ -f ~/.bashrc ]] && . ~/.bashrc
 #+END_SRC
 
-** Interactive                                                        :setup:
+** Interactive :setup:
 :PROPERTIES:
 :header-args:sh: :tangle stow/bash/.bashrc
 :END:
@@ -365,7 +365,7 @@ To generate an SSH key, run:
 Ed25519 is preferred when supported. Unlike passwords, SSH keys can be
 reused.
 
-* GnuPG                                                               :setup:
+* GnuPG :setup:
 When setting GnuPG's home, the directory must be created manually. To
 create it, run:
 
@@ -395,7 +395,7 @@ To generate a PGP key, run:
 
 For a guide on encrypted e-mail, see [[https://emailselfdefense.fsf.org/][Email Self-Defense (FSF)]].
 
-* Syncthing                                                           :setup:
+* Syncthing :setup:
 Stores:
 - archive: Archief
 - documents: Bureaublad, Documenten, Inbox and Projecten
@@ -442,7 +442,7 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   .nrepl-port
 #+END_SRC
 
-* Firefox                                                             :setup:
+* Firefox :setup:
 
 ** Saka Key
 [[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
@@ -465,28 +465,28 @@ Create a new profile. Change:
 | Bind to physical keys         | No       |
 | Ignore modifier keys          | No       |
 | Hint characters               | qsdfjklm |
-| Open link                     | =j j=    |
-| Open link in background tab   | =j b=    |
-| Open link in foreground tab   | =j f=    |
-| Open link in new window       | =j o=    |
-| Open link in incognito window | =j p=    |
-| Download link                 | =j d=    |
-| Focus input                   | =j i=    |
-| Go back                       | =l=      |
-| Go forward                    | =r=      |
-| Go up                         | =u=      |
-| Go to root                    | =M-u=    |
-| Scroll down                   | =n=      |
-| Scroll up                     | =p=      |
-| Scroll right                  | =f=      |
-| Scroll left                   | =b=      |
-| Scroll half page down         | =SPC=    |
-| Scroll half page up           | =DEL=    |
-| Refresh tab                   | =g=      |
-| Hard refresh tab              | =M-g=    |
-| Pass one key to page          | =s=      |
-| Pass all keys to page         | =M-s=    |
-| Stop passing keys to page     | =M-s=    |
+| Open link                     | =j j=      |
+| Open link in background tab   | =j b=      |
+| Open link in foreground tab   | =j f=      |
+| Open link in new window       | =j o=      |
+| Open link in incognito window | =j p=      |
+| Download link                 | =j d=      |
+| Focus input                   | =j i=      |
+| Go back                       | =l=        |
+| Go forward                    | =r=        |
+| Go up                         | =u=        |
+| Go to root                    | =M-u=      |
+| Scroll down                   | =n=        |
+| Scroll up                     | =p=        |
+| Scroll right                  | =f=        |
+| Scroll left                   | =b=        |
+| Scroll half page down         | =SPC=      |
+| Scroll half page up           | =DEL=      |
+| Refresh tab                   | =g=        |
+| Hard refresh tab              | =M-g=      |
+| Pass one key to page          | =s=        |
+| Pass all keys to page         | =M-s=      |
+| Stop passing keys to page     | =M-s=      |
 
 #+CAPTION: Blacklist
 #+BEGIN_SRC fundamental
@@ -516,7 +516,7 @@ Store sync state with maildir sub directories, simplifying backup.
   SyncState *
 #+END_SRC
 
-*** Personal account                                                  :setup:
+*** Personal account :setup:
 To configure the domain, follow [[https://www.fastmail.com/help/receive/domains-setup-nsmx.html][Configuring your domain with NS/MX
 (FastMail)]].
 
@@ -537,7 +537,7 @@ variables.
 #+END_SRC
 
 To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
-=Emacs e-mail= and give it access to IMAP and SMTP. Then, to store it
+/Emacs e-mail/ and give it access to IMAP and SMTP. Then, to store it
 securely, run:
 
 #+BEGIN_SRC sh
@@ -570,7 +570,7 @@ Define personal channel.
   CopyArrivalDate yes
 #+END_SRC
 
-** mu                                                                 :setup:
+** mu :setup:
 Move maildir directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/mu/.config/environment.d/50-mu.conf
@@ -596,7 +596,7 @@ is expanded, not environment variables.
   status_path = "~/Documenten/Contacten/.vdirsyncer/"
 #+END_SRC
 
-** Personal account                                                   :setup:
+** Personal account :setup:
 To create the vdir directory, run:
 
 #+BEGIN_SRC sh
@@ -613,7 +613,7 @@ Define local personal storage.
 #+END_SRC
 
 To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
-=Emacs contacts= and give it access to CardDAV. Then, to store it
+/Emacs contacts/ and give it access to CardDAV. Then, to store it
 securely, run:
 
 #+BEGIN_SRC sh
@@ -706,7 +706,7 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
-* DisplayCAL                                                          :setup:
+* DisplayCAL :setup:
 Calibration settings:
 - Whitepoint: 6500 K
 - White level: 120 cd/m^2
@@ -719,7 +719,7 @@ value determined during calibration, run:
   echo 362 > /sys/class/backlight/intel_backlight/brightness
 #+END_SRC
 
-* Org protocol                                                        :setup:
+* Org protocol :setup:
 Define org protocol scheme handler. Must invoke a shell to expand
 environment variables. For desktop entry or scheme handler format, see
 [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME

@@ -573,7 +573,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     :delight)
 #+END_SRC
 
-*** Smartparens and GNOME Shell keybindings conflict            :issue:setup:
+*** Smartparens and GNOME Shell keybindings conflict :issue:setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -787,8 +787,8 @@ When line is indented, press =TAB= to complete text before point.
 #+END_SRC
 
 *** Setting up Clang
-Run =M-x= ~make-symbolic-link~. Create a link to
-=compile_commands.json= in the project home directory.
+Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
+the project home directory.
 
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
@@ -2836,7 +2836,7 @@ Inherit Clojure snippets.
       (setq ispell-dictionary dictionary-name)))
 #+END_SRC
 
-*** Spell checking contractions fails                           :issue:setup:
+*** Spell checking contractions fails :issue:setup:
 Visit the dictionary's affix file. On Arch Linux, affix files are
 saved in =/usr/share/hunspell/=. Add:
 
@@ -3334,7 +3334,7 @@ Bury unneeded buffers, computers have more than enough memory.
                               koek-wm/base-simulation-keys))))))
 #+END_SRC
 
-*** exar - Monitor layouts                                              :wip:
+*** exar - Monitor layouts :wip:
 For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
@@ -3665,8 +3665,8 @@ etc.
 #+END_SRC
 
 ** Global commands
-The setting ~repeat-on-final-keystroke~ is cumbersome. Rebind ~repeat~
-to something short.
+The setting ~repeat-on-final-keystroke~ is cumbersome. Rebind ~repeat~ to
+something short.
 
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-z" #'repeat)
@@ -3834,7 +3834,7 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
        ("j" . link-hint-open-link))))
 #+END_SRC
 
-** devdocs-lookup - Search DevDocs                                    :setup:
+** devdocs-lookup - Search DevDocs :setup:
 [[https://github.com/skeeto/devdocs-lookup][devdocs-lookup (GitHub)]]
 
 On [[https://devdocs.io/][DevDocs]], enable:
@@ -4508,7 +4508,7 @@ Stavrou)]].
     :commands gino-generate-project)
 #+END_SRC
 
-*** gino - Generate project                                             :wip:
+*** gino - Generate project :wip:
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/gino/gino.el
   ;;; gino.el --- Generate Arduino project -*- lexical-binding: t; -*-
 
@@ -6199,9 +6199,8 @@ Configure monitors and monitor layouts.
 #+END_SRC
 
 ** Agendas
-Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and
-subdirectories of ~koek/projects-dir~, are agenda files. Configure
-agendas.
+Org files in ~koek/documents-dir~, ~koek/calendars-dir~ and subdirectories
+of ~koek/projects-dir~, are agenda files. Configure agendas.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -6250,9 +6249,9 @@ agendas.
     (setq calendar-week-start-day 1))     ; Monday
 #+END_SRC
 
-*** Calendars                                                         :setup:
+*** Calendars :setup:
 To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
-=Emacs calendars= and give it access to CalDAV. Then, to store it
+/Emacs calendars/ and give it access to CalDAV. Then, to store it
 securely, run:
 
 #+BEGIN_SRC sh
@@ -6263,8 +6262,7 @@ For more information, see [[info:auth#Help for users][Help for users (info)]], s
 explanation of URL authentication.
 
 Configure calendars. For calendar details, login to [[https://www.fastmail.com/][FastMail]], click
-=Settings=, =Calendars=. Then, for the desired calendar, click
-=Export=.
+/Settings/, /Calendars/. Then, for the desired calendar, click /Export/.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-caldav
@@ -6300,7 +6298,7 @@ Configure notes.
     (find-file-noselect org-roam-index-file 'nowarn))
 #+END_SRC
 
-** Capture templates                                                  :setup:
+** Capture templates :setup:
 #+BEGIN_SRC js :exports none
   ((args) => {
       "use strict";
@@ -6313,8 +6311,8 @@ Configure notes.
   })({protocol: "capture", template: "t", url: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
-To capture =Bookmark=, =Webpage= and =Book= from the browser, create
-three [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
+To capture /Bookmark/, /Webpage/ and /Book/ from the browser, create three
+[[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
 
 #+CAPTION: Bladwijzer (bookmark)
 #+BEGIN_SRC js
