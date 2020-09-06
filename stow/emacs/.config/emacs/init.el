@@ -181,11 +181,12 @@ When FORCE is truthy, continue commit unconditionally."
   (require 'find-func)
   (let ((file-names
          (list
-          (locate-dominating-file (find-library-name "files") emacs-version)
-          user-emacs-directory)))
-    (dolist (file-name file-names)
-      (push (rx-to-string `(and line-start ,(file-truename file-name)))
-            recentf-exclude)))
+          (rx line-start
+              (literal (locate-dominating-file (find-library-name "files")
+                                               emacs-version)))
+          ;; True and symbolic file name variants
+          (regexp-quote (file-relative-name user-emacs-directory "~/")))))
+    (setq recentf-exclude (append file-names recentf-exclude)))
   (recentf-mode))
 
 (use-package saveplace
@@ -3361,7 +3362,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
 
   (use-package recentf
     :config
-    (push (rx-to-string `(and line-start ,elfeed-db-directory)) recentf-exclude))
+    (push (rx line-start (literal elfeed-db-directory)) recentf-exclude))
 
   (dolist (feed koek/feeds)
     (let ((args
