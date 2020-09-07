@@ -610,7 +610,7 @@ Indent with spaces, not tabs.
   (setq-default indent-tabs-mode nil)
 #+END_SRC
 
-End sentences with single space, not double space.
+End sentences with single space, not double spaces.
 
 #+BEGIN_SRC emacs-lisp
   (setq sentence-end-double-space nil)
@@ -2885,7 +2885,7 @@ The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
 #+END_SRC
 
 The default keybindings assume a QWERTY keyboard layout. Some
-keybindings are cumbersome on other keyboard layouts. Rebind
+keybindings are cumbersome on non QWERTY keyboard layouts. Rebind
 cumbersome window commands.
 
 #+BEGIN_SRC emacs-lisp
