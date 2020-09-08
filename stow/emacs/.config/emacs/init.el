@@ -1081,6 +1081,8 @@ N is an integer, the workspace to switch to."
     (let ((class (downcase exwm-class-name)))
       (exwm-workspace-rename-buffer
        (cond
+        ((string-prefix-p "gimp" class)
+         "GIMP")
         ((string-prefix-p "firefox" class)
          (replace-regexp-in-string
           (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
