@@ -912,6 +912,20 @@ system."
     "Suspend system."
     (interactive)
     (make-process :name "suspend" :command '("systemctl" "suspend")))
+
+  (defun koek-wm/launch-firefox (&optional arg)
+    "Launch Firefox.
+With `\\[universal-argument]' prefix argument ARG, create private
+window."
+    (interactive "P")
+    (make-process
+     :name "firefox"
+     :command `("firefox" ,(or (and arg "--private-window") "--new-window"))))
+
+  (defun koek-wm/launch-pavc ()
+    "Launch PulseAudio Volume Control."
+    (interactive)
+    (make-process :name "pavc" :command '("pavucontrol")))
   :init
   ;; :init of deferred subpackages are evaluated in both exwm and non
   ;; exwm sessions. :init of guarded (:when) main package is evaluated
@@ -920,6 +934,8 @@ system."
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend)
+   ("C-c x f" . koek-wm/launch-firefox)
+   ("C-c x p" . koek-wm/launch-pavc)
    ("C-c w 0" . koek-wm/switch-workspace-0)
    ("C-c w 1" . koek-wm/switch-workspace-1)
    ("C-c w 2" . koek-wm/switch-workspace-2)
