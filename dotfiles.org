@@ -271,6 +271,7 @@ To apply configuration, run:
   org.gnome.font-viewer.desktop
   org.gnome.seahorse.Application.desktop
   org.gnome.tweaks.desktop
+  pavucontrol.desktop
   yelp.desktop
 #+END_SRC
 

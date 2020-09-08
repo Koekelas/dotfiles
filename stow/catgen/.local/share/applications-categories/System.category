@@ -8,4 +8,5 @@ org.gnome.Terminal.desktop
 org.gnome.font-viewer.desktop
 org.gnome.seahorse.Application.desktop
 org.gnome.tweaks.desktop
+pavucontrol.desktop
 yelp.desktop
