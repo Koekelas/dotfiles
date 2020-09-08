@@ -732,6 +732,9 @@ name."
 
 (setq window-resize-pixelwise t)
 
+(unbind-key "C-z")
+(unbind-key "C-x C-z")
+
 (bind-keys
  ("C-c w h" . split-window-below)
  ("C-c w v" . split-window-right)

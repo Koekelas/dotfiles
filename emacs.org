@@ -2877,6 +2877,13 @@ Resize windows pixelwise, not characterwise.
 #+END_SRC
 
 ** Window commands
+The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
+
+#+BEGIN_SRC emacs-lisp
+  (unbind-key "C-z")
+  (unbind-key "C-x C-z")
+#+END_SRC
+
 The default keybindings assume a QWERTY keyboard layout. Some
 keybindings are cumbersome on other keyboard layouts. Rebind
 cumbersome window commands.
