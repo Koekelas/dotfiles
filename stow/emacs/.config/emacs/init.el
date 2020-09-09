@@ -1710,6 +1710,8 @@ playing track, else, enqueue after last track."
     (:map dictionary-mode-map
      ("j" . link-hint-open-link)))
 
+  (bind-key "DEL" #'scroll-down 'dictionary-mode-map)
+
   (setq dictionary-create-buttons nil))
 
 (use-package calendar

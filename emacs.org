@@ -4364,6 +4364,8 @@ For news feeds, see [[*News feeds][News feeds]].
       (:map dictionary-mode-map
        ("j" . link-hint-open-link)))
 
+    (bind-key "DEL" #'scroll-down 'dictionary-mode-map)
+
     (setq dictionary-create-buttons nil))
 #+END_SRC
 
