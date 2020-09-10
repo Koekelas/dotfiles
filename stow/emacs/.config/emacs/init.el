@@ -2700,9 +2700,9 @@ THEME-SPEC is a theme specification, see
 
 (defvar koek-font/pairs
   '(((:family "PragmataPro Mono" :height 110)
-     (:family "FiraGO" :height 1.0))
+     (:family "IBM Plex Sans" :height 1.0))
     ((:family "Iosevka" :height 110)
-     (:family "FiraGO" :height 1.0)))
+     (:family "IBM Plex Sans" :height 1.0)))
   "List of font pairs.
 A font pair is a list of two font specifications, one for fixed
 pitch and one for variable pitch faces.  A font specification is
