@@ -2188,10 +2188,18 @@ playing track, else, enqueue after last track."
   (setq org-startup-folded t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
+  (setq org-tags-column 0)
 
   ;; Appearance
+  (setq org-hide-emphasis-markers t)
+  (setq org-pretty-entities t)
   (setq org-highlight-latex-and-related '(native))
   (push '("" "listings" nil) org-latex-packages-alist)
+
+  ;; Appearance - Headings
+  (setq org-fontify-whole-heading-line t)
+  (setq org-fontify-done-headline nil)
+  (setq org-ellipsis "…")
 
   ;; Appearance - Images
   (setq org-startup-with-inline-images t)
