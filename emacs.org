@@ -5760,8 +5760,8 @@ Load [[https://github.com/purcell/color-theme-sanityinc-tomorrow][Tomorrow]] the
       (koek-thm/enable spec)))
 #+END_SRC
 
-Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://bboxtype.com/typefaces/FiraGO][FiraGO]]
-for variable pitch.
+Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM
+Plex]] for variable pitch.
 
 #+BEGIN_SRC emacs-lisp
   (defvar koek-font/pairs
