@@ -1041,8 +1041,9 @@ Keybinding is a string, see `koek-wm/simulation-keybindings'.")
                   (cons (kbd from) (kbd to)))
                 koek-wm/simulation-keys))
 
-  ;; Grab C-z (repeat) in line mode
+  ;; Grab repeat and ivy-resume in line mode
   (push ?\C-z exwm-input-prefix-keys)
+  (push ?\C-r exwm-input-prefix-keys)
 
   (add-hook 'exwm-manage-finish-hook #'koek-wm/setup-application-keys))
 
