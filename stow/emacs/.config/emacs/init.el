@@ -1121,7 +1121,9 @@ N is an integer, a workspace number."
   :defer t
   :config
   (setq exwm-manage-configurations
-        `(((string-prefix-p "firefox" (downcase exwm-class-name))
+        `(((string-prefix-p "gimp" (downcase exwm-class-name))
+           char-mode t)
+          ((string-prefix-p "firefox" (downcase exwm-class-name))
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
                       (cons (kbd from) (kbd to)))
