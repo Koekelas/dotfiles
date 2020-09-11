@@ -2181,12 +2181,14 @@ playing track, else, enqueue after last track."
                                  (python . t)
                                  (scheme . t)
                                  (sql . t)))
+  (setq org-adapt-indentation nil)
+
+  ;; Headings
+  (setq org-startup-folded t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "STALLED(s@/!)" "|" "DONE(d!)" "ABANDONED(a@)")))
 
   ;; Appearance
-  (setq org-adapt-indentation nil)
-  (setq org-startup-folded t)
   (setq org-highlight-latex-and-related '(native))
   (push '("" "listings" nil) org-latex-packages-alist)
 
