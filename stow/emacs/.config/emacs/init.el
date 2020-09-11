@@ -956,7 +956,7 @@ window."
 (use-package exwm-input
   :defer t
   :preface
-  (defvar koek-wm/simulation-keys
+  (defvar koek-wm/base-simulation-keys
     '(("C-f" . "<right>")
       ("C-b" . "<left>")
       ("C-n" . "<down>")
@@ -983,26 +983,6 @@ window."
       ("M-/" . "C-y"))
     "Alist of Emacs keybinding to non Emacs keybinding pairs.
 Keybinding is a string, see `edmacro-mode'.")
-
-  (defvar koek-wm/firefox-keys
-    (append '(("M-o" . "C-n")
-              ("M-p" . "S-C-p")
-              ("M-k" . "C-w"))
-            koek-wm/simulation-keys)
-    "Alist of Emacs keybinding to Firefox keybinding pairs.
-Keybinding is a string, see `koek-wm/simulation-keybindings'.")
-
-  (defun koek-wm/setup-application-keys ()
-    "Setup application keybindings for current."
-    (let* ((class (downcase exwm-class-name))
-           (keys (cond
-                  ((string-prefix-p "firefox" class)
-                   koek-wm/firefox-keys))))
-      (when keys
-        (exwm-input-set-local-simulation-keys
-         (mapcar (pcase-lambda (`(,from . ,to))
-                   (cons (kbd from) (kbd to)))
-                 keys)))))
 
   (define-advice exwm-input--update-mode-line
       (:around (f &rest args) koek-wm/disable-update-process-status)
@@ -1039,13 +1019,11 @@ Keybinding is a string, see `koek-wm/simulation-keybindings'.")
   (setq exwm-input-simulation-keys
         (mapcar (pcase-lambda (`(,from . ,to))
                   (cons (kbd from) (kbd to)))
-                koek-wm/simulation-keys))
+                koek-wm/base-simulation-keys))
 
   ;; Grab repeat and ivy-resume in line mode
   (push ?\C-z exwm-input-prefix-keys)
-  (push ?\C-r exwm-input-prefix-keys)
-
-  (add-hook 'exwm-manage-finish-hook #'koek-wm/setup-application-keys))
+  (push ?\C-r exwm-input-prefix-keys))
 
 (use-package exwm-workspace
   :defer t
@@ -1138,6 +1116,19 @@ N is an integer, a workspace number."
           (face-attribute 'koek-wm/floating-border :foreground)))
   :config
   (add-hook 'koek-thm/enable-hook #'koek-wm/set-floating-border-color))
+
+(use-package exwm-manage
+  :defer t
+  :config
+  (setq exwm-manage-configurations
+        `(((string-prefix-p "firefox" (downcase exwm-class-name))
+           simulation-keys
+           ,(mapcar (pcase-lambda (`(,from . ,to))
+                      (cons (kbd from) (kbd to)))
+                    (append '(("M-o" . "C-n")
+                              ("M-p" . "S-C-p")
+                              ("M-k" . "C-w"))
+                            koek-wm/base-simulation-keys))))))
 
 (use-package server
   :config
