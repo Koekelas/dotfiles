@@ -115,11 +115,12 @@
   (defun koek-git/check-spelling (force)
     "Check spelling of commit message.
 When FORCE is truthy, continue commit unconditionally."
-    (let* ((ispell-skip-region-alist    ; Dynamic variable
-            (cons (list (rx line-start "#") #'forward-line) ; Comment
-                  ispell-skip-region-alist))
-           (tick (buffer-chars-modified-tick))
-           (result (ispell-buffer)))
+    (let ((tick (buffer-chars-modified-tick))
+          (result
+           (let ((ispell-skip-region-alist ; Dynamic variable
+                  (cons (list (rx line-start "#") #'forward-line) ; Comment
+                        ispell-skip-region-alist)))
+             (ispell-buffer))))
       (cond
        (force t)
        ;; When spell check was completed, result is truthy
