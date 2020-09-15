@@ -446,7 +446,7 @@ strings."
   :delight)
 
 (use-package hl-line
-  :hook (prog-mode . hl-line-mode))
+  :hook ((prog-mode conf-mode) . hl-line-mode))
 
 (bind-keys
  ("C-c e s" . sort-lines)
