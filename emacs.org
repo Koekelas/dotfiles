@@ -3212,6 +3212,7 @@ Bury unneeded buffers, computers have more than enough memory.
                     ("s-8" . koek-wm/switch-workspace-8)
                     ("s-9" . koek-wm/switch-workspace-9)
                     ("s-w" . koek-wm/switch-previous-workspace)
+                    ("s-x" . counsel-linux-app)
                     ("s-q" . bury-buffer)
                     ("s-d" . kill-current-buffer)
                     ("<f11>" . exwm-layout-toggle-fullscreen))))
