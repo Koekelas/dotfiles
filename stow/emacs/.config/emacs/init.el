@@ -305,7 +305,7 @@ enable `auto-fill-mode'."
     (auto-fill-mode)))
 
 (add-hook 'text-mode-hook #'koek-af/maybe-enable)
-(delight 'auto-fill-function nil 'emacs)
+(delight 'auto-fill-function nil 'simple)
 
 (use-package smartparens
   :straight t
