@@ -489,13 +489,6 @@ backends, see `company-backends'."
                      `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
                                 ,setup-backends-name))
                    modes))))
-
-  ;; Prevent geiser from modifying company-backends
-  (define-advice geiser-company--setup-company
-      (:around (f &rest args) koek-cpny/disable-setup-backends)
-    (let ((backends company-backends))
-      (apply f args)
-      (setq company-backends backends)))
   :config
   (setq company-backends
         '((company-capf company-files :with company-yasnippet)))
@@ -2458,6 +2451,15 @@ TITLE is a string, a note title."
 (use-package geiser-autodoc
   :defer t
   :delight)
+
+(use-package geiser-company
+  :defer t
+  :preface
+  (define-advice geiser-company--setup-company
+      (:around (f &rest args) koek-gsr/disable-setup-backends)
+    (let ((backends company-backends))
+      (apply f args)
+      (setq company-backends backends))))
 
 (use-package geiser-impl
   :defer t
