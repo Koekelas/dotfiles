@@ -1130,7 +1130,7 @@ N is an integer, a workspace number."
   :config
   (setq exwm-manage-configurations
         `(((string-prefix-p "gimp" (downcase exwm-class-name))
-           char-mode t)
+           char-mode t floating-mode-line nil)
           ((string-prefix-p "firefox" (downcase exwm-class-name))
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
