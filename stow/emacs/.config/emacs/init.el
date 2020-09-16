@@ -1122,6 +1122,7 @@ N is an integer, a workspace number."
     (setq exwm-floating-border-color
           (face-attribute 'koek-wm/floating-border :foreground)))
   :config
+  (setq exwm-floating-border-width 3)
   (add-hook 'koek-thm/load-hook #'koek-wm/set-floating-border-color))
 
 (use-package exwm-manage
@@ -2636,7 +2637,7 @@ vivendi."
        `(koek-diff/variant            ((,class :inherit bold)))
        `(eyebrowse-mode-line-active   ((,class :foreground unspecified)))
        `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
-       `(koek-wm/floating-border      ((,class :foreground ,fg-main)))
+       `(koek-wm/floating-border      ((,class :foreground ,fg-window-divider-inner)))
        `(koek-wm/selected-workspace   ((,class :inherit bold)))
        `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
        `(koek-pdf/midnight            ((,class :foreground ,fg-main :background ,bg-main))))))
