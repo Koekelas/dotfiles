@@ -1202,6 +1202,7 @@ N is an integer, a workspace number."
    ("C-c j o" . counsel-org-goto-all)
    ("C-c x x" . counsel-linux-app)
    ("C-c x s" . counsel-search)
+   ("C-c d f" . counsel-describe-face)
    :map minibuffer-local-map
    ("C-r" . counsel-minibuffer-history))
   :config
