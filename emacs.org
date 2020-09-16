@@ -3331,6 +3331,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (setq exwm-manage-configurations
           `(((string-prefix-p "gimp" (downcase exwm-class-name))
              char-mode t floating-mode-line nil)
+            ((string-prefix-p "inkscape" (downcase exwm-class-name))
+             char-mode t floating-mode-line nil)
             ((string-prefix-p "firefox" (downcase exwm-class-name))
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
