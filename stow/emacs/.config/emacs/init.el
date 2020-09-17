@@ -136,7 +136,11 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package ediff
   :bind
   (("C-c f d" . ediff-files)
-   ("C-c f b" . ediff-current-file)))
+   ("C-c f b" . ediff-current-file))
+  :preface
+  (defface koek-diff/variant '((t :inherit mode-line-emphasis))
+    "Face for variant label in mode line."
+    :group 'ediff))
 
 (use-package ediff-init
   :defer t
@@ -2629,6 +2633,7 @@ vivendi."
     (enable-theme theme)
     (koek-thm/with-modus-vars variant
       (custom-set-faces
+       `(koek-diff/variant            ((,class :inherit bold)))
        `(eyebrowse-mode-line-active   ((,class :foreground unspecified)))
        `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
        `(koek-wm/floating-border      ((,class :foreground ,fg-main)))
@@ -2715,9 +2720,10 @@ A dummy prevents a package from modifying the mode line.")
     '(:eval
       (when koek-ml/variant
         `(,(moody-ribbon
-            (concat (plist-get koek-ml/variant :label)
+            (concat (propertize (plist-get koek-ml/variant :label)
+                                'face 'koek-diff/variant)
                     (when-let ((state (plist-get koek-ml/variant :state)))
-                      (concat " " state)))
+                      (concat ":" state)))
             nil 'up)
           koek-ml/separator)))
     "Ediff mode line construct.")
@@ -2967,53 +2973,45 @@ checkers)."
              (format "%d/%d" diff-n n-diffs))))))
     "Ediff diff mode line construct.")
 
-  (defvar koek-ml/ediff-buffer-specs
-    '((:type A   :buffer ediff-buffer-A)
-      (:type B   :buffer ediff-buffer-B)
-      (:type C   :buffer ediff-buffer-C)
-      (:type Anc :buffer ediff-ancestor-buffer))
-    "List of ediff buffer specifications.
-An ediff buffer specification is a plist with keys :type and
-:buffer.  :type is a symbol, a type of buffer.  :buffer is a
-symbol, the variable name storing the buffer of type :type.")
+  (defvar koek-ml/variant-types '(A B C Ancestor)
+    "List of variant types.")
 
-  (defun koek-ml/get-variants ()
-    "Return variants of ediff session.
-Must be called from control buffer."
-    (seq-reduce (lambda (variants spec)
-                  (let ((buffer (symbol-value (plist-get spec :buffer))))
-                    (when (buffer-live-p buffer)
-                      (let ((type (plist-get spec :type)))
-                        (push (list :type type
-                                    :buffer buffer
-                                    :label (symbol-name type))
-                              variants))))
-                  variants)
-                koek-ml/ediff-buffer-specs ()))
-
-  (defun koek-ml/get-variant-state (variant)
-    "Return state of VARIANT.
-Must be called from control buffer."
+  (defun koek-ml/get-variant-state (type)
+    "Return state of variant type TYPE for current diff.
+TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
     (when (ediff-valid-difference-p)
-      (let ((state
-             (pcase (plist-get variant :type)
-               ('C
-                (concat
-                 (ediff-get-state-of-diff ediff-current-difference 'C)
-                 (when-let
-                     ((merge
-                       (ediff-get-state-of-merge ediff-current-difference)))
-                   (concat " " merge))
-                 (when (ediff-get-state-of-ancestor ediff-current-difference)
-                   " AncEmpty")))
-               ('Anc
-                (pcase (ediff-get-state-of-merge ediff-current-difference)
+      (let* ((diff
+              (let ((diff
+                     (if (eq type 'Ancestor)
+                         (ediff-get-state-of-merge ediff-current-difference)
+                       (ediff-get-state-of-diff ediff-current-difference
+                                                type))))
+                (pcase diff
                   ("prefer-A"
-                   "=diff(B)")
+                   "=B")
                   ("prefer-B"
-                   "=diff(A)")))
-               (type
-                (ediff-get-state-of-diff ediff-current-difference type)))))
+                   "=A")
+                  ("=diff(A)"
+                   "=A")
+                  ("=diff(B)"
+                   "=B")
+                  ("=diff(C)"
+                   "=C")
+                  ("=diff(A+B)"
+                   "=A+B"))))
+             (merge (when (eq type 'C)
+                      (ediff-get-state-of-merge ediff-current-difference)))
+             (ancestor
+              (when (eq type 'C)
+                (and (ediff-get-state-of-ancestor ediff-current-difference)
+                     "empty")))
+             (state (concat diff
+                            (when (and diff merge)
+                              ":")
+                            merge
+                            (when (and (or diff merge) ancestor)
+                              ":")
+                            ancestor)))
         (unless (string-empty-p state)
           state))))
 
@@ -3025,20 +3023,23 @@ Must be called from control buffer."
             koek-ml/exwm-workspaces koek-ml/eyebrowse
             koek-ml/id koek-ml/diff keycast-marker koek-ml/task koek-ml/modes))
     (force-mode-line-update)
-    (dolist (variant (koek-ml/get-variants))
-      (let ((state (koek-ml/get-variant-state variant)))
-        (with-current-buffer (plist-get variant :buffer)
-          (setq koek-ml/variant
-                (list :label (plist-get variant :label) :state state))
-          (force-mode-line-update)))))
+    (dolist (type koek-ml/variant-types)
+      (when-let ((buffer (ediff-get-buffer type)))
+        (let ((state (koek-ml/get-variant-state type)))
+          (with-current-buffer buffer
+            (setq koek-ml/variant
+                  (list :label (or (and (eq type 'Ancestor) "Anc")
+                                   (symbol-name type))
+                        :state state))
+            (force-mode-line-update))))))
 
   (defun koek-ml/cleanup-variants ()
     "Cleanup variants."
-    (save-current-buffer
-      (dolist (variant (koek-ml/get-variants))
-        (set-buffer (plist-get variant :buffer))
-        (kill-local-variable 'koek-ml/variant)
-        (force-mode-line-update))))
+    (dolist (type koek-ml/variant-types)
+      (when-let ((buffer (ediff-get-buffer type)))
+        (with-current-buffer buffer
+          (kill-local-variable 'koek-ml/variant)
+          (force-mode-line-update)))))
 
   (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-variants)
   :config
