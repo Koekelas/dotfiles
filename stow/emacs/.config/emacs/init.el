@@ -2684,8 +2684,6 @@ variable pitch optionally a relative height.")
          'fixed-pitch nil (plist-put (copy-sequence fixed) :height 1.0))
   (apply #'set-face-attribute 'variable-pitch nil variable))
 
-(blink-cursor-mode 0)
-
 (use-package moody
   :straight t
   :preface
@@ -3056,6 +3054,8 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
                   koek-ml/id koek-ml/state koek-ml/position koek-ml/pdf
                   keycast-marker koek-ml/exwm-input koek-ml/input
                   koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
+
+(blink-cursor-mode 0)
 
 (use-package auth-source
   :defer t

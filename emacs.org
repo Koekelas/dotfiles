@@ -5751,12 +5751,6 @@ Plex]] for variable pitch.
     (apply #'set-face-attribute 'variable-pitch nil variable))
 #+END_SRC
 
-Disable blink cursor mode.
-
-#+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode 0)
-#+END_SRC
-
 Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
 #+BEGIN_SRC emacs-lisp
@@ -6130,6 +6124,12 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                     koek-ml/id koek-ml/state koek-ml/position koek-ml/pdf
                     keycast-marker koek-ml/exwm-input koek-ml/input
                     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
+#+END_SRC
+
+Disable blink cursor mode.
+
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode 0)
 #+END_SRC
 
 * Personal
