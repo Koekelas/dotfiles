@@ -122,7 +122,8 @@ When FORCE is truthy, continue commit unconditionally."
                         ispell-skip-region-alist)))
              (ispell-buffer))))
       (cond
-       (force t)
+       (force
+        t)
        ;; When spell check was completed, result is truthy
        (result
         ;; When nothing was corrected, character tick counter is
