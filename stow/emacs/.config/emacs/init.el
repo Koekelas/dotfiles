@@ -2629,10 +2629,10 @@ vivendi."
     (enable-theme theme)
     (koek-thm/with-modus-vars variant
       (custom-set-faces
-       `(eyebrowse-mode-line-active   ((,class :inherit bold :foreground ,bg-main)))
+       `(eyebrowse-mode-line-active   ((,class :foreground unspecified)))
        `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
        `(koek-wm/floating-border      ((,class :foreground ,fg-main)))
-       `(koek-wm/selected-workspace   ((,class :inherit bold :foreground ,bg-main)))
+       `(koek-wm/selected-workspace   ((,class :inherit bold)))
        `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
        `(koek-pdf/midnight            ((,class :foreground ,fg-main :background ,bg-main))))))
   (run-hooks 'koek-thm/load-hook))
