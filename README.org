@@ -7,11 +7,6 @@ Take a look at [[file:dotfiles.org][dotfiles.org]] and [[file:emacs.org][emacs.o
 result of [[info:org#Extracting source code][tangling]].
 
 * For the masochist
-You enjoy pain? Take a look at [[file:dotfiles.org::*Identity][Identity]] and [[file:dotfiles.org::*Well known directories][Well known directories]].
-Tangle the file and re-login. Then, take a look at all headings tagged
-=setup= and [[file:emacs.org::*Personal][Personal]]. Tangle the file and restart Emacs.
-
-* Getting started
 To get started, run:
 
 #+BEGIN_SRC sh
@@ -24,7 +19,11 @@ Then, to [[https://www.gnu.org/software/stow/][stow]] all packages, run from thi
   make install
 #+END_SRC
 
-* Installing dependencies
+Finally, take a look at [[file:dotfiles.org::*Identity][Identity]], [[file:dotfiles.org::*Well known directories][Well known directories]], [[file:emacs.org::*Personal][Personal]] and
+all headings tagged =setup=. To apply changes, run =M-x= ~org-babel-tangle~
+from the changed file and restart the changed application or re-login.
+
+** Installing dependencies
 Git is mandatory, everything else is optional.
 
 - General:
