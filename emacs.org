@@ -785,8 +785,8 @@ When line is indented, press =TAB= to complete text before point.
 #+END_SRC
 
 *** Setting up Clang
-Run =M-x= ~make-symbolic-link~. Create a link to =compile_commands.json= in
-the project home directory.
+Run =M-x= ~make-symbolic-link~ and create a link to =compile_commands.json=
+in the project home directory.
 
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
