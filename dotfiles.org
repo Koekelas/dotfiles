@@ -96,6 +96,11 @@ Hide superfluous applications.
   Name=CMake
 #+END_SRC
 
+#+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/compton.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=compton
+#+END_SRC
+
 #+BEGIN_SRC conf :tangle stow/cups/.local/share/applications/cups.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Manage Printing
@@ -134,6 +139,11 @@ Hide superfluous applications.
 #+BEGIN_SRC conf :tangle stow/gnome/.local/share/applications/org.gnome.Extensions.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Extensions
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/picom.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=picom
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/qdbusviewer.desktop :noweb yes
