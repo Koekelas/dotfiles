@@ -553,7 +553,7 @@ Keep defaults.
 
 * E-mail
 
-** isync
+** isync :not_exp_env:
 :PROPERTIES:
 :header-args:conf: :tangle stow/isync/.config/isync/mbsyncrc
 :END:
@@ -631,7 +631,7 @@ To create the database, run:
   mbsync -c "${XDG_CONFIG_HOME:-~/.config}/isync/mbsyncrc" -a && mu init --my-address="nicolas@dejaeghe.re" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
 #+END_SRC
 
-* vdirsyncer
+* vdirsyncer :not_exp_env:
 :PROPERTIES:
 :header-args:conf: :tangle stow/vdirsyncer/.config/vdirsyncer/config
 :END:
