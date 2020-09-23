@@ -334,11 +334,11 @@ Non login
 #+END_SRC
 
 #+BEGIN_SRC sh :tangle no
-  mkdir -p "$XDG_DATA_HOME/bash"
+  mkdir -p "${XDG_DATA_HOME:-~/.local/share}/bash"
 #+END_SRC
 
 #+BEGIN_SRC sh
-  export HISTFILE="$XDG_DATA_HOME/bash/history"
+  export HISTFILE="${XDG_DATA_HOME:-~/.local/share}/bash/history"
 #+END_SRC
 
 #+BEGIN_SRC sh
@@ -370,14 +370,14 @@ When setting GnuPG's home, the directory must be created manually. To
 create it, run:
 
 #+BEGIN_SRC sh
-  mkdir -p "$XDG_DATA_HOME/gnupg"
-  chmod 700 "$XDG_DATA_HOME/gnupg"
+  mkdir -p "${XDG_DATA_HOME:-~/.local/share}/gnupg"
+  chmod 700 "${XDG_DATA_HOME:-~/.local/share}/gnupg"
 #+END_SRC
 
 Move data directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/gnupg/.config/environment.d/50-gnupg.conf
-  GNUPGHOME="$XDG_DATA_HOME/gnupg"
+  GNUPGHOME="${XDG_DATA_HOME:-~/.local/share}/gnupg"
 #+END_SRC
 
 To generate a PGP key, run:
@@ -580,7 +580,7 @@ Move maildir directory out of the way.
 To create the database, run:
 
 #+BEGIN_SRC sh
-  mbsync -c "$XDG_CONFIG_HOME/isync/mbsyncrc" -a && mu init --my-address="nicolas@dejaeghe.re" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
+  mbsync -c "${XDG_CONFIG_HOME:-~/.config}/isync/mbsyncrc" -a && mu init --my-address="nicolas@dejaeghe.re" --my-address="nicodeja@gmail.com" --my-address="nicodeja@mac.com" --my-address="Nicolas.DeJaeghere@belfius.be"
 #+END_SRC
 
 * vdirsyncer
@@ -740,14 +740,14 @@ Info Specification (freedesktop)]].
 To register the scheme handler, run:
 
 #+BEGIN_SRC sh
-  update-desktop-database "$XDG_DATA_HOME/applications"
+  update-desktop-database "${XDG_DATA_HOME:-~/.local/share}/applications"
 #+END_SRC
 
 * Jupyter Notebook
 Move configuration directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/jupyter/.config/environment.d/50-jupyter.conf
-  JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+  JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME:-~/.config}/jupyter"
 #+END_SRC
 
 Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
@@ -772,26 +772,26 @@ see [[https://codemirror.net/doc/manual.html#config][User manual and reference g
 Move configuration directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/jupyter/.config/environment.d/50-ipython.conf
-  IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
+  IPYTHONDIR="${XDG_CONFIG_HOME:-~/.config}/ipython"
 #+END_SRC
 
 * CUDA
 Move cache directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/cuda/.config/environment.d/50-cuda.conf
-  CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv/ComputeCache"
+  CUDA_CACHE_PATH="${XDG_CACHE_HOME:-~/.cache}/nv/ComputeCache"
 #+END_SRC
 
 * Keras
 Move configuration directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/keras/.config/environment.d/50-keras.conf
-  KERAS_HOME="$XDG_CONFIG_HOME/keras"
+  KERAS_HOME="${XDG_CONFIG_HOME:-~/.config}/keras"
 #+END_SRC
 
 * NLTK
 Move data directory out of the way.
 
 #+BEGIN_SRC conf :tangle stow/nltk/.config/environment.d/50-nltk.conf
-  NLTK_DATA="$XDG_DATA_HOME/nltk"
+  NLTK_DATA="${XDG_DATA_HOME:-~/.local/share}/nltk"
 #+END_SRC
