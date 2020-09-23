@@ -750,7 +750,7 @@ Move configuration directory out of the way.
   JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME:-~/.config}/jupyter"
 #+END_SRC
 
-Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For properties,
+Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For settings,
 see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
 
 #+BEGIN_SRC json :tangle stow/jupyter/.config/jupyter/nbconfig/notebook.json
