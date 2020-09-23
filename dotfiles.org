@@ -168,9 +168,10 @@ Hide superfluous applications.
 :header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc
 :END:
 
-Launch [[*xsettingsd][xsettingsd]].
+Launch [[*picom][picom]] and [[*xsettingsd][xsettingsd]].
 
 #+BEGIN_SRC sh
+  picom &
   xsettingsd -c "${XDG_CONFIG_HOME:-~/.config}/xsettingsd/xsettingsd" &
 #+END_SRC
 
@@ -200,6 +201,17 @@ Launch Emacs.
 
 #+BEGIN_SRC sh
   . /etc/exwm/exwmrc
+#+END_SRC
+
+** picom
+:PROPERTIES:
+:header-args:conf: :tangle stow/picom/.config/picom/picom.conf
+:END:
+
+Ignore system configuration.
+
+#+BEGIN_SRC conf
+  # Intentionally empty
 #+END_SRC
 
 ** xsettingsd
