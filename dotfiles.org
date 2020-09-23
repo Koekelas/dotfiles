@@ -27,22 +27,22 @@ Set name and e-mail.
 Set [[https://freedesktop.org/wiki/Specifications/basedir-spec/][base directories]].
 
 #+BEGIN_SRC conf :tangle stow/xdg/.config/environment.d/10-base-dirs.conf
-  XDG_CACHE_HOME="~/.cache"
-  XDG_CONFIG_HOME="~/.config"
-  XDG_DATA_HOME="~/.local/share"
+  XDG_CACHE_HOME="$HOME/.cache"
+  XDG_CONFIG_HOME="$HOME/.config"
+  XDG_DATA_HOME="$HOME/.local/share"
 #+END_SRC
 
 Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directories]].
 
 #+BEGIN_SRC conf :noweb-ref user-dirs :tangle stow/xdg/.config/user-dirs.dirs
-  XDG_DESKTOP_DIR="~/.Bureaublad"
-  XDG_DOCUMENTS_DIR="~/Documenten"
-  XDG_DOWNLOAD_DIR="~/Inbox/tmp"
-  XDG_MUSIC_DIR="~/Muziek"
-  XDG_PICTURES_DIR="~/Afbeeldingen"
-  XDG_PUBLICSHARE_DIR="~/Delen"
-  XDG_TEMPLATES_DIR="~/Sjablonen"
-  XDG_VIDEOS_DIR="~/Video's"
+  XDG_DESKTOP_DIR="$HOME/.Bureaublad"
+  XDG_DOCUMENTS_DIR="$HOME/Documenten"
+  XDG_DOWNLOAD_DIR="$HOME/Inbox/tmp"
+  XDG_MUSIC_DIR="$HOME/Muziek"
+  XDG_PICTURES_DIR="$HOME/Afbeeldingen"
+  XDG_PUBLICSHARE_DIR="$HOME/Delen"
+  XDG_TEMPLATES_DIR="$HOME/Sjablonen"
+  XDG_VIDEOS_DIR="$HOME/Video's"
 #+END_SRC
 
 Again, but as environment variables.
@@ -59,7 +59,7 @@ Finally, set other directories.
   KOEK_EMAIL_DIR="$XDG_DOCUMENTS_DIR/E-mail"
   KOEK_NEWS_DIR="$XDG_DOCUMENTS_DIR/Nieuws"
   KOEK_NOTES_DIR="$XDG_DOCUMENTS_DIR/Notities"
-  KOEK_PROJECTS_DIR="~/Projecten"
+  KOEK_PROJECTS_DIR="$HOME/Projecten"
 #+END_SRC
 
 * Superfluous applications
@@ -363,7 +363,7 @@ To apply configuration, run:
 Interactive and non interactive
 
 #+BEGIN_SRC sh
-  export PATH="~/.local/bin"${PATH:+:$PATH}
+  export PATH="$HOME/.local/bin"${PATH:+:$PATH}
 #+END_SRC
 
 #+BEGIN_SRC sh
