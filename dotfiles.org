@@ -536,7 +536,7 @@ variables.
   SubFolders Verbatim
 #+END_SRC
 
-To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App passwords (FastMail)]]. Name it
 /Emacs e-mail/ and give it access to IMAP and SMTP. Then, to store it
 securely, run:
 
@@ -612,7 +612,7 @@ Define local personal storage.
   fileext = ".vcf"
 #+END_SRC
 
-To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App Passwords (FastMail)]]. Name it
+To generate the app password, follow [[https://www.fastmail.com/help/clients/apppassword.html][App passwords (FastMail)]]. Name it
 /Emacs contacts/ and give it access to CardDAV. Then, to store it
 securely, run:
 
