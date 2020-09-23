@@ -162,9 +162,17 @@ Hide superfluous applications.
 #+END_SRC
 
 * EXWM
+
+** EXWM GDM
 :PROPERTIES:
 :header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc
 :END:
+
+Launch [[*xsettingsd][xsettingsd]].
+
+#+BEGIN_SRC sh
+  xsettingsd -c "${XDG_CONFIG_HOME:-~/.config}/xsettingsd/xsettingsd" &
+#+END_SRC
 
 Set SSH agent.
 
@@ -192,6 +200,25 @@ Launch Emacs.
 
 #+BEGIN_SRC sh
   . /etc/exwm/exwmrc
+#+END_SRC
+
+** xsettingsd
+:PROPERTIES:
+:header-args:conf: :tangle stow/xsettingsd/.config/xsettingsd/xsettingsd
+:END:
+
+For settings, see [[https://www.freedesktop.org/wiki/Specifications/XSettingsRegistry/][XSETTINGS registry (freedesktop)]]. To dump the
+settings of the running XSETTINGS daemon (e.g. GNOME Settings Daemon),
+run:
+
+#+BEGIN_SRC sh
+  dump_xsettings
+#+END_SRC
+
+Disable blink cursor.
+
+#+BEGIN_SRC conf
+  Net/CursorBlink 0
 #+END_SRC
 
 * GNOME catgen :setup:
