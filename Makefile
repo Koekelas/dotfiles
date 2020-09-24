@@ -1,6 +1,6 @@
-packages := avahi bash calf catgen cmake cuda cups emacs env freecad git gnupg \
-            hwloc isync java jupyter keras mu nltk picom qt ssh steam tex \
-            vdirsyncer xdg xsettingsd
+packages := avahi bash calf catgen cmake cuda cups emacs env firefox freecad \
+            git gnupg hwloc isync java jupyter keras mu nltk picom qt ssh \
+            steam tex vdirsyncer xdg xsettingsd
 
 .PHONY: install uninstall
 install:
