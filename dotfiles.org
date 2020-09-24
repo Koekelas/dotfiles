@@ -136,11 +136,6 @@ Hide superfluous applications.
   Name=Hardware Locality lstopo
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/gnome/.local/share/applications/org.gnome.Extensions.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=Extensions
-#+END_SRC
-
 #+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/picom.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=picom
@@ -314,6 +309,7 @@ To apply configuration, run:
   gnome-control-center.desktop
   gnome-system-monitor.desktop
   org.gnome.DiskUtility.desktop
+  org.gnome.Extensions.desktop
   org.gnome.Logs.desktop
   org.gnome.Terminal.desktop
   org.gnome.font-viewer.desktop
