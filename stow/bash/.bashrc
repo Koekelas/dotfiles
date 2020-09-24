@@ -1,6 +1,6 @@
 [[ $- != *i* ]] && return
 
-export HISTFILE="${XDG_DATA_HOME:-~/.local/share}/bash/history"
+export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/bash/history"
 
 alias ls='ls -lah --group-directories-first --color=auto'
 

@@ -1,5 +1,5 @@
 picom &
-xsettingsd -c "${XDG_CONFIG_HOME:-~/.config}/xsettingsd/xsettingsd" &
+xsettingsd -c "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd" &
 
 eval $(gnome-keyring-daemon -s)
 export SSH_AUTH_SOCK
