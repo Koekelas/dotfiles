@@ -363,7 +363,7 @@ To apply configuration, run:
 Interactive and non interactive
 
 #+BEGIN_SRC sh
-  export PATH="$HOME/.local/bin"${PATH:+:$PATH}
+  export PATH="$HOME/.local/bin${PATH:+:$PATH}"
 #+END_SRC
 
 #+BEGIN_SRC sh
