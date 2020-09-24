@@ -554,7 +554,7 @@ Keep defaults.
 :header-args:conf: :tangle stow/isync/.config/isync/mbsyncrc
 :END:
 
-Store sync state with maildir sub directories, simplifying backup.
+Store sync state with maildir subdirectories, simplifying backup.
 
 #+BEGIN_SRC conf
   SyncState *
