@@ -5824,6 +5824,15 @@ Plex]] for variable pitch.
     (apply #'set-face-attribute 'variable-pitch nil variable))
 #+END_SRC
 
+Show vertical divider between windows. The default divider is drawn in
+the left fringe of the right window, the ~window-divider-mode~ divider
+is drawn between windows.
+
+#+BEGIN_SRC emacs-lisp
+  (setq window-divider-default-right-width 1)
+  (window-divider-mode)
+#+END_SRC
+
 Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
 #+BEGIN_SRC emacs-lisp

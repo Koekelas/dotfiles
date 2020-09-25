@@ -2691,6 +2691,9 @@ variable pitch optionally a relative height.")
          'fixed-pitch nil (plist-put (copy-sequence fixed) :height 1.0))
   (apply #'set-face-attribute 'variable-pitch nil variable))
 
+(setq window-divider-default-right-width 1)
+(window-divider-mode)
+
 (use-package moody
   :straight t
   :preface
