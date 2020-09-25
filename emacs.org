@@ -3357,7 +3357,7 @@ Bury unneeded buffers, computers have more than enough memory.
              char-mode t floating-mode-line nil))))
 #+END_SRC
 
-*** exar - Monitor layouts :wip:
+*** exar - Monitors :wip:
 For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
