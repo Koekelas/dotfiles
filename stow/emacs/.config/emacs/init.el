@@ -1979,6 +1979,11 @@ playing track, else, enqueue after last track."
    ("C-c C-c" . eval-buffer))
   :delight (emacs-lisp-mode "El" :major))
 
+(use-package checkdoc
+  :defer t
+  :config
+  (setq checkdoc-package-keywords-flag t))
+
 (use-package erlang
   :straight t
   :mode ((rx ".erl" string-end) . erlang-mode)
@@ -2872,7 +2877,7 @@ maximum length of S."
   (defvar koek-ml/checker-names
     '((eglot-flymake-backend . "LSP")
       (elisp-flymake-byte-compile . "El")
-      (elisp-flymake-checkdoc . "Checkdoc"))
+      (elisp-flymake-checkdoc . "CDoc"))
     "Alist of checker symbol to checker name pairs.")
 
   (defun koek-ml/state-to-description (state)

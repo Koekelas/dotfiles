@@ -4919,6 +4919,14 @@ Configure Conf mode afterwards.
     :delight (emacs-lisp-mode "El" :major))
 #+END_SRC
 
+*** checkdoc - Documentation checker
+#+BEGIN_SRC emacs-lisp
+  (use-package checkdoc
+    :defer t
+    :config
+    (setq checkdoc-package-keywords-flag t))
+#+END_SRC
+
 ** Erlang
 [[https://github.com/erlang/otp][erlang (GitHub)]]
 
@@ -5963,7 +5971,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (defvar koek-ml/checker-names
       '((eglot-flymake-backend . "LSP")
         (elisp-flymake-byte-compile . "El")
-        (elisp-flymake-checkdoc . "Checkdoc"))
+        (elisp-flymake-checkdoc . "CDoc"))
       "Alist of checker symbol to checker name pairs.")
 
     (defun koek-ml/state-to-description (state)
