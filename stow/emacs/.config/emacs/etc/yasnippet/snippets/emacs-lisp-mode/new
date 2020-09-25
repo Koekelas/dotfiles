@@ -5,9 +5,30 @@
 # --
 ;;; ${1:`(file-name-nondirectory (or (buffer-file-name) (buffer-name)))`} --- ${2:Short description} -*- lexical-binding: t; -*-
 
+;; Copyright (C) ${3:`(format-time-string "%Y")`} ${4:`user-full-name`}
+
+;; Author: ${5:`user-full-name`} <${6:`user-mail-address`}>
+;; Keywords: ${7:keyword-1, keyword-2, keyword-n}
+;; URL: ${8:URL}
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ;;; Commentary:
 
-;; ${3:Long description.}
+;; ${9:Long description.}
 
 ;;; Code:
 
