@@ -2620,8 +2620,8 @@ Mustn't be called directly, see
   (push 'modus-vivendi koek-thm/dark-themes))
 
 (defmacro koek-thm/with-modus-vars (variant &rest body)
-  "Evaluate BODY with Modus theme variables bound.
-VARIANT is a symbol, the theme variant, either operandi or
+  "Evaluate BODY with variables of Modus theme variant VARIANT bound.
+VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
   (declare (indent 1))
   `(if (eq ,variant 'operandi)
@@ -2632,7 +2632,7 @@ vivendi."
 
 (defun koek-thm/load-modus (variant)
   "Load and enable Modus theme.
-VARIANT is a symbol, the theme variant, either operandi or
+VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
   (let ((koek-thm/load-hook nil)        ; Dynamic variable
         (theme (or (and (eq variant 'operandi) 'modus-operandi)
