@@ -1122,18 +1122,18 @@ N is an integer, a workspace number."
   :defer t
   :config
   (setq exwm-manage-configurations
-        `(((string-prefix-p "gimp" (downcase exwm-class-name))
-           char-mode t floating-mode-line nil)
-          ((string-prefix-p "inkscape" (downcase exwm-class-name))
-           char-mode t floating-mode-line nil)
-          ((string-prefix-p "firefox" (downcase exwm-class-name))
+        `(((string-prefix-p "firefox" (downcase exwm-class-name))
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
                       (cons (kbd from) (kbd to)))
                     (append '(("M-o" . "C-n")
                               ("M-p" . "S-C-p")
                               ("M-k" . "C-w"))
-                            koek-wm/base-simulation-keys))))))
+                            koek-wm/base-simulation-keys)))
+          ((string-prefix-p "gimp" (downcase exwm-class-name))
+           char-mode t floating-mode-line nil)
+          ((string-prefix-p "inkscape" (downcase exwm-class-name))
+           char-mode t floating-mode-line nil))))
 
 (use-package server
   :config
