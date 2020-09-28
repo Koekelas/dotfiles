@@ -305,6 +305,7 @@ To apply configuration, run:
 
 ** System
 #+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/System.category
+  blueman-manager.desktop
   ca.desrt.dconf-editor.desktop
   gnome-control-center.desktop
   gnome-system-monitor.desktop
