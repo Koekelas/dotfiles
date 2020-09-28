@@ -45,12 +45,12 @@ Git is mandatory, everything else is optional.
 - News reader: [[https://curl.haxx.se/][curl]]
 - PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
 - Media player: [[https://www.videolan.org/vlc/][VLC media player]]
-- Arduino (depends on C family): [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
 - C family:
   - [[https://gcc.gnu.org/][GCC]]
   - [[https://mesonbuild.com/][Meson]]
   - [[https://clang.llvm.org/][Clang]] (language server)
   - [[https://www.gnu.org/software/gdb/][GDB]]
+  - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
 - Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
 - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
 - Erlang:
@@ -113,14 +113,11 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   ## Media player
   pacman -S vlc
 
-  ## Arduino
-  pacman -S arduino arduino-avr-core
+  ## C family
+  pacman -S gcc meson clang gdb arduino arduino-avr-core
 
   # Setup Arduino
   gpasswd -a $(whoami) uucp
-
-  ## C family
-  pacman -S gcc meson clang gdb
 
   ## Clojure & ClojureScript
   pacman -S leiningen

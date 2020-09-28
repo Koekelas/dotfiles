@@ -1829,10 +1829,6 @@ playing track, else, enqueue after last track."
   (setq keycast-separator-width 3)
   (setq keycast-remove-tail-elements nil))
 
-(use-package gino
-  :load-path "lisp/gino"
-  :commands gino-generate-project)
-
 (use-package cc-mode
   :mode
   (((rx ".c" string-end) . c-mode)
@@ -1864,6 +1860,10 @@ playing track, else, enqueue after last track."
         '((awk-mode  . "awk")
           (java-mode . "java")
           (other     . "stroustrup"))))
+
+(use-package gino
+  :load-path "lisp/gino"
+  :commands gino-generate-project)
 
 (use-package clojure-mode
   :straight t

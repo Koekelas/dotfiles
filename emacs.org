@@ -4546,14 +4546,48 @@ Stavrou)]].
 
 * Languages
 
-** Arduino
+** C family
+#+BEGIN_SRC emacs-lisp
+  (use-package cc-mode
+    :mode
+    (((rx ".c" string-end) . c-mode)
+     ((rx ".cpp" string-end) . c++-mode)
+     ((rx ".java" string-end) . java-mode))
+    :config
+    (use-package devdocs-lookup
+      :bind
+      (:map c-mode-map
+       ("C-c d d" . devdocs-lookup-c)
+       :map c++-mode-map
+       ("C-c d d" . devdocs-lookup-cpp)
+       :map java-mode-map
+       ("C-c d d" . devdocs-lookup-openjdk~8))))
+
+  (use-package cc-cmds
+    :defer t
+    :preface
+    (define-advice c-update-modeline
+        (:around (f) koek-cc/disable-update-mode-name)
+      (let ((name mode-name))
+        (funcall f)
+        (setq mode-name name))))
+
+  (use-package cc-vars
+    :defer t
+    :config
+    (setq c-default-style
+          '((awk-mode  . "awk")
+            (java-mode . "java")
+            (other     . "stroustrup"))))
+#+END_SRC
+
+*** gino - Generate Arduino project :wip:
 #+BEGIN_SRC emacs-lisp
   (use-package gino
     :load-path "lisp/gino"
     :commands gino-generate-project)
 #+END_SRC
 
-*** gino - Generate project :wip:
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/gino/gino.el
   ;;; gino.el --- Generate Arduino project -*- lexical-binding: t; -*-
 
@@ -4781,41 +4815,6 @@ Stavrou)]].
   (provide 'gino)
 
   ;;; gino.el ends here
-#+END_SRC
-
-** C family
-#+BEGIN_SRC emacs-lisp
-  (use-package cc-mode
-    :mode
-    (((rx ".c" string-end) . c-mode)
-     ((rx ".cpp" string-end) . c++-mode)
-     ((rx ".java" string-end) . java-mode))
-    :config
-    (use-package devdocs-lookup
-      :bind
-      (:map c-mode-map
-       ("C-c d d" . devdocs-lookup-c)
-       :map c++-mode-map
-       ("C-c d d" . devdocs-lookup-cpp)
-       :map java-mode-map
-       ("C-c d d" . devdocs-lookup-openjdk~8))))
-
-  (use-package cc-cmds
-    :defer t
-    :preface
-    (define-advice c-update-modeline
-        (:around (f) koek-cc/disable-update-mode-name)
-      (let ((name mode-name))
-        (funcall f)
-        (setq mode-name name))))
-
-  (use-package cc-vars
-    :defer t
-    :config
-    (setq c-default-style
-          '((awk-mode  . "awk")
-            (java-mode . "java")
-            (other     . "stroustrup"))))
 #+END_SRC
 
 ** Clojure & ClojureScript
