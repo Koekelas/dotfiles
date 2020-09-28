@@ -721,6 +721,10 @@ name."
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 
+(add-hook 'markdown-mode-hook #'variable-pitch-mode)
+(add-hook 'org-mode-hook #'variable-pitch-mode)
+(delight 'buffer-face-mode nil 'face-remap)
+
 (use-package paren-face
   :straight t
   :config
