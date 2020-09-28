@@ -30,16 +30,15 @@ Git is mandatory, everything else is optional.
   - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
-  - [[https://x.org/][xprop]] (GTK theme variant)
+  - [[https://x.org/][xprop]] (set GTK theme variant)
   - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] (fixed pitch font)
   - [[https://www.ibm.com/plex/][IBM Plex]] (variable pitch font)
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
   - [[https://github.com/yshui/picom][picom]]
   - [[https://github.com/derat/xsettingsd][xsettingsd]]
-  - [[https://x.org/][xsetroot]]
-  - [[https://github.com/Airblader/unclutter-xfixes][unclutter]]
-  - [[https://www.argyllcms.com/][ArgyllCMS]] (color profile)
+  - [[https://x.org/][xsetroot]] and [[https://github.com/Airblader/unclutter-xfixes][unclutter]]
+  - [[https://www.argyllcms.com/][ArgyllCMS]] (dispwin, load color profile)
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
 - E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
@@ -67,7 +66,6 @@ Git is mandatory, everything else is optional.
   - [[https://nodejs.org/][Node.js]]
   - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
   - [[https://github.com/NicolasPetton/Indium][Indium]]
-  - [[https://www.chromium.org/][Chromium]] (debugger, with Indium)
 - JSON: [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
 - Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
 - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
@@ -78,7 +76,7 @@ Git is mandatory, everything else is optional.
 - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
 - SQL: [[https://www.postgresql.org/][PostgreSQL]]
 - TeX, Org & Markdown:
-  - [[https://www.sqlite.org/][SQLite]] (roam)
+  - [[https://www.sqlite.org/][SQLite]] (track Org backlinks)
   - [[https://www.latex-project.org/][LaTeX]]
   - [[https://pandoc.org/][pandoc]]
 - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
@@ -143,7 +141,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   # Install jdtls from AUR
 
   ## JavaScript
-  pacman -S nodejs npm python2 chromium
+  pacman -S nodejs npm python2
   npm i -g indium
   # Install javascript-typescript-langserver from AUR
 
