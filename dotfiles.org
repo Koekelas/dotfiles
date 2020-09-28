@@ -86,6 +86,11 @@ Hide superfluous applications.
   Name=Avahi VNC Server Browser
 #+END_SRC
 
+#+BEGIN_SRC conf :tangle stow/blueman/.local/share/applications/blueman-adapters.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Bluetooth Adapters
+#+END_SRC
+
 #+BEGIN_SRC conf :tangle stow/cmake/.local/share/applications/cmake-gui.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=CMake
