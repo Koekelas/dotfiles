@@ -71,11 +71,6 @@ Hide superfluous applications.
   NoDisplay=true
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/assistant.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=Qt Assistant
-#+END_SRC
-
 #+BEGIN_SRC conf :tangle stow/avahi/.local/share/applications/avahi-discover.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Avahi Zeroconf Browser
@@ -96,24 +91,14 @@ Hide superfluous applications.
   Name=CMake
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/compton.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=compton
-#+END_SRC
-
 #+BEGIN_SRC conf :tangle stow/cups/.local/share/applications/cups.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Manage Printing
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/designer.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/hwloc/.local/share/applications/lstopo.desktop :noweb yes
   <<desktop-nodisplay>>
-  Name=Qt Designer
-#+END_SRC
-
-#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/ipython.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=ipython
+  Name=Hardware Locality lstopo
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle stow/java/.local/share/applications/jconsole-java-openjdk.desktop :noweb yes
@@ -126,19 +111,34 @@ Hide superfluous applications.
   Name=OpenJDK Java Shell
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/linguist.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/ipython.desktop :noweb yes
   <<desktop-nodisplay>>
-  Name=Qt Linguist
+  Name=ipython
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/hwloc/.local/share/applications/lstopo.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/compton.desktop :noweb yes
   <<desktop-nodisplay>>
-  Name=Hardware Locality lstopo
+  Name=compton
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/picom.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=picom
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/assistant.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Assistant
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/designer.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Designer
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/linguist.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Qt Linguist
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle stow/qt/.local/share/applications/qdbusviewer.desktop :noweb yes
