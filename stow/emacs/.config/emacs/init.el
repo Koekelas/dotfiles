@@ -2849,6 +2849,12 @@ maximum length of S."
   (defconst koek-ml/state '(" " "%*%+")
     "State mode line construct.")
 
+  (defconst koek-ml/keycast
+    '(:eval
+      (when (bound-and-true-p keycast-mode)
+        mode-line-keycast))
+    "Keycast mode line construct.")
+
   (defconst koek-ml/position
     '(:eval
       (unless (derived-mode-p 'pdf-view-mode)
@@ -3037,7 +3043,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace koek-ml/depth
             koek-ml/exwm-workspaces koek-ml/eyebrowse
-            koek-ml/id koek-ml/diff keycast-marker koek-ml/task koek-ml/modes))
+            koek-ml/id koek-ml/keycast koek-ml/diff koek-ml/task koek-ml/modes))
     (force-mode-line-update)
     (dolist (type koek-ml/variant-types)
       (when-let ((buffer (ediff-get-buffer type)))
@@ -3065,8 +3071,8 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
                 `(,@koek-ml/dummies " "
                   koek-ml/eldoc koek-ml/ace koek-ml/ediff
                   koek-ml/depth koek-ml/exwm-workspaces koek-ml/eyebrowse
-                  koek-ml/id koek-ml/state koek-ml/position koek-ml/pdf
-                  keycast-marker koek-ml/exwm-input koek-ml/input
+                  koek-ml/id koek-ml/state keycast-marker
+                  koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
                   koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
 
 (blink-cursor-mode 0)
