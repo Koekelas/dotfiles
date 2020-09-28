@@ -1823,6 +1823,12 @@ playing track, else, enqueue after last track."
   (setq bongo-display-track-icons nil)
   :delight bongo-dired-library-mode)
 
+(use-package prepcast
+  :load-path "lisp/prepcast"
+  :commands prepcast-mode
+  :config
+  (setq prepcast-scale 1.5))
+
 (use-package keycast
   :straight t
   :defer t
