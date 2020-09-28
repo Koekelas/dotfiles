@@ -406,6 +406,36 @@ When popping mark, skip consecutive identical marks.
         (setq n (1- n)))))
 #+END_SRC
 
+** Edit commands
+Bind sort and align region.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ("C-c e s" . sort-lines)
+   ("C-c e a" . align-regexp))
+#+END_SRC
+
+Upgrade case commands.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ([remap downcase-word]   . downcase-dwim)
+   ([remap upcase-word]     . upcase-dwim)
+   ([remap capitalize-word] . capitalize-dwim))
+#+END_SRC
+
+** expand-region - Mark increasingly larger unit
+[[https://github.com/magnars/expand-region.el][expand-region (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :straight t
+    :bind
+    ("C-S-SPC" . er/expand-region)
+    :config
+    (setq expand-region-smart-cursor t))
+#+END_SRC
+
 ** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
@@ -587,28 +617,6 @@ Run:
   gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>Page_Down']"
 #+END_SRC
 
-** paren-face - Dim brackets
-[[https://github.com/tarsius/paren-face][paren-face (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package paren-face
-    :straight t
-    :config
-    (global-paren-face-mode))
-#+END_SRC
-
-** expand-region - Mark increasingly larger unit
-[[https://github.com/magnars/expand-region.el][expand-region (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :straight t
-    :bind
-    ("C-S-SPC" . er/expand-region)
-    :config
-    (setq expand-region-smart-cursor t))
-#+END_SRC
-
 ** Whitespace
 Indent with spaces, not tabs.
 
@@ -644,30 +652,6 @@ End files with empty line.
     (setq whitespace-action '(auto-cleanup))
     (setq whitespace-style '(face trailing empty lines-tail))
     :delight)
-#+END_SRC
-
-** hl-line - Highlight current line
-#+BEGIN_SRC emacs-lisp
-  (use-package hl-line
-    :hook ((prog-mode conf-mode) . hl-line-mode))
-#+END_SRC
-
-** Edit commands
-Bind sort and align region.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-keys
-   ("C-c e s" . sort-lines)
-   ("C-c e a" . align-regexp))
-#+END_SRC
-
-Upgrade case commands.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-keys
-   ([remap downcase-word]   . downcase-dwim)
-   ([remap upcase-word]     . upcase-dwim)
-   ([remap capitalize-word] . capitalize-dwim))
 #+END_SRC
 
 ** Clipboard
@@ -2885,6 +2869,22 @@ For more information, see ~man 5 hunspell~.
     :defer t
     :config
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+#+END_SRC
+
+** paren-face - Dim brackets
+[[https://github.com/tarsius/paren-face][paren-face (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package paren-face
+    :straight t
+    :config
+    (global-paren-face-mode))
+#+END_SRC
+
+** hl-line - Highlight current line
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-line
+    :hook ((prog-mode conf-mode) . hl-line-mode))
 #+END_SRC
 
 * Windows & buffers

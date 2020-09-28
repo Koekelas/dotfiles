@@ -263,6 +263,22 @@ dictionary links before LIMIT."
       (funcall f)
       (setq n (1- n)))))
 
+(bind-keys
+ ("C-c e s" . sort-lines)
+ ("C-c e a" . align-regexp))
+
+(bind-keys
+ ([remap downcase-word]   . downcase-dwim)
+ ([remap upcase-word]     . upcase-dwim)
+ ([remap capitalize-word] . capitalize-dwim))
+
+(use-package expand-region
+  :straight t
+  :bind
+  ("C-S-SPC" . er/expand-region)
+  :config
+  (setq expand-region-smart-cursor t))
+
 (use-package subword
   :hook
   ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
@@ -417,18 +433,6 @@ strings."
   (koek-sp/setup-format-c-block-on-return-handler 'python-mode "{" "[" "(")
   :delight)
 
-(use-package paren-face
-  :straight t
-  :config
-  (global-paren-face-mode))
-
-(use-package expand-region
-  :straight t
-  :bind
-  ("C-S-SPC" . er/expand-region)
-  :config
-  (setq expand-region-smart-cursor t))
-
 (setq-default indent-tabs-mode nil)
 
 (setq sentence-end-double-space nil)
@@ -449,18 +453,6 @@ strings."
   (setq whitespace-action '(auto-cleanup))
   (setq whitespace-style '(face trailing empty lines-tail))
   :delight)
-
-(use-package hl-line
-  :hook ((prog-mode conf-mode) . hl-line-mode))
-
-(bind-keys
- ("C-c e s" . sort-lines)
- ("C-c e a" . align-regexp))
-
-(bind-keys
- ([remap downcase-word]   . downcase-dwim)
- ([remap upcase-word]     . upcase-dwim)
- ([remap capitalize-word] . capitalize-dwim))
 
 (setq save-interprogram-paste-before-kill t)
 
@@ -728,6 +720,14 @@ name."
   :defer t
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+
+(use-package paren-face
+  :straight t
+  :config
+  (global-paren-face-mode))
+
+(use-package hl-line
+  :hook ((prog-mode conf-mode) . hl-line-mode))
 
 (setq window-resize-pixelwise t)
 
