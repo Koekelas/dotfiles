@@ -426,7 +426,7 @@ strings."
   (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
   (koek-sp/setup-format-c-block-on-return-handler 'css-mode "{")
   (koek-sp/setup-format-c-block-on-return-handler 'java-mode "{")
-  (koek-sp/setup-format-c-block-on-return-handler 'js2-mode "{" "[")
+  (koek-sp/setup-format-c-block-on-return-handler 'js-mode "{" "[")
   (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
   (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
   (koek-sp/setup-format-c-block-on-return-handler 'python-mode "{" "[" "(")
@@ -515,7 +515,7 @@ backends, see `company-backends'."
    ("C-c e f" . eglot-code-actions)
    ("C-c e r" . eglot-rename))
   :hook
-  ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js2-mode json-mode python-mode) .
+  ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js-mode json-mode python-mode) .
    eglot-ensure)
   :config
   ;; Eclipse JDT Language Server lacks an executable. Eglot expects to
@@ -2041,14 +2041,12 @@ playing track, else, enqueue after last track."
   (setq emmet-self-closing-tag-style " /")
   :delight)
 
-(use-package js2-mode
-  :straight t
-  :mode (rx ".js" string-end)
-  :interpreter "node"
+(use-package js
+  :mode ((rx ".js" string-end) . js-mode)
   :config
   (use-package devdocs-lookup
     :bind
-    (:map js2-mode-map
+    (:map js-mode-map
      ("C-c d d" . devdocs-lookup-javascript)
      ("C-c d C-d" . devdocs-lookup-dom)
      ("C-c d C-e" . devdocs-lookup-dom_events)
@@ -2059,11 +2057,10 @@ playing track, else, enqueue after last track."
      ("C-c d C-x" . devdocs-lookup-express)))
 
   ;; Resolve keybinding conflict with eglot
-  (unbind-key "M-." js2-mode-map)
+  (unbind-key "M-." js-mode-map)
 
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil)
-  :delight (js2-mode "JS" :major))
+  (setq js-enabled-frameworks '(javascript))
+  :delight (js-mode "JS" :major))
 
 ;; Prevent indium from creating Chrome profile directory during
 ;; installation
@@ -2071,7 +2068,7 @@ playing track, else, enqueue after last track."
 
 (use-package indium-interaction
   :straight indium
-  :hook (js2-mode . indium-interaction-mode)
+  :hook (js-mode . indium-interaction-mode)
   :config
   ;; Resolve keybinding conflict with documentation keymap
   (unbind-key "C-c d" indium-interaction-mode-map)
@@ -2286,8 +2283,6 @@ Candidates are collected from agenda files."
   ;; Resolve keybinding conflict with cider
   (unbind-key "C-c '" org-src-mode-map)
   (unbind-key "C-c C-k" org-src-mode-map)
-
-  (push '("js" . js2) org-src-lang-modes)
   :delight)
 
 (use-package ob-core
