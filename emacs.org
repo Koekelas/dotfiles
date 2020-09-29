@@ -4072,8 +4072,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
                   (setf (url-host u) "old.reddit.com")
                   (url-recreate-url u)))))
       "List of redirect functions.
-  Functions are passed a URL and should return a redirect URL or
-  nil.")
+  A redirect function is passed a URL and must return a redirect
+  URL or, to not redirect the URL, nil.")
 
     (define-advice eww (:filter-args (args) koek-eww/redirect)
       (let ((url (car args)))
@@ -4639,7 +4639,8 @@ Stavrou)]].
                     (rx line-start "1.8." (one-or-more num) line-end) version)
                    t))))
     "List of hardware specification whitelist predicates.
-  Predicates are passed a hardware specification.")
+  A hardware specification whitelist predicate is passed a hardware
+  specification.")
 
   (defun gino--get-in (keys alist)
     "Return value for KEYS in nested ALIST.
@@ -6612,7 +6613,7 @@ Configure news feeds.
         ("krtwood" youtube "UCrI3NWmFF45LwKwk5TEYihQ" woodwork)
         ("scanlime" youtube "UCaEgw3321ct_PE4PJvdhXEQ" electronics))
       "List of news feeds.
-  News feed is a list of format:
+  A news feed is a list of format:
 
   '(\"title\" \"url\" tag-1 tag-2 tag-n) or
   '(\"title\" reddit \"id\" tag-1 tag-2 tag-n) or

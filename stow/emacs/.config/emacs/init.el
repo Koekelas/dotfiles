@@ -1410,8 +1410,8 @@ Output is between `compilation-filter-start' and point."
                 (setf (url-host u) "old.reddit.com")
                 (url-recreate-url u)))))
     "List of redirect functions.
-Functions are passed a URL and should return a redirect URL or
-nil.")
+A redirect function is passed a URL and must return a redirect
+URL or, to not redirect the URL, nil.")
 
   (define-advice eww (:filter-args (args) koek-eww/redirect)
     (let ((url (car args)))
@@ -3354,7 +3354,7 @@ When optional FULL is truthy, return absolute file names."
       ("krtwood" youtube "UCrI3NWmFF45LwKwk5TEYihQ" woodwork)
       ("scanlime" youtube "UCaEgw3321ct_PE4PJvdhXEQ" electronics))
     "List of news feeds.
-News feed is a list of format:
+A news feed is a list of format:
 
 '(\"title\" \"url\" tag-1 tag-2 tag-n) or
 '(\"title\" reddit \"id\" tag-1 tag-2 tag-n) or

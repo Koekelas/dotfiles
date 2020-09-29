@@ -42,7 +42,8 @@
                   (rx line-start "1.8." (one-or-more num) line-end) version)
                  t))))
   "List of hardware specification whitelist predicates.
-Predicates are passed a hardware specification.")
+A hardware specification whitelist predicate is passed a hardware
+specification.")
 
 (defun gino--get-in (keys alist)
   "Return value for KEYS in nested ALIST.
