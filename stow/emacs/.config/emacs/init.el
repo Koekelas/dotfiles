@@ -398,8 +398,7 @@ ignored."
         (indent-according-to-mode))
       (indent-according-to-mode)))
 
-  (defun
-      koek-sp/setup-format-c-block-on-return-handler
+  (defun koek-sp/setup-format-c-block-on-return-handler
       (mode &rest open-delimiters)
     "Setup format-c-block handler in MODE for OPEN-DELIMITERS.
 MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
