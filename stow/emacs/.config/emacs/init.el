@@ -2408,6 +2408,11 @@ TITLE is a string, a note title."
   :config
   (setq org-roam-completion-system 'ivy))
 
+(use-package org-roam-db
+  :defer t
+  :config
+  (setq org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")))
+
 (use-package org-roam-protocol
   :after org-protocol)
 
