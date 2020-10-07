@@ -4035,7 +4035,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+END_SRC
 
 *** Aliases
-#+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/var/eshell/alias
+#+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/etc/eshell/aliases
   alias ls ls -lah $*
   alias nb jupyter notebook $*
 #+END_SRC
