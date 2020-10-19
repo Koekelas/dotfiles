@@ -419,6 +419,7 @@ strings."
   (setq sp-navigate-reindent-after-up nil)
   (setq sp-highlight-pair-overlay nil)
   (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
+  (koek-sp/setup-separate-sexp-handler 'cider-repl-mode "(" "[" "{" "\"")
   (koek-sp/setup-separate-sexp-handler 'lisp-mode "(" "\"")
   (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
   (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
