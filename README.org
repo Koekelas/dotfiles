@@ -35,6 +35,7 @@ Git is mandatory, everything else is optional.
   - [[https://www.ibm.com/plex/][IBM Plex]] (variable pitch font)
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
+  - [[https://x.org/][xset]]
   - [[https://github.com/yshui/picom][picom]]
   - [[https://github.com/derat/xsettingsd][xsettingsd]]
   - [[https://x.org/][xsetroot]] and [[https://github.com/Airblader/unclutter-xfixes][unclutter]]
@@ -91,7 +92,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   # Install PragmataPro Mono from source or ttf-iosevka from AUR
 
   ## X window manager
-  pacman -S picom xsettingsd xorg-xsetroot unclutter argyllcms
+  pacman -S xorg-xset picom xsettingsd xorg-xsetroot unclutter argyllcms
   # Install exwm-gdm from source
 
   ## Terminal emulator

@@ -178,6 +178,14 @@ Hide superfluous applications.
 :header-args:sh: :tangle stow/emacs/.config/exwm/exwmrc
 :END:
 
+Disable display power management signaling and screensaver, i.e.,
+disable turning off monitors.
+
+#+BEGIN_SRC sh
+  xset -dpms
+  xset s off
+#+END_SRC
+
 Launch [[*picom][picom]] and [[*xsettingsd][xsettingsd]].
 
 #+BEGIN_SRC sh

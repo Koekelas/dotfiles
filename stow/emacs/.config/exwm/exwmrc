@@ -1,3 +1,6 @@
+xset -dpms
+xset s off
+
 picom &
 xsettingsd -c "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd" &
 
