@@ -1873,6 +1873,14 @@ playing track, else, enqueue after last track."
 
 (use-package cider-mode
   :defer t
+  :config
+  (use-package cider-eval
+    :bind
+    (:map cider-mode-map
+     ("C-c C-c" . cider-load-buffer)))
+
+  ;; Resolve keybinding conflict with org
+  (unbind-key "C-c C-k" cider-mode-map)
   :delight)
 
 (use-package cider-common
@@ -2246,19 +2254,11 @@ Candidates are collected from agenda files."
   (setq org-refile-use-outline-path 'buffer-name))
 
 (use-package org-src
-  :bind
-  (:map org-src-mode-map
-   ("C-c o '" . org-edit-src-exit)
-   ("C-c o k" . org-edit-src-abort))
   :preface
   (define-advice org-src--construct-edit-buffer-name
       (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
     ;; Mirror helpful buffer names
     (format "*org-src: %s*" org-buffer-name))
-  :config
-  ;; Resolve keybinding conflict with cider
-  (unbind-key "C-c '" org-src-mode-map)
-  (unbind-key "C-c C-k" org-src-mode-map)
   :delight)
 
 (use-package ob-core
