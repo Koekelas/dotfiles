@@ -645,10 +645,6 @@ name."
                    (or (koek-org/get-code-block-var-value name) ""))))
         (make-directory file-name 'parents))))
   :config
-  ;; Load own snippets
-  (setq yas-snippet-dirs (remq 'yas-installed-snippets-dir yas-snippet-dirs))
-  (yas-reload-all)
-
   ;; Set new snippet file snippet
   (with-temp-buffer
     (insert-file-contents
