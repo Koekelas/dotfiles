@@ -1912,10 +1912,7 @@ playing track, else, enqueue after last track."
   :defer t
   :config
   ;; Resolve keybinding conflict with company
-  (unbind-key "TAB" sly-mrepl-mode-map)
-
-  (setq sly-mrepl-history-file-name
-        (no-littering-expand-var-file-name "sly-mrepl-history")))
+  (unbind-key "TAB" sly-mrepl-mode-map))
 
 (use-package text-mode
   :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
