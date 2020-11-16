@@ -552,30 +552,6 @@ backends, see `company-backends'."
 
 (use-package abbrev
   :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
-  :config
-  ;; Prime abbrev tables
-  (unless (file-exists-p (no-littering-expand-var-file-name "abbrev.el"))
-    (require 'find-func)
-
-    ;; Upcase SQL keywords
-    (let ((abbrevs
-           (let ((keywords
-                  (split-string
-                   (with-temp-buffer
-                     (insert-file-contents (find-library-name "sql"))
-                     (search-forward "ANSI Reserved keywords")
-                     (buffer-substring (re-search-forward
-                                        (rx (one-or-more (not (any "\"")))))
-                                       (re-search-forward
-                                        (rx (one-or-more (not (any ")")))))))
-                   (rx (any " \n")) 'omit-nulls "\"")))
-             (mapcar (lambda (keyword)
-                       (list keyword (upcase keyword)))
-                     keywords))))
-      (define-abbrev-table 'sql-mode-abbrev-table abbrevs)
-      (define-abbrev-table 'sql-interactive-mode-abbrev-table abbrevs)))
-
-  (setq save-abbrevs 'silently)
   :delight)
 
 (use-package yasnippet
@@ -2523,6 +2499,24 @@ TITLE is a string, a note title."
     :bind
     (:map sql-mode-map
      ("C-c d C-p" . devdocs-lookup-postgresql~12)))
+
+  ;; Upcase keywords after insertion
+  (require 'find-func)
+  (require 'abbrev)
+
+  (let ((keywords
+         (split-string
+          (with-temp-buffer
+            (insert-file-contents (find-library-name "sql"))
+            (search-forward "ANSI Reserved keywords")
+            (buffer-substring (re-search-forward
+                               (rx (one-or-more (not (any "\"")))))
+                              (re-search-forward
+                               (rx (one-or-more (not (any ")")))))))
+          (rx (any " \n")) 'omit-nulls "\"")))
+    (dolist (keyword keywords)
+      (define-abbrev
+        sql-mode-abbrev-table keyword (upcase keyword) nil :system t)))
 
   (setq sql-product 'postgres))
 
