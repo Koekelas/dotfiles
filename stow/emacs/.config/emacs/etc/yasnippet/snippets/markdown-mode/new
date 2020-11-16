@@ -4,7 +4,6 @@
 # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
 # --
 <!-- -*- ispell-local-dictionary: "${2:$(koek-ys/ietf-to-other yas-text :hun)}"; -*- -->
-
 ---
 title: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
 lang: ${2:en-US$(koek-ys/complete-ietf)}
