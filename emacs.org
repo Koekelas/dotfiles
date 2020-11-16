@@ -297,6 +297,7 @@ VC is a placeholder.
   (use-package recentf
     :config
     (require 'find-func)
+
     (let ((file-names
            (list
             (rx line-start

@@ -185,6 +185,7 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package recentf
   :config
   (require 'find-func)
+
   (let ((file-names
          (list
           (rx line-start
