@@ -789,11 +789,11 @@ vertically, else, flip horizontally."
   (defun koek-tf/rotate (&optional arg)
     "Rotate window layout.
 With `\\[universal-argument]' prefix argument ARG, rotate
-counterclockwise, else, rotate clockwise."
+clockwise, else, rotate counterclockwise."
     (interactive "P")
     (if arg
-        (rotate-frame-anticlockwise)
-      (rotate-frame-clockwise)))
+        (rotate-frame-clockwise)
+      (rotate-frame-anticlockwise)))
   :init
   (bind-keys
    ("C-c w f" . koek-tf/flip)
