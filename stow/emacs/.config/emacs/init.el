@@ -948,7 +948,8 @@ window."
       ("C-s" . "C-f")
       ("C-d" . "<delete>")
       ("M-d" . "S-C-<right> C-x")
-      ("M-DEL" . "S-C-<left> C-x")
+      ;; Why does <backspace> work but DEL not?
+      ("M-<backspace>" . "S-C-<left> C-x")
       ("C-k" . "S-<end> C-x")
       ("M-@" . "S-C-<right>")
       ("M-h" . "C-a")
