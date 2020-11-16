@@ -648,8 +648,7 @@ name."
   ;; Set new snippet file snippet
   (with-temp-buffer
     (insert-file-contents
-     (expand-file-name "yasnippet/snippets/snippet-mode/new"
-                       no-littering-etc-directory))
+     (expand-file-name "snippet-mode/new" (car (last yas-snippet-dirs))))
     (setq yas-new-snippet-default
           (buffer-substring (re-search-forward (rx line-start "# --\n"))
                             (point-max))))
