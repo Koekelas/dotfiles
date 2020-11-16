@@ -1860,7 +1860,8 @@ playing track, else, enqueue after last track."
   (use-package devdocs-lookup
     :bind
     (:map clojure-mode-map
-     ("C-c d d" . devdocs-lookup-clojure~1.10)))
+     ("C-c d d" . devdocs-lookup-clojure~1.10)
+     ("C-c d C-j" . devdocs-lookup-openjdk~8)))
   :delight
   (clojure-mode "Clj" :major)
   (clojurescript-mode "Cljs" :major)
