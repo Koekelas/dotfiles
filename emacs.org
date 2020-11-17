@@ -6492,8 +6492,8 @@ Configure notes.
     :config
     (setq org-roam-directory koek/notes-dir)
     (setq org-roam-index-file (expand-file-name "index.org" koek/notes-dir))
-    (org-roam-mode)
-    (find-file-noselect org-roam-index-file 'nowarn))
+    (find-file-noselect org-roam-index-file 'nowarn)
+    (org-roam-mode))
 #+END_SRC
 
 ** Capture templates :setup:

@@ -3198,8 +3198,8 @@ When optional FULL is truthy, return absolute file names."
   :config
   (setq org-roam-directory koek/notes-dir)
   (setq org-roam-index-file (expand-file-name "index.org" koek/notes-dir))
-  (org-roam-mode)
-  (find-file-noselect org-roam-index-file 'nowarn))
+  (find-file-noselect org-roam-index-file 'nowarn)
+  (org-roam-mode))
 
 (use-package org-capture
   :defer t
