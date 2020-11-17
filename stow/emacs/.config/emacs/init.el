@@ -2730,7 +2730,7 @@ A dummy prevents a package from modifying the mode line.")
 
   (defconst koek-ml/ediff
     '(:eval
-      (when koek-ml/variant
+      (when (and koek-ml/variant (not (bound-and-true-p ace-window-mode)))
         `(,(moody-ribbon
             (concat (propertize (plist-get koek-ml/variant :label)
                                 'face 'koek-diff/variant)

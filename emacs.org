@@ -5975,7 +5975,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
 
     (defconst koek-ml/ediff
       '(:eval
-        (when koek-ml/variant
+        (when (and koek-ml/variant (not (bound-and-true-p ace-window-mode)))
           `(,(moody-ribbon
               (concat (propertize (plist-get koek-ml/variant :label)
                                   'face 'koek-diff/variant)
