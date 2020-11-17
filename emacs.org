@@ -6727,6 +6727,7 @@ Configure news feeds.
     (setq elfeed-db-directory koek/news-dir)
 
     (use-package recentf
+      :defer t
       :config
       (push (rx line-start (literal elfeed-db-directory)) recentf-exclude))
 

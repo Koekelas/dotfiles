@@ -3368,6 +3368,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
   (setq elfeed-db-directory koek/news-dir)
 
   (use-package recentf
+    :defer t
     :config
     (push (rx line-start (literal elfeed-db-directory)) recentf-exclude))
 
