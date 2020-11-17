@@ -3274,44 +3274,43 @@ When optional FULL is truthy, return absolute file names."
   :config
   (setq eww-download-directory koek/download-dir))
 
+(use-package mu4e-context
+  :defer t
+  :config
+  (setq mu4e-contexts
+        (list (make-mu4e-context
+               :name "Personal"
+               :match-func
+               (lambda (message)
+                 (when message
+                   (string-prefix-p "/Personal/"
+                                    (mu4e-message-field message :maildir))))
+               :vars
+               `((smtpmail-smtp-server   . "smtp.fastmail.com")
+                 (smtpmail-smtp-service  . 465)
+                 (smtpmail-stream-type   . ssl)
+                 ;; refile-folder, drafts-folder, sent-folder and
+                 ;; trash-folder are directory file names, i.e., no
+                 ;; trailing /
+                 (mu4e-refile-folder     . "/Personal/Archive")
+                 (mu4e-drafts-folder     . "/Personal/Drafts")
+                 (mu4e-sent-folder       . "/Personal/Sent")
+                 (mu4e-trash-folder      . "/Personal/Trash")
+                 (mu4e-compose-signature . ,user-full-name))))))
+
 (use-package mu4e-vars
   :defer t
   :config
-  (use-package mu4e-context
-    :config
-    (setq mu4e-contexts
-          (list (make-mu4e-context
-                 :name "Personal"
-                 :match-func
-                 (lambda (message)
-                   (when message
-                     (string-prefix-p "/Personal/"
-                                      (mu4e-message-field message :maildir))))
-                 :vars
-                 `((smtpmail-smtp-server   . "smtp.fastmail.com")
-                   (smtpmail-smtp-service  . 465)
-                   (smtpmail-stream-type   . ssl)
-                   ;; refile-folder, drafts-folder, sent-folder and
-                   ;; trash-folder are directory file names, i.e., no
-                   ;; trailing /
-                   (mu4e-refile-folder     . "/Personal/Archive")
-                   (mu4e-drafts-folder     . "/Personal/Drafts")
-                   (mu4e-sent-folder       . "/Personal/Sent")
-                   (mu4e-trash-folder      . "/Personal/Trash")
-                   (mu4e-compose-signature . ,user-full-name))))))
-
-  (use-package mu4e-utils
-    :config
-    (setq mu4e-bookmarks
-          '((:name "Personal INBOX"
-             :query "maildir:/Personal/INBOX"
-             :key ?p)
-            (:name "Applied Artificial Intelligence"
-             :query "maildir:/Personal/Opleidingen/AAI"
-             :key ?a)
-            (:name "Unread"
-             :query "flag:unread"
-             :key ?u)))))
+  (setq mu4e-bookmarks
+        '((:name "Personal INBOX"
+           :query "maildir:/Personal/INBOX"
+           :key ?p)
+          (:name "Applied Artificial Intelligence"
+           :query "maildir:/Personal/Opleidingen/AAI"
+           :key ?a)
+          (:name "Unread"
+           :query "flag:unread"
+           :key ?u))))
 
 (use-package elfeed
   :defer t
