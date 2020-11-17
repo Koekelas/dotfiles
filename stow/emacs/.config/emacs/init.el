@@ -3330,7 +3330,6 @@ When optional FULL is truthy, return absolute file names."
       ("Furniture Making" reddit month "FurnitureMaking" woodwork)
       ("Ishitani Furniture" youtube "UC7FkqjV8SU5I8FCHXQSQe9Q" woodwork)
       ("John Heisz" youtube "UCjA8vRlL1c7BDixQRJ39-LQ" woodwork)
-      ("LEGO" reddit month "lego" lego)
       ("Layout Land" youtube "UC7TizprGknbDalbHplROtag" css)
       ("Linux" reddit month "linux" linux)
       ("Lisp" reddit month "lisp" lisp)
