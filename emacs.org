@@ -4164,14 +4164,15 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
     ;; When trashing e-mail, e-mail is flagged trashed. E-mail flagged
     ;; trashed is deleted by most e-mail providers. Move to trash but
     ;; don't flag trashed.
-    (push
-     (cons
-      'trash
-      (plist-put (alist-get 'trash mu4e-marks)
-                 :action
-                 (lambda (docid _msg target)
-                   (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
-     mu4e-marks))
+    (setq mu4e-marks
+          (cons (cons 'trash
+                      (plist-put (alist-get 'trash mu4e-marks)
+                                 :action
+                                 (lambda (docid _msg target)
+                                   (mu4e~proc-move docid
+                                                   (mu4e~mark-check-target target)
+                                                   "-N"))))
+                (assq-delete-all 'trash mu4e-marks))))
 
   (use-package mu4e-view
     :defer t
