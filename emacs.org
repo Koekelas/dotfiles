@@ -4122,7 +4122,6 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
            (expand-file-name "isync/mbsyncrc"
                              (or (getenv "XDG_CONFIG_HOME") "~/.config/"))))
       (setq mu4e-get-mail-command (format "mbsync -c %s -a" config)))
-    (setq mu4e-update-interval (* 60 30)) ; In seconds
     ;; When moving e-mail, isync expects them to be renamed
     (setq mu4e-change-filenames-when-moving t)
 
