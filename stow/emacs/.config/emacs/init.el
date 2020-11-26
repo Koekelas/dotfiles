@@ -645,6 +645,9 @@ name."
                    (or (koek-org/get-code-block-var-value name) ""))))
         (make-directory file-name 'parents))))
   :config
+  ;; Load snippets
+  (yas-reload-all)
+
   ;; Set new snippet file snippet
   (with-temp-buffer
     (insert-file-contents
