@@ -1602,6 +1602,31 @@ URL or, to not redirect the URL, nil.")
   :bind
   ("C-c x a" . bbdb))
 
+(use-package bbdb-vcard
+  :straight t
+  :after bbdb
+  :preface
+  (defun koek-bbdb/import-dir (file-name)
+    "Import vCards from directory FILE-NAME and its subdirectories."
+    (interactive "DvCard directory: ")
+    (require 'bbdb-vcard)
+    (let* ((file-names
+            (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
+           (vcards (with-temp-buffer
+                     (dolist (file-name file-names)
+                       (insert-file-contents file-name)
+                       (when (and (eolp) (not (bolp)))
+                         (insert "\n")))
+                     (buffer-substring (point-min) (point-max))))
+           (records
+            (bbdb-vcard-iterate-vcards #'bbdb-vcard-import-vcard vcards))
+           (n-records (length records)))
+      (message "%d %s imported"
+               n-records (or (and (= n-records 1) "vCard") "vCards"))))
+  :config
+  ;; Contacts sharing a landline telephone aren't duplicates
+  (setq bbdb-vcard-try-merge nil))
+
 (use-package elfeed
   :straight t
   :bind
@@ -3130,6 +3155,10 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
   (or (koek/get-user-dir "KOEK_CALENDARS_DIR") koek/documents-dir)
   "File name to calendars directory.")
 
+(defconst koek/contacts-dir
+  (or (koek/get-user-dir "KOEK_CONTACTS_DIR") koek/documents-dir)
+  "File name to contacts directory.")
+
 (defconst koek/news-dir
   (or (koek/get-user-dir "KOEK_NEWS_DIR") koek/documents-dir)
   "File name to news directory.")
@@ -3351,6 +3380,11 @@ When optional FULL is truthy, return absolute file names."
           (:name "Unread"
            :query "flag:unread"
            :key ?u))))
+
+(use-package bbdb-vcard
+  :defer t
+  :config
+  (setq bbdb-vcard-default-dir koek/contacts-dir))
 
 (use-package elfeed
   :defer t

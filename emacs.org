@@ -4285,6 +4285,36 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
     ("C-c x a" . bbdb))
 #+END_SRC
 
+*** bbdb-vcard - Import from and export to vCard
+[[https://github.com/tohojo/bbdb-vcard][bbdb-vcard (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bbdb-vcard
+    :straight t
+    :after bbdb
+    :preface
+    (defun koek-bbdb/import-dir (file-name)
+      "Import vCards from directory FILE-NAME and its subdirectories."
+      (interactive "DvCard directory: ")
+      (require 'bbdb-vcard)
+      (let* ((file-names
+              (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
+             (vcards (with-temp-buffer
+                       (dolist (file-name file-names)
+                         (insert-file-contents file-name)
+                         (when (and (eolp) (not (bolp)))
+                           (insert "\n")))
+                       (buffer-substring (point-min) (point-max))))
+             (records
+              (bbdb-vcard-iterate-vcards #'bbdb-vcard-import-vcard vcards))
+             (n-records (length records)))
+        (message "%d %s imported"
+                 n-records (or (and (= n-records 1) "vCard") "vCards"))))
+    :config
+    ;; Contacts sharing a landline telephone aren't duplicates
+    (setq bbdb-vcard-try-merge nil))
+#+END_SRC
+
 ** elfeed - News reader
 [[https://github.com/skeeto/elfeed][elfeed (GitHub)]]
 
@@ -6401,6 +6431,10 @@ Define well known directories.
     (or (koek/get-user-dir "KOEK_CALENDARS_DIR") koek/documents-dir)
     "File name to calendars directory.")
 
+  (defconst koek/contacts-dir
+    (or (koek/get-user-dir "KOEK_CONTACTS_DIR") koek/documents-dir)
+    "File name to contacts directory.")
+
   (defconst koek/news-dir
     (or (koek/get-user-dir "KOEK_NEWS_DIR") koek/documents-dir)
     "File name to news directory.")
@@ -6715,6 +6749,16 @@ the instructions on storing passwords.
             (:name "Unread"
              :query "flag:unread"
              :key ?u))))
+#+END_SRC
+
+** Contacts
+Configure contacts.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bbdb-vcard
+    :defer t
+    :config
+    (setq bbdb-vcard-default-dir koek/contacts-dir))
 #+END_SRC
 
 ** News feeds
