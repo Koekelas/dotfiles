@@ -1749,7 +1749,7 @@ playing track, else, enqueue after last track."
 
 (use-package calendar
   :bind
-  ("C-c x a" . calendar))
+  ("C-c x q" . calendar))               ; Qalendar [sic]
 
 (use-package bongo
   :straight t

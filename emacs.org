@@ -4454,7 +4454,7 @@ For news feeds, see [[*News feeds][News feeds]].
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
     :bind
-    ("C-c x a" . calendar))
+    ("C-c x q" . calendar))               ; Qalendar [sic]
 #+END_SRC
 
 ** bongo - Media player
