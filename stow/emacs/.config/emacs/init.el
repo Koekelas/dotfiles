@@ -1451,6 +1451,7 @@ URL or, to not redirect the URL, nil.")
   (setq mu4e-completing-read-function #'completing-read)
   (setq mu4e-context-policy 'pick-first)
 
+  (setq mu4e-use-fancy-chars t)
   (setq mu4e-hide-index-messages t))
 
 (use-package mu4e-main
@@ -1479,7 +1480,19 @@ URL or, to not redirect the URL, nil.")
   ;; `mu4e-header-info'.
   (setq mu4e-headers-fields '((:human-date . 8)
                               (:from       . 22)
-                              (:subject    . nil))))
+                              (:subject    . nil)))
+
+  ;; Style thread segments
+  (let ((specs '((mu4e-headers-thread-child-prefix         . "├─")
+                 (mu4e-headers-thread-last-child-prefix    . "└─")
+                 (mu4e-headers-thread-connection-prefix    . "│ ")
+                 (mu4e-headers-thread-blank-prefix         . "  ")
+                 (mu4e-headers-thread-orphan-prefix        . "┌─")
+                 (mu4e-headers-thread-single-orphan-prefix . "╶─")
+                 (mu4e-headers-thread-duplicate-prefix     . "= "))))
+    (dolist (spec specs)
+      (pcase-let ((`(,symbol . ,segment) spec))
+        (set symbol (cons segment segment))))))
 
 (use-package mu4e-mark
   :defer t
@@ -1495,7 +1508,17 @@ URL or, to not redirect the URL, nil.")
                                  (mu4e~proc-move docid
                                                  (mu4e~mark-check-target target)
                                                  "-N"))))
-              (assq-delete-all 'trash mu4e-marks))))
+              (assq-delete-all 'trash mu4e-marks)))
+
+  ;; Style marker characters
+  (setq mu4e-marks
+        (mapcar (pcase-lambda (`(,mark . ,props))
+                  (let ((marker (let ((spec (plist-get props :char)))
+                                  (if (consp spec)
+                                      (car spec)
+                                    spec))))
+                    (cons mark (plist-put props :char (cons marker marker)))))
+                mu4e-marks)))
 
 (use-package mu4e-view
   :defer t
