@@ -2365,6 +2365,22 @@ nil, delete empty line at end of file."
   :config
   (setq org-link-keep-stored-after-insertion t))
 
+(use-package ol-bbdb
+  :defer t
+  :preface
+  (defun koek-org/construct-birthday-entry-name (name age _age-suffix)
+    "Return name of agenda entry for birthday.
+NAME is a string, the name of the person.  AGE is an integer, the
+age of the person.  _AGE-SUFFIX is ignored."
+    (format "[[bbdb:%s][%s (%d %s old)]]"
+            name name age (or (and (= age 1) "year") "years")))
+  :config
+  ;; BBDB anniversary (many, any type) and vCard ANNIVERSARY (one, any
+  ;; type except birthday) aren't compatible, birthday and BDAY are
+  (setq org-bbdb-anniversary-field 'birthday)
+  (setq org-bbdb-anniversary-format-alist
+        '(("birthday" . koek-org/construct-birthday-entry-name))))
+
 (use-package ox
   :defer t
   :config
