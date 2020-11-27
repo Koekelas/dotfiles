@@ -1450,6 +1450,7 @@ URL or, to not redirect the URL, nil.")
 
   (setq mu4e-completing-read-function #'completing-read)
   (setq mu4e-context-policy 'pick-first)
+  (setq mu4e-compose-complete-addresses nil)
 
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-hide-index-messages t))
@@ -1585,6 +1586,20 @@ URL or, to not redirect the URL, nil.")
   (require 'mu4e)
 
   (setq mu4e-org-link-query-in-headers-mode t))
+
+(use-package bbdb
+  :straight t
+  :after mu4e
+  :config
+  (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
+        bbdb-address-format-list)
+  (setq bbdb-default-country nil)
+  (setq bbdb-phone-style nil)
+  (bbdb-initialize 'mu4e 'message))
+
+(use-package bbdb-com
+  :bind
+  ("C-c x a" . bbdb))
 
 (use-package elfeed
   :straight t
