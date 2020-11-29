@@ -588,10 +588,7 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
                        ;; For event names, see `single-key-description'
                        :post-handlers '(:add (koek-sp/format-c-block "RET")))))
     :init
-    (bind-keys
-     ("C-M-{" . beginning-of-defun)
-     ("C-M-}" . end-of-defun)
-     ("C-S-w" . append-next-kill))
+    (bind-key "C-S-w" #'append-next-kill)
     :config
     (require 'smartparens-config)
 
@@ -612,6 +609,11 @@ recognize [[*subword - Recognize words in camel case words][subwords]].
     (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
     (koek-sp/setup-format-c-block-on-return-handler 'python-mode "{" "[" "(")
     :delight)
+
+  (use-package lisp
+    :bind
+    (("C-M-{" . beginning-of-defun)
+     ("C-M-}" . end-of-defun)))
 #+END_SRC
 
 *** Smartparens and GNOME Shell keybindings conflict :issue:setup:
