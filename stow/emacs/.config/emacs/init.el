@@ -3106,32 +3106,41 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
   :config
   (setq auth-sources '("secrets:Login")))
 
-(defun koek/resolve-directory (name)
-  "Resolve directory in environment variable NAME."
-  (thread-first (or (getenv name) (expand-file-name "~/"))
-    file-truename
-    file-name-as-directory))
+(defun koek/get-user-dir (name)
+  "Return user directory NAME."
+  (when-let ((file-name (getenv name)))
+    (file-name-as-directory file-name)))
 
-(defconst koek/documents-dir (koek/resolve-directory "XDG_DOCUMENTS_DIR")
+(defconst koek/home-dir (expand-file-name "~/")
+  "File name to home directory.")
+
+(defconst koek/documents-dir
+  (or (koek/get-user-dir "XDG_DOCUMENTS_DIR") koek/home-dir)
   "File name to documents directory.")
 
-(defconst koek/download-dir (koek/resolve-directory "XDG_DOWNLOAD_DIR")
+(defconst koek/download-dir
+  (or (koek/get-user-dir "XDG_DOWNLOAD_DIR") koek/home-dir)
   "File name to download directory.")
 
-(defconst koek/music-dir (koek/resolve-directory "XDG_MUSIC_DIR")
+(defconst koek/music-dir
+  (or (koek/get-user-dir "XDG_MUSIC_DIR") koek/home-dir)
   "File name to music directory.")
 
-(defconst koek/projects-dir (koek/resolve-directory "KOEK_PROJECTS_DIR")
-  "File name to projects directory.")
-
-(defconst koek/calendars-dir (koek/resolve-directory "KOEK_CALENDARS_DIR")
+(defconst koek/calendars-dir
+  (or (koek/get-user-dir "KOEK_CALENDARS_DIR") koek/documents-dir)
   "File name to calendars directory.")
 
-(defconst koek/notes-dir (koek/resolve-directory "KOEK_NOTES_DIR")
+(defconst koek/news-dir
+  (or (koek/get-user-dir "KOEK_NEWS_DIR") koek/documents-dir)
+  "File name to news directory.")
+
+(defconst koek/notes-dir
+  (or (koek/get-user-dir "KOEK_NOTES_DIR") koek/documents-dir)
   "File name to notes directory.")
 
-(defconst koek/news-dir (koek/resolve-directory "KOEK_NEWS_DIR")
-  "File name to news directory.")
+(defconst koek/projects-dir
+  (or (koek/get-user-dir "KOEK_PROJECTS_DIR") koek/home-dir)
+  "File name to projects directory.")
 
 (use-package exar
   :load-path "lisp/exar"
