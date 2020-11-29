@@ -27,7 +27,7 @@ from the changed file and restart the changed application or re-login.
 Git is mandatory, everything else is optional.
 
 - General:
-  - [[https://geoff.greer.fm/ag/][The Silver Searcher]]
+  - [[https://github.com/BurntSushi/ripgrep][ripgrep]]
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
   - [[https://x.org/][xprop]] (set GTK theme variant)
@@ -86,8 +86,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
 #+BEGIN_SRC sh
   ## General
-  pacman -S the_silver_searcher git hunspell hunspell-en_US xorg-xprop
-  pacman -S ttf-ibm-plex
+  pacman -S ripgrep git hunspell hunspell-en_US xorg-xprop ttf-ibm-plex
 
   # Install PragmataPro Mono from source or ttf-iosevka from AUR
 

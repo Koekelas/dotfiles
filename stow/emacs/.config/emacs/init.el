@@ -82,6 +82,8 @@
   :demand t
   :bind
   (:map projectile-command-map
+   ("s s" . projectile-ripgrep)
+   ("s a" . projectile-ag)
    ("x x" . projectile-run-vterm)
    ("x t" . projectile-run-vterm)
    ("x r" . projectile-run-term))
@@ -1148,7 +1150,7 @@ N is an integer, a workspace number."
 
   (setq ivy-re-builders-alist
         '((swiper-isearch . ivy--regex-plus)
-          (counsel-ag . ivy--regex-plus)
+          (counsel-rg . ivy--regex-plus)
           (counsel-unicode-char . ivy--regex-ignore-order)
           (t . ivy--regex-fuzzy)))
   (setq ivy-use-virtual-buffers t)
@@ -1172,7 +1174,7 @@ N is an integer, a workspace number."
    ([remap yank-pop] . counsel-yank-pop)
    ([remap execute-extended-command] . counsel-M-x)
    ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-   ("C-M-s" . counsel-ag)
+   ("C-M-s" . counsel-rg)
    ("C-c f s" . counsel-file-jump)
    ("C-c f l" . counsel-find-library)
    ("C-c j d" . counsel-imenu)
