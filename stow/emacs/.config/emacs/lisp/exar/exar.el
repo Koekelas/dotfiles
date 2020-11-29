@@ -80,7 +80,7 @@
 (defun exar--decode-terminated-string (bytes)
   (exar--decode-string
    (seq-take-while (lambda (byte)
-                     (not (= byte ?\C-j)))
+                     (/= byte ?\C-j))
                    bytes)))
 
 (defun exar--decode-manufacturer (bytes)
@@ -258,7 +258,7 @@
          ;; Sort primary first, mirror dispwin
          (sorted (cons primary
                        (seq-filter (lambda (output)
-                                     (not (= (car output) (car primary))))
+                                     (/= (car output) (car primary)))
                                    outputs))))
     (seq-map-indexed (lambda (output i)
                        (cons (car output) (1+ i)))

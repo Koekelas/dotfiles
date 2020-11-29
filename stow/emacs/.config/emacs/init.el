@@ -2818,7 +2818,7 @@ internally."
       (when (and (bound-and-true-p eyebrowse-mode) (moody-window-active-p))
         (let ((workspaces (koek-ml/get-eyebrowse-workspaces))
               (selected-n (eyebrowse--get 'current-slot)))
-          (when (or (> (length workspaces) 1) (not (= selected-n 0)))
+          (when (or (> (length workspaces) 1) (/= selected-n 0))
             `(,(moody-ribbon
                 (mapconcat
                  (lambda (workspace)
