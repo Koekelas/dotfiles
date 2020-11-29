@@ -3975,7 +3975,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+BEGIN_SRC emacs-lisp
   (use-package vterm
     :straight t
-    :commands vterm-mode
     :bind
     (:map vterm-mode-map
      ("C-c C-z" . vterm-send-C-z))
@@ -3990,6 +3989,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
   prefix argument ARG, launch a new numbered session, taking the
   first available number."
       (interactive "P")
+      (require 'vterm)
       (pop-to-buffer-same-window
        (cond
         ((integerp arg)

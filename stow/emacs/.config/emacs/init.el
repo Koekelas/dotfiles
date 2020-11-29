@@ -1325,7 +1325,6 @@ N is an integer, a workspace number."
 
 (use-package vterm
   :straight t
-  :commands vterm-mode
   :bind
   (:map vterm-mode-map
    ("C-c C-z" . vterm-send-C-z))
@@ -1340,6 +1339,7 @@ switch to it when it exists.  With `\\[universal-argument]'
 prefix argument ARG, launch a new numbered session, taking the
 first available number."
     (interactive "P")
+    (require 'vterm)
     (pop-to-buffer-same-window
      (cond
       ((integerp arg)
