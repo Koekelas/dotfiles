@@ -175,7 +175,9 @@ Move deleted files to trash.
     :demand t
     :bind
     (:map projectile-command-map
-     ("x t" . projectile-run-vterm))
+     ("x x" . projectile-run-vterm)
+     ("x t" . projectile-run-vterm)
+     ("x r" . projectile-run-term))
     :preface
     (defun koek-proj/forgetp (file-name)
       "Return whether project with root FILE-NAME should be forgotten."
