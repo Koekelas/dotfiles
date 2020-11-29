@@ -110,7 +110,7 @@
           (exar--format-bin (exar--reverse-endian (seq-subseq vendor-block 2 4)))
           :serial
           (exar--decode-int (exar--reverse-endian (seq-subseq vendor-block 4 8)))
-          :week (when (not (= week 0))
+          :week (unless (= week 0)
                   week)
           :year (+ (car (seq-subseq vendor-block 9 10)) 1990)))
        :edid     ; Section 3.5, EDID structure version/revision
