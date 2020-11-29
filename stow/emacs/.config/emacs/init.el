@@ -1257,36 +1257,47 @@ N is an integer, a workspace number."
   :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
   :bind
   ("C-c d d" . devdocs-lookup)
-  :config
-  ;; DevDocs is updated more frequently than devdocs-lookup. Update
-  ;; subjects.
-  (setq devdocs-subjects
-        '(("C" "c")
-          ("C++" "cpp")
-          ("OpenJDK" "openjdk~8")
-          ("Clojure" "clojure~1.10")
-          ("Erlang" "erlang~21")
-          ("HTML" "html")
-          ("CSS" "css")
-          ("JavaScript" "javascript")
-          ("DOM" "dom")
-          ("DOM Events" "dom_events")
-          ("jQuery" "jquery")
-          ("lodash" "lodash~4")
-          ("Node.js" "node")
-          ("npm" "npm")
-          ("Express" "express")
-          ("Octave" "octave")
-          ("Python" "python~3.8")
-          ("NumPy" "numpy~1.17")
-          ("pandas" "pandas~0.25")
-          ("StatsModels" "statsmodels")
-          ("scikit-learn" "scikit_learn")
-          ("scikit-image" "scikit_image")
-          ("TensorFlow" "tensorflow~python")
-          ("Matplotlib" "matplotlib~3.1")
-          ("PostgreSQL" "postgresql~12")))
-  (devdocs-setup))
+  :preface
+  (let ((specs '(("C"            . "c")
+                 ("C++"          . "cpp")
+                 ("OpenJDK"      . "openjdk~11")
+                 ("Clojure"      . "clojure~1.10")
+                 ("Erlang"       . "erlang~21")
+                 ("HTML"         . "html")
+                 ("CSS"          . "css")
+                 ("JavaScript"   . "javascript")
+                 ("DOM"          . "dom")
+                 ("DOM Events"   . "dom_events")
+                 ("jQuery"       . "jquery")
+                 ("lodash"       . "lodash~4")
+                 ("Node.js"      . "node")
+                 ("npm"          . "npm")
+                 ("Express"      . "express")
+                 ("Octave"       . "octave")
+                 ("Python"       . "python~3.9")
+                 ("NumPy"        . "numpy~1.17")
+                 ("pandas"       . "pandas~1")
+                 ("StatsModels"  . "statsmodels")
+                 ("scikit-learn" . "scikit_learn")
+                 ("scikit-image" . "scikit_image")
+                 ("TensorFlow"   . "tensorflow~2.3")
+                 ("Matplotlib"   . "matplotlib~3.1")
+                 ("PostgreSQL"   . "postgresql~13"))))
+    (dolist (spec specs)
+      (pcase-let* ((`(,name . ,id) spec)
+                   (symbol
+                    (thread-last id
+                      (replace-regexp-in-string
+                       (rx "~" (one-or-more (any digit ".")) line-end) "")
+                      (replace-regexp-in-string (rx "_") "-")
+                      (concat "koek-dl/lookup-")
+                      intern)))
+        (defalias symbol
+          (lambda ()
+            (interactive)
+            (require 'devdocs-lookup)
+            (devdocs-lookup id (devdocs-read-entry id)))
+          (format "Lookup documentation for %s on DevDocs." name))))))
 
 (use-package eldoc
   :straight t
@@ -1829,14 +1840,13 @@ playing track, else, enqueue after last track."
    ((rx ".cpp" string-end) . c++-mode)
    ((rx ".java" string-end) . java-mode))
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map c-mode-map
-     ("C-c d d" . devdocs-lookup-c)
-     :map c++-mode-map
-     ("C-c d d" . devdocs-lookup-cpp)
-     :map java-mode-map
-     ("C-c d d" . devdocs-lookup-openjdk~8))))
+  (bind-keys
+   :map c-mode-map
+   ("C-c d d" . koek-dl/lookup-c)
+   :map c++-mode-map
+   ("C-c d d" . koek-dl/lookup-cpp)
+   :map java-mode-map
+   ("C-c d d" . koek-dl/lookup-openjdk)))
 
 (use-package cc-cmds
   :defer t
@@ -1867,11 +1877,10 @@ playing track, else, enqueue after last track."
    ((rx ".cljc" string-end) . clojurec-mode)
    ((rx ".edn" string-end) . clojure-mode))
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map clojure-mode-map
-     ("C-c d d" . devdocs-lookup-clojure~1.10)
-     ("C-c d C-j" . devdocs-lookup-openjdk~8)))
+  (bind-keys
+   :map clojure-mode-map
+   ("C-c d d" . koek-dl/lookup-clojure)
+   ("C-c d C-j" . koek-dl/lookup-openjdk))
   :delight
   (clojure-mode "Clj" :major)
   (clojurescript-mode "Cljs" :major)
@@ -1988,10 +1997,7 @@ playing track, else, enqueue after last track."
   :straight t
   :mode ((rx ".erl" string-end) . erlang-mode)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map erlang-mode-map
-     ("C-c d d" . devdocs-lookup-erlang~21)))
+  (bind-key "C-c d d" #'koek-dl/lookup-erlang 'erlang-mode-map)
 
   ;; On Windows, executable-find finds the erlc shim. Shadow
   ;; c:/ProgramData/chocolatey/bin/.
@@ -2008,19 +2014,13 @@ playing track, else, enqueue after last track."
 (use-package mhtml-mode
   :mode (rx (or ".htm" ".html") string-end)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map mhtml-mode-map
-     ("C-c d d" . devdocs-lookup-html)))
+  (bind-key "C-c d d" #'koek-dl/lookup-html 'mhtml-mode-map)
   :delight (mhtml-mode "HTML" :major))
 
 (use-package css-mode
   :mode (rx ".css" string-end)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map css-mode-map
-     ("C-c d d" . devdocs-lookup-css))))
+  (bind-key "C-c d d" #'koek-dl/lookup-css 'css-mode-map))
 
 (use-package emmet-mode
   :straight t
@@ -2035,17 +2035,16 @@ playing track, else, enqueue after last track."
 (use-package js
   :mode ((rx ".js" string-end) . js-mode)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map js-mode-map
-     ("C-c d d" . devdocs-lookup-javascript)
-     ("C-c d C-d" . devdocs-lookup-dom)
-     ("C-c d C-e" . devdocs-lookup-dom_events)
-     ("C-c d C-j" . devdocs-lookup-jquery)
-     ("C-c d C-l" . devdocs-lookup-lodash~4)
-     ("C-c d C-n" . devdocs-lookup-node)
-     ("C-c d C-p" . devdocs-lookup-npm)
-     ("C-c d C-x" . devdocs-lookup-express)))
+  (bind-keys
+   :map js-mode-map
+   ("C-c d d" . koek-dl/lookup-javascript)
+   ("C-c d C-d" . koek-dl/lookup-dom)
+   ("C-c d C-e" . koek-dl/lookup-dom-events)
+   ("C-c d C-j" . koek-dl/lookup-jquery)
+   ("C-c d C-l" . koek-dl/lookup-lodash)
+   ("C-c d C-n" . koek-dl/lookup-node)
+   ("C-c d C-p" . koek-dl/lookup-npm)
+   ("C-c d C-x" . koek-dl/lookup-express))
 
   ;; Resolve keybinding conflict with eglot
   (unbind-key "M-." js-mode-map)
@@ -2082,10 +2081,7 @@ playing track, else, enqueue after last track."
   :straight t
   :mode (rx ".json" string-end)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map json-mode-map
-     ("C-c d C-n" . devdocs-lookup-npm))))
+  (bind-key "C-c d C-n" #'koek-dl/lookup-npm 'json-mode-map))
 
 (use-package markdown-mode
   :straight t
@@ -2103,10 +2099,7 @@ playing track, else, enqueue after last track."
 (use-package octave
   :mode ((rx ".m" string-end) . octave-mode)
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map octave-mode-map
-     ("C-c d d" . devdocs-lookup-octave)))
+  (bind-key "C-c d d" #'koek-dl/lookup-octave 'octave-mode-map)
 
   ;; Insert MATLAB compatible comments
   (setq octave-comment-char ?%)
@@ -2411,17 +2404,16 @@ TITLE is a string, a note title."
     "Disable Python checker for current."
     (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map python-mode-map
-     ("C-c d d" . devdocs-lookup-python~3.8)
-     ("C-c d C-n" . devdocs-lookup-numpy~1.17)
-     ("C-c d C-p" . devdocs-lookup-pandas~0.25)
-     ("C-c d C-s" . devdocs-lookup-statsmodels)
-     ("C-c d C-l" . devdocs-lookup-scikit_learn)
-     ("C-c d C-i" . devdocs-lookup-scikit_image)
-     ("C-c d C-t" . devdocs-lookup-tensorflow~python)
-     ("C-c d C-m" . devdocs-lookup-matplotlib~3.1)))
+  (bind-keys
+   :map python-mode-map
+   ("C-c d d" . koek-dl/lookup-python)
+   ("C-c d C-n" . koek-dl/lookup-numpy)
+   ("C-c d C-p" . koek-dl/lookup-pandas)
+   ("C-c d C-s" . koek-dl/lookup-statsmodels)
+   ("C-c d C-l" . koek-dl/lookup-scikit-learn)
+   ("C-c d C-i" . koek-dl/lookup-scikit-image)
+   ("C-c d C-t" . koek-dl/lookup-tensorflow)
+   ("C-c d C-m" . koek-dl/lookup-matplotlib))
 
   (add-hook 'python-mode-hook #'koek-py/disable-checker)
   :delight (python-mode "Py" :major))
@@ -2500,10 +2492,7 @@ TITLE is a string, a note title."
                 "SQL"
               (sql-get-product-feature sql-product :name)))))
   :config
-  (use-package devdocs-lookup
-    :bind
-    (:map sql-mode-map
-     ("C-c d C-p" . devdocs-lookup-postgresql~12)))
+  (bind-key "C-c d d" #'koek-dl/lookup-postgresql 'sql-mode-map)
 
   ;; Upcase keywords after insertion
   (require 'find-func)
