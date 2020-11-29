@@ -3805,7 +3805,24 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (counsel-projectile-mode))
 #+END_SRC
 
-** helpful - Help viewer
+** Help
+
+*** help - Help viewer
+#+BEGIN_SRC emacs-lisp
+  (use-package help-mode
+    :defer t
+    :config
+    (use-package link-hint
+      :bind
+      (:map help-mode-map
+       ("j" . link-hint-open-link))))
+
+  (use-package descr-text
+    :bind
+    ("C-c d c" . describe-char))
+#+END_SRC
+
+*** helpful - Partial help replacement
 [[https://github.com/Wilfred/helpful][helpful (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp

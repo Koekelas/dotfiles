@@ -1209,6 +1209,18 @@ N is an integer, a workspace number."
 
   (counsel-projectile-mode))
 
+(use-package help-mode
+  :defer t
+  :config
+  (use-package link-hint
+    :bind
+    (:map help-mode-map
+     ("j" . link-hint-open-link))))
+
+(use-package descr-text
+  :bind
+  ("C-c d c" . describe-char))
+
 (use-package helpful
   :straight t
   :bind
