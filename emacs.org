@@ -3251,24 +3251,12 @@ Bury unneeded buffers, computers have more than enough memory.
         (:before (&rest _args) koek-wm/update-previous-workspace-n)
       (setq koek-wm/previous-workspace-n exwm-workspace-current-index))
 
-    (defmacro koek-wm/def-switch-workspace (n)
-      "Define function to switch to workspace N.
-  N is an integer, the workspace to switch to."
-      `(defun ,(intern (format "koek-wm/switch-workspace-%d" n)) ()
-         ,(format "Switch to workspace %d." n)
-         (interactive)
-         (exwm-workspace-switch-create ,n)))
-
-    (koek-wm/def-switch-workspace 0)
-    (koek-wm/def-switch-workspace 1)
-    (koek-wm/def-switch-workspace 2)
-    (koek-wm/def-switch-workspace 3)
-    (koek-wm/def-switch-workspace 4)
-    (koek-wm/def-switch-workspace 5)
-    (koek-wm/def-switch-workspace 6)
-    (koek-wm/def-switch-workspace 7)
-    (koek-wm/def-switch-workspace 8)
-    (koek-wm/def-switch-workspace 9)
+    (dolist (n (number-sequence 0 9))
+      (defalias (intern (format "koek-wm/switch-workspace-%d" n))
+        (lambda ()
+          (interactive)
+          (exwm-workspace-switch-create n))
+        (format "Switch to workspace %d." n)))
 
     (defun koek-wm/switch-previous-workspace ()
       "Switch to previously selected workspace."
