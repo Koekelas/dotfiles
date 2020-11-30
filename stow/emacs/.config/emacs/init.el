@@ -2295,7 +2295,7 @@ Candidates are collected from agenda files."
 (use-package org-src
   :preface
   (define-advice org-src--construct-edit-buffer-name
-      (:override (org-buffer-name _lang) koek-org/construct-buffer-name)
+      (:override (org-buffer-name _lang) koek-org/construct-edit-buffer-name)
     ;; Mirror helpful buffer names
     (format "*org-src: %s*" org-buffer-name))
   :delight)
