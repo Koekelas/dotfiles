@@ -3186,7 +3186,8 @@ When optional FULL is truthy, return absolute file names."
       (seq-mapcat (lambda (file-name)
                     (directory-files file-name 'full (rx ".org" line-end))))
       (seq-filter (lambda (file-name)
-                    (not (koek/lock-file-p file-name))))))
+                    (not (koek/lock-file-p file-name))))
+      seq-uniq))
 
   (define-advice org-agenda-files
       (:before (&rest _args) koek/update-agenda-files)
