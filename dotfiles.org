@@ -268,6 +268,7 @@ To apply configuration, run:
   openscad.desktop
   org.fontforge.FontForge.desktop
   org.inkscape.Inkscape.desktop
+  org.pitivi.Pitivi.desktop
   scribus.desktop
   tape.desktop
   valentina.desktop
