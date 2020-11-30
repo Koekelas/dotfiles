@@ -226,7 +226,8 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package link-hint
   :straight t
   :bind
-  ("C-c j l" . link-hint-open-link)
+  (("C-c j l" . link-hint-open-link)
+   ("C-c j C-l" . link-hint-copy-link))
   :preface
   (defun koek-lh/next-dictionary-link (limit)
     "Return position of next dictionary link.
