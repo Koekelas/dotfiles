@@ -539,8 +539,10 @@ Create a new profile. Change:
 | Scroll up                     | =p=        |
 | Scroll right                  | =f=        |
 | Scroll left                   | =b=        |
-| Scroll half page down         | =SPC=      |
-| Scroll half page up           | =DEL=      |
+| Scroll page down              | =SPC=      |
+| Scroll page up                | =DEL=      |
+| Scroll half page down         | =C-SPC=    |
+| Scroll half page up           | =C-DEL=    |
 | Refresh tab                   | =g=        |
 | Hard refresh tab              | =M-g=      |
 | Pass one key to page          | =s=        |
