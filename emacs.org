@@ -2859,7 +2859,7 @@ For more information, see ~man 5 hunspell~.
   (use-package paren-face
     :straight t
     :config
-    (setq paren-face-regexp (rx (any "([{}])")))
+    (setq paren-face-regexp (rx (any "()[]{}")))
     (global-paren-face-mode))
 #+END_SRC
 

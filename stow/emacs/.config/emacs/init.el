@@ -704,7 +704,7 @@ name."
 (use-package paren-face
   :straight t
   :config
-  (setq paren-face-regexp (rx (any "([{}])")))
+  (setq paren-face-regexp (rx (any "()[]{}")))
   (global-paren-face-mode))
 
 (use-package hl-line
