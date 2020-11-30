@@ -730,6 +730,13 @@ name."
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 
+(use-package olivetti
+  :straight t
+  :defer t
+  :config
+  (setq olivetti-body-width (round (* 80 1.25)))
+  :delight)
+
 (add-hook 'markdown-mode-hook #'variable-pitch-mode)
 (add-hook 'org-mode-hook #'variable-pitch-mode)
 (delight 'buffer-face-mode nil 'face-remap)

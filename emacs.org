@@ -2925,6 +2925,18 @@ For more information, see ~man 5 hunspell~.
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
 
+** olivetti - Center contents
+[[https://github.com/rnkn/olivetti][olivetti (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package olivetti
+    :straight t
+    :defer t
+    :config
+    (setq olivetti-body-width (round (* 80 1.25)))
+    :delight)
+#+END_SRC
+
 ** buffer-face - Remap default face
 #+BEGIN_SRC emacs-lisp
   (add-hook 'markdown-mode-hook #'variable-pitch-mode)
