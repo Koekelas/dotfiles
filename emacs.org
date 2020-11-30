@@ -6504,7 +6504,7 @@ Configure notes.
 #+BEGIN_SRC js :exports none
   ((args) => {
       "use strict";
-      const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&");
+      const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&");
       const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {
           acc[key] = encodeURIComponent(args[key]);
           return acc;
@@ -6518,17 +6518,17 @@ To capture /Bookmark/, /Webpage/ and /Book/ from the browser, create three
 
 #+CAPTION: Bladwijzer (bookmark)
 #+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "b", url: location.href, title: document.title});
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "b", url: location.href, title: document.title});
 #+END_SRC
 
 #+CAPTION: Notitie (webpage)
 #+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
 #+END_SRC
 
 #+CAPTION: Boek (book)
 #+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, val]) => `${key}=${val}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "B", url: location.href, body: window.getSelection()});
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "B", url: location.href, body: window.getSelection()});
 #+END_SRC
 
 In [[https://www.mozilla.org/en-US/firefox/new/][Firefox]], to show bookmarklets to the left of the menu ([[https://en.wikipedia.org/wiki/Hamburger_button][hamburger]]):
