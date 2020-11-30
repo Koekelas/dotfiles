@@ -557,6 +557,11 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
    ("M-p" . koek-mtn/previous-word))
 #+END_SRC
 
+** visual-line - Wrapped lines
+#+BEGIN_SRC emacs-lisp
+  (delight 'visual-line-mode nil 'simple)
+#+END_SRC
+
 ** auto-fill - Break long sentences
 #+BEGIN_SRC emacs-lisp
   (add-hook 'koek-txt/confident-hook #'auto-fill-mode)

@@ -357,6 +357,8 @@ negative, move point to beginning of next word."
  ("M-n" . koek-mtn/next-word)
  ("M-p" . koek-mtn/previous-word))
 
+(delight 'visual-line-mode nil 'simple)
+
 (add-hook 'koek-txt/confident-hook #'auto-fill-mode)
 (delight 'auto-fill-function nil 'simple)
 
