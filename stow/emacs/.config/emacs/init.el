@@ -3340,6 +3340,7 @@ When optional FULL is truthy, return absolute file names."
       ("LiveOverflow" youtube "UClcE-kVhqyiHCcjYwcpfj9w" hack)
       ("Luke Smith" youtube "UC2eYFnH61tmytImy1mTYvhA" foss)
       ("Mastering Emacs" "https://www.masteringemacs.org/feed" blog emacs)
+      ("Mr. Chickadee" youtube "UCHkYrJ2Fbe7pBjEZvkFzi3A" woodwork)
       ("Netflix TechBlog" "https://medium.com/feed/netflix-techblog" blog ai)
       ("Professor Leonard" youtube "UCoHhuummRZaIVX7bD4t2czg" mathematics)
       ("Programming" reddit month "programming" program)
