@@ -1726,13 +1726,13 @@ playing track, else, enqueue after last track."
   :hook (dired-mode . bongo-dired-library-mode)
   :preface
   (define-advice bongo-default-library-buffer
-      (:override () koek-bngo/get-create-default-library-buffer)
+      (:override () koek-bngo/get-default-library-buffer)
     (require 'dired)
     (dired-noselect bongo-default-directory))
 
   ;; Disable banner
   (define-advice bongo-default-playlist-buffer
-      (:override () koek-bngo/get-create-default-playlist-buffer)
+      (:override () koek-bngo/get-default-playlist-buffer)
     (with-current-buffer (get-buffer-create bongo-default-playlist-buffer-name)
       (unless (derived-mode-p 'bongo-playlist-mode)
         (bongo-playlist-mode))
@@ -3403,13 +3403,13 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
   :config
   (setq bongo-default-directory koek/music-dir))
 
-(defun koek/make-initial-buffer ()
+(defun koek/get-initial-buffer ()
   "Return initial buffer."
   (let ((layout (current-window-configuration)))
     (org-agenda-list)
     (set-window-configuration layout))
   (get-buffer "*Org Agenda*"))
 
-(setq initial-buffer-choice #'koek/make-initial-buffer)
+(setq initial-buffer-choice #'koek/get-initial-buffer)
 
 ;;; init.el ends here
