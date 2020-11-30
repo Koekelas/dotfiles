@@ -643,7 +643,7 @@ TO is a symbol, the language scheme to, see
                                             (plist-get spec :org)))
                                     koek-ys/lang-specs)))
 
-  (defun koek-ys/make-ensure-result-directory (name)
+  (defun koek-ys/make-ensure-result-dir (name)
     "Return function to ensure result directory of current code block exists.
 NAME is a string, the variable name storing the result file
 name."

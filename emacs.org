@@ -884,7 +884,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
                                               (plist-get spec :org)))
                                       koek-ys/lang-specs)))
 
-    (defun koek-ys/make-ensure-result-directory (name)
+    (defun koek-ys/make-ensure-result-dir (name)
       "Return function to ensure result directory of current code block exists.
   NAME is a string, the variable name storing the result file
   name."
@@ -1305,7 +1305,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Octave plot code block
   # key: smplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "path") t)) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path") t)) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC octave :var path="images/plot-${1:name}.png" :results file :exports results
     fig = figure('visible', 'off');
@@ -1345,7 +1345,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Python plot code block
   # key: spyplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-directory "path") t)) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path") t)) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC python :var path="images/plot-${1:name}.png" :results file :exports results
     from numpy import pi, linspace, sin, cos
