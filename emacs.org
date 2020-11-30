@@ -6569,7 +6569,9 @@ Configure org capture templates.
              :empty-lines 1)
             ("b" "Bookmark" entry (file+olp "Inbox.org" "Bladwijzers")
              ,(string-join '("* %:description %^g"
-                             "%a"
+                             ":PROPERTIES:"
+                             ":URL: %L"
+                             ":END:"
                              ""
                              "%?")
                            "\n")

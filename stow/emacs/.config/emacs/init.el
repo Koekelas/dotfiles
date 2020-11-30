@@ -3230,7 +3230,9 @@ When optional FULL is truthy, return absolute file names."
            :empty-lines 1)
           ("b" "Bookmark" entry (file+olp "Inbox.org" "Bladwijzers")
            ,(string-join '("* %:description %^g"
-                           "%a"
+                           ":PROPERTIES:"
+                           ":URL: %L"
+                           ":END:"
                            ""
                            "%?")
                          "\n")
