@@ -1189,7 +1189,7 @@ N is an integer, a workspace number."
 
   (setq counsel-linux-app-format-function
         #'counsel-linux-app-format-function-name-first)
-  (setq counsel-yank-pop-separator (concat "\n" (make-string 80 ?―) "\n"))
+  (setq counsel-yank-pop-separator (format "\n%s\n" (make-string 80 ?―)))
   (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
 
 (straight-use-package 'request)         ; Optional dependency
