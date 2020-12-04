@@ -481,14 +481,14 @@ strings."
     "Setup backends in modes.
 ARGS are one or more mode name symbols followed by a list of
 backends, see `company-backends'."
-    (let ((setup-backends-name (gensym))
+    (let ((setup-backends-sym (gensym))
           (modes (butlast args))
           (backends (car (last args))))
-      `(let ((,setup-backends-name (lambda ()
+      `(let ((,setup-backends-sym (lambda ()
                                      (setq-local company-backends ',backends))))
          ,@(mapcar (lambda (mode)
                      `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
-                                ,setup-backends-name))
+                                ,setup-backends-sym))
                    modes))))
   :config
   (setq company-backends
