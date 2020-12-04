@@ -2655,7 +2655,7 @@ vivendi."
     "Load and enable Modus theme.
 VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
-    (let ((koek-thm/load-hook nil))       ; Dynamic variable
+    (let ((koek-thm/load-hook nil))     ; Dynamic variable
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme (or (and (eq variant 'operandi) 'modus-operandi)
                       'modus-vivendi)
