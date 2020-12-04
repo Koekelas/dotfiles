@@ -67,7 +67,7 @@ preparation, nil."
       (lambda ()
         (setq moody-mode-line-height height)))))
 
-(declare-function keycast-mode "keycast")
+(declare-function keycast-mode "ext:keycast")
 (defvar keycast-mode)
 
 (defun prepcast-prep-keycast ()
