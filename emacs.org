@@ -48,6 +48,7 @@ settings file manually.
 
   (setq nsm-settings-file
         (expand-file-name "var/nsm-settings.el" user-emacs-directory))
+  (make-directory (file-name-directory nsm-settings-file) 'parents)
   (setq network-security-level 'high)
 #+END_SRC
 
