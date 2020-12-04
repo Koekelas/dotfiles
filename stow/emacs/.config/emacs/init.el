@@ -2034,6 +2034,10 @@ INTERACTIVE is used internally."
   :config
   (setq calendar-mark-holidays-flag t))
 
+(use-package holidays
+  :bind
+  ("C-c x C-q" . list-holidays))
+
 (use-package prepcast
   :koek t
   :defer t
@@ -3505,6 +3509,16 @@ When optional FULL is truthy, return absolute file names."
   (setq org-refile-targets
         '((nil . (:maxlevel . 3))       ; Current
           (org-agenda-files . (:maxlevel . 3)))))
+
+(koek-pkg/register belgian-holidays)    ; Optional dependency
+
+(use-package holidays
+  :defer t
+  :config
+  (require 'belgian-holidays)
+
+  (setq calendar-holidays
+        (append holiday-belgian-holidays holiday-solar-holidays)))
 
 (use-package org-caldav
   :defer t
