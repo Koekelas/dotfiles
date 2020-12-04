@@ -5872,74 +5872,64 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
   (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
   (add-hook 'koek-thm/load-hook #'koek-thm/update-frame-theme-variant)
 
-  (use-package modus-operandi-theme
-    :straight t
-    :defer t
-    :init
-    (setq modus-operandi-theme-bold-constructs t)
-    (setq modus-operandi-theme-slanted-constructs t)
-    (setq modus-operandi-theme-mode-line 'moody)
-    (setq modus-operandi-theme-headings '((t . section)))
-    (setq modus-operandi-theme-variable-pitch-headings t)
-    (setq modus-operandi-theme-scale-headings t)
-    (setq modus-operandi-theme-org-blocks 'greyscale))
-
-  (use-package modus-vivendi-theme
-    :straight t
-    :defer t
-    :init
-    (setq modus-vivendi-theme-bold-constructs t)
-    (setq modus-vivendi-theme-slanted-constructs t)
-    (setq modus-vivendi-theme-mode-line 'moody)
-    (setq modus-vivendi-theme-headings '((t . section)))
-    (setq modus-vivendi-theme-variable-pitch-headings t)
-    (setq modus-vivendi-theme-scale-headings t)
-    (setq modus-vivendi-theme-org-blocks 'greyscale)
-    (push 'modus-vivendi koek-thm/dark-themes))
-
-  (defmacro koek-thm/with-modus-vars (variant &rest body)
-    "Evaluate BODY with variables of Modus theme variant VARIANT bound.
+  (use-package modus-themes
+    :straight (:host gitlab :repo "protesilaos/modus-themes" :branch "main")
+    :preface
+    (defmacro koek-thm/with-modus-colors (variant colors &rest body)
+      "Evaluate BODY with COLORS of Modus theme variant VARIANT bound.
+  COLORS is a list of symbols, the colors to bind, see
+  `modus-themes-colors-operandi' or `modus-themes-colors-vivendi'.
   VARIANT is a symbol, the Modus theme variant, either operandi or
   vivendi."
-    (declare (indent 1))
-    `(if (eq ,variant 'operandi)
-         (modus-operandi-theme-with-color-variables
-          ,@body)
-       (modus-vivendi-theme-with-color-variables
-         ,@body)))
+      (declare (indent 2))
+      (let ((pallet-sym (gensym)))
+        `(let* ((,pallet-sym
+                 (or (and (eq ,variant 'operandi) modus-themes-colors-operandi)
+                     modus-themes-colors-vivendi))
+                ,@(mapcar (lambda (color)
+                            (list color `(alist-get ',color ,pallet-sym)))
+                          colors))
+           ,@body)))
 
-  (defun koek-thm/load-modus (variant)
-    "Load and enable Modus theme.
+    (defun koek-thm/load-modus (variant)
+      "Load and enable Modus theme.
   VARIANT is a symbol, the Modus theme variant, either operandi or
   vivendi."
-    (let ((koek-thm/load-hook nil)        ; Dynamic variable
-          (theme (or (and (eq variant 'operandi) 'modus-operandi)
-                     'modus-vivendi)))
-      (unless (member theme custom-known-themes)
-        ;; load-theme will load a theme even when it's already loaded
-        (load-theme theme 'no-confirm 'no-enable))
-      (mapc #'disable-theme custom-enabled-themes)
-      (enable-theme theme)
-      (koek-thm/with-modus-vars variant
-        (custom-set-faces
-         `(koek-diff/variant            ((,class :inherit bold)))
-         `(eyebrowse-mode-line-active   ((,class :foreground unspecified)))
-         `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
-         `(koek-wm/floating-border      ((,class :foreground ,fg-window-divider-inner)))
-         `(koek-wm/selected-workspace   ((,class :inherit bold)))
-         `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
-         `(koek-pdf/midnight            ((,class :foreground ,fg-main :background ,bg-main))))))
-    (run-hooks 'koek-thm/load-hook))
+      (let ((koek-thm/load-hook nil))       ; Dynamic variable
+        (mapc #'disable-theme custom-enabled-themes)
+        (load-theme (or (and (eq variant 'operandi) 'modus-operandi)
+                        'modus-vivendi)
+                    'no-confirm)
+        (koek-thm/with-modus-colors variant
+            (fg-main fg-window-divider-inner bg-main bg-alt)
+          (custom-set-faces
+           `(koek-diff/variant            ((t :inherit bold)))
+           `(eyebrowse-mode-line-active   ((t :foreground unspecified)))
+           `(eyebrowse-mode-line-inactive ((t :foreground ,bg-alt)))
+           `(koek-wm/floating-border      ((t :foreground ,fg-window-divider-inner)))
+           `(koek-wm/selected-workspace   ((t :inherit bold)))
+           `(koek-wm/unselected-workspace ((t :foreground ,bg-alt)))
+           `(koek-pdf/midnight            ((t :foreground ,fg-main :background ,bg-main))))))
+      (run-hooks 'koek-thm/load-hook))
 
-  (defun koek-thm/toggle-modus-variant ()
-    "Toggle Modus theme variant."
-    (interactive)
-    (koek-thm/load-modus
-     (or (and (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi)
-         'operandi)))
-
-  (setq face-near-same-color-threshold 45000)
-  (koek-thm/load-modus 'vivendi)
+    (defun koek-thm/toggle-modus-variant ()
+      "Toggle Modus theme variant."
+      (interactive)
+      (koek-thm/load-modus
+       (or (and (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi)
+           'operandi)))
+    :init
+    (setq modus-themes-bold-constructs t)
+    (setq modus-themes-slanted-constructs t)
+    (setq modus-themes-mode-line 'moody)
+    (setq modus-themes-headings '((t . section)))
+    (setq modus-themes-variable-pitch-headings t)
+    (setq modus-themes-scale-headings t)
+    (setq modus-themes-org-blocks 'greyscale)
+    :config
+    (setq face-near-same-color-threshold 45000)
+    (push 'modus-vivendi koek-thm/dark-themes)
+    (koek-thm/load-modus 'vivendi))
 #+END_SRC
 
 Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM
