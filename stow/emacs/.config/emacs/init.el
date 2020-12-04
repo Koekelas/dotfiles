@@ -1255,7 +1255,7 @@ N is an integer, a workspace number."
      ("j" . link-hint-open-link))))
 
 (use-package devdocs-lookup
-  :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
+  :straight (:host github :repo "skeeto/devdocs-lookup")
   :bind
   ("C-c d d" . devdocs-lookup)
   :preface

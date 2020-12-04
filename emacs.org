@@ -3892,7 +3892,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
 
 #+BEGIN_SRC emacs-lisp
   (use-package devdocs-lookup
-    :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
+    :straight (:host github :repo "skeeto/devdocs-lookup")
     :bind
     ("C-c d d" . devdocs-lookup)
     :preface
