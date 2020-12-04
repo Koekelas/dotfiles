@@ -4701,7 +4701,10 @@ Configure elfeed afterwards.
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
     :bind
-    ("C-c x q" . calendar))               ; Qalendar [sic]
+    ("C-c x q" . calendar)                ; Qalendar [sic]
+    :hook (calendar-today-visible . calendar-mark-today)
+    :config
+    (setq calendar-mark-holidays-flag t))
 #+END_SRC
 
 ** bongo - Media player
@@ -6671,6 +6674,27 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
             (force-mode-line-update)))))
 
     (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-variants)
+
+    ;; calendar
+    (define-advice calendar-set-mode-line
+        (:override (description) koek-ml/set-mode-line)
+      (setq mode-line-format
+            `(,@koek-ml/dummies " "
+              koek-ml/eldoc koek-ml/ace koek-ml/depth
+              koek-ml/exwm-workspaces koek-ml/eyebrowse
+              koek-ml/id koek-ml/keycast
+              ("" koek-ml/large-separator ,description)
+              koek-ml/task koek-ml/modes))
+      (force-mode-line-update))
+
+    (define-advice calendar-update-mode-line
+        (:override () koek-ml/update-mode-line)
+      ;; Calendar buffer isn't guaranteed to exist or be current
+      (when-let ((buffer (get-buffer calendar-buffer)))
+        (with-current-buffer buffer
+          (calendar-set-mode-line
+           (calendar-date-string (calendar-current-date)
+                                 'abbreviate 'nodayname)))))
     :config
     (setq x-underline-at-descent-line t)
     (setq moody-mode-line-height 24)
@@ -6698,6 +6722,10 @@ Configure locale.
   (use-package calendar
     :defer t
     :config
+    ;; Prefer calling calendar-set-date-style to setting
+    ;; calendar-date-style. Calling calendar-set-date-style sets related
+    ;; variables.
+    (calendar-set-date-style 'european)
     (setq calendar-week-start-day 1))     ; Monday
 
   ;; Dependency of org-caldav
