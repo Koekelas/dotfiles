@@ -911,29 +911,13 @@ window."
     "Launch PulseAudio Volume Control."
     (interactive)
     (make-process :name "pavc" :command '("pavucontrol")))
-  :init
-  ;; :init of deferred subpackages are evaluated in both exwm and non
-  ;; exwm sessions. :init of guarded (:when) main package is evaluated
-  ;; only in exwm sessions. Bind global keys in :init of guarded main
-  ;; package.
+  :config
+  ;; Only when package is loaded
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend)
    ("C-c x f" . koek-wm/launch-firefox)
-   ("C-c x p" . koek-wm/launch-pavc)
-   ("C-c w 0" . koek-wm/switch-workspace-0)
-   ("C-c w 1" . koek-wm/switch-workspace-1)
-   ("C-c w 2" . koek-wm/switch-workspace-2)
-   ("C-c w 3" . koek-wm/switch-workspace-3)
-   ("C-c w 4" . koek-wm/switch-workspace-4)
-   ("C-c w 5" . koek-wm/switch-workspace-5)
-   ("C-c w 6" . koek-wm/switch-workspace-6)
-   ("C-c w 7" . koek-wm/switch-workspace-7)
-   ("C-c w 8" . koek-wm/switch-workspace-8)
-   ("C-c w 9" . koek-wm/switch-workspace-9)
-   ("C-c w w" . koek-wm/switch-previous-workspace)
-   ("C-c w e" . exwm-workspace-swap)
-   ("C-c w k" . exwm-workspace-delete)))
+   ("C-c x p" . koek-wm/launch-pavc)))
 
 (use-package exwm-input
   :defer t
@@ -1065,6 +1049,22 @@ Keybinding is a string, see `edmacro-mode'.")
 N is an integer, a workspace number."
     (or (koek-ml/arabic-to-roman n) "N"))
   :config
+  ;; Only when package is loaded
+  (bind-keys
+   ("C-c w 0" . koek-wm/switch-workspace-0)
+   ("C-c w 1" . koek-wm/switch-workspace-1)
+   ("C-c w 2" . koek-wm/switch-workspace-2)
+   ("C-c w 3" . koek-wm/switch-workspace-3)
+   ("C-c w 4" . koek-wm/switch-workspace-4)
+   ("C-c w 5" . koek-wm/switch-workspace-5)
+   ("C-c w 6" . koek-wm/switch-workspace-6)
+   ("C-c w 7" . koek-wm/switch-workspace-7)
+   ("C-c w 8" . koek-wm/switch-workspace-8)
+   ("C-c w 9" . koek-wm/switch-workspace-9)
+   ("C-c w w" . koek-wm/switch-previous-workspace)
+   ("C-c w e" . exwm-workspace-swap)
+   ("C-c w k" . exwm-workspace-delete))
+
   (setq exwm-workspace-number 2)
   (setq exwm-workspace-show-all-buffers t)
   (setq exwm-workspace-index-map #'koek-wm/n-to-label)
