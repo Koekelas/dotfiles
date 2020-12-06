@@ -1092,7 +1092,6 @@ N is an integer, a workspace number."
     (setq exwm-floating-border-color
           (face-attribute 'koek-wm/floating-border :foreground)))
   :config
-  (setq exwm-floating-border-width 3)
   (add-hook 'koek-thm/load-hook #'koek-wm/set-floating-border-color))
 
 (use-package exwm-manage

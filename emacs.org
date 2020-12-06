@@ -3314,7 +3314,6 @@ Bury unneeded buffers, computers have more than enough memory.
       (setq exwm-floating-border-color
             (face-attribute 'koek-wm/floating-border :foreground)))
     :config
-    (setq exwm-floating-border-width 3)
     (add-hook 'koek-thm/load-hook #'koek-wm/set-floating-border-color))
 
   (use-package exwm-manage
