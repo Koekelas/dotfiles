@@ -1080,20 +1080,6 @@ N is an integer, a workspace number."
   :config
   (setq exwm-layout-show-all-buffers t))
 
-(use-package exwm-floating
-  :defer t
-  :preface
-  (defface koek-wm/floating-border '((t :foreground "white"))
-    "Face for border of floating frames."
-    :group 'exwm-floating)
-
-  (defun koek-wm/set-floating-border-color ()
-    "Set border color of floating frames."
-    (setq exwm-floating-border-color
-          (face-attribute 'koek-wm/floating-border :foreground)))
-  :config
-  (add-hook 'koek-thm/load-hook #'koek-wm/set-floating-border-color))
-
 (use-package exwm-manage
   :defer t
   :config
@@ -1726,16 +1712,6 @@ playing track, else, enqueue after last track."
   :straight pdf-tools
   :mode ((rx ".pdf" string-end) . pdf-view-mode)
   :preface
-  (defface koek-pdf/midnight '((t :foreground "white" :background "black"))
-    "Face for page when `pdf-view-midnight-minor-mode' is enabled."
-    :group 'pdf-view)
-
-  (define-advice pdf-view-midnight-minor-mode
-      (:before (&rest _args) koek-pdf/update-colors)
-    (setq pdf-view-midnight-colors
-          (cons (face-attribute 'koek-pdf/midnight :foreground)
-                (face-attribute 'koek-pdf/midnight :background))))
-
   (defun koek-pdf/re-apply-midnight-colors ()
     "Re-apply `pdf-view-midnight-minor-mode' colors in all buffers."
     (save-current-buffer
@@ -2657,7 +2633,7 @@ Mustn't be called directly, see
 (add-hook 'koek-thm/load-hook #'koek-thm/update-frame-theme-variant)
 
 (use-package modus-themes
-  :straight (:host gitlab :repo "protesilaos/modus-themes" :branch "main")
+  :straight t
   :preface
   (defmacro koek-thm/with-modus-colors (variant colors &rest body)
     "Evaluate BODY with COLORS of Modus theme variant VARIANT bound.
@@ -2679,21 +2655,20 @@ vivendi."
     "Load and enable Modus theme.
 VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
-    (let ((koek-thm/load-hook nil))     ; Dynamic variable
+    (let ((koek-thm/load-hook nil)      ; Dynamic variable
+          (theme (or (and (eq variant 'operandi) 'modus-operandi)
+                     'modus-vivendi)))
+      (unless (custom-theme-p theme)
+        (load-theme theme 'no-confirm 'no-enable))
       (mapc #'disable-theme custom-enabled-themes)
-      (load-theme (or (and (eq variant 'operandi) 'modus-operandi)
-                      'modus-vivendi)
-                  'no-confirm)
-      (koek-thm/with-modus-colors variant
-          (fg-main fg-window-divider-inner bg-main bg-alt)
+      (enable-theme theme)
+      (koek-thm/with-modus-colors variant (bg-alt)
         (custom-set-faces
          `(koek-diff/variant            ((t :inherit bold)))
          `(eyebrowse-mode-line-active   ((t :foreground unspecified)))
          `(eyebrowse-mode-line-inactive ((t :foreground ,bg-alt)))
-         `(koek-wm/floating-border      ((t :foreground ,fg-window-divider-inner)))
          `(koek-wm/selected-workspace   ((t :inherit bold)))
-         `(koek-wm/unselected-workspace ((t :foreground ,bg-alt)))
-         `(koek-pdf/midnight            ((t :foreground ,fg-main :background ,bg-main))))))
+         `(koek-wm/unselected-workspace ((t :foreground ,bg-alt))))))
     (run-hooks 'koek-thm/load-hook))
 
   (defun koek-thm/toggle-modus-variant ()
