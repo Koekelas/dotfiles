@@ -4029,9 +4029,7 @@ Modes are confident about being derived from text-mode.")
           (java-mode . "java")
           (other     . "stroustrup"))))
 
-(use-package gino
-  :load-path "lisp/gino"
-  :commands gino-generate-project)
+(koek-pkg/register gino)
 
 (use-package clojure-mode
   :ensure t
