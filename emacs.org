@@ -6644,7 +6644,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
             state))))
 
     (define-advice ediff-refresh-mode-lines
-        (:override () koek-ml/update-variants)
+        (:override () koek-ml/update-mode-line)
       (setq mode-line-format
             `(,@koek-ml/dummies " "
               koek-ml/eldoc koek-ml/ace koek-ml/depth

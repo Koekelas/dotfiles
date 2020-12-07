@@ -3317,7 +3317,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
           state))))
 
   (define-advice ediff-refresh-mode-lines
-      (:override () koek-ml/update-variants)
+      (:override () koek-ml/update-mode-line)
     (setq mode-line-format
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace koek-ml/depth
