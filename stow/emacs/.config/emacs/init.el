@@ -2678,6 +2678,8 @@ vivendi."
      (or (and (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi)
          'operandi)))
   :init
+  (bind-key "C-c z t" #'koek-thm/toggle-modus-variant)
+
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-slanted-constructs t)
   (setq modus-themes-mode-line 'moody)
