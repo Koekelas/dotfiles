@@ -1,4 +1,4 @@
-;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

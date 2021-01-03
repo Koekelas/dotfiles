@@ -5,11 +5,10 @@
 #+TITLE: Emacs
 
 * Header
-Enable lexical binding. When visiting the tangled file, enable read
-only mode.
+Enable lexical binding.
 
 #+BEGIN_SRC emacs-lisp
-  ;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; buffer-read-only: t; -*-
+  ;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; -*-
 
   ;;; Commentary:
 
