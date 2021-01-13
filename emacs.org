@@ -83,7 +83,7 @@ limited to what's available in a package archive. Configure straight.
     (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
-** no-littering - Normalize configuration and data paths packages
+** no-littering - Normalize configuration and data file names
 [[https://github.com/emacscollective/no-littering][no-littering (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
