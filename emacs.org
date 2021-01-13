@@ -39,8 +39,9 @@ Require libraries.
 * Bootstrap
 
 ** nsm - Network security manager
-No-littering requires straight which requires nsm. Set location of
-settings file manually.
+On a fresh installation, nsm is needed to download [[*straight - Package manager][straight]], which is
+needed to install [[*no-littering - Normalize configuration and data file names][no-littering]]. Replicate no-littering configuration
+for nsm.
 
 #+BEGIN_SRC emacs-lisp
   (require 'nsm)
@@ -48,6 +49,11 @@ settings file manually.
   (setq nsm-settings-file
         (expand-file-name "var/nsm-settings.el" user-emacs-directory))
   (make-directory (file-name-directory nsm-settings-file) 'parents)
+  #+END_SRC
+
+Tighten network security.
+
+  #+BEGIN_SRC emacs-lisp
   (setq network-security-level 'high)
 #+END_SRC
 

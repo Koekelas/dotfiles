@@ -14,6 +14,7 @@
 (setq nsm-settings-file
       (expand-file-name "var/nsm-settings.el" user-emacs-directory))
 (make-directory (file-name-directory nsm-settings-file) 'parents)
+
 (setq network-security-level 'high)
 
 (defvar bootstrap-version)              ; Must be a dynamic variable
