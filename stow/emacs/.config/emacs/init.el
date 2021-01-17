@@ -35,14 +35,47 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(defmacro koek-pkg/register (package)
+  "Register embedded package.
+PACKAGE is a symbol, the package name."
+  (declare (indent 1))
+  (let ((package-name (symbol-name package)))
+    `(progn
+       ;; Emacs loads packages during compilation to warn about
+       ;; undefined symbols and to expand macros
+       (eval-and-compile
+         (add-to-list 'load-path
+                      ,(thread-last user-emacs-directory
+                         (expand-file-name "lisp/")
+                         (expand-file-name package-name))))
+       (load ,(concat package-name "-autoloads.el")
+             'noerror 'nomessage 'nosuffix))))
+
 (straight-use-package 'no-littering)
 (require 'no-littering)
 
 (straight-use-package 'delight)         ; Optional dependency
 (straight-use-package 'use-package)
-(eval-when-compile
-  (require 'use-package))
-(require 'bind-key)
+(require 'use-package)
+
+(defun koek-up/process-koek (package _keyword arg rem state)
+  "Process :koek keyword.
+PACKAGE is a symbol, the package name.  ARG is a symbol, the
+keyword argument, either t or nil.  REM is a plist, the remaining
+keywords.  STATE is a plist, the state of the keywords.  For more
+information, see `use-package-process-keywords'."
+  (use-package-concat (when arg
+                        `((koek-pkg/register ,package)))
+                      (use-package-process-keywords package rem state)))
+
+(defalias 'use-package-normalize/:koek #'use-package-normalize-predicate)
+(defalias 'use-package-handler/:koek #'koek-up/process-koek)
+
+(let ((i (seq-position use-package-keywords :load-path)))
+  (setq use-package-keywords
+        (append (seq-subseq use-package-keywords 0 i)
+                '(:koek)
+                (seq-subseq use-package-keywords i))))
 
 (straight-use-package 'org-plus-contrib)
 
@@ -1999,8 +2032,8 @@ INTERACTIVE is used internally."
   ("C-c x q" . calendar))               ; Qalendar [sic]
 
 (use-package prepcast
-  :load-path "lisp/prepcast"
-  :commands prepcast-mode
+  :koek t
+  :defer t
   :config
   (setq prepcast-scale 1.5)
   :delight)
@@ -2506,6 +2539,28 @@ NAME is a string, the variable's name."
 (use-package ob-tangle
   :defer t
   :preface
+  (defun koek-org/gen-autoloads ()
+    "Generate autoloads for Emacs Lisp packages."
+    (when (derived-mode-p 'emacs-lisp-mode)
+      (require 'autoload)
+      (let* ((file-name (buffer-file-name))
+             (package-dir (file-name-directory file-name))
+             (package-name (thread-first package-dir
+                             directory-file-name
+                             file-name-base)))
+        (when (string= (file-name-base file-name) package-name)
+          (let ((generated-autoload-file ; Dynamic variable
+                 (expand-file-name (concat package-name "-autoloads.el")
+                                   package-dir)))
+            (update-directory-autoloads package-dir)
+            (kill-buffer (find-buffer-visiting generated-autoload-file)))))))
+
+  (defun koek-org/compile-emacs-lisp ()
+    "Compile Emacs Lisp files."
+    (when (derived-mode-p 'emacs-lisp-mode)
+      (require 'bytecomp)
+      (byte-recompile-file (buffer-file-name) nil 0)))
+
   (defun koek-org/process-file-end ()
     "Process end of tangled file.
 Code blocks end with empty line.  When `require-final-newline' is
@@ -2517,7 +2572,9 @@ nil, delete empty line at end of file."
           (delete-char -1)
           (save-buffer)))))
   :config
-  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads))
 
 (use-package ob-clojure
   :defer t
@@ -3337,7 +3394,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
   "File name to projects directory.")
 
 (use-package exar
-  :load-path "lisp/exar"
+  :koek t
   :after exwm
   :config
   (let ((icc-dir

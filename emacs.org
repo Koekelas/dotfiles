@@ -89,6 +89,45 @@ limited to what's available in a package archive. Configure straight.
     (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
+** Embedded packages
+When some customizations got large, I wondered, what would creating a
+package from one or more code blocks entail? Not much!
+
+First, output the code blocks to one or more files. This can be done
+by setting the =:tangle= header argument, see [[info:org#Extracting Source Code][Extracting Source Code
+(info)]] and [[info:org#Using Header Arguments][Using Header Arguments (info)]]. The directory containing the
+files must be a directory in =stow/emacs/.config/emacs/lisp/=.
+
+Next, generate autoloads from the files. This can be done during
+tangle, see [[*Babel][Babel]], specifically the function ~koek-org/gen-autoloads~
+and the variable ~org-babel-post-tangle-hook~. The base name of the file
+containing the entry points must equal the name of the directory.
+
+Last, add the directory containing the files to the load path and load
+the autoloads. This can be done by using the macro ~koek-pkg/register~
+or the [[*use-package - Package configuration macro][use-package]] keyword ~:koek~.
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro koek-pkg/register (package)
+    "Register embedded package.
+  PACKAGE is a symbol, the package name."
+    (declare (indent 1))
+    (let ((package-name (symbol-name package)))
+      `(progn
+         ;; Emacs loads packages during compilation to warn about
+         ;; undefined symbols and to expand macros
+         (eval-and-compile
+           (add-to-list 'load-path
+                        ,(thread-last user-emacs-directory
+                           (expand-file-name "lisp/")
+                           (expand-file-name package-name))))
+         (load ,(concat package-name "-autoloads.el")
+               'noerror 'nomessage 'nosuffix))))
+#+END_SRC
+
+For examples, see [[*prepcast - Prepare for screencasting][prepcast]] and other code blocks which output to
+directories in =stow/emacs/.config/emacs/lisp/=.
+
 ** no-littering - Normalize configuration and data file names
 [[https://github.com/emacscollective/no-littering][no-littering (GitHub)]]
 
@@ -100,12 +139,36 @@ limited to what's available in a package archive. Configure straight.
 ** use-package - Package configuration macro
 [[https://github.com/jwiegley/use-package][use-package (GitHub)]]
 
+Install use-package.
+
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'delight)         ; Optional dependency
   (straight-use-package 'use-package)
-  (eval-when-compile
-    (require 'use-package))
-  (require 'bind-key)
+  (require 'use-package)
+#+END_SRC
+
+The keyword ~:koek~ registers [[*Embedded packages][embedded packages]]. It is a predicate
+keyword, i.e., it accepts as argument =t=, =nil= or nothing.
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek-up/process-koek (package _keyword arg rem state)
+    "Process :koek keyword.
+  PACKAGE is a symbol, the package name.  ARG is a symbol, the
+  keyword argument, either t or nil.  REM is a plist, the remaining
+  keywords.  STATE is a plist, the state of the keywords.  For more
+  information, see `use-package-process-keywords'."
+    (use-package-concat (when arg
+                          `((koek-pkg/register ,package)))
+                        (use-package-process-keywords package rem state)))
+
+  (defalias 'use-package-normalize/:koek #'use-package-normalize-predicate)
+  (defalias 'use-package-handler/:koek #'koek-up/process-koek)
+
+  (let ((i (seq-position use-package-keywords :load-path)))
+    (setq use-package-keywords
+          (append (seq-subseq use-package-keywords 0 i)
+                  '(:koek)
+                  (seq-subseq use-package-keywords i))))
 #+END_SRC
 
 ** org - Notes, to-do lists & project planning
@@ -4751,8 +4814,8 @@ Stavrou)]].
 *** prepcast - Prepare for screencasting
 #+BEGIN_SRC emacs-lisp
   (use-package prepcast
-    :load-path "lisp/prepcast"
-    :commands prepcast-mode
+    :koek t
+    :defer t
     :config
     (setq prepcast-scale 1.5)
     :delight)
@@ -5628,6 +5691,13 @@ templates]].
 #+END_SRC
 
 *** Babel
+Tangling is modified in two important ways. First, the function
+~koek-org/gen-autoloads~ generates autoloads for Emacs Lisp packages. It
+is part of tangling [[*Embedded packages][embedded packages]]. Second, the function
+~koek-org/process-file-end~ processes the file end according to the
+value of the variable ~require-final-newline~, see [[*Whitespace][Whitespace]]. It is
+part of tangling [[*yasnippet - Snippets][embedded snippets]].
+
 #+BEGIN_SRC emacs-lisp
   (use-package ob-core
     :defer t
@@ -5670,6 +5740,28 @@ templates]].
   (use-package ob-tangle
     :defer t
     :preface
+    (defun koek-org/gen-autoloads ()
+      "Generate autoloads for Emacs Lisp packages."
+      (when (derived-mode-p 'emacs-lisp-mode)
+        (require 'autoload)
+        (let* ((file-name (buffer-file-name))
+               (package-dir (file-name-directory file-name))
+               (package-name (thread-first package-dir
+                               directory-file-name
+                               file-name-base)))
+          (when (string= (file-name-base file-name) package-name)
+            (let ((generated-autoload-file ; Dynamic variable
+                   (expand-file-name (concat package-name "-autoloads.el")
+                                     package-dir)))
+              (update-directory-autoloads package-dir)
+              (kill-buffer (find-buffer-visiting generated-autoload-file)))))))
+
+    (defun koek-org/compile-emacs-lisp ()
+      "Compile Emacs Lisp files."
+      (when (derived-mode-p 'emacs-lisp-mode)
+        (require 'bytecomp)
+        (byte-recompile-file (buffer-file-name) nil 0)))
+
     (defun koek-org/process-file-end ()
       "Process end of tangled file.
   Code blocks end with empty line.  When `require-final-newline' is
@@ -5681,7 +5773,9 @@ templates]].
             (delete-char -1)
             (save-buffer)))))
     :config
-    (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
+    (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
+    (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
+    (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads))
 
   (use-package ob-clojure
     :defer t
@@ -6648,7 +6742,7 @@ Configure monitors and monitor layouts.
 
 #+BEGIN_SRC emacs-lisp
   (use-package exar
-    :load-path "lisp/exar"
+    :koek t
     :after exwm
     :config
     (let ((icc-dir
