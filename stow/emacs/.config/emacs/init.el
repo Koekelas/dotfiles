@@ -2467,7 +2467,7 @@ Candidates are collected from agenda files."
 
 (use-package ob-core
   :defer t
-  :config
+  :preface
   (defun koek-org/get-code-block-var-value (name)
     "Return value of variable NAME for current code block.
 NAME is a string, the variable's name."
@@ -2486,7 +2486,7 @@ NAME is a string, the variable's name."
       (seq-find (pcase-lambda (`(,nm))
                   (string= nm name)))
       cdr))
-
+  :config
   ;; Evaluate code blocks in buffer after confirmation
   (let ((whitelist nil))
     (setq org-confirm-babel-evaluate
