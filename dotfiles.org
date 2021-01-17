@@ -498,6 +498,7 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   .shadow-cljs/
   build/
   node_modules/
+  ,*.elc
   .nrepl-port
 #+END_SRC
 

@@ -1,4 +1,5 @@
 .shadow-cljs/
 build/
 node_modules/
+*.elc
 .nrepl-port
