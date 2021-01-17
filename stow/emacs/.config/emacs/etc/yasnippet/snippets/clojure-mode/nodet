@@ -1,7 +1,7 @@
 # -*- mode: snippet; -*-
 # name: shadow-cljs Node.js test target
 # key: nodet
-# expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet t)))
+# expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet)))
 # --
 :${1:node-test} {:target :node-test
                  :output-to "${2:build/$1}.js"

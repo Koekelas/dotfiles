@@ -925,7 +925,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
   # -*- mode: snippet; -*-
   # name: shadow-cljs Node.js target
   # key: node
-  # expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet t)))
+  # expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet)))
   # --
   :${1:node} {:target :node-script
               :output-to "${2:index}.js"
@@ -938,7 +938,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
   # -*- mode: snippet; -*-
   # name: shadow-cljs Node.js test target
   # key: nodet
-  # expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet t)))
+  # expand-env: ((yas-after-exit-snippet-hook '(koek-ys/indent-snippet)))
   # --
   :${1:node-test} {:target :node-test
                    :output-to "${2:build/$1}.js"
@@ -957,7 +957,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: New Emacs Lisp file
   # key: new
-  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
+  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
   # --
   ;;; ${1:`(file-name-nondirectory (or (buffer-file-name) (buffer-name)))`} --- ${2:Short description} -*- lexical-binding: t; -*-
 
@@ -1055,7 +1055,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: New Markdown file
   # key: new
-  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
+  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
   # --
   <!-- -*- ispell-local-dictionary: "${2:$(koek-ys/ietf-to-other yas-text :hun)}"; -*- -->
   ---
@@ -1072,7 +1072,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: New Org file
   # key: new
-  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
+  # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
   # --
   # -*- ispell-local-dictionary: "${2:$(koek-ys/org-to-other yas-text :hun)}"; -*-
   ,#+TITLE: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
@@ -1296,7 +1296,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Octave plot code block
   # key: smplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path") t)) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path"))) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC octave :var path="images/plot-${1:name}.png" :results file :exports results
     fig = figure('visible', 'off');
@@ -1336,7 +1336,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Python plot code block
   # key: spyplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path") t)) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-ensure-result-dir "path"))) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC python :var path="images/plot-${1:name}.png" :results file :exports results
     from numpy import pi, linspace, sin, cos

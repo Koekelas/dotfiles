@@ -1,7 +1,7 @@
 # -*- mode: snippet; -*-
 # name: New Org file
 # key: new
-# expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables t)))
+# expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
 # --
 # -*- ispell-local-dictionary: "${2:$(koek-ys/org-to-other yas-text :hun)}"; -*-
 #+TITLE: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
