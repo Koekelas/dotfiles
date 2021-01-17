@@ -4339,9 +4339,6 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
 For news feeds, see [[*News feeds][News feeds]].
 
-[[*bongo - Media player][Bongo]] plays URLs. Its backend plays YouTube URLs, no need for
-[[https://ytdl-org.github.io/youtube-dl/][youtube-dl]], quality is identical.
-
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
     :straight t
