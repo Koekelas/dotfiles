@@ -5740,6 +5740,14 @@ part of tangling [[*yasnippet - Snippets][embedded snippets]].
   (use-package ob-tangle
     :defer t
     :preface
+    (define-advice org-babel-tangle
+        (:around (f &rest args) koek-org/disable-recentf)
+      ;; Dynamic variables
+      (let ((find-file-hook (remq 'recentf-track-opened-file find-file-hook))
+            (write-file-functions
+             (remq 'recentf-track-opened-file write-file-functions)))
+        (apply f args)))
+
     (defun koek-org/gen-autoloads ()
       "Generate autoloads for Emacs Lisp packages."
       (when (derived-mode-p 'emacs-lisp-mode)
