@@ -63,7 +63,7 @@
   :after dired
   :config
   (setq dired-vc-rename-file t)
-  (setq dired-dwim-target #'dired-dwim-target-recent)
+  (setq dired-dwim-target #'dired-dwim-target-next-visible)
   (setq dired-create-destination-dirs 'ask))
 
 (use-package dired-x
