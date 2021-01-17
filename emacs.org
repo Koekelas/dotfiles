@@ -5222,6 +5222,7 @@ Stavrou)]].
 #+BEGIN_SRC emacs-lisp
   (use-package sly
     :straight t
+    :load-path "straight/build/sly/contrib" ; Silence warnings
     :after lisp-mode)
 
   (use-package sly-mrepl

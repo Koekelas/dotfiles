@@ -2110,6 +2110,7 @@ INTERACTIVE is used internally."
 
 (use-package sly
   :straight t
+  :load-path "straight/build/sly/contrib" ; Silence warnings
   :after lisp-mode)
 
 (use-package sly-mrepl
