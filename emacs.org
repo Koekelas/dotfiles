@@ -108,7 +108,7 @@ limited to what's available in a package archive. Configure straight.
   (require 'bind-key)
 #+END_SRC
 
-** org - Notes, to-do lists and project planning
+** org - Notes, to-do lists & project planning
 Installing latest org after loading builtin org breaks org. Install
 latest org before loading org.
 
@@ -612,7 +612,7 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
      ("C-M-}" . end-of-defun)))
 #+END_SRC
 
-*** Smartparens and GNOME Shell keybindings conflict :issue:setup:
+*** Smartparens & GNOME Shell keybindings conflict :issue:setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -672,7 +672,7 @@ When line is indented, press =TAB= to complete text before point.
   (setq tab-always-indent 'complete)
 #+END_SRC
 
-** company - Autocomplete code
+** company - Select from candidates
 [[https://github.com/company-mode/company-mode][company (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -772,7 +772,7 @@ When line is indented, press =TAB= to complete text before point.
     (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
 #+END_SRC
 
-*** Setting up Clang
+*** Setting up clangd
 Run =M-x= ~make-symbolic-link~ and create a link to =compile_commands.json=
 in the project home directory.
 
@@ -4291,7 +4291,7 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     ("C-c x a" . bbdb))
 #+END_SRC
 
-*** bbdb-vcard - Import from and export to vCard
+*** bbdb-vcard - Import from & export to vCard
 [[https://github.com/tohojo/bbdb-vcard][bbdb-vcard (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
