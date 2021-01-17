@@ -5625,7 +5625,10 @@ templates]].
       ;; Mirror helpful buffer names
       (format "*org-src: %s*" org-buffer-name))
     :delight)
+#+END_SRC
 
+*** Babel
+#+BEGIN_SRC emacs-lisp
   (use-package ob-core
     :defer t
     :preface
@@ -5684,7 +5687,10 @@ templates]].
     :defer t
     :config
     (setq org-babel-clojure-backend 'cider))
+#+END_SRC
 
+*** Link
+#+BEGIN_SRC emacs-lisp
   (use-package ol
     :bind
     ("C-c o l" . org-store-link)
@@ -5706,7 +5712,10 @@ templates]].
     (setq org-bbdb-anniversary-field 'birthday)
     (setq org-bbdb-anniversary-format-alist
           '(("birthday" . koek-org/construct-birthday-entry-name))))
+#+END_SRC
 
+*** Export
+#+BEGIN_SRC emacs-lisp
   (straight-use-package 'htmlize)         ; Optional dependency
 
   (use-package ox
