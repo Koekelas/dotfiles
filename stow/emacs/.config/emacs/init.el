@@ -377,8 +377,8 @@ ignored."
 
   (defun koek-sp/setup-separate-sexp-handler (mode &rest open-delimiters)
     "Setup separate-sexp handler in MODE for OPEN-DELIMITERS.
-MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
-strings."
+MODE is a symbol, the mode to setup.  OPEN-DELIMITERS are one or
+more strings, the delimiters that call the handler."
     (dolist (delimiter open-delimiters)
       (sp-local-pair mode delimiter nil
                      :post-handlers '(:add koek-sp/separate-sexp))))
@@ -400,8 +400,8 @@ ignored."
   (defun koek-sp/setup-format-c-block-on-return-handler
       (mode &rest open-delimiters)
     "Setup format-c-block handler in MODE for OPEN-DELIMITERS.
-MODE is a major mode symbol.  OPEN-DELIMITERS are one or more
-strings."
+MODE is a symbol, the mode to setup.  OPEN-DELIMITERS are one or
+more strings, the delimiters that call the handler."
     (dolist (delimiter open-delimiters)
       (sp-local-pair mode delimiter nil
                      ;; For event names, see `single-key-description'
@@ -471,8 +471,8 @@ strings."
   :preface
   (defmacro koek-cpny/setup-backends (&rest args)
     "Setup backends in modes.
-ARGS are one or more mode name symbols followed by a list of
-backends, see `company-backends'."
+ARGS are one or more symbols, the modes to setup, followed by a
+list of backends, see `company-backends'."
     (let ((setup-backends-sym (gensym))
           (modes (butlast args))
           (backends (car (last args))))
