@@ -690,14 +690,13 @@ When line is indented, press =TAB= to complete text before point.
       "Setup backends in modes.
   ARGS are one or more symbols, the modes to setup, followed by a
   list of backends, see `company-backends'."
-      (let ((setup-backends-sym (gensym))
-            (modes (butlast args))
+      (let ((modes (butlast args))
             (backends (car (last args))))
-        `(let ((,setup-backends-sym (lambda ()
-                                       (setq-local company-backends ',backends))))
+        `(let ((setup-backends (lambda ()
+                                 (setq-local company-backends ',backends))))
            ,@(mapcar (lambda (mode)
                        `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
-                                  ,setup-backends-sym))
+                                  setup-backends))
                      modes))))
     :config
     (setq company-backends
