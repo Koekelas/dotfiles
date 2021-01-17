@@ -6690,6 +6690,22 @@ Disable blink cursor mode.
 
 * Personal
 
+** Locale
+Configure locale.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package calendar
+    :defer t
+    :config
+    (setq calendar-week-start-day 1))     ; Monday
+
+  ;; Dependency of org-caldav
+  (use-package ox-icalendar
+    :defer t
+    :config
+    (setq org-icalendar-timezone "Europe/Brussels"))
+#+END_SRC
+
 ** Secrets
 Retrieve secrets from [[https://freedesktop.org/wiki/Specifications/secret-storage-spec/][Secret Service]].
 
@@ -6819,11 +6835,6 @@ of ~koek/projects-dir~, are agenda files. Configure agendas.
     (setq org-refile-targets
           '((nil . (:maxlevel . 3))       ; Current
             (org-agenda-files . (:maxlevel . 3)))))
-
-  (use-package calendar
-    :defer t
-    :config
-    (setq calendar-week-start-day 1))     ; Monday
 #+END_SRC
 
 *** Calendars :setup:
@@ -6855,11 +6866,6 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     (setq org-caldav-url
           "https://caldav.fastmail.com/dav/calendars/user/nicolas@dejaeghe.re")
     (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
-
-  (use-package ox-icalendar
-    :defer t
-    :config
-    (setq org-icalendar-timezone "Europe/Brussels"))
 #+END_SRC
 
 ** Notes

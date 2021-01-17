@@ -3356,6 +3356,17 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
 
 (blink-cursor-mode 0)
 
+(use-package calendar
+  :defer t
+  :config
+  (setq calendar-week-start-day 1))     ; Monday
+
+;; Dependency of org-caldav
+(use-package ox-icalendar
+  :defer t
+  :config
+  (setq org-icalendar-timezone "Europe/Brussels"))
+
 (use-package auth-source
   :defer t
   :config
@@ -3466,11 +3477,6 @@ When optional FULL is truthy, return absolute file names."
         '((nil . (:maxlevel . 3))       ; Current
           (org-agenda-files . (:maxlevel . 3)))))
 
-(use-package calendar
-  :defer t
-  :config
-  (setq calendar-week-start-day 1))     ; Monday
-
 (use-package org-caldav
   :defer t
   :config
@@ -3484,11 +3490,6 @@ When optional FULL is truthy, return absolute file names."
   (setq org-caldav-url
         "https://caldav.fastmail.com/dav/calendars/user/nicolas@dejaeghe.re")
   (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
-
-(use-package ox-icalendar
-  :defer t
-  :config
-  (setq org-icalendar-timezone "Europe/Brussels"))
 
 (use-package org-roam
   :after org
