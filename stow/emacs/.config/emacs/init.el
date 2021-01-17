@@ -97,6 +97,7 @@
 
   (setq projectile-ignored-project-function #'koek-proj/forgetp)
   (setq projectile-completion-system 'ivy)
+  (setq projectile-dynamic-mode-line nil)
   (projectile-mode)
   :delight)
 
@@ -2593,21 +2594,16 @@ TITLE is a string, a note title."
 
 (setq frame-title-format
       '((:eval
-         ;; Resolve conflict between `file-truename' and
-         ;; `query-replace', see
-         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=33697
-         (save-match-data
-           (let ((file-name (buffer-file-name)))
-             (cond
-              ((and (projectile-project-p) file-name)
-               (format "~%s/%s"
-                       (projectile-project-name)
-                       (file-relative-name (file-truename file-name)
-                                           (projectile-project-root))))
-              (file-name
-               (abbreviate-file-name file-name))
-              (t
-               "%b")))))
+         (let ((file-name (buffer-file-name)))
+           (cond
+            (koek-ml/project-spec
+             (format "~%s/%s"
+                     (plist-get koek-ml/project-spec :name)
+                     (plist-get koek-ml/project-spec :relative)))
+            (file-name
+             (abbreviate-file-name file-name))
+            (t
+             "%b"))))
         " - Emacs"))
 
 (defvar koek-thm/load-hook nil
@@ -2872,6 +2868,9 @@ internally."
               koek-ml/separator)))))
     "Eyebrowse mode line construct.")
 
+  (defvar-local koek-ml/project-spec nil
+    "Projectile project specification.")
+
   (defun koek-ml/truncate (s length)
     "Truncate string S to LENGTH.
 S is a string, the string to truncate.  LENGTH is an integer, the
@@ -2881,10 +2880,11 @@ maximum length of S."
   (defconst koek-ml/id
     '(:eval
       (moody-tab
-       (concat (when (and (projectile-project-p) (derived-mode-p 'prog-mode))
-                 (concat (koek-ml/truncate (projectile-project-name) 16) "/"))
-               (propertize (koek-ml/truncate (buffer-name) 32)
-                           'face 'mode-line-buffer-id))))
+       (concat
+        (when (and koek-ml/project-spec (derived-mode-p 'prog-mode))
+          (concat (koek-ml/truncate (plist-get koek-ml/project-spec :name) 16) "/"))
+        (propertize (koek-ml/truncate (buffer-name) 32)
+                    'face 'mode-line-buffer-id))))
     "Id mode line construct.")
 
   (defconst koek-ml/state '(" " "%*%+")
@@ -3020,6 +3020,23 @@ checkers)."
   (defconst koek-ml/modes
     '("" koek-ml/separator "(" mode-name mode-line-process minor-mode-alist ")")
     "Modes mode line construct.")
+
+  ;; projectile
+
+  ;; `projectile-project-root' is expensive, i.e., calling it during
+  ;; mode line update makes Emacs lag
+  (defun koek-ml/setup-project-spec ()
+    "Setup projectile project specification for current."
+    (when-let ((file-name (projectile-project-root)))
+      (setq koek-ml/project-spec
+            (list :dir file-name
+                  :name (projectile-project-name file-name)
+                  :relative
+                  (file-relative-name (file-truename (buffer-file-name))
+                                      file-name)))
+      (force-mode-line-update)))
+
+  (add-hook 'find-file-hook #'koek-ml/setup-project-spec)
 
   ;; ediff
   (defconst koek-ml/diff
