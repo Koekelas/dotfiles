@@ -1633,6 +1633,101 @@ INTERACTIVE is used internally."
   ;; Contacts sharing a landline telephone aren't duplicates
   (setq bbdb-vcard-try-merge nil))
 
+(use-package bongo
+  :straight t
+  :bind
+  (("C-c x k" . bongo)
+   ("C-c k s" . bongo-seek)
+   ("C-c k f" . bongo-seek-forward-10)
+   ("C-c k b" . bongo-seek-backward-10)
+   ("C-c k a" . bongo-replay-current)
+   ("C-c k e" . bongo-perform-next-action)
+   ("C-c k n" . bongo-play-next)
+   ("C-c k p" . bongo-play-previous)
+   ("C-c k x" . bongo-stop))
+  :hook (dired-mode . bongo-dired-library-mode)
+  :preface
+  (define-advice bongo-default-library-buffer
+      (:override () koek-bngo/get-default-library-buffer)
+    (require 'dired)
+    (dired-noselect bongo-default-directory))
+
+  ;; Disable banner
+  (define-advice bongo-default-playlist-buffer
+      (:override () koek-bngo/get-default-playlist-buffer)
+    (let ((buffer (get-buffer-create bongo-default-playlist-buffer-name)))
+      (with-current-buffer buffer
+        (unless (derived-mode-p 'bongo-playlist-mode)
+          (bongo-playlist-mode)))
+      buffer))
+
+  (defun koek-bngo/play-pause ()
+    "Pause or resume playback.
+When playback is stopped, play from beginning."
+    (interactive)
+    (if (bongo-playing-p)
+        (bongo-pause/resume)
+      (with-bongo-playlist-buffer
+        (save-excursion
+          (goto-char (point-min))
+          (bongo-play)))))
+
+  (defun koek-bngo/enqueue (file-names &optional next)
+    "Enqueue FILE-NAMES.
+When NEXT is truthy, enqueue after playing track, else, enqueue
+after last track."
+    (with-temp-bongo-library-buffer
+      (dolist (file-name file-names)
+        (bongo-insert-file file-name))
+      (bongo-enqueue-region (or (and next 'insert) 'append)
+                            (point-min) (point-max)
+                            'maybe-display-playlist)))
+
+  ;; Contrary to what its signature suggests,
+  ;; `bongo-dired-enqueue-lines' enqueues only current line
+  (defun koek-bngo/dired-enqueue-dwim (&optional arg)
+    "Enqueue current line or marked lines.
+With `\\[universal-argument]' prefix argument ARG, enqueue after
+playing track, else, enqueue after last track."
+    (interactive "P")
+    (let* ((file-names (dired-get-marked-files))
+           (mark-active
+            (or (> (length file-names) 1)
+                (eq (car (dired-get-marked-files nil nil nil 'distinguish))
+                    t))))
+      (koek-bngo/enqueue file-names arg)
+      (unless mark-active
+        (dired-next-line 1))))
+
+  (defun koek-bngo/dired-enqueue-next-dwim ()
+    "Enqueue current line or marked lines after playing track."
+    (interactive)
+    (koek-bngo/dired-enqueue-dwim t))
+  :config
+  ;; Resolve keybinding conflict with wdired
+  (unbind-key "SPC" bongo-dired-library-mode-map)
+
+  (bind-keys
+   ("C-c k k" . koek-bngo/play-pause)
+   :map bongo-dired-library-mode-map
+   ([remap bongo-dired-append-enqueue-lines] . koek-bngo/dired-enqueue-dwim)
+   ([remap bongo-dired-insert-enqueue-lines] . koek-bngo/dired-enqueue-next-dwim))
+
+  ;; General
+  (setq bongo-enabled-backends '(vlc))
+  (setq bongo-prefer-library-buffers nil)
+  (setq bongo-insert-whole-directory-trees t)
+  (setq bongo-join-inserted-tracks nil)
+  (setq bongo-display-playlist-after-enqueue nil)
+
+  ;; Appearance
+  (setq bongo-header-line-mode nil)
+  (setq bongo-mode-line-indicator-mode nil)
+  (setq bongo-mark-played-tracks t)
+  (setq bongo-track-mark-icon-file-name nil)
+  (setq bongo-display-track-icons nil)
+  :delight bongo-dired-library-mode)
+
 (use-package elfeed
   :straight t
   :bind
@@ -1903,101 +1998,6 @@ INTERACTIVE is used internally."
 (use-package calendar
   :bind
   ("C-c x q" . calendar))               ; Qalendar [sic]
-
-(use-package bongo
-  :straight t
-  :bind
-  (("C-c x k" . bongo)
-   ("C-c k s" . bongo-seek)
-   ("C-c k f" . bongo-seek-forward-10)
-   ("C-c k b" . bongo-seek-backward-10)
-   ("C-c k a" . bongo-replay-current)
-   ("C-c k e" . bongo-perform-next-action)
-   ("C-c k n" . bongo-play-next)
-   ("C-c k p" . bongo-play-previous)
-   ("C-c k x" . bongo-stop))
-  :hook (dired-mode . bongo-dired-library-mode)
-  :preface
-  (define-advice bongo-default-library-buffer
-      (:override () koek-bngo/get-default-library-buffer)
-    (require 'dired)
-    (dired-noselect bongo-default-directory))
-
-  ;; Disable banner
-  (define-advice bongo-default-playlist-buffer
-      (:override () koek-bngo/get-default-playlist-buffer)
-    (let ((buffer (get-buffer-create bongo-default-playlist-buffer-name)))
-      (with-current-buffer buffer
-        (unless (derived-mode-p 'bongo-playlist-mode)
-          (bongo-playlist-mode)))
-      buffer))
-
-  (defun koek-bngo/play-pause ()
-    "Pause or resume playback.
-When playback is stopped, play from beginning."
-    (interactive)
-    (if (bongo-playing-p)
-        (bongo-pause/resume)
-      (with-bongo-playlist-buffer
-        (save-excursion
-          (goto-char (point-min))
-          (bongo-play)))))
-
-  (defun koek-bngo/enqueue (file-names &optional next)
-    "Enqueue FILE-NAMES.
-When NEXT is truthy, enqueue after playing track, else, enqueue
-after last track."
-    (with-temp-bongo-library-buffer
-      (dolist (file-name file-names)
-        (bongo-insert-file file-name))
-      (bongo-enqueue-region (or (and next 'insert) 'append)
-                            (point-min) (point-max)
-                            'maybe-display-playlist)))
-
-  ;; Contrary to what its signature suggests,
-  ;; `bongo-dired-enqueue-lines' enqueues only current line
-  (defun koek-bngo/dired-enqueue-dwim (&optional arg)
-    "Enqueue current line or marked lines.
-With `\\[universal-argument]' prefix argument ARG, enqueue after
-playing track, else, enqueue after last track."
-    (interactive "P")
-    (let* ((file-names (dired-get-marked-files))
-           (mark-active
-            (or (> (length file-names) 1)
-                (eq (car (dired-get-marked-files nil nil nil 'distinguish))
-                    t))))
-      (koek-bngo/enqueue file-names arg)
-      (unless mark-active
-        (dired-next-line 1))))
-
-  (defun koek-bngo/dired-enqueue-next-dwim ()
-    "Enqueue current line or marked lines after playing track."
-    (interactive)
-    (koek-bngo/dired-enqueue-dwim t))
-  :config
-  ;; Resolve keybinding conflict with wdired
-  (unbind-key "SPC" bongo-dired-library-mode-map)
-
-  (bind-keys
-   ("C-c k k" . koek-bngo/play-pause)
-   :map bongo-dired-library-mode-map
-   ([remap bongo-dired-append-enqueue-lines] . koek-bngo/dired-enqueue-dwim)
-   ([remap bongo-dired-insert-enqueue-lines] . koek-bngo/dired-enqueue-next-dwim))
-
-  ;; General
-  (setq bongo-enabled-backends '(vlc))
-  (setq bongo-prefer-library-buffers nil)
-  (setq bongo-insert-whole-directory-trees t)
-  (setq bongo-join-inserted-tracks nil)
-  (setq bongo-display-playlist-after-enqueue nil)
-
-  ;; Appearance
-  (setq bongo-header-line-mode nil)
-  (setq bongo-mode-line-indicator-mode nil)
-  (setq bongo-mark-played-tracks t)
-  (setq bongo-track-mark-icon-file-name nil)
-  (setq bongo-display-track-icons nil)
-  :delight bongo-dired-library-mode)
 
 (use-package prepcast
   :load-path "lisp/prepcast"

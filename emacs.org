@@ -4341,6 +4341,16 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
 For news feeds, see [[*News feeds][News feeds]].
 
+The [[*bongo - Media player][bongo]] integration uses bongo's macros, i.e., bongo must be on the
+load path before compiling the bongo integration. Configure bongo
+first.
+
+#+BEGIN_SRC emacs-lisp :noweb no-export
+  <<bongo>>
+#+END_SRC
+
+Configure elfeed afterwards.
+
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
     :straight t
@@ -4640,7 +4650,7 @@ contrast, inserting and immediately enqueueing media from [[*dired - File manage
 joy. The idea is from [[https://protesilaos.com/codelog/2020-08-06-emacs-bongo-extras/][Bongo media manager and extras (Protesilaos
 Stavrou)]].
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb-ref bongo :tangle no
   (use-package bongo
     :straight t
     :bind
