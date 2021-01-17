@@ -597,7 +597,7 @@ Assumes source path is a child of project root."
       (replace-regexp-in-string "_" "-" (string-join parts "."))))
 
   ;; Org & Markdown
-  (defvar koek-ys/lang-specs
+  (defvar koek-ys/languages
     '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
       (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
       (:ietf "fr-FR" :org "fr"    :tex "frenchb"  :hun "fr_FR")
@@ -612,10 +612,10 @@ code.")
     "Translate language code LANG from scheme FROM to TO.
 FROM is a symbol, the language scheme of code LANG.  TO is a
 symbol, the language scheme to.  For language schemes, see
-`koek-ys/lang-specs'."
+`koek-ys/languages'."
     (plist-get (seq-find (lambda (spec)
                            (string= (plist-get spec from) lang))
-                         koek-ys/lang-specs)
+                         koek-ys/languages)
                to))
 
   (defun koek-ys/ietf-to-other (lang to)
@@ -634,14 +634,14 @@ TO is a symbol, the language scheme to, see
     "Complete IETF language code."
     (yas-choose-value (mapcar (lambda (spec)
                                 (plist-get spec :ietf))
-                              koek-ys/lang-specs)))
+                              koek-ys/languages)))
 
   (defun koek-ys/complete-org ()
     "Complete Org language code from IETF codes."
     (koek-ys/complete-field (mapcar (lambda (spec)
                                       (cons (plist-get spec :ietf)
                                             (plist-get spec :org)))
-                                    koek-ys/lang-specs)))
+                                    koek-ys/languages)))
 
   (defun koek-ys/make-ensure-result-dir (name)
     "Return function to ensure result directory of current code block exists.
