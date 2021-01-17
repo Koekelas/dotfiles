@@ -5222,14 +5222,14 @@ Stavrou)]].
 #+END_SRC
 
 ** Conf
-Conf mode's mode declaration must precede over Text mode's. Configure
-Text mode first.
+Conf-mode's mode declaration must precede over [[*Text][text-mode's]]. Configure
+text-mode first.
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
   <<text-mode>>
 #+END_SRC
 
-Configure Conf mode afterwards.
+Configure conf-mode afterwards.
 
 #+BEGIN_SRC emacs-lisp
   (use-package conf-mode
