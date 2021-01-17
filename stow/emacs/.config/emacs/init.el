@@ -38,8 +38,8 @@
 (straight-use-package 'no-littering)
 (require 'no-littering)
 
-(straight-use-package 'use-package)
 (straight-use-package 'delight)         ; Optional dependency
+(straight-use-package 'use-package)
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)
@@ -1098,6 +1098,11 @@ N is an integer, a workspace number."
 
 (setq enable-recursive-minibuffers t)
 
+;; Optional dependencies
+(straight-use-package 'ivy-avy)
+(straight-use-package 'flx)
+(straight-use-package 'wgrep)
+
 (use-package ivy
   :straight t
   :demand t
@@ -1130,10 +1135,7 @@ N is an integer, a workspace number."
   (ivy-mode)
   :delight)
 
-;; Optional dependencies
-(straight-use-package 'ivy-avy)
-(straight-use-package 'flx)
-(straight-use-package 'wgrep)
+(straight-use-package 'request)         ; Optional dependency
 
 (use-package counsel
   :straight t
@@ -1164,8 +1166,6 @@ N is an integer, a workspace number."
         #'counsel-linux-app-format-function-name-first)
   (setq counsel-yank-pop-separator (format "\n%s\n" (make-string 80 ?―)))
   (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
-
-(straight-use-package 'request)         ; Optional dependency
 
 (use-package counsel-projectile
   :straight t
@@ -2547,6 +2547,8 @@ age of the person.  _AGE-SUFFIX is ignored."
   (setq org-bbdb-anniversary-format-alist
         '(("birthday" . koek-org/construct-birthday-entry-name))))
 
+(straight-use-package 'htmlize)         ; Optional dependency
+
 (use-package ox
   :defer t
   :config
@@ -2581,8 +2583,6 @@ age of the person.  _AGE-SUFFIX is ignored."
           (concat "\\hypersetup{\n "
                   (string-join (append options '("hidelinks")) ",\n ")
                   "\n}\n"))))
-
-(straight-use-package 'htmlize)         ; Optional dependency
 
 (use-package org-roam
   :straight t
