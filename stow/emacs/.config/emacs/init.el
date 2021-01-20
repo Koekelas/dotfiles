@@ -2322,8 +2322,8 @@ NAME is a string, the variable's name."
        (lambda (value)
          (let ((parts (split-string value "=")))
            (cons (car parts)
-                 (replace-regexp-in-string (rx (or (and line-start "\"")
-                                                   (and "\"" line-end)))
+                 (replace-regexp-in-string (rx (or (seq line-start "\"")
+                                                   (seq "\"" line-end)))
                                            "" (string-join (cdr parts) "="))))))
       (seq-find (pcase-lambda (`(,nm))
                   (string= nm name)))
@@ -2415,7 +2415,7 @@ age of the person.  _AGE-SUFFIX is ignored."
                 (replace-regexp-in-string (rx (any " \n")) ""
                                           org-latex-hyperref-template)))
            (string-match
-            (rx "{" (submatch-n 1 (one-or-more (any letter "={}%,"))) "}")
+            (rx "{" (group-n 1 (one-or-more (any alpha "={}%,"))) "}")
             normalized)
            (split-string (match-string 1 normalized) ","))))
     (setq org-latex-hyperref-template
@@ -2434,7 +2434,7 @@ age of the person.  _AGE-SUFFIX is ignored."
     "Convert note title TITLE to a file name slug.
 TITLE is a string, a note title."
     (let ((parts
-           (split-string (replace-regexp-in-string (rx (not (any alphanumeric)))
+           (split-string (replace-regexp-in-string (rx (not (any alnum)))
                                                    " " title))))
       (downcase (string-join parts "-"))))
   :config
@@ -3008,9 +3008,9 @@ checkers)."
         (let ((state (string-trim (substring-no-properties vc-mode))))
           ;; For format, see `vc-default-mode-line-string'
           (string-match
-           (rx (submatch-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
+           (rx (group-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
                (zero-or-one (not (any ":")) ":")
-               (submatch-n 2 (one-or-more not-newline)))
+               (group-n 2 (one-or-more not-newline)))
            state)
           `("" koek-ml/separator
             ,(format "%s %s" (match-string 1 state) (match-string 2 state))))))
