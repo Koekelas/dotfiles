@@ -1029,8 +1029,9 @@ Keybinding is a string, see `edmacro-mode'.")
     :group 'exwm-workspace)
 
   (define-advice exwm-workspace-switch
-      (:before (&rest _args) koek-wm/update-previous-workspace-n)
-    (setq koek-wm/previous-workspace-n exwm-workspace-current-index))
+      (:before (index &optional _force) koek-wm/update-previous-workspace-n)
+    (unless (eq index exwm-workspace-current-index)
+      (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
 
   (dolist (n (number-sequence 0 9))
     (defalias (intern (format "koek-wm/switch-workspace-%d" n))
