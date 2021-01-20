@@ -323,17 +323,7 @@ negative, move point to beginning of next word."
  ("M-n" . koek-mtn/next-word)
  ("M-p" . koek-mtn/previous-word))
 
-(defvar koek-af/excluded-modes '(snippet-mode)
-  "List of major mode symbols, see `koek-af/maybe-enable'.")
-
-(defun koek-af/maybe-enable ()
-  "Enable `auto-fill-mode' conditionally.
-Unless current major mode is member of `koek-af/excluded-modes',
-enable `auto-fill-mode'."
-  (unless (memq major-mode koek-af/excluded-modes)
-    (auto-fill-mode)))
-
-(add-hook 'text-mode-hook #'koek-af/maybe-enable)
+(add-hook 'koek-text/confident-hook #'auto-fill-mode)
 (delight 'auto-fill-function nil 'simple)
 
 (use-package smartparens
@@ -1980,6 +1970,23 @@ playing track, else, enqueue after last track."
 
 (use-package text-mode
   :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
+  :preface
+  (defvar koek-text/insecure-modes
+    '(sgml-mode                         ; mhtml-mode derives from sgml-mode
+      snippet-mode)
+    "List of major mode symbols.
+Modes are insecure about being derived from text-mode.")
+
+  (defvar koek-text/confident-hook nil
+    "Normal hook run after enabling text-mode or derived modes.
+Modes are confident about being derived from text-mode.")
+
+  (defun koek-text/run-confident-hook ()
+    "Run `koek-text/confident-hook'."
+    (unless (apply #'derived-mode-p koek-text/insecure-modes)
+      (run-hooks 'koek-text/confident-hook)))
+  :config
+  (add-hook 'text-mode-hook #'koek-text/run-confident-hook)
   :delight (text-mode "Txt" :major))
 
 (use-package conf-mode
