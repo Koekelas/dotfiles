@@ -1337,16 +1337,13 @@ first available number."
       (vterm-mode)))
   :init
   (bind-key "C-c x t" #'koek-term/launch)
+
+  (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=yes")
   :config
   ;; Resolve keybinding conflict with repeat
   (unbind-key "C-z" vterm-mode-map)
 
   (setq vterm-kill-buffer-on-exit t))
-
-(use-package vterm-module-make
-  :defer t
-  :init
-  (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=yes"))
 
 (use-package eshell
   :bind
