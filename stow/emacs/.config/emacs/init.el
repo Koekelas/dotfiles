@@ -2616,11 +2616,11 @@ TITLE is a string, a note title."
              "%b"))))
         " - Emacs"))
 
-(defvar koek-thm/load-hook nil
-  "Normal hook run after loading theme.")
+(defvar koek-thm/enable-hook nil
+  "Normal hook run after enabling theme.")
 
-(define-advice load-theme (:after (&rest _args) koek-thm/run-load-hooks)
-  (run-hooks 'koek-thm/load-hook))
+(define-advice enable-theme (:after (&rest _args) koek-thm/run-enable-hook)
+  (run-hooks 'koek-thm/enable-hook))
 
 (defvar koek-thm/dark-themes nil
   "List of theme symbols.
@@ -2653,46 +2653,37 @@ Mustn't be called directly, see
   (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
 
 (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
-(add-hook 'koek-thm/load-hook #'koek-thm/update-frame-theme-variant)
+(add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant)
 
 (use-package modus-themes
   :straight t
   :preface
-  (defmacro koek-thm/with-modus-colors (variant colors &rest body)
-    "Evaluate BODY with COLORS of Modus theme variant VARIANT bound.
-COLORS is a list of symbols, the colors to bind, see
-`modus-themes-colors-operandi' or `modus-themes-colors-vivendi'.
-VARIANT is a symbol, the Modus theme variant, either operandi or
-vivendi."
-    (declare (indent 2))
-    (let ((pallet-sym (gensym)))
-      `(let* ((,pallet-sym
-               (or (and (eq ,variant 'operandi) modus-themes-colors-operandi)
-                   modus-themes-colors-vivendi))
-              ,@(mapcar (lambda (color)
-                          (list color `(alist-get ',color ,pallet-sym)))
-                        colors))
-         ,@body)))
-
   (defun koek-thm/load-modus (variant)
-    "Load and enable Modus theme.
+    "Load and enable Modus theme variant VARIANT.
 VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
-    (let ((koek-thm/load-hook nil)      ; Dynamic variable
-          (theme (or (and (eq variant 'operandi) 'modus-operandi)
-                     'modus-vivendi)))
-      (unless (custom-theme-p theme)
-        (load-theme theme 'no-confirm 'no-enable))
-      (mapc #'disable-theme custom-enabled-themes)
-      (enable-theme theme)
-      (koek-thm/with-modus-colors variant (bg-alt)
+    (pcase-let* ((koek-thm/enable-hook nil) ; Dynamic variable
+                 (themes '(modus-operandi modus-vivendi))
+                 (`(,new ,old) (if (eq variant 'operandi)
+                                          themes
+                                        (reverse themes))))
+      (when (custom-theme-enabled-p old)
+        (disable-theme old))
+      (unless (custom-theme-p new)
+        (load-theme new 'no-confirm 'no-enable))
+      (enable-theme new)
+      (modus-themes-with-colors
         (custom-set-faces
-         `(koek-diff/variant            ((t :inherit bold)))
-         `(eyebrowse-mode-line-active   ((t :foreground unspecified)))
-         `(eyebrowse-mode-line-inactive ((t :foreground ,bg-alt)))
-         `(koek-wm/selected-workspace   ((t :inherit bold)))
-         `(koek-wm/unselected-workspace ((t :foreground ,bg-alt))))))
-    (run-hooks 'koek-thm/load-hook))
+         `(koek-diff/variant            ((,class :inherit bold)))
+         `(eyebrowse-mode-line-active   ((,class :foreground unspecified)))
+         `(eyebrowse-mode-line-inactive ((,class :foreground ,bg-alt)))
+         `(koek-wm/selected-workspace   ((,class :inherit bold)))
+         `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
+         `(pdf-links-read-link          ((,class
+                                          :foreground unspecified :background unspecified
+                                          :inherit (modus-theme-intense-magenta bold)))))))
+    ;; After user theme
+    (run-hooks 'koek-thm/enable-hook))
 
   (defun koek-thm/toggle-modus-variant ()
     "Toggle Modus theme variant."
