@@ -2003,7 +2003,8 @@ playing track, else, enqueue after last track."
   :load-path "lisp/prepcast"
   :commands prepcast-mode
   :config
-  (setq prepcast-scale 1.5))
+  (setq prepcast-scale 1.5)
+  :delight)
 
 (use-package keycast
   :straight t

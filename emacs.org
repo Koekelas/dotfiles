@@ -4745,7 +4745,8 @@ Stavrou)]].
     :load-path "lisp/prepcast"
     :commands prepcast-mode
     :config
-    (setq prepcast-scale 1.5))
+    (setq prepcast-scale 1.5)
+    :delight)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/prepcast/prepcast.el
