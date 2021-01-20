@@ -4394,42 +4394,157 @@ For news feeds, see [[*News feeds][News feeds]].
 [[https://github.com/politza/pdf-tools][pdf-tools (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :straight t
+    :defer t
+    :preface
+    (defun koek-pdf/recompile (&optional interactive)
+      "Recompile epdf.
+  INTERACTIVE is used internally."
+      (interactive (list 'interactive))
+      (require 'pdf-tools)
+      (let* (buffer
+             (callback
+              (lambda (file-name)
+                (setq pdf-info-epdfinfo-program file-name)
+                (when (and file-name buffer)
+                  (kill-buffer buffer))
+                (when interactive
+                  (if file-name
+                      (message "Recompiling epdf...done")
+                    (message "Recompile epdf failed"))))))
+        (when interactive
+          (message "Recompiling epdf..."))
+        (setq buffer
+              (pdf-tools-build-server pdf-tools-directory
+                                      'no-install-deps nil
+                                      callback)))))
+
+  (use-package pdf-loader
+    :config
+    (pdf-loader-install 'no-ask 'no-install-deps))
+
   (use-package pdf-view
-    :straight pdf-tools
     :mode ((rx ".pdf" string-end) . pdf-view-mode)
     :preface
-    (defun koek-pdf/re-apply-midnight-colors ()
-      "Re-apply `pdf-view-midnight-minor-mode' colors in all buffers."
+    (defun koek-pdf/redraw-hard ()
+      "Invalidate cache and redraw document."
+      (pdf-cache-clear-images)
+      (pdf-view-redisplay t))
+
+    (defun koek-pdf/stain ()
+      "Stain document."
+      (pdf-info-setoptions :render/foreground (car pdf-view-midnight-colors)
+                           :render/background (cdr pdf-view-midnight-colors)
+                           :render/usecolors t)
+      (koek-pdf/redraw-hard))
+
+    ;; `pdf-view-midnight-minor-mode' is difficult to extend
+    (define-minor-mode koek-pdf/stain-mode
+      "Stain document for reading under different light conditions."
+      :lighter " Stain"
+      (unless (derived-mode-p 'pdf-view-mode)
+        (user-error "Not a PDF buffer"))
+      (if koek-pdf/stain-mode
+          (progn
+            (add-hook 'after-save-hook #'koek-pdf/stain nil 'local)
+            (add-hook 'after-revert-hook #'koek-pdf/stain nil 'local)
+            (koek-pdf/stain))
+        (remove-hook 'after-save-hook #'koek-pdf/stain 'local)
+        (remove-hook 'after-revert-hook #'koek-pdf/stain 'local)
+        (pdf-info-setoptions :render/usecolors nil)
+        (koek-pdf/redraw-hard)))
+
+    ;; Hints are cached, i.e., cache must be invalidated on theme change
+    (defun koek-pdf/invalidate-all ()
+      "Invalidate cache all documents."
       (save-current-buffer
         (dolist (buffer (buffer-list))
           (set-buffer buffer)
-          (when (and (derived-mode-p 'pdf-view-mode) pdf-view-midnight-minor-mode)
-            (pdf-view-midnight-minor-mode 0)
-            (pdf-view-midnight-minor-mode)))))
+          (when (derived-mode-p 'pdf-view-mode)
+            (pdf-cache-clear-images)))))
+
+    (defun koek-pdf/restain-all ()
+      "Restain all stained documents."
+      (save-current-buffer
+        (dolist (buffer (buffer-list))
+          (set-buffer buffer)
+          (when (and (derived-mode-p 'pdf-view-mode) koek-pdf/stain-mode)
+            (koek-pdf/stain)))))
     :config
     ;; Only isearch is supported
     (use-package isearch
       :bind
       (:map pdf-view-mode-map
-       ("C-s" . isearch-forward)))
+       ([remap swiper-isearch] . isearch-forward)))
+
+    (use-package counsel
+      :bind
+      (:map pdf-view-mode-map
+       ("d" . counsel-imenu)))
+
+    (bind-keys
+     :map pdf-view-mode-map
+     ([remap pdf-view-midnight-minor-mode] . koek-pdf/stain-mode)
+     ("C-c e s" . koek-pdf/stain-mode))
 
     (setq-default pdf-view-display-size 'fit-page)
-    (add-hook 'koek-thm/load-hook #'koek-pdf/re-apply-midnight-colors)
+    ;; First invalidate, then restain. `add-hook' adds to the front. The
+    ;; reverse invalidates the restained page.
+    (add-hook 'koek-thm/enable-hook #'koek-pdf/restain-all)
+    (add-hook 'koek-thm/enable-hook #'koek-pdf/invalidate-all)
     :delight (pdf-view-mode "PDF" :major))
 
   (use-package pdf-links
     :bind
     (:map pdf-links-minor-mode-map
-     ([remap link-hint-open-link] . pdf-links-action-perform))
-    :config
-    (use-package link-hint
-      :bind
-      (:map pdf-links-minor-mode-map
-       ("j" . pdf-links-action-perform))))
+     ([remap link-hint-open-link] . pdf-links-action-perform)
+     ("j" . pdf-links-action-perform))
+    :preface
+    ;; Show hints in minuscule
+    (define-advice pdf-links-read-link-action--create-keys
+        (:around (f &rest args) koek-pdf/downcase-hints)
+      (mapcar (lambda (chars)
+                (mapcar #'downcase chars))
+              (apply f args)))
 
-  (use-package pdf-loader
+    (define-advice pdf-links-read-link-action--read-chars
+        (:around (f prompt actions) koek-pdf/normalize-hints)
+      (funcall f prompt
+               (mapcar (pcase-lambda (`(,hint . ,link))
+                         (cons (mapcar #'upcase hint)
+                               link))
+                       actions)))
     :config
-    (pdf-loader-install 'no-ask 'no-install-deps))
+    (let ((spec
+           (seq-mapcat
+            (lambda (name)
+              (list name (face-attribute 'pdf-links-read-link name nil 'default)))
+            '(:family :width :weight :slant))))
+      (setq pdf-links-read-link-convert-commands
+            `("-density"    "96"
+              "-family"     ,(plist-get spec :family)
+              "-stretch"    ,(thread-last (plist-get spec :width)
+                               symbol-name
+                               capitalize
+                               (replace-regexp-in-string "-" ""))
+              "-weight"     ,(pcase (plist-get spec :weight)
+                               ('ultra-light "Thin")
+                               ('extra-light "ExtraLight")
+                               ('light       "Light")
+                               ('semi-bold   "SemiBold")
+                               ('bold        "Bold")
+                               ('extra-bold  "ExtraBold")
+                               ('ultra-bold  "Black")
+                               (_weight      "Normal"))
+              "-style"      ,(pcase (plist-get spec :slant)
+                               ('italic  "Italic")
+                               ('oblique "Oblique")
+                               (_slant   "Normal"))
+              "-pointsize"  "%P"
+              "-fill"       "%f"
+              "-undercolor" "%b"
+              "-draw"       "text %X,%Y '%c'"))))
 #+END_SRC
 
 *** saveplace-pdf-view - Restore page on revisit
