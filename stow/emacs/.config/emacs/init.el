@@ -1540,7 +1540,7 @@ URL or, to not redirect the URL, nil.")
       (ispell-message)
       (unless (or (= (buffer-chars-modified-tick) tick)
                   (y-or-n-p "Spelling checked.  Send? "))
-        (user-error "%s" "Send aborted"))))
+        (user-error "Send aborted"))))
   :config
   (setq message-send-mail-function #'smtpmail-send-it)
   (setq message-beginning-of-line nil)
