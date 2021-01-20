@@ -3922,7 +3922,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
     :straight t
-    :defer t
+    :bind
+    ("C-c d e" . eldoc-doc-buffer)
     :config
     (setq eldoc-echo-area-use-multiline-p nil)
     :delight)
