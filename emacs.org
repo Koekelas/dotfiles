@@ -2909,7 +2909,7 @@ above each other right). Bind ~balance-windows-area~.
   (bind-key "C-c w C-b" #'balance-windows-area)
 #+END_SRC
 
-Resizing a window by characters or pixels is slow. Resize windows in
+Resizing windows by characters or pixels is slow. Resize windows in
 steps.
 
 #+BEGIN_SRC emacs-lisp
