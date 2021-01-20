@@ -523,7 +523,7 @@ list of backends, see `company-backends'."
    ((company-indium-repl company-files :with company-yasnippet)))
   (koek-cpny/setup-backends geiser-mode geiser-repl-mode
    ((geiser-company-backend company-files :with company-yasnippet)))
-  (koek-cpny/setup-backends scad-mode
+  (koek-cpny/setup-backends makefile-mode scad-mode
    ((company-dabbrev-code company-files :with company-yasnippet)))
   (koek-cpny/setup-backends conf-mode
    ((company-dabbrev company-files :with company-yasnippet)))
@@ -2324,6 +2324,16 @@ Modes are confident about being derived from text-mode.")
   :mode (rx ".json" string-end)
   :config
   (bind-key "C-c d C-n" #'koek-dl/lookup-npm 'json-mode-map))
+
+(use-package make-mode
+  :mode ((rx "/Makefile" string-end) . makefile-gmake-mode)
+  :delight
+  (makefile-mode "Make" :major)
+  (makefile-automake-mode "Automake" :major)
+  (makefile-bsdmake-mode "BSDMake" :major)
+  (makefile-gmake-mode "GMake" :major)
+  (makefile-imake-mode "IMake" :major)
+  (makefile-makepp-mode "Make++" :major))
 
 (use-package markdown-mode
   :straight t

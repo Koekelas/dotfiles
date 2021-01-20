@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Make code block
+# key: smake
+# --
+#+BEGIN_SRC make
+$0
+#+END_SRC

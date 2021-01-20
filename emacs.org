@@ -770,7 +770,7 @@ When line is indented, press =TAB= to complete text before point.
      ((company-indium-repl company-files :with company-yasnippet)))
     (koek-cpny/setup-backends geiser-mode geiser-repl-mode
      ((geiser-company-backend company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends scad-mode
+    (koek-cpny/setup-backends makefile-mode scad-mode
      ((company-dabbrev-code company-files :with company-yasnippet)))
     (koek-cpny/setup-backends conf-mode
      ((company-dabbrev company-files :with company-yasnippet)))
@@ -1331,6 +1331,17 @@ Inherit Clojure snippets.
   # key: sjson
   # --
   ,#+BEGIN_SRC json
+  $0
+  ,#+END_SRC
+#+END_SRC
+
+*** Make code block
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/smake
+  # -*- mode: snippet; -*-
+  # name: Make code block
+  # key: smake
+  # --
+  ,#+BEGIN_SRC make
   $0
   ,#+END_SRC
 #+END_SRC
@@ -5580,6 +5591,19 @@ Configure conf-mode afterwards.
     :mode (rx ".json" string-end)
     :config
     (bind-key "C-c d C-n" #'koek-dl/lookup-npm 'json-mode-map))
+#+END_SRC
+
+** Make
+#+BEGIN_SRC emacs-lisp
+  (use-package make-mode
+    :mode ((rx "/Makefile" string-end) . makefile-gmake-mode)
+    :delight
+    (makefile-mode "Make" :major)
+    (makefile-automake-mode "Automake" :major)
+    (makefile-bsdmake-mode "BSDMake" :major)
+    (makefile-gmake-mode "GMake" :major)
+    (makefile-imake-mode "IMake" :major)
+    (makefile-makepp-mode "Make++" :major))
 #+END_SRC
 
 ** Markdown
