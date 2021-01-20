@@ -25,6 +25,8 @@
 
 ;; Emacs, X Window System and RandR
 
+;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
+
 ;;; Code:
 
 (require 'subr-x)
@@ -94,7 +96,6 @@
 
 (defun exar--decode-edid (bytes)
   (when bytes
-    ;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
     (let ((vendor-block   (seq-subseq bytes 8 18))
           (edid-block     (seq-subseq bytes 18 20))
           (basic-block    (seq-subseq bytes 20 25))
