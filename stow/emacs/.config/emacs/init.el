@@ -911,7 +911,7 @@ window."
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend)
-   ("C-c x f" . koek-wm/launch-firefox)))
+   ("C-c x C-f" . koek-wm/launch-firefox)))
 
 (use-package exwm-input
   :defer t
@@ -975,7 +975,8 @@ Keybinding is a string, see `edmacro-mode'.")
                   ("s-x" . counsel-linux-app)
                   ("s-q" . bury-buffer)
                   ("s-d" . kill-current-buffer)
-                  ("<f11>" . exwm-layout-toggle-fullscreen))))
+                  ("<f11>" . exwm-layout-toggle-fullscreen)
+                  ("s-C-f" . koek-wm/launch-firefox))))
 
   ;; Translate Emacs to non Emacs keybindings in line mode
   (setq exwm-input-simulation-keys
