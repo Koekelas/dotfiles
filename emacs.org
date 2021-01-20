@@ -4278,9 +4278,21 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     :straight t
     :after bbdb
     :preface
-    (defun koek-bbdb/import-dir (file-name)
-      "Import vCards from directory FILE-NAME and its subdirectories."
-      (interactive "DvCard directory: ")
+    (defun koek-bbdb/import-dir (file-name &optional interactive)
+      "Import vCards from directory FILE-NAME and its subdirectories.
+  INTERACTIVE is used internally."
+      (interactive
+       (let ((file-name
+              (progn
+                (require 'bbdb-vcard)
+                (expand-file-name
+                 (read-directory-name
+                  "vCard directory: "
+                  (or (and (file-accessible-directory-p bbdb-vcard-default-dir)
+                           bbdb-vcard-default-dir)
+                      default-directory)
+                  nil t)))))
+         (list file-name 'interactive)))
       (require 'bbdb-vcard)
       (let* ((file-names
               (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
@@ -4293,8 +4305,9 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
              (records
               (bbdb-vcard-iterate-vcards #'bbdb-vcard-import-vcard vcards))
              (n-records (length records)))
-        (message "%d %s imported"
-                 n-records (or (and (= n-records 1) "vCard") "vCards"))))
+        (when interactive
+          (message "%d %s imported"
+                   n-records (or (and (= n-records 1) "vCard") "vCards")))))
     :config
     ;; Contacts sharing a landline telephone aren't duplicates
     (setq bbdb-vcard-try-merge nil))
