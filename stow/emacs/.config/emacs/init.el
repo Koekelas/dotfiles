@@ -701,9 +701,12 @@ name."
 
 (use-package paren-face
   :straight t
+  :hook
+  ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode
+    emacs-lisp-mode lisp-interaction-mode scheme-mode geiser-repl-mode) .
+   paren-face-mode)
   :config
-  (setq paren-face-regexp (rx (any "()[]{}")))
-  (global-paren-face-mode))
+  (setq paren-face-regexp (rx (any "()[]{}"))))
 
 (use-package hl-line
   :hook ((prog-mode conf-mode) . hl-line-mode))
