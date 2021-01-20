@@ -86,7 +86,7 @@
 (defun exar--decode-manufacturer (bytes)
   (let ((base (expt 2 5))
         (n (exar--decode-int bytes))
-        (chars ()))
+        (chars nil))
     (while (> n 0)
       (push (+ (1- ?A) (% n base)) chars)
       (setq n (/ n base)))
@@ -206,7 +206,7 @@
                        (when-let ((edid (exar--get-in props :edid :id)))
                          (push (cons edid id) ids))
                        ids)
-                     outputs ())))
+                     outputs nil)))
     (mapcar (pcase-lambda (`(,id . ,props))
               (cons id
                     (append (list :id id) props

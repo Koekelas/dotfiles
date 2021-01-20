@@ -2330,7 +2330,7 @@ NAME is a string, the variable's name."
       cdr))
 
   ;; Evaluate code blocks in buffer after confirmation
-  (let ((whitelist ()))
+  (let ((whitelist nil))
     (setq org-confirm-babel-evaluate
           (lambda (_language _body)
             ;; A reference to a buffer is a good id but would storing
