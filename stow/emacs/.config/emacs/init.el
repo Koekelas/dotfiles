@@ -702,9 +702,6 @@ name."
   :config
   (setq paren-face-regexp (rx (any "()[]{}"))))
 
-(use-package hl-line
-  :hook ((prog-mode conf-mode) . hl-line-mode))
-
 (setq window-resize-pixelwise t)
 
 (unbind-key "C-z")
