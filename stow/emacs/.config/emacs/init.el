@@ -2640,7 +2640,7 @@ Mustn't be called directly, see
        "-id" ,(frame-parameter frame 'outer-window-id)
        "-f" "_GTK_THEME_VARIANT" "8u"
        "-set" "_GTK_THEME_VARIANT"
-       ,(or (and (member (car custom-enabled-themes) koek-thm/dark-themes) "dark")
+       ,(or (and (memq (car custom-enabled-themes) koek-thm/dark-themes) "dark")
             "")))))
 
 (defun koek-thm/update-frame-theme-variant ()
@@ -2821,7 +2821,7 @@ internally."
                       (nth n exwm-workspace--workareas)))
       (mapcar #'cdr)
       (seq-find (lambda (ns)
-                  (member exwm-workspace-current-index ns)))
+                  (memq exwm-workspace-current-index ns)))
       (mapcar (lambda (n)
                 (list :n n :label (or (koek-ml/arabic-to-roman n) "N"))))))
 
