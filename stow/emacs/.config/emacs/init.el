@@ -1888,7 +1888,10 @@ playing track, else, enqueue after last track."
    :map c++-mode-map
    ("C-c d d" . koek-dl/lookup-cpp)
    :map java-mode-map
-   ("C-c d d" . koek-dl/lookup-openjdk)))
+   ("C-c d d" . koek-dl/lookup-openjdk))
+
+  ;; Resolve keybinding conflict with company
+  (unbind-key "TAB" c-mode-base-map))
 
 (use-package cc-cmds
   :defer t
