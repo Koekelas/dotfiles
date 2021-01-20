@@ -2395,6 +2395,8 @@ Modes are confident about being derived from text-mode.")
   (setq org-startup-with-latex-preview t)
   (setq org-preview-latex-image-directory
         (no-littering-expand-var-file-name "org/latex-previews/"))
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :scale (/ 4 3.0)))
   :delight org-cdlatex-mode)
 
 (use-package org-agenda
