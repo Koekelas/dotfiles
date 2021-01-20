@@ -81,7 +81,7 @@ preparation, nil."
 ;;;###autoload
 (define-minor-mode prepcast-mode
   "Prepare for screencasting."
-  :global t
+  :global t :lighter " Prep"
   (if prepcast-mode
       (unless prepcast--unprep-fs
         (setq prepcast--unprep-fs
