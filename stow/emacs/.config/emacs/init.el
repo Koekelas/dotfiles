@@ -1279,6 +1279,8 @@ N is an integer, a workspace number."
 (use-package eldoc
   :straight t
   :defer t
+  :config
+  (setq eldoc-echo-area-use-multiline-p nil)
   :delight)
 
 (use-package which-key

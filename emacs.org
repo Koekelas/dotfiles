@@ -3923,6 +3923,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
   (use-package eldoc
     :straight t
     :defer t
+    :config
+    (setq eldoc-echo-area-use-multiline-p nil)
     :delight)
 #+END_SRC
 
