@@ -3780,7 +3780,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
           (append counsel-projectile-key-bindings
                   `((,(kbd "C-p") . counsel-projectile-switch-project)
                     (,(kbd "p")   . counsel-projectile))))
-
     (counsel-projectile-mode))
 #+END_SRC
 

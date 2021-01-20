@@ -1185,7 +1185,6 @@ N is an integer, a workspace number."
         (append counsel-projectile-key-bindings
                 `((,(kbd "C-p") . counsel-projectile-switch-project)
                   (,(kbd "p")   . counsel-projectile))))
-
   (counsel-projectile-mode))
 
 (use-package help-mode
