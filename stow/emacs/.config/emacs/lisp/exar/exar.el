@@ -296,8 +296,7 @@
 
 (defun exar-insert-edid (output)
   (interactive
-   (list
-    (let ((candidates
+   (let* ((candidates
            (mapcar
             (lambda (output)
               (let* ((props (cdr output))
@@ -319,8 +318,11 @@
                            (concat " " (string-join monitor-names " ")))
                          (concat " connected to " output-name))
                  output)))
-            (exar--get-connected-outputs (exar--get-outputs)))))
-      (cdr (assoc (completing-read "Monitor: " candidates nil t) candidates)))))
+            (exar--get-connected-outputs (exar--get-outputs))))
+          (output
+           (cdr
+            (assoc (completing-read "Monitor: " candidates nil t) candidates))))
+     (list output)))
   (insert (exar--get-in (cdr output) :edid :id)))
 
 ;;;###autoload
