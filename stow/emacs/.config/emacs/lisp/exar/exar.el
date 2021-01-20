@@ -25,6 +25,7 @@
 
 ;; Emacs, X Window System and RandR
 
+;; https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt
 ;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
 
 ;;; Code:
