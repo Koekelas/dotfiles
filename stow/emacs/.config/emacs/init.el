@@ -1837,6 +1837,9 @@ playing track, else, enqueue after last track."
     (interactive)
     (koek-bngo/dired-enqueue-dwim t))
   :config
+  ;; Resolve keybinding conflict with wdired
+  (unbind-key "SPC" bongo-dired-library-mode-map)
+
   (bind-keys
    ("C-c k k" . koek-bngo/play-pause)
    :map bongo-dired-library-mode-map
