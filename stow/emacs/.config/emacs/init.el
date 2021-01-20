@@ -153,7 +153,7 @@ When FORCE is truthy, continue commit unconditionally."
   :preface
   (defun koek-diff/unfold-outline ()
     "Unfold outline in outline and derived modes."
-    (when (derived-mode-p 'outline-mode) ; org is derived from outline
+    (when (derived-mode-p 'outline-mode) ; org-mode derives from outline-mode
       (outline-show-all)))
   :config
   ;; Restore window layout on quit
@@ -2618,7 +2618,8 @@ TITLE is a string, a note title."
   (run-hooks 'koek-thm/load-hook))
 
 (defvar koek-thm/dark-themes nil
-  "List of theme symbols, see `koek-thm/set-frame-theme-variant'.")
+  "List of theme symbols.
+Themes are dark themes.")
 
 (defun koek-thm/set-frame-theme-variant (frame)
   "Set theme variant of FRAME.
