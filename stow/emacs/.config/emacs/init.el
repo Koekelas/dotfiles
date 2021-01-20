@@ -906,18 +906,12 @@ window."
     (make-process
      :name "firefox"
      :command `("firefox" ,(or (and arg "--private-window") "--new-window"))))
-
-  (defun koek-wm/launch-pavc ()
-    "Launch PulseAudio Volume Control."
-    (interactive)
-    (make-process :name "pavc" :command '("pavucontrol")))
   :config
   ;; Only when package is loaded
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend)
-   ("C-c x f" . koek-wm/launch-firefox)
-   ("C-c x p" . koek-wm/launch-pavc)))
+   ("C-c x f" . koek-wm/launch-firefox)))
 
 (use-package exwm-input
   :defer t
