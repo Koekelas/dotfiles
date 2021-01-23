@@ -3261,6 +3261,8 @@ Bury unneeded buffers, computers have more than enough memory.
             "Firefox" (or exwm-title "Firefox")))
           ((string-prefix-p "microsoft teams" class)
            "Teams")
+          ((string-prefix-p "vlc" class)
+           "VLC")
           (t
            exwm-class-name)))))
 

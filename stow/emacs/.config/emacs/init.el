@@ -1035,6 +1035,8 @@ Keybinding is a string, see `edmacro-mode'.")
           "Firefox" (or exwm-title "Firefox")))
         ((string-prefix-p "microsoft teams" class)
          "Teams")
+        ((string-prefix-p "vlc" class)
+         "VLC")
         (t
          exwm-class-name)))))
 
