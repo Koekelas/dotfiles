@@ -3316,7 +3316,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
           '((:name "Home (primary) and laptop"
              :monitors
              (:home (:top 0 :left 1920 :width 1920 :height 1080)
-              :laptop (:top 0 :left 0 :width 1920 :height 1080 :workspaces (1 5))))
+              :laptop (:top 0 :left 0 :width 1920 :height 1080 :workspaces (1 6))))
             (:name "Home"
              :monitors (:home (:top 0 :left 0 :width 1920 :height 1080)))
             (:name "Laptop"
