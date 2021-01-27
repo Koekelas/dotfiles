@@ -3623,7 +3623,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
   (let ((layout (current-window-configuration)))
     (org-agenda-list)
     (set-window-configuration layout))
-  (get-buffer "*Org Agenda*"))
+  org-agenda-buffer)
 
 (setq initial-buffer-choice #'koek/get-initial-buffer)
 
