@@ -4,8 +4,7 @@
 
 (push '(fullscreen . maximized) default-frame-alist)
 
-;; Prefer setting frame parameters to disabling menu-bar-mode,
-;; tool-bar-mode and scroll-bar-mode during early initialization
+;; Prefer setting frame parameters to disabling modes
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
