@@ -2914,7 +2914,7 @@ A dummy prevents a package from modifying the mode line.")
             (concat (propertize (plist-get koek-ml/variant :label)
                                 'face 'koek-diff/variant)
                     (when-let ((state (plist-get koek-ml/variant :state)))
-                      (concat ":" state)))
+                      (concat " " state)))
             nil 'up)
           koek-ml/separator)))
     "Ediff mode line construct.")
@@ -3121,7 +3121,7 @@ checkers)."
              (concat name " "))
           ,(pcase (koek-ml/get-flymake-state)
              (`running
-              "- -")
+              "-;-")
              (`finished
               (let ((n-diags (koek-ml/get-flymake-n-diags)))
                 (mapconcat
@@ -3129,7 +3129,7 @@ checkers)."
                    (propertize
                     (number-to-string (alist-get cat n-diags 0))
                     'face (flymake--lookup-type-property cat 'mode-line-face)))
-                 '(flymake-error flymake-warning) " ")))
+                 '(flymake-error flymake-warning) ";")))
              (state
               (koek-ml/state-to-description state))))))
     "Flymake mode line construct.")
@@ -3225,10 +3225,10 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
                      "empty")))
              (state (concat diff
                             (when (and diff merge)
-                              ":")
+                              ";")
                             merge
                             (when (and (or diff merge) ancestor)
-                              ":")
+                              ";")
                             ancestor)))
         (unless (string-empty-p state)
           state))))
