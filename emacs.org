@@ -5978,8 +5978,8 @@ Plex]] for variable pitch.
                (let ((families (seq-uniq (font-family-list))))
                  (seq-find
                   (lambda (pair)
-                    (seq-every-p (lambda (attrs)
-                                   (member (plist-get attrs :family) families))
+                    (seq-every-p (lambda (spec)
+                                   (member (plist-get spec :family) families))
                                  pair))
                   koek-font/pairs)))
               (fixed (car pair))
