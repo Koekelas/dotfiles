@@ -3588,7 +3588,7 @@ When optional FULL is truthy, return absolute file names."
       ("krtwood" youtube "UCrI3NWmFF45LwKwk5TEYihQ" woodwork)
       ("scanlime" youtube "UCaEgw3321ct_PE4PJvdhXEQ" electronics))
     "List of news feeds.
-A news feed is a list of format:
+A news feed is a list of form:
 
 '(\"title\" \"url\" tag-1 tag-2 tag-n) or
 '(\"title\" reddit \"id\" tag-1 tag-2 tag-n) or
