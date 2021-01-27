@@ -3121,7 +3121,7 @@ checkers)."
              (concat name " "))
           ,(pcase (koek-ml/get-flymake-state)
              (`running
-              "-;-")
+              "-;-;-")
              (`finished
               (let ((n-diags (koek-ml/get-flymake-n-diags)))
                 (mapconcat
@@ -3129,7 +3129,7 @@ checkers)."
                    (propertize
                     (number-to-string (alist-get cat n-diags 0))
                     'face (flymake--lookup-type-property cat 'mode-line-face)))
-                 '(flymake-error flymake-warning) ";")))
+                 '(flymake-error flymake-warning flymake-note) ";")))
              (state
               (koek-ml/state-to-description state))))))
     "Flymake mode line construct.")
