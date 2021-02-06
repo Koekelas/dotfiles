@@ -3019,7 +3019,7 @@ maximum length of S."
     '(:eval
       (moody-tab
        (concat
-        (when (and koek-ml/project-spec (derived-mode-p 'prog-mode))
+        (when (and koek-ml/project-spec (derived-mode-p 'prog-mode 'conf-mode))
           (concat (koek-ml/truncate (plist-get koek-ml/project-spec :name) 16) "/"))
         (propertize (koek-ml/truncate (buffer-name) 32)
                     'face 'mode-line-buffer-id))))
