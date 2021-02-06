@@ -721,6 +721,8 @@ name."
  ("C-c w C-d" . delete-other-windows)
  ("C-c w M-d" . kill-buffer-and-window))
 
+(bind-key "C-c w C-b" #'balance-windows-area)
+
 (defvar koek-wind/n-hor-steps 32
   "Number of horizontal steps to resize a window from monitor width to zero.")
 

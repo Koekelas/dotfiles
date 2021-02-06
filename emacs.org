@@ -2894,6 +2894,16 @@ cumbersome window commands.
    ("C-c w M-d" . kill-buffer-and-window))
 #+END_SRC
 
+Unlike ~balance-windows~, which divides the width and height equally,
+~balance-windows-area~ divides the area equally. It produces identical
+results for simple configurations (e.g. one left and one right) but
+different results for complex configurations (e.g. one left and two
+above each other right). Bind ~balance-windows-area~.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-key "C-c w C-b" #'balance-windows-area)
+#+END_SRC
+
 Resizing a window by characters or pixels is slow. Resize windows in
 steps.
 
