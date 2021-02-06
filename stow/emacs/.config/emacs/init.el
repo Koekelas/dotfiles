@@ -772,7 +772,8 @@ vertically, else, shrink horizontally."
       (:around (f &rest args) koek-ace/disable-setup-mode-line)
     (let ((format (default-value 'mode-line-format)))
       (apply f args)
-      (setq-default mode-line-format format)))
+      (setq-default mode-line-format format)
+      (force-mode-line-update 'all)))
   :config
   (setq aw-scope 'frame)
   (setq aw-swap-invert t)
@@ -1892,7 +1893,8 @@ playing track, else, enqueue after last track."
       (:around (f) koek-cc/disable-update-mode-name)
     (let ((name mode-name))
       (funcall f)
-      (setq mode-name name))))
+      (setq mode-name name)
+      (force-mode-line-update))))
 
 (use-package cc-vars
   :defer t
