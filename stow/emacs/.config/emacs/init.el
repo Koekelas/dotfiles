@@ -156,25 +156,19 @@ When FORCE is truthy, continue commit unconditionally."
     (when (derived-mode-p 'outline-mode) ; org-mode derives from outline-mode
       (outline-show-all)))
   :config
-  ;; Restore window layout on quit
-  (let (last-layout)
-    ;; Store window layout before it's modified. Control buffer
-    ;; doesn't exist yet.
-    (add-hook 'ediff-before-setup-hook
-              (lambda ()
-                (setq last-layout (current-window-configuration))))
-    ;; Store window layout in a local hook of control buffer. Current
-    ;; is control buffer.
-    (add-hook 'ediff-mode-hook
-              (lambda ()
-                (let ((layout last-layout))
-                  ;; Restore window layout
-                  (add-hook 'ediff-quit-hook
-                            (lambda ()
-                              (set-window-configuration layout))
-                            'append 'local)))))
-
   (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
+
+(use-package ediff-util
+  :defer t
+  :preface
+  (define-advice ediff-setup
+      (:around (f &rest args) koek-diff/setup-restore-window-config)
+    (let ((config (current-window-configuration)))
+      (with-current-buffer (apply f args)
+        (add-hook 'ediff-quit-hook
+                  (lambda ()
+                    (set-window-configuration config))
+                  'append 'local)))))
 
 (use-package ediff-wind
   :defer t
