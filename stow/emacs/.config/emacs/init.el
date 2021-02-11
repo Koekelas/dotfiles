@@ -163,12 +163,14 @@ When FORCE is truthy, continue commit unconditionally."
   :preface
   (define-advice ediff-setup
       (:around (f &rest args) koek-diff/setup-restore-window-config)
-    (let ((config (current-window-configuration)))
-      (with-current-buffer (apply f args)
+    (let ((config (current-window-configuration))
+          (control-buffer (apply f args)))
+      (with-current-buffer control-buffer
         (add-hook 'ediff-quit-hook
                   (lambda ()
                     (set-window-configuration config))
-                  'append 'local)))))
+                  'append 'local))
+      control-buffer)))
 
 (use-package ediff-wind
   :defer t
