@@ -1609,12 +1609,13 @@ line."
     (require 'eww)
     (thread-last entries
       (mapcar (lambda (entry)
-                (with-current-buffer
-                    (generate-new-buffer
-                     (format "*eww: %s*" (elfeed-entry-title entry)))
-                  (eww-mode)
-                  (eww (elfeed-entry-link entry))
-                  (current-buffer))))
+                (let ((buffer
+                       (generate-new-buffer
+                        (format "*eww: %s*" (elfeed-entry-title entry)))))
+                  (with-current-buffer buffer
+                    (eww-mode)
+                    (eww (elfeed-entry-link entry)))
+                  buffer)))
       (mapc #'pop-to-buffer-same-window)))
 
   (defun koek-feed/visit-dwim ()
@@ -1882,10 +1883,11 @@ INTERACTIVE is used internally."
   ;; Disable banner
   (define-advice bongo-default-playlist-buffer
       (:override () koek-bngo/get-default-playlist-buffer)
-    (with-current-buffer (get-buffer-create bongo-default-playlist-buffer-name)
-      (unless (derived-mode-p 'bongo-playlist-mode)
-        (bongo-playlist-mode))
-      (current-buffer)))
+    (let ((buffer (get-buffer-create bongo-default-playlist-buffer-name)))
+      (with-current-buffer buffer
+        (unless (derived-mode-p 'bongo-playlist-mode)
+          (bongo-playlist-mode)))
+      buffer))
 
   (defun koek-bngo/play-pause ()
     "Pause or resume playback.
