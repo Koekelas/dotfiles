@@ -454,9 +454,8 @@ Upgrade case commands.
 #+END_SRC
 
 ** Word motion commands
-Complement word motion commands. Unlike ~forward-to-word~ and
-~backward-to-word~, ~koek-mtn/next-word~ and ~koek-mtn/previous-word~
-recognize [[*subword - Recognize words in camel case words][subwords]].
+Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
+~koek-mtn/previous-word~ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 #+BEGIN_SRC emacs-lisp
   (defun koek-mtn/next-word (&optional arg)
