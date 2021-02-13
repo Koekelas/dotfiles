@@ -267,6 +267,9 @@ VC is a placeholder.
   (use-package ediff-util
     :defer t
     :preface
+    ;; `ediff-before-setup-hook' is too early, the control buffer is not
+    ;; yet created. `ediff-startup-hook' is too late, the window
+    ;; configuration was already modified.
     (define-advice ediff-setup
         (:around (f &rest args) koek-diff/setup-restore-window-config)
       (let ((config (current-window-configuration))
