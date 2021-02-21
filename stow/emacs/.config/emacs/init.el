@@ -3207,7 +3207,7 @@ checkers)."
         'no-checker))))
 
   (defun koek-ml/get-flymake-n-diags ()
-    "Return number of diagnosis per type of error."
+    "Return number of diagnoses per error type."
     (thread-last (hash-table-values flymake--backend-state)
       (seq-mapcat #'flymake--backend-state-diags)
       (seq-group-by (lambda (diag)
