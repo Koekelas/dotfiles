@@ -8,6 +8,7 @@
 
 (require 'subr-x)
 (require 'seq)
+(require 'xdg)
 
 (require 'nsm)
 
@@ -1472,10 +1473,9 @@ none return a URL, nil.  For redirect functions, see
 (use-package mu4e-vars
   :defer t
   :config
-  (let ((config
-         (expand-file-name "isync/mbsyncrc"
-                           (or (getenv "XDG_CONFIG_HOME") "~/.config/"))))
-    (setq mu4e-get-mail-command (format "mbsync -c %s -a" config)))
+  (setq mu4e-get-mail-command
+        (format "mbsync -c %s -a"
+                (expand-file-name "isync/mbsyncrc" (xdg-config-home))))
   ;; When moving e-mail, isync expects them to be renamed
   (setq mu4e-change-filenames-when-moving t)
 
@@ -3459,9 +3459,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
   :koek t
   :after exwm
   :config
-  (let ((icc-dir
-         (expand-file-name "icc/"
-                           (or (getenv "XDG_DATA_HOME") "~/.local/share/"))))
+  (let ((icc-dir (expand-file-name "icc/" (xdg-data-home))))
     (setq exar-monitors
           `(:laptop (:edid "0x06af3d13000000002617" :name "Laptop"
                      :color ,(expand-file-name "laptop.icc" icc-dir))
