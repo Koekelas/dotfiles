@@ -6276,7 +6276,9 @@ early initialization reduces startup time.
   (push '(vertical-scroll-bars . nil) default-frame-alist)
 #+END_SRC
 
-Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
+Parts of this configuration need to act on theme changes and need to
+know the theme variant, whether a theme is a light or a dark theme.
+Define theme infrastructure.
 
 #+BEGIN_SRC emacs-lisp
   (defvar koek-thm/enable-hook nil
@@ -6289,10 +6291,21 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
     "List of theme symbols.
   Themes are dark themes.")
 
+  (defun koek-thm/darkp (&optional theme)
+    "Return whether THEME is a dark theme.
+  Optional THEME is a symbol, the theme to interrogate and defaults
+  to the current theme."
+    (memq (or theme (car custom-enabled-themes)) koek-thm/dark-themes))
+#+END_SRC
+
+Match frame theme variant, the window decoration theme variant, with
+current theme.
+
+#+BEGIN_SRC emacs-lisp
   (defun koek-thm/set-frame-theme-variant (frame)
     "Set theme variant of FRAME.
-  When current theme is member of `koek-thm/dark-themes', set frame
-  theme variant to dark, else, clear frame theme variant."
+  When current theme is a dark theme, set frame theme variant to
+  dark, else, clear frame theme variant."
     (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
       (koek-thm/set-frame-theme-variant-xprop frame)))
 
@@ -6307,8 +6320,7 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
        `("xprop"
          "-id" ,(frame-parameter frame 'outer-window-id)
          "-f" "_GTK_THEME_VARIANT" "8u"
-         "-set" "_GTK_THEME_VARIANT"
-         ,(if (memq (car custom-enabled-themes) koek-thm/dark-themes) "dark" "")))))
+         "-set" "_GTK_THEME_VARIANT" ,(if (koek-thm/darkp) "dark" "")))))
 
   (defun koek-thm/update-frame-theme-variant ()
     "Update theme variant of all frames."
@@ -6316,11 +6328,15 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
 
   (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
   (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant)
+#+END_SRC
 
+Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
+
+#+BEGIN_SRC emacs-lisp
   (use-package modus-themes
     :straight t
     :preface
-    (defun koek-thm/load-modus (variant)
+    (defun koek-mt/load (variant)
       "Load and enable Modus theme variant VARIANT.
   VARIANT is a symbol, the Modus theme variant, either operandi or
   vivendi."
@@ -6346,13 +6362,13 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
       ;; After user theme
       (run-hooks 'koek-thm/enable-hook))
 
-    (defun koek-thm/toggle-modus-variant ()
+    (defun koek-mt/toggle-variant ()
       "Toggle Modus theme variant."
       (interactive)
-      (koek-thm/load-modus
+      (koek-mt/load
        (if (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi 'operandi)))
     :init
-    (bind-key "C-c z t" #'koek-thm/toggle-modus-variant)
+    (bind-key "C-c z t" #'koek-mt/toggle-variant)
 
     (setq modus-themes-bold-constructs t)
     (setq modus-themes-slanted-constructs t)
@@ -6364,7 +6380,7 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
     :config
     (setq face-near-same-color-threshold 45000)
     (push 'modus-vivendi koek-thm/dark-themes)
-    (koek-thm/load-modus 'vivendi))
+    (koek-mt/load 'vivendi))
 #+END_SRC
 
 Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM

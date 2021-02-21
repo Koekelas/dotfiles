@@ -2866,10 +2866,16 @@ TITLE is a string, a note title."
   "List of theme symbols.
 Themes are dark themes.")
 
+(defun koek-thm/darkp (&optional theme)
+  "Return whether THEME is a dark theme.
+Optional THEME is a symbol, the theme to interrogate and defaults
+to the current theme."
+  (memq (or theme (car custom-enabled-themes)) koek-thm/dark-themes))
+
 (defun koek-thm/set-frame-theme-variant (frame)
   "Set theme variant of FRAME.
-When current theme is member of `koek-thm/dark-themes', set frame
-theme variant to dark, else, clear frame theme variant."
+When current theme is a dark theme, set frame theme variant to
+dark, else, clear frame theme variant."
   (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
     (koek-thm/set-frame-theme-variant-xprop frame)))
 
@@ -2884,8 +2890,7 @@ Mustn't be called directly, see
      `("xprop"
        "-id" ,(frame-parameter frame 'outer-window-id)
        "-f" "_GTK_THEME_VARIANT" "8u"
-       "-set" "_GTK_THEME_VARIANT"
-       ,(if (memq (car custom-enabled-themes) koek-thm/dark-themes) "dark" "")))))
+       "-set" "_GTK_THEME_VARIANT" ,(if (koek-thm/darkp) "dark" "")))))
 
 (defun koek-thm/update-frame-theme-variant ()
   "Update theme variant of all frames."
@@ -2897,7 +2902,7 @@ Mustn't be called directly, see
 (use-package modus-themes
   :straight t
   :preface
-  (defun koek-thm/load-modus (variant)
+  (defun koek-mt/load (variant)
     "Load and enable Modus theme variant VARIANT.
 VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
@@ -2923,13 +2928,13 @@ vivendi."
     ;; After user theme
     (run-hooks 'koek-thm/enable-hook))
 
-  (defun koek-thm/toggle-modus-variant ()
+  (defun koek-mt/toggle-variant ()
     "Toggle Modus theme variant."
     (interactive)
-    (koek-thm/load-modus
+    (koek-mt/load
      (if (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi 'operandi)))
   :init
-  (bind-key "C-c z t" #'koek-thm/toggle-modus-variant)
+  (bind-key "C-c z t" #'koek-mt/toggle-variant)
 
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-slanted-constructs t)
@@ -2941,7 +2946,7 @@ vivendi."
   :config
   (setq face-near-same-color-threshold 45000)
   (push 'modus-vivendi koek-thm/dark-themes)
-  (koek-thm/load-modus 'vivendi))
+  (koek-mt/load 'vivendi))
 
 (defvar koek-font/pairs
   '(((:family "PragmataPro Mono Liga" :height 110)
