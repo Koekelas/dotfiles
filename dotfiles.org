@@ -364,7 +364,10 @@ To apply configuration, run:
   wolfram-mathematica11.desktop
 #+END_SRC
 
-* Bash :wip:
+* Bash :setup:wip:
+#+BEGIN_SRC sh
+  mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/bash"
+#+END_SRC
 
 ** Login
 :PROPERTIES:
@@ -381,7 +384,7 @@ Interactive and non interactive
   [[ -f ~/.bashrc ]] && . ~/.bashrc
 #+END_SRC
 
-** Interactive :setup:
+** Interactive
 :PROPERTIES:
 :header-args:sh: :tangle stow/bash/.bashrc
 :END:
@@ -390,10 +393,6 @@ Non login
 
 #+BEGIN_SRC sh
   [[ $- != *i* ]] && return
-#+END_SRC
-
-#+BEGIN_SRC sh :tangle no
-  mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/bash"
 #+END_SRC
 
 #+BEGIN_SRC sh
