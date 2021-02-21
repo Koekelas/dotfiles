@@ -186,11 +186,20 @@ disable turning off monitors.
   xset s off
 #+END_SRC
 
-Launch [[*picom][picom]] and [[*xsettingsd][xsettingsd]].
+Launch [[*picom][picom]].
 
 #+BEGIN_SRC sh
   picom &
-  xsettingsd -c "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd" &
+#+END_SRC
+
+Launch [[*xsettingsd][xsettingsd]].
+
+#+BEGIN_SRC sh
+  xsettingsd_preset_file="${XDG_DATA_HOME:-$HOME/.local/share}/xsettingsd/presets/dark"
+  xsettingsd_config_file="${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd"
+
+  ln -sf "$xsettingsd_preset_file" "$xsettingsd_config_file" \
+      && xsettingsd -c "$xsettingsd_config_file" &
 #+END_SRC
 
 Set SSH agent.
@@ -232,11 +241,7 @@ Ignore system configuration.
   # Intentionally empty
 #+END_SRC
 
-** xsettingsd
-:PROPERTIES:
-:header-args:conf: :tangle stow/xsettingsd/.config/xsettingsd/xsettingsd
-:END:
-
+** xsettingsd :setup:
 For settings, see [[https://www.freedesktop.org/wiki/Specifications/XSettingsRegistry/][XSETTINGS registry (freedesktop)]]. To dump the
 settings of the running XSETTINGS daemon (e.g. GNOME Settings Daemon),
 run:
@@ -245,10 +250,46 @@ run:
   dump_xsettings
 #+END_SRC
 
+To create the configuration directory, run:
+
+#+BEGIN_SRC sh
+  mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd"
+#+END_SRC
+
+*** Common
+:PROPERTIES:
+:header-args:conf: :noweb-ref xsettingsd-common
+:END:
+
 Disable blink cursor.
 
 #+BEGIN_SRC conf
   Net/CursorBlink 0
+#+END_SRC
+
+*** Themes
+Configure a light and a dark theme. For theme names, see [[file:/usr/share/themes][theme
+directory]].
+
+#+BEGIN_SRC conf :noweb-ref xsettingsd-light-theme
+  Net/ThemeName "Adwaita"
+#+END_SRC
+
+#+BEGIN_SRC conf :noweb-ref xsettingsd-dark-theme
+  Net/ThemeName "Adwaita-dark"
+#+END_SRC
+
+*** Presets
+Combine common and theme configuration into a light and a dark preset.
+
+#+BEGIN_SRC conf :tangle stow/xsettingsd/.local/share/xsettingsd/presets/light :noweb no-export
+  <<xsettingsd-common>>
+  <<xsettingsd-light-theme>>
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/xsettingsd/.local/share/xsettingsd/presets/dark :noweb no-export
+  <<xsettingsd-common>>
+  <<xsettingsd-dark-theme>>
 #+END_SRC
 
 * GNOME catgen :setup:

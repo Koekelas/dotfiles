@@ -2,7 +2,12 @@ xset -dpms
 xset s off
 
 picom &
-xsettingsd -c "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd" &
+
+xsettingsd_preset_file="${XDG_DATA_HOME:-$HOME/.local/share}/xsettingsd/presets/dark"
+xsettingsd_config_file="${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd/xsettingsd"
+
+ln -sf "$xsettingsd_preset_file" "$xsettingsd_config_file" \
+    && xsettingsd -c "$xsettingsd_config_file" &
 
 eval $(gnome-keyring-daemon -s)
 export SSH_AUTH_SOCK
