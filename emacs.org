@@ -3962,8 +3962,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
 - Clojure & ClojureScript: Clojure
 - Erlang: Erlang
 - HTML & CSS: HTML and CSS
-- JavaScript: JavaScript, DOM, DOM Events, jQuery, lodash, Node.js,
-  npm and Express
+- JavaScript: JavaScript, DOM, jQuery, lodash, Node.js, npm and
+  Express
 - Octave: Octave
 - Python: Python, NumPy, pandas, StatsModels, scikit-learn,
   scikit-image, TensorFlow and Matplotlib
@@ -3977,14 +3977,13 @@ On [[https://devdocs.io/][DevDocs]], enable:
     :preface
     (let ((specs '(("C"            . "c")
                    ("C++"          . "cpp")
-                   ("OpenJDK"      . "openjdk~11")
+                   ("OpenJDK"      . "openjdk~15")
                    ("Clojure"      . "clojure~1.10")
-                   ("Erlang"       . "erlang~21")
+                   ("Erlang"       . "erlang~24")
                    ("HTML"         . "html")
                    ("CSS"          . "css")
                    ("JavaScript"   . "javascript")
                    ("DOM"          . "dom")
-                   ("DOM Events"   . "dom_events")
                    ("jQuery"       . "jquery")
                    ("lodash"       . "lodash~4")
                    ("Node.js"      . "node")
@@ -3992,13 +3991,13 @@ On [[https://devdocs.io/][DevDocs]], enable:
                    ("Express"      . "express")
                    ("Octave"       . "octave")
                    ("Python"       . "python~3.9")
-                   ("NumPy"        . "numpy~1.19")
+                   ("NumPy"        . "numpy~1.20")
                    ("pandas"       . "pandas~1")
                    ("StatsModels"  . "statsmodels")
                    ("scikit-learn" . "scikit_learn")
                    ("scikit-image" . "scikit_image")
-                   ("TensorFlow"   . "tensorflow~2.3")
-                   ("Matplotlib"   . "matplotlib~3.3")
+                   ("TensorFlow"   . "tensorflow~2.4")
+                   ("Matplotlib"   . "matplotlib~3.4")
                    ("PostgreSQL"   . "postgresql~13"))))
       (dolist (spec specs)
         (pcase-let* ((`(,name . ,id) spec)
@@ -5555,7 +5554,6 @@ Configure conf-mode afterwards.
      :map js-mode-map
      ("C-c d d" . koek-dl/lookup-javascript)
      ("C-c d C-d" . koek-dl/lookup-dom)
-     ("C-c d C-e" . koek-dl/lookup-dom-events)
      ("C-c d C-j" . koek-dl/lookup-jquery)
      ("C-c d C-l" . koek-dl/lookup-lodash)
      ("C-c d C-n" . koek-dl/lookup-node)
