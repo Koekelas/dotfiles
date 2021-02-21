@@ -4432,7 +4432,7 @@ load path before compiling the bongo integration. Configure bongo
 first.
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
-  <<bongo>>
+  <<bongo-config>>
 #+END_SRC
 
 Configure elfeed afterwards.
@@ -4832,7 +4832,7 @@ contrast, inserting and immediately enqueueing media from [[*dired - File manage
 joy. The idea is from [[https://protesilaos.com/codelog/2020-08-06-emacs-bongo-extras/][Bongo media manager and extras (Protesilaos
 Stavrou)]].
 
-#+BEGIN_SRC emacs-lisp :noweb-ref bongo :tangle no
+#+BEGIN_SRC emacs-lisp :noweb-ref bongo-config :tangle no
   (use-package bongo
     :straight t
     :bind
@@ -5419,7 +5419,7 @@ Conf-mode's mode declaration must precede over [[*Text][text-mode's]]. Configure
 text-mode first.
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
-  <<text-mode>>
+  <<text-mode-config>>
 #+END_SRC
 
 Configure conf-mode afterwards.
@@ -6199,7 +6199,7 @@ which requires AUCTeX.
 #+END_SRC
 
 ** Text
-#+BEGIN_SRC emacs-lisp :noweb-ref text-mode :tangle no
+#+BEGIN_SRC emacs-lisp :noweb-ref text-mode-config :tangle no
   (use-package text-mode
     :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
     :preface
