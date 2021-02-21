@@ -47,7 +47,7 @@ Then, set [[https://freedesktop.org/wiki/Software/xdg-user-dirs/][user directori
 
 Again, but as environment variables.
 
-#+BEGIN_SRC conf :tangle stow/xdg/.config/environment.d/10-user-dirs.conf :noweb yes
+#+BEGIN_SRC conf :tangle stow/xdg/.config/environment.d/10-user-dirs.conf :noweb no-export
   <<user-dirs>>
 #+END_SRC
 
