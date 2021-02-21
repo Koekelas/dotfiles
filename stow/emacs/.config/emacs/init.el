@@ -90,8 +90,7 @@ information, see `use-package-process-keywords'."
   (setq dired-recursive-deletes 'always)
   (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
          (unsafe (concat safe " --group-directories-first")))
-    (setq dired-listing-switches
-          (or (and (executable-find "ls") unsafe) safe))))
+    (setq dired-listing-switches (if (executable-find "ls") unsafe safe))))
 
 (use-package dired-aux
   :after dired
@@ -775,9 +774,7 @@ VERTICAL is truthy, resize vertically, else, resize
 horizontally."
   (let* ((width (nth 2 (frame-monitor-geometry)))
          (step (/ width koek-wind/n-hor-steps))
-         (delta (if shrink
-                    (* step -1)
-                  step)))
+         (delta (if shrink (* step -1) step)))
     (window-resize nil delta (not vertical) nil 'pixelwise)))
 
 (defun koek-wind/grow (&optional arg)
@@ -931,7 +928,7 @@ system."
     (interactive "P")
     (let ((kill-emacs-hook ; Dynamic variable, restore when kill is aborted
            (append kill-emacs-hook
-                   (list (or (and arg #'koek-wm/reboot) #'koek-wm/power-off)))))
+                   (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
       (save-buffers-kill-terminal)))
 
   (defun koek-wm/suspend ()
@@ -946,7 +943,7 @@ window."
     (interactive "P")
     (make-process
      :name "firefox"
-     :command `("firefox" ,(or (and arg "--private-window") "--new-window"))))
+     :command `("firefox" ,(if arg "--private-window" "--new-window"))))
   :config
   ;; Only when package is loaded
   (bind-keys
@@ -1649,9 +1646,9 @@ INTERACTIVE is used internally."
               (expand-file-name
                (read-directory-name
                 "vCard directory: "
-                (or (and (file-accessible-directory-p bbdb-vcard-default-dir)
-                         bbdb-vcard-default-dir)
-                    default-directory)
+                (if (file-accessible-directory-p bbdb-vcard-default-dir)
+                    bbdb-vcard-default-dir
+                  default-directory)
                 nil t)))))
        (list file-name 'interactive)))
     (require 'bbdb-vcard)
@@ -1668,7 +1665,7 @@ INTERACTIVE is used internally."
            (n-records (length records)))
       (when interactive
         (message "%d %s imported"
-                 n-records (or (and (= n-records 1) "vCard") "vCards")))))
+                 n-records (if (= n-records 1) "vCard" "vCards")))))
   :config
   ;; Contacts sharing a landline telephone aren't duplicates
   (setq bbdb-vcard-try-merge nil))
@@ -1719,7 +1716,7 @@ after last track."
     (with-temp-bongo-library-buffer
       (dolist (file-name file-names)
         (bongo-insert-file file-name))
-      (bongo-enqueue-region (or (and next 'insert) 'append)
+      (bongo-enqueue-region (if next 'insert 'append)
                             (point-min) (point-max)
                             'maybe-display-playlist)))
 
@@ -1816,7 +1813,7 @@ after last track."
       (dolist (entry entries)
         (bongo-insert-uri (elfeed-entry-link entry)
                           (elfeed-entry-title entry)))
-      (bongo-enqueue-region (or (and next 'insert) 'append)
+      (bongo-enqueue-region (if next 'insert 'append)
                             (point-min) (point-max)
                             'maybe-display-playlist)))
 
@@ -2208,9 +2205,9 @@ Modes are confident about being derived from text-mode.")
           '(:eval
             ;; When mode-name is evaluated during mode line update,
             ;; inhibit-mode-name-delight is unbound or false
-            (or (and (not (bound-and-true-p inhibit-mode-name-delight))
-                     (alist-get major-mode koek-conf/mode-names))
-                "Conf")))))
+            (if (not (bound-and-true-p inhibit-mode-name-delight))
+                (alist-get major-mode koek-conf/mode-names)
+              "Conf")))))
 
 (use-package elisp-mode
   :mode ((rx ".el" string-end) . emacs-lisp-mode)
@@ -2627,7 +2624,7 @@ nil, delete empty line at end of file."
 NAME is a string, the name of the person.  AGE is an integer, the
 age of the person.  _AGE-SUFFIX is ignored."
     (format "[[bbdb:%s][%s (%d %s old)]]"
-            name name age (or (and (= age 1) "year") "years")))
+            name name age (if (= age 1) "year" "years")))
   :config
   ;; BBDB anniversary (many, any type) and vCard ANNIVERSARY (one, any
   ;; type except birthday) aren't compatible, birthday and BDAY are
@@ -2888,8 +2885,7 @@ Mustn't be called directly, see
        "-id" ,(frame-parameter frame 'outer-window-id)
        "-f" "_GTK_THEME_VARIANT" "8u"
        "-set" "_GTK_THEME_VARIANT"
-       ,(or (and (memq (car custom-enabled-themes) koek-thm/dark-themes) "dark")
-            "")))))
+       ,(if (memq (car custom-enabled-themes) koek-thm/dark-themes) "dark" "")))))
 
 (defun koek-thm/update-frame-theme-variant ()
   "Update theme variant of all frames."
@@ -2907,9 +2903,8 @@ VARIANT is a symbol, the Modus theme variant, either operandi or
 vivendi."
     (pcase-let* ((koek-thm/enable-hook nil) ; Dynamic variable
                  (themes '(modus-operandi modus-vivendi))
-                 (`(,new ,old) (if (eq variant 'operandi)
-                                          themes
-                                        (reverse themes))))
+                 (`(,new ,old)
+                  (if (eq variant 'operandi) themes (reverse themes))))
       (when (custom-theme-enabled-p old)
         (disable-theme old))
       (unless (custom-theme-p new)
@@ -2932,8 +2927,7 @@ vivendi."
     "Toggle Modus theme variant."
     (interactive)
     (koek-thm/load-modus
-     (or (and (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi)
-         'operandi)))
+     (if (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi 'operandi)))
   :init
   (bind-key "C-c z t" #'koek-thm/toggle-modus-variant)
 
@@ -3354,8 +3348,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
         (let ((state (koek-ml/get-variant-state type)))
           (with-current-buffer buffer
             (setq koek-ml/variant
-                  (list :label (or (and (eq type 'Ancestor) "Anc")
-                                   (symbol-name type))
+                  (list :label (if (eq type 'Ancestor) "Anc" (symbol-name type))
                         :state state))
             (force-mode-line-update))))))
 
