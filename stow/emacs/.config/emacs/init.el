@@ -494,6 +494,46 @@ more strings, the delimiters that call the handler."
 
 (setq tab-always-indent 'complete)
 
+(use-package eglot
+  :straight t
+  :bind
+  (:map eglot-mode-map
+   ("C-c e f" . eglot-code-actions)
+   ("C-c e r" . eglot-rename))
+  :hook
+  ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js-mode json-mode python-mode) .
+   eglot-ensure)
+  :config
+  ;; Eclipse JDT Language Server lacks an executable. Eglot expects to
+  ;; find the jdtls launcher on the CLASSPATH environment variable.
+  (when-let
+      ((launcher-program-name
+        (thread-last '("/usr/share/java/jdtls/plugins/" "c:/bin/jdtls/plugins/")
+          (seq-filter #'file-exists-p)
+          (seq-mapcat (lambda (file-name)
+                        (directory-files file-name 'full
+                                         (rx "org.eclipse.equinox.launcher_"
+                                             (one-or-more (or alnum punct))
+                                             ".jar" line-end))))
+          car)))
+    (let ((paths (split-string (or (getenv "CLASSPATH") "") path-separator)))
+      (unless (member launcher-program-name paths)
+        (setenv "CLASSPATH"
+                (string-join (cons launcher-program-name paths)
+                             path-separator)))))
+
+  ;; Register additional language servers
+  (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs)
+  (push '(mhtml-mode . ("html-languageserver" "--stdio")) eglot-server-programs)
+  (push '(css-mode . ("css-languageserver" "--stdio")) eglot-server-programs)
+  (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
+
+(use-package xref
+  :straight t
+  :defer t
+  :config
+  (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
+
 (use-package company
   :straight t
   :bind
@@ -543,46 +583,6 @@ list of backends, see `company-backends'."
   :after company
   :config
   (company-flx-mode))
-
-(use-package eglot
-  :straight t
-  :bind
-  (:map eglot-mode-map
-   ("C-c e f" . eglot-code-actions)
-   ("C-c e r" . eglot-rename))
-  :hook
-  ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js-mode json-mode python-mode) .
-   eglot-ensure)
-  :config
-  ;; Eclipse JDT Language Server lacks an executable. Eglot expects to
-  ;; find the jdtls launcher on the CLASSPATH environment variable.
-  (when-let
-      ((launcher-program-name
-        (thread-last '("/usr/share/java/jdtls/plugins/" "c:/bin/jdtls/plugins/")
-          (seq-filter #'file-exists-p)
-          (seq-mapcat (lambda (file-name)
-                        (directory-files file-name 'full
-                                         (rx "org.eclipse.equinox.launcher_"
-                                             (one-or-more (or alnum punct))
-                                             ".jar" line-end))))
-          car)))
-    (let ((paths (split-string (or (getenv "CLASSPATH") "") path-separator)))
-      (unless (member launcher-program-name paths)
-        (setenv "CLASSPATH"
-                (string-join (cons launcher-program-name paths)
-                             path-separator)))))
-
-  ;; Register additional language servers
-  (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs)
-  (push '(mhtml-mode . ("html-languageserver" "--stdio")) eglot-server-programs)
-  (push '(css-mode . ("css-languageserver" "--stdio")) eglot-server-programs)
-  (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
-
-(use-package xref
-  :straight t
-  :defer t
-  :config
-  (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 
 (use-package abbrev
   :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
