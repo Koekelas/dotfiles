@@ -2996,7 +2996,7 @@ vivendi."
   (koek-mt/load 'vivendi))
 
 (defvar koek-font/pairs
-  '(((:family "PragmataPro Mono Liga" :height 110)
+  '(((:family "PragmataPro Liga" :height 110)
      (:family "IBM Plex Sans" :height 1.0))
     ((:family "Iosevka" :height 110)
      (:family "IBM Plex Sans" :height 1.0)))

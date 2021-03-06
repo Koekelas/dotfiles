@@ -6424,12 +6424,12 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
     (koek-mt/load 'vivendi))
 #+END_SRC
 
-Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM
-Plex]] for variable pitch.
+Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM Plex]] for
+variable pitch.
 
 #+BEGIN_SRC emacs-lisp
   (defvar koek-font/pairs
-    '(((:family "PragmataPro Mono Liga" :height 110)
+    '(((:family "PragmataPro Liga" :height 110)
        (:family "IBM Plex Sans" :height 1.0))
       ((:family "Iosevka" :height 110)
        (:family "IBM Plex Sans" :height 1.0)))

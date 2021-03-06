@@ -31,7 +31,7 @@ Git is mandatory, everything else is optional.
   - [[https://git-scm.com/][Git]]
   - [[https://hunspell.github.io/][Hunspell]]
   - [[https://x.org/][xprop]] (set GTK theme variant)
-  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro Mono]] or [[https://typeof.net/Iosevka/][Iosevka]] (fixed pitch font)
+  - [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]] or [[https://typeof.net/Iosevka/][Iosevka]] (fixed pitch font)
   - [[https://www.ibm.com/plex/][IBM Plex]] (variable pitch font)
 - X window manager:
   - [[https://github.com/Koekelas/exwm-gdm][exwm-gdm]]
@@ -88,7 +88,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   ## General
   pacman -S ripgrep git hunspell hunspell-en_US xorg-xprop ttf-ibm-plex
 
-  # Install PragmataPro Mono from source or ttf-iosevka from AUR
+  # Install PragmataPro from source or ttf-iosevka from AUR
 
   ## X window manager
   pacman -S xorg-xset picom xsettingsd xorg-xsetroot unclutter argyllcms
