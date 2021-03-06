@@ -144,6 +144,11 @@ information, see `use-package-process-keywords'."
   :bind
   ("C-c f g" . magit-status))
 
+(use-package magit-diff
+  :defer t
+  :config
+  (setq magit-diff-refine-hunk t))
+
 (use-package magit-log
   :bind
   ("C-c f h" . magit-log-buffer-file))
