@@ -2983,6 +2983,7 @@ vivendi."
   (setq modus-themes-headings '((t . section)))
   (setq modus-themes-variable-pitch-headings t)
   (setq modus-themes-scale-headings t)
+  (setq modus-themes-diffs 'deuteranopia)
   (setq modus-themes-org-blocks 'greyscale)
   :config
   (setq face-near-same-color-threshold 45000)
