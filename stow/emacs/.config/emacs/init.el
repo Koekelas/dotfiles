@@ -638,7 +638,7 @@ FROM is a symbol, the language scheme of code LANG.  TO is a
 symbol, the language scheme to.  For language schemes, see
 `koek-ys/languages'."
     (plist-get (seq-find (lambda (spec)
-                           (string= (plist-get spec from) lang))
+                           (string-equal (plist-get spec from) lang))
                          koek-ys/languages)
                to))
 
@@ -852,7 +852,7 @@ clockwise, else, rotate counterclockwise."
 
 (use-package eyebrowse
   :straight t
-  :unless (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+  :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
   :bind
   (("C-c w 0" . eyebrowse-switch-to-window-config-0)
    ("C-c w 1" . eyebrowse-switch-to-window-config-1)
@@ -908,7 +908,7 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
 
 (use-package exwm
   :straight t
-  :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+  :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
   :preface
   (defun koek-wm/get-process-args (id)
     "Return arguments of process id ID.
@@ -2579,7 +2579,7 @@ NAME is a string, the variable's name."
                                                    (seq "\"" line-end)))
                                            "" (string-join (cdr parts) "="))))))
       (seq-find (pcase-lambda (`(,nm))
-                  (string= nm name)))
+                  (string-equal nm name)))
       cdr))
   :config
   ;; Evaluate code blocks in buffer after confirmation
@@ -2618,7 +2618,7 @@ NAME is a string, the variable's name."
              (package-name (thread-first package-dir
                              directory-file-name
                              file-name-base)))
-        (when (string= (file-name-base file-name) package-name)
+        (when (string-equal (file-name-base file-name) package-name)
           (let ((generated-autoload-file ; Dynamic variable
                  (expand-file-name (concat package-name "-autoloads.el")
                                    package-dir)))
@@ -3127,7 +3127,7 @@ internally."
     (mapcar (lambda (workspace)
               (let ((n (nth 0 workspace))
                     (name (let ((name (nth 2 workspace)))
-                            (unless (string= name "")
+                            (unless (string-equal name "")
                               name))))
                 (list :n n
                       :label (concat (or (koek-ml/arabic-to-roman n) "N")
@@ -3537,7 +3537,8 @@ When optional FULL is truthy, return absolute file names."
       (seq-filter (pcase-lambda (`(,file-name ,type))
                     (let ((name (file-name-nondirectory file-name)))
                       (and (eq type t)  ; Directory
-                           (not (or (string= name ".") (string= name "..")))))))
+                           (not (or (string-equal name ".")
+                                    (string-equal name "..")))))))
       (mapcar (lambda (spec)
                 (file-name-as-directory (car spec))))))
 
@@ -3649,7 +3650,7 @@ When optional FULL is truthy, return absolute file names."
            :unnarrowed t)))
   (setq org-roam-capture-immediate-template
         (append (seq-find (pcase-lambda (`(,key))
-                            (string= key "n"))
+                            (string-equal key "n"))
                           org-roam-capture-templates)
                 '(:immediate-finish t)))
   (setq org-roam-capture-ref-templates

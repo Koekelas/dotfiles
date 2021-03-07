@@ -909,7 +909,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
   symbol, the language scheme to.  For language schemes, see
   `koek-ys/languages'."
       (plist-get (seq-find (lambda (spec)
-                             (string= (plist-get spec from) lang))
+                             (string-equal (plist-get spec from) lang))
                            koek-ys/languages)
                  to))
 
@@ -2852,7 +2852,7 @@ Inherit Clojure snippets.
   # --
   # -*- mode: snippet; -*-
   # name: ${1:Snippet name}
-  # key: ${2:`(let ((buffer-name (buffer-name))) (if (or (string= buffer-name yas-new-snippet-buffer-name) (string-match-p (rx "*org-src: " (one-or-more not-newline) "*") buffer-name)) "key" buffer-name))`}
+  # key: ${2:`(let ((buffer-name (buffer-name))) (if (or (string-equal buffer-name yas-new-snippet-buffer-name) (string-match-p (rx "*org-src: " (one-or-more not-newline) "*") buffer-name)) "key" buffer-name))`}
   # --
   $0
 #+END_SRC
@@ -3102,7 +3102,7 @@ steps.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
     :straight t
-    :unless (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+    :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
     :bind
     (("C-c w 0" . eyebrowse-switch-to-window-config-0)
      ("C-c w 1" . eyebrowse-switch-to-window-config-1)
@@ -3181,7 +3181,7 @@ Bury unneeded buffers, computers have more than enough memory.
 
   (use-package exwm
     :straight t
-    :when (string= (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+    :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
     :preface
     (defun koek-wm/get-process-args (id)
       "Return arguments of process id ID.
@@ -3737,8 +3737,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
     (let* ((outputs (exar--get-outputs))
            (layout (exar--get-preferred-layout (exar--get-layouts outputs)))
            (monitor-layout (plist-get layout :monitors)))
-      (when (and (not (string= (plist-get layout :name)
-                               (plist-get exar--previous-layout :name)))
+      (when (and (not (string-equal (plist-get layout :name)
+                                    (plist-get exar--previous-layout :name)))
                  monitor-layout)
         (exar--set-primary monitor-layout)
         (exar--set-workspaces monitor-layout)
@@ -3758,8 +3758,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                         (thread-last (exar--get-in props :edid :detailed)
                           (seq-filter (lambda (detailed)
                                         (let ((type (plist-get detailed :type)))
-                                          (or (string= type "name")
-                                              (string= type "string")))))
+                                          (or (string-equal type "name")
+                                              (string-equal type "string")))))
                           (mapcar (lambda (detailed)
                                     (plist-get detailed :data)))))
                        (output-name (plist-get props :name)))
@@ -5885,7 +5885,7 @@ part of tangling [[*yasnippet - Snippets][embedded snippets]].
                                                      (seq "\"" line-end)))
                                              "" (string-join (cdr parts) "="))))))
         (seq-find (pcase-lambda (`(,nm))
-                    (string= nm name)))
+                    (string-equal nm name)))
         cdr))
     :config
     ;; Evaluate code blocks in buffer after confirmation
@@ -5924,7 +5924,7 @@ part of tangling [[*yasnippet - Snippets][embedded snippets]].
                (package-name (thread-first package-dir
                                directory-file-name
                                file-name-base)))
-          (when (string= (file-name-base file-name) package-name)
+          (when (string-equal (file-name-base file-name) package-name)
             (let ((generated-autoload-file ; Dynamic variable
                    (expand-file-name (concat package-name "-autoloads.el")
                                      package-dir)))
@@ -6570,7 +6570,7 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       (mapcar (lambda (workspace)
                 (let ((n (nth 0 workspace))
                       (name (let ((name (nth 2 workspace)))
-                              (unless (string= name "")
+                              (unless (string-equal name "")
                                 name))))
                   (list :n n
                         :label (concat (or (koek-ml/arabic-to-roman n) "N")
@@ -7012,7 +7012,8 @@ of ~koek/projects-dir~, are agenda files. Configure agendas.
         (seq-filter (pcase-lambda (`(,file-name ,type))
                       (let ((name (file-name-nondirectory file-name)))
                         (and (eq type t)  ; Directory
-                             (not (or (string= name ".") (string= name "..")))))))
+                             (not (or (string-equal name ".")
+                                      (string-equal name "..")))))))
         (mapcar (lambda (spec)
                   (file-name-as-directory (car spec))))))
 
@@ -7200,7 +7201,7 @@ Configure roam capture templates.
              :unnarrowed t)))
     (setq org-roam-capture-immediate-template
           (append (seq-find (pcase-lambda (`(,key))
-                              (string= key "n"))
+                              (string-equal key "n"))
                             org-roam-capture-templates)
                   '(:immediate-finish t)))
     (setq org-roam-capture-ref-templates
