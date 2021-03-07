@@ -80,8 +80,6 @@ information, see `use-package-process-keywords'."
 
 (straight-use-package 'org-plus-contrib)
 
-(straight-use-package '(org :type built-in))
-
 (use-package dired
   :bind
   ("C-c f f" . dired)

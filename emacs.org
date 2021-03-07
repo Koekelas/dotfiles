@@ -180,14 +180,6 @@ latest org before loading org.
   (straight-use-package 'org-plus-contrib)
 #+END_SRC
 
-Org is a subset of org-plus-contrib. Packages depending on org will
-cause org to be installed even when org-plus-contrib is installed.
-Prevent packages from installing org.
-
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package '(org :type built-in))
-#+END_SRC
-
 For org configuration, see [[*Org][Org]].
 
 * Files
