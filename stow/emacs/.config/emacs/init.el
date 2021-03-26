@@ -308,6 +308,16 @@ dictionary links before LIMIT."
       (funcall f)
       (setq n (1- n)))))
 
+(use-package undo-tree
+  :straight t
+  :demand t
+  :bind
+  (:map undo-tree-map
+   ("M-/" . undo-tree-redo))
+  :config
+  (global-undo-tree-mode)
+  :delight)
+
 (bind-keys
  ("C-c e s" . sort-lines)
  ("C-c e a" . align-regexp))
@@ -693,16 +703,6 @@ name."
           (buffer-substring (re-search-forward (rx line-start "# --\n"))
                             (point-max))))
   :delight yas-minor-mode)
-
-(use-package undo-tree
-  :straight t
-  :demand t
-  :bind
-  (:map undo-tree-map
-   ("M-/" . undo-tree-redo))
-  :config
-  (global-undo-tree-mode)
-  :delight)
 
 (use-package ispell
   :bind
