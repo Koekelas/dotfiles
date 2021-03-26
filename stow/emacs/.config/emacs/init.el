@@ -318,6 +318,18 @@ dictionary links before LIMIT."
   (global-undo-tree-mode)
   :delight)
 
+(use-package ispell
+  :bind
+  ("C-c e d" . ispell-change-dictionary)
+  :config
+  (setq ispell-program-name "hunspell")
+  (let ((dictionary-name "en_US"))
+    ;; On Windows, Hunspell expects the DICTIONARY environment
+    ;; variable to be set
+    (when (eq system-type 'windows-nt)
+      (setenv "DICTIONARY" dictionary-name))
+    (setq ispell-dictionary dictionary-name)))
+
 (bind-keys
  ("C-c e s" . sort-lines)
  ("C-c e a" . align-regexp))
@@ -703,18 +715,6 @@ name."
           (buffer-substring (re-search-forward (rx line-start "# --\n"))
                             (point-max))))
   :delight yas-minor-mode)
-
-(use-package ispell
-  :bind
-  ("C-c e d" . ispell-change-dictionary)
-  :config
-  (setq ispell-program-name "hunspell")
-  (let ((dictionary-name "en_US"))
-    ;; On Windows, Hunspell expects the DICTIONARY environment
-    ;; variable to be set
-    (when (eq system-type 'windows-nt)
-      (setenv "DICTIONARY" dictionary-name))
-    (setq ispell-dictionary dictionary-name)))
 
 (use-package flymake
   :straight t
