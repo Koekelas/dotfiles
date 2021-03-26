@@ -796,13 +796,6 @@ End files with empty line.
     :delight)
 #+END_SRC
 
-** Clipboard
-Add clipboard to kill ring before killing.
-
-#+BEGIN_SRC emacs-lisp
-  (setq save-interprogram-paste-before-kill t)
-#+END_SRC
-
 ** eglot - Code insight
 [[https://github.com/joaotavora/eglot][eglot (GitHub)]]
 
@@ -3802,6 +3795,13 @@ etc.
   (use-package server
     :config
     (server-start))
+#+END_SRC
+
+** Clipboard
+Add clipboard to kill ring before killing.
+
+#+BEGIN_SRC emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
 #+END_SRC
 
 ** Global commands

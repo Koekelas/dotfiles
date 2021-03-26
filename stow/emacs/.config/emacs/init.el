@@ -535,8 +535,6 @@ more strings, the delimiters that call the handler."
   (setq whitespace-style '(face trailing empty lines-tail))
   :delight)
 
-(setq save-interprogram-paste-before-kill t)
-
 (use-package eglot
   :straight t
   :bind
@@ -1178,6 +1176,8 @@ N is an integer, a workspace number."
 (use-package server
   :config
   (server-start))
+
+(setq save-interprogram-paste-before-kill t)
 
 (bind-key "C-z" #'repeat)
 
