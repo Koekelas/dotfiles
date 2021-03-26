@@ -531,6 +531,13 @@ For more information, see ~man 5 hunspell~.
     :delight)
 #+END_SRC
 
+** buffer-face - Remap default face
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
+  (add-hook 'org-mode-hook #'variable-pitch-mode)
+  (delight 'buffer-face-mode nil 'face-remap)
+#+END_SRC
+
 ** Edit commands
 Bind sort and align region.
 
@@ -2932,13 +2939,6 @@ Inherit Clojure snippets.
     :defer t
     :config
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
-#+END_SRC
-
-** buffer-face - Remap default face
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
-  (add-hook 'org-mode-hook #'variable-pitch-mode)
-  (delight 'buffer-face-mode nil 'face-remap)
 #+END_SRC
 
 ** paren-face - Dim brackets
