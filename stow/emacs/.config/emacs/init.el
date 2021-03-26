@@ -505,6 +505,15 @@ more strings, the delimiters that call the handler."
   (("C-M-{" . beginning-of-defun)
    ("C-M-}" . end-of-defun)))
 
+(use-package paren-face
+  :straight t
+  :hook
+  ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode
+    emacs-lisp-mode lisp-interaction-mode scheme-mode geiser-repl-mode) .
+   paren-face-mode)
+  :config
+  (setq paren-face-regexp (rx (any "()[]{}"))))
+
 (setq-default indent-tabs-mode nil)
 
 (setq sentence-end-double-space nil)
@@ -743,15 +752,6 @@ name."
   :defer t
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
-
-(use-package paren-face
-  :straight t
-  :hook
-  ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode
-    emacs-lisp-mode lisp-interaction-mode scheme-mode geiser-repl-mode) .
-   paren-face-mode)
-  :config
-  (setq paren-face-regexp (rx (any "()[]{}"))))
 
 (setq window-resize-pixelwise t)
 
