@@ -519,6 +519,18 @@ saved in =/usr/share/hunspell/=. Add:
 
 For more information, see ~man 5 hunspell~.
 
+** olivetti - Center contents
+[[https://github.com/rnkn/olivetti][olivetti (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package olivetti
+    :straight t
+    :defer t
+    :config
+    (setq olivetti-body-width (round (* 80 1.25)))
+    :delight)
+#+END_SRC
+
 ** Edit commands
 Bind sort and align region.
 
@@ -2920,18 +2932,6 @@ Inherit Clojure snippets.
     :defer t
     :config
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
-#+END_SRC
-
-** olivetti - Center contents
-[[https://github.com/rnkn/olivetti][olivetti (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package olivetti
-    :straight t
-    :defer t
-    :config
-    (setq olivetti-body-width (round (* 80 1.25)))
-    :delight)
 #+END_SRC
 
 ** buffer-face - Remap default face
