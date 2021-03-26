@@ -596,56 +596,6 @@ more strings, the delimiters that call the handler."
 
 (setq tab-always-indent 'complete)
 
-(use-package company
-  :straight t
-  :bind
-  (:map company-mode-map
-   ([remap indent-for-tab-command] . company-indent-or-complete-common)
-   :map company-active-map
-   ("C-n" . company-select-next)
-   ("C-p" . company-select-previous))
-  :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
-  :preface
-  (defmacro koek-cpny/setup-backends (&rest args)
-    "Setup backends in modes.
-ARGS are one or more symbols, the modes to setup, followed by a
-list of backends, see `company-backends'."
-    (let ((modes (butlast args))
-          (backends (car (last args))))
-      `(let ((setup-backends (lambda ()
-                               (setq-local company-backends ',backends))))
-         ,@(mapcar (lambda (mode)
-                     `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
-                                setup-backends))
-                   modes))))
-  :config
-  (setq company-backends
-        '((company-capf company-files :with company-yasnippet)))
-  (setq company-idle-delay 1)           ; In seconds
-  (setq company-show-numbers t)
-  (koek-cpny/setup-backends indium-repl-mode
-   ((company-indium-repl company-files :with company-yasnippet)))
-  (koek-cpny/setup-backends geiser-mode geiser-repl-mode
-   ((geiser-company-backend company-files :with company-yasnippet)))
-  (koek-cpny/setup-backends makefile-mode scad-mode
-   ((company-dabbrev-code company-files :with company-yasnippet)))
-  (koek-cpny/setup-backends conf-mode
-   ((company-dabbrev company-files :with company-yasnippet)))
-  :delight)
-
-(use-package company-dabbrev
-  :defer t
-  :config
-  (setq company-dabbrev-other-buffers t) ; Same major mode
-  (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
-  (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
-
-(use-package company-flx
-  :straight t
-  :after company
-  :config
-  (company-flx-mode))
-
 (use-package abbrev
   :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
   :delight)
@@ -752,6 +702,56 @@ name."
           (buffer-substring (re-search-forward (rx line-start "# --\n"))
                             (point-max))))
   :delight yas-minor-mode)
+
+(use-package company
+  :straight t
+  :bind
+  (:map company-mode-map
+   ([remap indent-for-tab-command] . company-indent-or-complete-common)
+   :map company-active-map
+   ("C-n" . company-select-next)
+   ("C-p" . company-select-previous))
+  :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
+  :preface
+  (defmacro koek-cpny/setup-backends (&rest args)
+    "Setup backends in modes.
+ARGS are one or more symbols, the modes to setup, followed by a
+list of backends, see `company-backends'."
+    (let ((modes (butlast args))
+          (backends (car (last args))))
+      `(let ((setup-backends (lambda ()
+                               (setq-local company-backends ',backends))))
+         ,@(mapcar (lambda (mode)
+                     `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
+                                setup-backends))
+                   modes))))
+  :config
+  (setq company-backends
+        '((company-capf company-files :with company-yasnippet)))
+  (setq company-idle-delay 1)           ; In seconds
+  (setq company-show-numbers t)
+  (koek-cpny/setup-backends indium-repl-mode
+   ((company-indium-repl company-files :with company-yasnippet)))
+  (koek-cpny/setup-backends geiser-mode geiser-repl-mode
+   ((geiser-company-backend company-files :with company-yasnippet)))
+  (koek-cpny/setup-backends makefile-mode scad-mode
+   ((company-dabbrev-code company-files :with company-yasnippet)))
+  (koek-cpny/setup-backends conf-mode
+   ((company-dabbrev company-files :with company-yasnippet)))
+  :delight)
+
+(use-package company-dabbrev
+  :defer t
+  :config
+  (setq company-dabbrev-other-buffers t) ; Same major mode
+  (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
+  (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
+
+(use-package company-flx
+  :straight t
+  :after company
+  :config
+  (company-flx-mode))
 
 (setq window-resize-pixelwise t)
 

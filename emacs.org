@@ -882,66 +882,6 @@ When line is indented, press =TAB= to complete text before point.
   (setq tab-always-indent 'complete)
 #+END_SRC
 
-** company - Select from candidates
-[[https://github.com/company-mode/company-mode][company (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :straight t
-    :bind
-    (:map company-mode-map
-     ([remap indent-for-tab-command] . company-indent-or-complete-common)
-     :map company-active-map
-     ("C-n" . company-select-next)
-     ("C-p" . company-select-previous))
-    :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
-    :preface
-    (defmacro koek-cpny/setup-backends (&rest args)
-      "Setup backends in modes.
-  ARGS are one or more symbols, the modes to setup, followed by a
-  list of backends, see `company-backends'."
-      (let ((modes (butlast args))
-            (backends (car (last args))))
-        `(let ((setup-backends (lambda ()
-                                 (setq-local company-backends ',backends))))
-           ,@(mapcar (lambda (mode)
-                       `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
-                                  setup-backends))
-                     modes))))
-    :config
-    (setq company-backends
-          '((company-capf company-files :with company-yasnippet)))
-    (setq company-idle-delay 1)           ; In seconds
-    (setq company-show-numbers t)
-    (koek-cpny/setup-backends indium-repl-mode
-     ((company-indium-repl company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends geiser-mode geiser-repl-mode
-     ((geiser-company-backend company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends makefile-mode scad-mode
-     ((company-dabbrev-code company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends conf-mode
-     ((company-dabbrev company-files :with company-yasnippet)))
-    :delight)
-
-  (use-package company-dabbrev
-    :defer t
-    :config
-    (setq company-dabbrev-other-buffers t) ; Same major mode
-    (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
-    (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
-#+END_SRC
-
-*** company-flx - Match candidates fuzzily
-[[https://github.com/PythonNut/company-flx][company-flx (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company-flx
-    :straight t
-    :after company
-    :config
-    (company-flx-mode))
-#+END_SRC
-
 ** abbrev - Abbreviations
 #+BEGIN_SRC emacs-lisp
   (use-package abbrev
@@ -2953,6 +2893,66 @@ Inherit Clojure snippets.
   # key: ${2:`(let ((buffer-name (buffer-name))) (if (or (string-equal buffer-name yas-new-snippet-buffer-name) (string-match-p (rx "*org-src: " (one-or-more not-newline) "*") buffer-name)) "key" buffer-name))`}
   # --
   $0
+#+END_SRC
+
+** company - Select from candidates
+[[https://github.com/company-mode/company-mode][company (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :straight t
+    :bind
+    (:map company-mode-map
+     ([remap indent-for-tab-command] . company-indent-or-complete-common)
+     :map company-active-map
+     ("C-n" . company-select-next)
+     ("C-p" . company-select-previous))
+    :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
+    :preface
+    (defmacro koek-cpny/setup-backends (&rest args)
+      "Setup backends in modes.
+  ARGS are one or more symbols, the modes to setup, followed by a
+  list of backends, see `company-backends'."
+      (let ((modes (butlast args))
+            (backends (car (last args))))
+        `(let ((setup-backends (lambda ()
+                                 (setq-local company-backends ',backends))))
+           ,@(mapcar (lambda (mode)
+                       `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
+                                  setup-backends))
+                     modes))))
+    :config
+    (setq company-backends
+          '((company-capf company-files :with company-yasnippet)))
+    (setq company-idle-delay 1)           ; In seconds
+    (setq company-show-numbers t)
+    (koek-cpny/setup-backends indium-repl-mode
+     ((company-indium-repl company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends geiser-mode geiser-repl-mode
+     ((geiser-company-backend company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends makefile-mode scad-mode
+     ((company-dabbrev-code company-files :with company-yasnippet)))
+    (koek-cpny/setup-backends conf-mode
+     ((company-dabbrev company-files :with company-yasnippet)))
+    :delight)
+
+  (use-package company-dabbrev
+    :defer t
+    :config
+    (setq company-dabbrev-other-buffers t) ; Same major mode
+    (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
+    (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
+#+END_SRC
+
+*** company-flx - Match candidates fuzzily
+[[https://github.com/PythonNut/company-flx][company-flx (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-flx
+    :straight t
+    :after company
+    :config
+    (company-flx-mode))
 #+END_SRC
 
 * Windows & buffers
