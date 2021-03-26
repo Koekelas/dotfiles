@@ -579,6 +579,23 @@ more strings, the delimiters that call the handler."
   :config
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 
+(use-package flymake
+  :straight t
+  :bind
+  (:map flymake-mode-map
+   ("C-c e n" . flymake-goto-next-error)
+   ("C-c e p" . flymake-goto-prev-error)
+   ("C-c e l" . flymake-show-diagnostics-buffer))
+  :hook (emacs-lisp-mode . flymake-mode)
+  :config
+  (setq flymake-wrap-around nil)
+  :delight)
+
+(use-package flymake-proc
+  :defer t
+  :config
+  (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+
 (use-package company
   :straight t
   :bind
@@ -735,23 +752,6 @@ name."
           (buffer-substring (re-search-forward (rx line-start "# --\n"))
                             (point-max))))
   :delight yas-minor-mode)
-
-(use-package flymake
-  :straight t
-  :bind
-  (:map flymake-mode-map
-   ("C-c e n" . flymake-goto-next-error)
-   ("C-c e p" . flymake-goto-prev-error)
-   ("C-c e l" . flymake-show-diagnostics-buffer))
-  :hook (emacs-lisp-mode . flymake-mode)
-  :config
-  (setq flymake-wrap-around nil)
-  :delight)
-
-(use-package flymake-proc
-  :defer t
-  :config
-  (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 
 (setq window-resize-pixelwise t)
 
