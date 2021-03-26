@@ -538,23 +538,7 @@ For more information, see ~man 5 hunspell~.
   (delight 'buffer-face-mode nil 'face-remap)
 #+END_SRC
 
-** Edit commands
-Bind sort and align region.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-keys
-   ("C-c e s" . sort-lines)
-   ("C-c e a" . align-regexp))
-#+END_SRC
-
-Upgrade case commands.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-keys
-   ([remap downcase-word]   . downcase-dwim)
-   ([remap upcase-word]     . upcase-dwim)
-   ([remap capitalize-word] . capitalize-dwim))
-#+END_SRC
+* Constructs
 
 ** expand-region - Mark increasingly larger unit
 [[https://github.com/magnars/expand-region.el][expand-region (GitHub)]]
@@ -568,7 +552,19 @@ Upgrade case commands.
     (setq expand-region-smart-cursor t))
 #+END_SRC
 
-** subword - Recognize words in camel case words
+** Words
+
+*** Word case commands
+Upgrade case commands.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ([remap downcase-word]   . downcase-dwim)
+   ([remap upcase-word]     . upcase-dwim)
+   ([remap capitalize-word] . capitalize-dwim))
+#+END_SRC
+
+*** subword - Recognize words in camel case words
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
@@ -577,7 +573,7 @@ Upgrade case commands.
     :delight)
 #+END_SRC
 
-** Word motion commands
+*** Word motion commands
 Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
 ~koek-mtn/previous-word~ recognize [[*subword - Recognize words in camel case words][subwords]].
 
@@ -613,18 +609,31 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
    ("M-p" . koek-mtn/previous-word))
 #+END_SRC
 
-** visual-line - Wrapped lines
+** Lines
+
+*** Line commands
+Bind sort and align region.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ("C-c e s" . sort-lines)
+   ("C-c e a" . align-regexp))
+#+END_SRC
+
+*** visual-line - Wrapped lines
 #+BEGIN_SRC emacs-lisp
   (delight 'visual-line-mode nil 'simple)
 #+END_SRC
 
-** auto-fill - Break long sentences
+*** auto-fill - Break long sentences
 #+BEGIN_SRC emacs-lisp
   (add-hook 'koek-txt/confident-hook #'auto-fill-mode)
   (delight 'auto-fill-function nil 'simple)
 #+END_SRC
 
-** smartparens - Pairs & symbolic expressions
+** Expressions
+
+*** smartparens - Pairs & symbolic expressions
 [[https://github.com/Fuco1/smartparens][smartparens (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -736,7 +745,7 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
      ("C-M-}" . end-of-defun)))
 #+END_SRC
 
-*** Smartparens & GNOME Shell keybindings conflict :issue:setup:
+**** Smartparens & GNOME Shell keybindings conflict :issue:setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -745,7 +754,7 @@ Run:
   gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>Page_Down']"
 #+END_SRC
 
-** paren-face - Dim brackets
+*** paren-face - Dim brackets
 [[https://github.com/tarsius/paren-face][paren-face (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -760,6 +769,8 @@ Run:
 #+END_SRC
 
 ** Whitespace
+
+*** Whitespace settings
 Indent with spaces, not tabs.
 
 #+BEGIN_SRC emacs-lisp
@@ -784,7 +795,7 @@ End files with empty line.
   (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
-** whitespace - Clean & visualize whitespace
+*** whitespace - Clean & visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
     :bind
@@ -795,6 +806,8 @@ End files with empty line.
     (setq whitespace-style '(face trailing empty lines-tail))
     :delight)
 #+END_SRC
+
+* Insights
 
 ** eglot - Code insight
 [[https://github.com/joaotavora/eglot][eglot (GitHub)]]
@@ -867,6 +880,8 @@ in the project home directory.
     :config
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 #+END_SRC
+
+* Completions
 
 ** Complete text
 When line is indented, press =TAB= to complete text before point.
@@ -5867,8 +5882,8 @@ Tangling is modified in two important ways. First, the function
 ~koek-org/gen-autoloads~ generates autoloads for Emacs Lisp packages. It
 is part of tangling [[*Embedded packages][embedded packages]]. Second, the function
 ~koek-org/process-file-end~ processes the file end according to the
-value of the variable ~require-final-newline~, see [[*Whitespace][Whitespace]]. It is
-part of tangling [[*yasnippet - Snippets][embedded snippets]].
+value of the variable ~require-final-newline~, see [[*Whitespace settings][Whitespace settings]].
+It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package ob-core

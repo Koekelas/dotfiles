@@ -341,21 +341,17 @@ dictionary links before LIMIT."
 (add-hook 'org-mode-hook #'variable-pitch-mode)
 (delight 'buffer-face-mode nil 'face-remap)
 
-(bind-keys
- ("C-c e s" . sort-lines)
- ("C-c e a" . align-regexp))
-
-(bind-keys
- ([remap downcase-word]   . downcase-dwim)
- ([remap upcase-word]     . upcase-dwim)
- ([remap capitalize-word] . capitalize-dwim))
-
 (use-package expand-region
   :straight t
   :bind
   ("C-S-SPC" . er/expand-region)
   :config
   (setq expand-region-smart-cursor t))
+
+(bind-keys
+ ([remap downcase-word]   . downcase-dwim)
+ ([remap upcase-word]     . upcase-dwim)
+ ([remap capitalize-word] . capitalize-dwim))
 
 (use-package subword
   :hook
@@ -392,6 +388,10 @@ negative, move point to beginning of next word."
 (bind-keys
  ("M-n" . koek-mtn/next-word)
  ("M-p" . koek-mtn/previous-word))
+
+(bind-keys
+ ("C-c e s" . sort-lines)
+ ("C-c e a" . align-regexp))
 
 (delight 'visual-line-mode nil 'simple)
 
