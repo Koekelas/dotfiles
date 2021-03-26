@@ -537,8 +537,6 @@ more strings, the delimiters that call the handler."
 
 (setq save-interprogram-paste-before-kill t)
 
-(setq tab-always-indent 'complete)
-
 (use-package eglot
   :straight t
   :bind
@@ -595,6 +593,8 @@ more strings, the delimiters that call the handler."
   :defer t
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+
+(setq tab-always-indent 'complete)
 
 (use-package company
   :straight t

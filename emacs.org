@@ -803,13 +803,6 @@ Add clipboard to kill ring before killing.
   (setq save-interprogram-paste-before-kill t)
 #+END_SRC
 
-** Complete text
-When line is indented, press =TAB= to complete text before point.
-
-#+BEGIN_SRC emacs-lisp
-  (setq tab-always-indent 'complete)
-#+END_SRC
-
 ** eglot - Code insight
 [[https://github.com/joaotavora/eglot][eglot (GitHub)]]
 
@@ -880,6 +873,13 @@ in the project home directory.
     :defer t
     :config
     (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+#+END_SRC
+
+** Complete text
+When line is indented, press =TAB= to complete text before point.
+
+#+BEGIN_SRC emacs-lisp
+  (setq tab-always-indent 'complete)
 #+END_SRC
 
 ** company - Select from candidates
