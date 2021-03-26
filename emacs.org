@@ -3170,7 +3170,7 @@ Bury unneeded buffers, computers have more than enough memory.
   (bind-key [remap kill-buffer] #'koek-buff/bury)
 #+END_SRC
 
-* Other
+* System
 
 ** gcmh - Collect garbage when idle
 [[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
@@ -3827,7 +3827,9 @@ something short.
   (bind-key "C-z" #'repeat)
 #+END_SRC
 
-** Minibuffer
+* Minibuffer
+
+** Minibuffer settings
 Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) in minibuffer.
 
 #+BEGIN_SRC emacs-lisp
@@ -3927,6 +3929,8 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
                     (,(kbd "p")   . counsel-projectile))))
     (counsel-projectile-mode))
 #+END_SRC
+
+* Help & documentation
 
 ** Help
 
@@ -4102,6 +4106,8 @@ On [[https://devdocs.io/][DevDocs]], enable:
     (which-key-mode)
     :delight)
 #+END_SRC
+
+* Applications
 
 ** vterm - Terminal emulator
 [[https://github.com/akermu/emacs-libvterm][vterm (GitHub)]]
