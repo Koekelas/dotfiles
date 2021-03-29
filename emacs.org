@@ -235,32 +235,156 @@ Move deleted files to trash.
   (setq delete-by-moving-to-trash t)
 #+END_SRC
 
-** projectile - Projects
-[[https://github.com/bbatsov/projectile][projectile (GitHub)]]
-
+** project - Projects
 #+BEGIN_SRC emacs-lisp
-  (use-package projectile
+  (use-package project
     :straight t
-    :demand t
-    :bind
-    (:map projectile-command-map
-     ("s s" . projectile-ripgrep)
-     ("s a" . projectile-ag)
-     ("x x" . projectile-run-vterm)
-     ("x t" . projectile-run-vterm)
-     ("x r" . projectile-run-term))
+    :defer t
     :preface
-    (defun koek-proj/forgetp (file-name)
-      "Return whether project with root FILE-NAME should be forgotten."
-      (not (recentf-include-p file-name)))
-    :config
-    (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
+    (defvar-local koek-proj/cache nil
+      "Project cache.")
 
-    (setq projectile-ignored-project-function #'koek-proj/forgetp)
-    (setq projectile-completion-system 'ivy)
-    (setq projectile-dynamic-mode-line nil)
-    (projectile-mode)
-    :delight)
+    (defun koek-proj/locate-root (&optional buffer)
+      "Locate root of project for BUFFER.
+  Optional BUFFER is a buffer or string, respectively the buffer or
+  name of the buffer to locate the root for and defaults to the
+  current buffer.
+
+  This function is expensive.  For a potentially cheap alternative,
+  see `koek-proj/get-root'."
+      (let ((file-name
+             (buffer-local-value
+              'default-directory (get-buffer (or buffer (current-buffer))))))
+        (when-let ((project (project-current nil file-name)))
+          (project-root project))))
+
+    (defun koek-proj/determine-name (file-name)
+      "Determine name of project for project FILE-NAME."
+      (file-name-nondirectory (directory-file-name file-name)))
+
+    (defun koek-proj/init ()
+      "Initialize project cache of current."
+      (unless koek-proj/cache
+        (setq koek-proj/cache
+              (if-let ((file-name (koek-proj/locate-root)))
+                  (list :root file-name
+                        :name (koek-proj/determine-name file-name))
+                'no-project))))
+
+    (defun koek-proj/get-root ()
+      "Return cached root of project for current.
+  The first call in a buffer is expensive.  Subsequent calls in the
+  same buffer are cheap but its results incorrect when the buffer
+  is no longer part of the initial project.  For a correct
+  alternative, see `koek-proj/locate-root'."
+      (koek-proj/init)
+      (plist-get koek-proj/cache :root))
+
+    (defun koek-proj/get-name ()
+      "Return cached name of project for current.
+  The first call in a buffer is expensive.  Subsequent calls in the
+  same buffer are cheap but its results incorrect when the buffer
+  is no longer part of the initial project."
+      (koek-proj/init)
+      (plist-get koek-proj/cache :name))
+
+    (defun koek-proj/locate-configs (name &optional buffer prompt)
+      "Locate configuration files of project for BUFFER.
+  Some projects contain configuration files (e.g. Makefile,
+  project.clj and package.json), one in the root directory, the
+  primary configuration file, and/or one or more in the child
+  directories of the root directory, the secondary configuration
+  files.
+
+  NAME is a string, the name of the configuration file.  Optional
+  BUFFER is a buffer or string, respectively the buffer or name of
+  the buffer to locate the configuration files for and defaults to
+  the current buffer.
+
+  When optional PROMPT is truthy and the project only contains
+  secondary configuration files, prompt for one.  The selected
+  configuration file is sorted before the other ones.
+
+  When the project contains both a primary configuration file and
+  secondary configuration files, the primary one is sorted before
+  the secondary ones."
+      (let* ((root (or (koek-proj/locate-root buffer) (error "Not in a project")))
+             (primary (let ((file-name (expand-file-name name root)))
+                        (when (file-exists-p file-name)
+                          (list file-name))))
+             (secondary (file-expand-wildcards (thread-last root
+                                                 (expand-file-name "*/")
+                                                 (expand-file-name name)))))
+        (if (and (null primary) (> (length secondary) 1) prompt)
+            (let* ((candidates (mapcar (lambda (file-name)
+                                         (cons (file-relative-name file-name root)
+                                               file-name))
+                                       secondary))
+                   (file-name (thread-first
+                                  (completing-read "Project configuration: "
+                                                   candidates nil t)
+                                (assoc candidates)
+                                cdr)))
+              (cons file-name (remove file-name secondary)))
+          (append primary secondary))))
+
+    (define-advice project-remember-project
+        (:before-while (project) koek-proj/exclude-uninteresting)
+      (if (bound-and-true-p recentf-mode)
+          (recentf-include-p (project-root project))
+        t))
+
+    (defun koek-proj/magit-status ()
+      "Launch magit in current project.
+  When not in a project, prompt for one."
+      (interactive)
+      (let ((default-directory            ; Dynamic variable
+              (project-root (project-current 'maybe-prompt))))
+        (magit-status-setup-buffer)))
+
+    (defun koek-proj/vterm (&optional arg)
+      "Launch or switch to a vterm session in current project.
+  With numeric prefix argument ARG, launch or switch to a numbered
+  vterm session.  With `\\[universal-argument]' prefix argument
+  ARG, launch a new vterm session.  When not in a project, prompt
+  for one."
+      (interactive "P")
+      ;; Dynamic variables
+      (defvar vterm-buffer-name)
+      (let* ((default-directory (project-root (project-current 'maybe-prompt)))
+             (vterm-buffer-name (project-prefixed-buffer-name "vterm")))
+        (vterm arg)))
+
+    ;; `project-eshell' doesn't launch or switch to numbered eshell
+    ;; sessions
+    (defun koek-proj/eshell (&optional arg)
+      "Launch or switch to an eshell session in current project.
+  With numeric prefix argument ARG, launch or switch to a numbered
+  eshell session.  With `\\[universal-argument]' prefix argument
+  ARG, launch a new eshell session.  When not in a project, prompt
+  for one."
+      (interactive "P")
+      ;; Dynamic variables
+      (defvar eshell-buffer-name)
+      (let* ((default-directory (project-root (project-current 'maybe-prompt)))
+             (eshell-buffer-name (project-prefixed-buffer-name "eshell")))
+        (eshell arg)))
+    :config
+    (bind-keys
+     :map project-prefix-map
+     ("m" . koek-proj/magit-status)
+     ("t" . koek-proj/vterm)
+     ("e" . koek-proj/eshell))
+
+    (setq project-compilation-buffer-name-function #'project-prefixed-buffer-name)
+    (setq project-switch-commands
+          '((project-find-file "Find file")
+            (project-dired "Dired")
+            (project-find-dir "Find directory")
+            (project-switch-to-buffer "Buffer")
+            (koek-proj/magit-status "Magit")
+            (koek-proj/vterm "Vterm")
+            (koek-proj/eshell "Eshell"))))
 #+END_SRC
 
 ** vc - Version control
@@ -928,21 +1052,16 @@ For the major mode, see [[*YASnippet][YASnippet]].
     ;; Clojure & ClojureScript
     (defun koek-ys/determine-ns-name ()
       "Determine Clojure namespace name for current.
-  Assumes source path is a child of project root."
-      (let ((parts
-             (let ((separator (thread-first (expand-file-name "a" "b")
-                                file-relative-name
-                                (substring 1 2)))
-                   (rel-file-name
-                    (let ((file-name (buffer-file-name)))
-                      (if (and (projectile-project-p) file-name)
-                          (file-relative-name (file-truename file-name)
-                                              (projectile-project-root))
-                        (buffer-name)))))
-               (let ((file-name (file-name-sans-extension rel-file-name)))
-                 (or (cdr (split-string file-name (regexp-quote separator)))
-                     (list file-name))))))
-        (replace-regexp-in-string "_" "-" (string-join parts "."))))
+  Assumes source path is the root of the project."
+      (let ((root (or (koek-proj/locate-root) default-directory))
+            (file-name (or (buffer-file-name) (buffer-name)))
+            (separator (thread-first (expand-file-name "a" "b")
+                         file-relative-name
+                         (substring 1 2))))
+        (thread-last (file-relative-name file-name root)
+          file-name-sans-extension
+          (replace-regexp-in-string (regexp-quote separator) ".")
+          (replace-regexp-in-string "_" "-"))))
 
     ;; Org & Markdown
     (defvar koek-ys/languages
@@ -3922,21 +4041,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
 #+END_SRC
 
-*** counsel-projectile - Ivy powered Projectile commands
-[[https://github.com/ericdanan/counsel-projectile][counsel-projectile (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel-projectile
-    :straight t
-    :after projectile
-    :config
-    (setq counsel-projectile-key-bindings
-          (append counsel-projectile-key-bindings
-                  `((,(kbd "C-p") . counsel-projectile-switch-project)
-                    (,(kbd "p")   . counsel-projectile))))
-    (counsel-projectile-mode))
-#+END_SRC
-
 * Help & documentation
 
 ** Help
@@ -4106,7 +4210,6 @@ On [[https://devdocs.io/][DevDocs]], enable:
       "C-c j" "jump"
       "C-c k" "media"
       "C-c o" "org"
-      "C-c p" "projectile"
       "C-c w" "windows"
       "C-c x" "other"
       "C-c z" "system")
@@ -6294,12 +6397,12 @@ Show file name in title bar.
 #+BEGIN_SRC emacs-lisp
   (setq frame-title-format
         '((:eval
-           (let ((file-name (buffer-file-name)))
+           (let ((root (koek-proj/get-root))
+                 (file-name (buffer-file-name)))
              (cond
-              (koek-ml/project-spec
+              ((and root file-name)
                (format "~%s/%s"
-                       (plist-get koek-ml/project-spec :name)
-                       (plist-get koek-ml/project-spec :relative)))
+                       (koek-proj/get-name) (file-relative-name file-name root)))
               (file-name
                (abbreviate-file-name file-name))
               (t
@@ -6603,9 +6706,6 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                 koek-ml/separator)))))
       "Eyebrowse mode line construct.")
 
-    (defvar-local koek-ml/project-spec nil
-      "Projectile project specification.")
-
     (defun koek-ml/truncate (s length)
       "Truncate string S to LENGTH.
   S is a string, the string to truncate.  LENGTH is an integer, the
@@ -6616,8 +6716,9 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
       '(:eval
         (moody-tab
          (concat
-          (when (and koek-ml/project-spec (derived-mode-p 'prog-mode 'conf-mode))
-            (concat (koek-ml/truncate (plist-get koek-ml/project-spec :name) 16) "/"))
+          (when (derived-mode-p 'prog-mode 'conf-mode)
+            (when-let ((name (koek-proj/get-name)))
+              (concat (koek-ml/truncate name 16) "/")))
           (propertize (koek-ml/truncate (buffer-name) 32)
                       'face 'mode-line-buffer-id))))
       "Id mode line construct.")
@@ -6755,23 +6856,6 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
     (defconst koek-ml/modes
       '("" koek-ml/separator "(" mode-name mode-line-process minor-mode-alist ")")
       "Modes mode line construct.")
-
-    ;; projectile
-
-    ;; `projectile-project-root' is expensive, i.e., calling it during
-    ;; mode line update makes Emacs lag
-    (defun koek-ml/setup-project-spec ()
-      "Setup projectile project specification for current."
-      (when-let ((file-name (projectile-project-root)))
-        (setq koek-ml/project-spec
-              (list :dir file-name
-                    :name (projectile-project-name file-name)
-                    :relative
-                    (file-relative-name (file-truename (buffer-file-name))
-                                        file-name)))
-        (force-mode-line-update)))
-
-    (add-hook 'find-file-hook #'koek-ml/setup-project-spec)
 
     ;; ediff
     (defconst koek-ml/diff
