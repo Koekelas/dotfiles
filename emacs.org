@@ -172,7 +172,7 @@ keyword, i.e., it accepts as argument =t=, =nil= or nothing.
                   (seq-subseq use-package-keywords i))))
 #+END_SRC
 
-** org - Notes, to-do lists & project planning
+** Latest org
 Installing latest org after loading builtin org breaks org. Install
 latest org before loading org.
 
@@ -464,7 +464,7 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
     (push 'link-hint-dictionary-link link-hint-types))
 #+END_SRC
 
-** Jump to recent mark positions
+** Return to marked positions
 When popping mark, skip consecutive identical marks.
 
 #+BEGIN_SRC emacs-lisp
@@ -519,7 +519,7 @@ saved in =/usr/share/hunspell/=. Add:
 
 For more information, see ~man 5 hunspell~.
 
-** olivetti - Center contents
+** olivetti - Show margins
 [[https://github.com/rnkn/olivetti][olivetti (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -540,7 +540,7 @@ For more information, see ~man 5 hunspell~.
 
 * Constructs
 
-** expand-region - Mark increasingly larger unit
+** expand-region - Mark increasingly larger construct
 [[https://github.com/magnars/expand-region.el][expand-region (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -625,7 +625,7 @@ Bind sort and align region.
   (delight 'visual-line-mode nil 'simple)
 #+END_SRC
 
-*** auto-fill - Break long sentences
+*** auto-fill - Break long lines
 #+BEGIN_SRC emacs-lisp
   (add-hook 'koek-txt/confident-hook #'auto-fill-mode)
   (delight 'auto-fill-function nil 'simple)
@@ -809,7 +809,7 @@ End files with empty line.
 
 * Insights
 
-** eglot - Code insight
+** eglot - LSP client
 [[https://github.com/joaotavora/eglot][eglot (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -883,7 +883,7 @@ in the project home directory.
 
 * Completions
 
-** Complete text
+** Completion settings
 When line is indented, press =TAB= to complete text before point.
 
 #+BEGIN_SRC emacs-lisp
@@ -2903,7 +2903,7 @@ Inherit Clojure snippets.
   $0
 #+END_SRC
 
-** company - Select from candidates
+** company - Inline completion UI
 [[https://github.com/company-mode/company-mode][company (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -2952,7 +2952,7 @@ Inherit Clojure snippets.
     (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
 #+END_SRC
 
-*** company-flx - Match candidates fuzzily
+*** company-flx - Flx completion style
 [[https://github.com/PythonNut/company-flx][company-flx (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -2965,7 +2965,7 @@ Inherit Clojure snippets.
 
 * Windows & buffers
 
-** Windows
+** Window settings
 Resize windows pixelwise, not characterwise.
 
 #+BEGIN_SRC emacs-lisp
@@ -3040,7 +3040,7 @@ steps.
    ("C-c w s" . koek-wind/shrink))
 #+END_SRC
 
-** ace-window - Jump to window
+** ace-window - Jump to visible window
 [[https://github.com/abo-abo/ace-window][ace-window (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -5588,7 +5588,7 @@ Configure conf-mode afterwards.
     (bind-key "C-c d d" #'koek-dl/lookup-css 'css-mode-map))
 #+END_SRC
 
-*** emmet - Expand selector to HTML or CSS
+*** emmet - Expand CSS selector to HTML
 [[https://github.com/smihica/emmet-mode][emmet-mode (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -6049,7 +6049,7 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
                     "\n}\n"))))
 #+END_SRC
 
-*** org-roam - Track backlinks
+*** org-roam - Slip box
 [[https://github.com/org-roam/org-roam][org-roam (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -6249,7 +6249,7 @@ which requires AUCTeX.
     :mode ((rx ".tex" string-end) . TeX-tex-mode))
 #+END_SRC
 
-*** cdlatex - Assist with writing LaTeX
+*** cdlatex - Completion
 [[https://github.com/cdominik/cdlatex][cdlatex (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
