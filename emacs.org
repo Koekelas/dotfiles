@@ -630,6 +630,14 @@ When popping mark, skip consecutive identical marks.
      ("C-c e C-k" . keep-lines)))
 #+END_SRC
 
+** sort - Sort occurrences
+#+BEGIN_SRC emacs-lisp
+  (use-package sort
+    :bind
+    (("C-c e s" . sort-lines)
+     ("C-c e M-k" . delete-duplicate-lines)))
+#+END_SRC
+
 ** undo-tree - Undo & redo replacement
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -763,12 +771,10 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
 ** Lines
 
 *** Line commands
-Bind sort and align region.
+Bind align region.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-keys
-   ("C-c e s" . sort-lines)
-   ("C-c e a" . align-regexp))
+  (bind-key "C-c e a" #'align-regexp)
 #+END_SRC
 
 *** visual-line - Wrapped lines
