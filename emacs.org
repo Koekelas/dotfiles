@@ -685,6 +685,12 @@ saved in =/usr/share/hunspell/=. Add:
 
 For more information, see ~man 5 hunspell~.
 
+** display-line-numbers - Show line numbers
+#+BEGIN_SRC emacs-lisp
+  (use-package display-line-numbers
+    :bind ("C-c a n" . display-line-numbers-mode)) ; Line [n]umbers
+#+END_SRC
+
 ** olivetti - Show margins
 [[https://github.com/rnkn/olivetti][olivetti (GitHub)]]
 
@@ -6543,6 +6549,7 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
 
     (setq modus-themes-bold-constructs t)
     (setq modus-themes-slanted-constructs t)
+    (setq modus-themes-subtle-line-numbers t)
     (setq modus-themes-mode-line 'moody)
     (setq modus-themes-headings '((t . section)))
     (setq modus-themes-variable-pitch-headings t)

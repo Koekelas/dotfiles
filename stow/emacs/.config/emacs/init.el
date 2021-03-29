@@ -484,6 +484,9 @@ dictionary links before LIMIT."
       (setenv "DICTIONARY" dictionary-name))
     (setq ispell-dictionary dictionary-name)))
 
+(use-package display-line-numbers
+  :bind ("C-c a n" . display-line-numbers-mode)) ; Line [n]umbers
+
 (use-package olivetti
   :straight t
   :defer t
@@ -3092,6 +3095,7 @@ vivendi."
 
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-slanted-constructs t)
+  (setq modus-themes-subtle-line-numbers t)
   (setq modus-themes-mode-line 'moody)
   (setq modus-themes-headings '((t . section)))
   (setq modus-themes-variable-pitch-headings t)
