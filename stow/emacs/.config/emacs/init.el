@@ -458,6 +458,10 @@ dictionary links before LIMIT."
   (("C-c e s" . sort-lines)
    ("C-c e M-k" . delete-duplicate-lines)))
 
+(use-package align
+  :bind
+  ("C-c e a" . align-regexp))
+
 (use-package undo-tree
   :straight t
   :demand t
@@ -538,8 +542,6 @@ negative, move point to beginning of next word."
 (bind-keys
  ("M-n" . koek-mtn/next-word)
  ("M-p" . koek-mtn/previous-word))
-
-(bind-key "C-c e a" #'align-regexp)
 
 (delight 'visual-line-mode nil 'simple)
 
