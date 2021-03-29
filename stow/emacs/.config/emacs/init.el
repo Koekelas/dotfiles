@@ -272,6 +272,13 @@ for one."
   :config
   (setq vc-follow-symlinks t))
 
+(use-package diff-hl
+  :straight t
+  :bind
+  ("C-c a c" . diff-hl-mode)            ; [C]hanges
+  :config
+  (setq diff-hl-draw-borders nil))
+
 (use-package magit-status
   :straight magit
   :bind
@@ -1492,6 +1499,7 @@ N is an integer, a workspace number."
   :config
   (which-key-add-key-based-replacements
     "C-c &" "yasnippet"
+    "C-c a" "aids"
     "C-c d" "documentation"
     "C-c e" "editor"
     "C-c f" "files"

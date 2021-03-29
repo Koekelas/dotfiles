@@ -397,6 +397,18 @@ VC is a placeholder.
     (setq vc-follow-symlinks t))
 #+END_SRC
 
+*** diff-hl - Show changes
+[[https://github.com/dgutov/diff-hl][diff-hl (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diff-hl
+    :straight t
+    :bind
+    ("C-c a c" . diff-hl-mode)            ; [C]hanges
+    :config
+    (setq diff-hl-draw-borders nil))
+#+END_SRC
+
 ** magit - Git
 [[https://github.com/magit/magit][magit (GitHub)]]
 
@@ -4204,6 +4216,7 @@ On [[https://devdocs.io/][DevDocs]], enable:
     :config
     (which-key-add-key-based-replacements
       "C-c &" "yasnippet"
+      "C-c a" "aids"
       "C-c d" "documentation"
       "C-c e" "editor"
       "C-c f" "files"
