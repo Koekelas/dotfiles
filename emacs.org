@@ -174,10 +174,19 @@ keyword, i.e., it accepts as argument =t=, =nil= or nothing.
 
 ** Latest org
 Installing latest org after loading builtin org breaks org. Install
-latest org before loading org.
+latest org and its documentation before loading org.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'org-plus-contrib)
+  (straight-use-package
+   `(org-plus-contrib
+     :pre-build
+     ,(list (if (eq system-type 'berkeley-unix) "gmake" "make")
+            "autoloads" "info"
+            (concat "EMACS=" invocation-directory invocation-name))
+     :build (:not autoloads info)
+     :files
+     (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*") "contrib/lisp/*.el"
+      ("doc/org" . "org.info") ("doc/orgguide" . "orgguide.info"))))
 #+END_SRC
 
 For org configuration, see [[*Org][Org]].
