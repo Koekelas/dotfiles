@@ -622,6 +622,14 @@ When popping mark, skip consecutive identical marks.
         (setq n (1- n)))))
 #+END_SRC
 
+** replace - Replace occurrences
+#+BEGIN_SRC emacs-lisp
+  (use-package replace
+    :bind
+    (("C-c e k" . flush-lines)
+     ("C-c e C-k" . keep-lines)))
+#+END_SRC
+
 ** undo-tree - Undo & redo replacement
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree

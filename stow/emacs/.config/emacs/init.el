@@ -448,6 +448,11 @@ dictionary links before LIMIT."
       (funcall f)
       (setq n (1- n)))))
 
+(use-package replace
+  :bind
+  (("C-c e k" . flush-lines)
+   ("C-c e C-k" . keep-lines)))
+
 (use-package undo-tree
   :straight t
   :demand t
