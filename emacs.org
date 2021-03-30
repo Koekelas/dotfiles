@@ -984,6 +984,20 @@ End files with empty line.
   (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
+*** ws-butler - Clean whitespace
+[[https://github.com/lewang/ws-butler][ws-butler (GitHub)]]
+
+Unlike [[*whitespace - Visualize whitespace][whitespace]]'s ~auto-cleanup~ action, which cleans whitespace from
+every line, ws-butler cleans whitespace from changed lines. It doesn't
+produce noisy diffs.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ws-butler
+    :straight t
+    :hook ((prog-mode conf-mode) . ws-butler-mode)
+    :delight)
+#+END_SRC
+
 *** whitespace - Visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace

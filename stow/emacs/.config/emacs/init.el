@@ -699,6 +699,11 @@ more strings, the delimiters that call the handler."
 
 (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 
+(use-package ws-butler
+  :straight t
+  :hook ((prog-mode conf-mode) . ws-butler-mode)
+  :delight)
+
 (use-package whitespace
   :hook ((prog-mode conf-mode) . whitespace-mode)
   :config
