@@ -495,6 +495,22 @@ dictionary links before LIMIT."
   (setq olivetti-body-width (round (* 80 1.25)))
   :delight)
 
+(use-package display-fill-column-indicator
+  :bind
+  ("C-c a r" . display-fill-column-indicator-mode) ; [R]ight margin
+  :preface
+  (defvar koek-fi/column 80
+    "Column in which to draw the indicator.")
+
+  (defun koek-fi/setup-indicator ()
+    "Setup indicator in current."
+    (setq display-fill-column-indicator-column koek-fi/column))
+  :init
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+  (add-hook 'prog-mode-hook #'koek-fi/setup-indicator)
+  (add-hook 'conf-mode-hook #'display-fill-column-indicator-mode)
+  (add-hook 'conf-mode-hook #'koek-fi/setup-indicator))
+
 (add-hook 'markdown-mode-hook #'variable-pitch-mode)
 (add-hook 'org-mode-hook #'variable-pitch-mode)
 (delight 'buffer-face-mode nil 'face-remap)

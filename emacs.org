@@ -704,6 +704,25 @@ For more information, see ~man 5 hunspell~.
     :delight)
 #+END_SRC
 
+** display-fill-column-indicator - Show right margin
+#+BEGIN_SRC emacs-lisp
+  (use-package display-fill-column-indicator
+    :bind
+    ("C-c a r" . display-fill-column-indicator-mode) ; [R]ight margin
+    :preface
+    (defvar koek-fi/column 80
+      "Column in which to draw the indicator.")
+
+    (defun koek-fi/setup-indicator ()
+      "Setup indicator in current."
+      (setq display-fill-column-indicator-column koek-fi/column))
+    :init
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+    (add-hook 'prog-mode-hook #'koek-fi/setup-indicator)
+    (add-hook 'conf-mode-hook #'display-fill-column-indicator-mode)
+    (add-hook 'conf-mode-hook #'koek-fi/setup-indicator))
+#+END_SRC
+
 ** buffer-face - Remap default face
 #+BEGIN_SRC emacs-lisp
   (add-hook 'markdown-mode-hook #'variable-pitch-mode)
