@@ -489,7 +489,8 @@ dictionary links before LIMIT."
 
 (use-package olivetti
   :straight t
-  :defer t
+  :bind
+  ("C-c a m" . olivetti-mode)           ; [M]argins
   :config
   (setq olivetti-body-width (round (* 80 1.25)))
   :delight)
