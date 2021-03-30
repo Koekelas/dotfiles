@@ -701,6 +701,11 @@ more strings, the delimiters that call the handler."
 
 (bind-key "C-c e w" #'delete-trailing-whitespace)
 
+(use-package tabify
+  :bind
+  (("C-c e SPC" . untabify)
+   ("C-c e TAB" . tabify)))
+
 (use-package ws-butler
   :straight t
   :hook ((prog-mode conf-mode) . ws-butler-mode)

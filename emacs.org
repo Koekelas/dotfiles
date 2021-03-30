@@ -991,6 +991,14 @@ Bind ~delete-trailing-whitespace~.
   (bind-key "C-c e w" #'delete-trailing-whitespace)
 #+END_SRC
 
+*** tabify - Replace tabs with spaces and vice versa
+#+BEGIN_SRC emacs-lisp
+  (use-package tabify
+    :bind
+    (("C-c e SPC" . untabify)
+     ("C-c e TAB" . tabify)))
+#+END_SRC
+
 *** ws-butler - Clean whitespace
 [[https://github.com/lewang/ws-butler][ws-butler (GitHub)]]
 
