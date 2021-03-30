@@ -515,6 +515,9 @@ dictionary links before LIMIT."
 (add-hook 'org-mode-hook #'variable-pitch-mode)
 (delight 'buffer-face-mode nil 'face-remap)
 
+(use-package hl-line
+  :bind ("C-c a l" . hl-line-mode))     ; [L]ine
+
 (use-package expand-region
   :straight t
   :bind
@@ -3112,6 +3115,7 @@ vivendi."
 
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-slanted-constructs t)
+  (setq modus-themes-hl-line 'underline-accented)
   (setq modus-themes-subtle-line-numbers t)
   (setq modus-themes-mode-line 'moody)
   (setq modus-themes-headings '((t . section)))

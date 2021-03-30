@@ -730,6 +730,12 @@ For more information, see ~man 5 hunspell~.
   (delight 'buffer-face-mode nil 'face-remap)
 #+END_SRC
 
+** hl-line - Highlight current line
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-line
+    :bind ("C-c a l" . hl-line-mode))     ; [L]ine
+#+END_SRC
+
 * Constructs
 
 ** expand-region - Mark increasingly larger construct
@@ -6569,6 +6575,7 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
 
     (setq modus-themes-bold-constructs t)
     (setq modus-themes-slanted-constructs t)
+    (setq modus-themes-hl-line 'underline-accented)
     (setq modus-themes-subtle-line-numbers t)
     (setq modus-themes-mode-line 'moody)
     (setq modus-themes-headings '((t . section)))
