@@ -984,15 +984,13 @@ End files with empty line.
   (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
-*** whitespace - Clean & visualize whitespace
+*** whitespace - Visualize whitespace
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace
-    :bind
-    ("C-c e c" . whitespace-cleanup)
     :hook ((prog-mode conf-mode) . whitespace-mode)
     :config
-    (setq whitespace-action '(auto-cleanup))
-    (setq whitespace-style '(face trailing empty lines-tail))
+    (setq whitespace-style '(tab-mark face tabs))
+    (setq whitespace-display-mappings '((tab-mark ?\t [?⇥ ?\t])))
     :delight)
 #+END_SRC
 

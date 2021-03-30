@@ -700,12 +700,10 @@ more strings, the delimiters that call the handler."
 (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 
 (use-package whitespace
-  :bind
-  ("C-c e c" . whitespace-cleanup)
   :hook ((prog-mode conf-mode) . whitespace-mode)
   :config
-  (setq whitespace-action '(auto-cleanup))
-  (setq whitespace-style '(face trailing empty lines-tail))
+  (setq whitespace-style '(tab-mark face tabs))
+  (setq whitespace-display-mappings '((tab-mark ?\t [?⇥ ?\t])))
   :delight)
 
 (use-package eglot
