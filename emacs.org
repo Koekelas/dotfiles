@@ -984,6 +984,13 @@ End files with empty line.
   (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
+*** Whitespace commands
+Bind ~delete-trailing-whitespace~.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-key "C-c e w" #'delete-trailing-whitespace)
+#+END_SRC
+
 *** ws-butler - Clean whitespace
 [[https://github.com/lewang/ws-butler][ws-butler (GitHub)]]
 
