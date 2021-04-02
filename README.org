@@ -65,7 +65,7 @@ Git is mandatory, everything else is optional.
   - [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT Language Server]]
 - JavaScript:
   - [[https://nodejs.org/][Node.js]]
-  - [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-langserver]]
+  - [[https://github.com/theia-ide/typescript-language-server][TypeScript Language Server]]
   - [[https://github.com/NicolasPetton/Indium][Indium]]
 - JSON: [[https://github.com/vscode-langservers/vscode-json-languageserver-bin][vscode-json-languageserver-bin]]
 - Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
@@ -140,7 +140,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   ## JavaScript
   pacman -S nodejs npm python2
   npm i -g indium
-  # Install javascript-typescript-langserver from AUR
+  # Install typescript-language-server from AUR
 
   ## JSON
   # Install vscode-json-languageserver-bin from AUR
