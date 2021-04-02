@@ -725,8 +725,7 @@ more strings, the delimiters that call the handler."
    ("C-c e f" . eglot-code-actions)
    ("C-c e r" . eglot-rename))
   :hook
-  ((c-mode c++-mode erlang-mode mhtml-mode css-mode java-mode js-mode json-mode python-mode) .
-   eglot-ensure)
+  ((c-mode c++-mode erlang-mode java-mode js-mode python-mode) . eglot-ensure)
   :config
   ;; Eclipse JDT Language Server lacks an executable. Eglot expects to
   ;; find the jdtls launcher on the CLASSPATH environment variable.
@@ -746,11 +745,8 @@ more strings, the delimiters that call the handler."
                 (string-join (cons launcher-program-name paths)
                              path-separator)))))
 
-  ;; Register additional language servers
-  (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs)
-  (push '(mhtml-mode . ("html-languageserver" "--stdio")) eglot-server-programs)
-  (push '(css-mode . ("css-languageserver" "--stdio")) eglot-server-programs)
-  (push '(json-mode . ("json-languageserver" "--stdio")) eglot-server-programs))
+  ;; Register clangd
+  (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs))
 
 (use-package xref
   :straight t
