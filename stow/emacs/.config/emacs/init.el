@@ -748,6 +748,18 @@ more strings, the delimiters that call the handler."
   ;; Register clangd
   (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs))
 
+(use-package tree-sitter
+  :straight t
+  :defer t
+  :delight)
+
+(use-package tree-sitter-langs
+  :straight t
+  :after tree-sitter)
+
+(use-package tree-sitter-hl
+  :hook ((c-mode c++-mode java-mode js-mode) . tree-sitter-hl-mode))
+
 (use-package xref
   :straight t
   :defer t

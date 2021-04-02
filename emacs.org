@@ -1064,6 +1064,23 @@ produce noisy diffs.
 Run =M-x= ~make-symbolic-link~ and create a link to =compile_commands.json=
 in the project home directory.
 
+** tree-sitter - Query parse tree
+[[https://github.com/ubolonton/emacs-tree-sitter][tree-sitter (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tree-sitter
+    :straight t
+    :defer t
+    :delight)
+
+  (use-package tree-sitter-langs
+    :straight t
+    :after tree-sitter)
+
+  (use-package tree-sitter-hl
+    :hook ((c-mode c++-mode java-mode js-mode) . tree-sitter-hl-mode))
+#+END_SRC
+
 ** xref - Jump to definition & references
 #+BEGIN_SRC emacs-lisp
   (use-package xref
