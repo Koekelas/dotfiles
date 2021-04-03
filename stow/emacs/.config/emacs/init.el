@@ -1417,8 +1417,6 @@ N is an integer, a workspace number."
   :init
   (setq ivy-avy-style 'at-full))
 
-(straight-use-package 'request)         ; Optional dependency
-
 (use-package counsel
   :straight t
   :bind
@@ -1433,7 +1431,6 @@ N is an integer, a workspace number."
    ("C-c j d" . counsel-imenu)
    ("C-c j o" . counsel-org-goto-all)
    ("C-c x x" . counsel-linux-app)
-   ("C-c x s" . counsel-search)
    ("C-c d f" . counsel-describe-face)
    :map minibuffer-local-map
    ("C-r" . counsel-minibuffer-history))

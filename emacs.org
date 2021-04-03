@@ -4122,8 +4122,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 [[https://github.com/abo-abo/swiper][counsel (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'request)         ; Optional dependency
-
   (use-package counsel
     :straight t
     :bind
@@ -4138,7 +4136,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
      ("C-c j d" . counsel-imenu)
      ("C-c j o" . counsel-org-goto-all)
      ("C-c x x" . counsel-linux-app)
-     ("C-c x s" . counsel-search)
      ("C-c d f" . counsel-describe-face)
      :map minibuffer-local-map
      ("C-r" . counsel-minibuffer-history))
