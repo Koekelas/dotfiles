@@ -1161,7 +1161,7 @@ dark, else, set it to light."
 With `\\[universal-argument]' prefix argument ARG, reboot
 system."
     (interactive "P")
-    (let ((kill-emacs-hook ; Dynamic variable, restore when kill is aborted
+    (let ((kill-emacs-hook              ; Dynamic variable
            (append kill-emacs-hook
                    (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
       (save-buffers-kill-terminal)))
