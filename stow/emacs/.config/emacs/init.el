@@ -1373,32 +1373,48 @@ Output is between `compilation-filter-start' and point."
   :bind
   ("C-c x b" . eww)
   :preface
-  (defvar koek-eww/redirect-fs
-    (list (lambda (url)
-            (require 'url)
-            (let ((u (url-generic-parse-url (eww--dwim-expand-url url))))
-              (when (string-match-p
-                     (rx line-start (zero-or-one "www.") "reddit.com" line-end)
-                     (or (url-host u) ""))
-                (setf (url-host u) "old.reddit.com")
-                (url-recreate-url u)))))
+  (defvar koek-eww/redirect-fs nil
     "List of redirect functions.
-A redirect function is passed a URL and must return a redirect
-URL or, to not redirect the URL, nil.")
+A redirect function redirects a URL.  It's passed a URL struct,
+the URL to redirect, which it's allowed to modify.  For URL
+fields, see `url-generic-parse-url'.  The redirect function must
+return a redirected URL, a string, or, to not redirect the URL,
+nil.")
 
-  (define-advice eww (:filter-args (args) koek-eww/redirect)
+  (defun koek-eww/redirect-reddit (url)
+    "Redirect Reddit to Reddit mobile.
+URL is a URL struct, the URL to redirect."
+    (when (string-match-p
+           (rx line-start
+               (zero-or-one (or "www" "old") ".") "reddit.com"
+               line-end)
+           (or (url-host url) ""))
+      (setf (url-host url) "i.reddit.com")
+      (url-recreate-url url)))
+
+  (defun koek-eww/redirect (url)
+    "Redirect URL.
+URL is a string, the URL to redirect.  The redirected URL is the
+result of the first redirect function to return a URL or, when
+none return a URL, nil.  For redirect functions, see
+`koek-eww/redirect-fs'."
+    (require 'url)
+    (let ((expanded (eww--dwim-expand-url url)))
+      (thread-last koek-eww/redirect-fs
+        (mapcar (lambda (f)
+                  (funcall f (url-generic-parse-url expanded))))
+        (seq-find #'identity))))
+
+  (define-advice eww (:filter-args (args) koek-eww/redirect-url)
     (let ((url (car args)))
-      (cons (or (seq-find #'identity
-                          (mapcar (lambda (f)
-                                    (funcall f url))
-                                  koek-eww/redirect-fs))
-                url)
-            (cdr args))))
+      (cons (or (koek-eww/redirect url) url) (cdr args))))
   :config
   (use-package link-hint
     :bind
     (:map eww-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (push #'koek-eww/redirect-reddit koek-eww/redirect-fs))
 
 (use-package shr
   :defer t
