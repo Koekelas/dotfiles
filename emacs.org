@@ -3216,9 +3216,7 @@ Resize windows pixelwise, not characterwise.
 #+END_SRC
 
 ** Window manipulation commands
-The default keybindings assume a QWERTY keyboard layout. Some
-keybindings are cumbersome on non QWERTY keyboard layouts. Rebind
-cumbersome window commands.
+Rebind cumbersome window commands.
 
 #+BEGIN_SRC emacs-lisp
   (bind-keys
