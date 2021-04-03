@@ -4076,7 +4076,6 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
 
 #+BEGIN_SRC emacs-lisp
   ;; Optional dependencies
-  (straight-use-package 'ivy-avy)
   (straight-use-package 'flx)
   (straight-use-package 'wgrep)
 
@@ -4111,6 +4110,12 @@ Enable minibuffer commands (e.g. [[*counsel - Ivy powered commands][counsel]]) i
     (setq ivy-count-format "%d/%d ")
     (ivy-mode)
     :delight)
+
+  (use-package ivy-avy
+    :straight t
+    :defer t
+    :init
+    (setq ivy-avy-style 'at-full))
 #+END_SRC
 
 *** counsel - Ivy powered commands

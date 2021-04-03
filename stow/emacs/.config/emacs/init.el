@@ -1376,7 +1376,6 @@ N is an integer, a workspace number."
 (setq enable-recursive-minibuffers t)
 
 ;; Optional dependencies
-(straight-use-package 'ivy-avy)
 (straight-use-package 'flx)
 (straight-use-package 'wgrep)
 
@@ -1411,6 +1410,12 @@ N is an integer, a workspace number."
   (setq ivy-count-format "%d/%d ")
   (ivy-mode)
   :delight)
+
+(use-package ivy-avy
+  :straight t
+  :defer t
+  :init
+  (setq ivy-avy-style 'at-full))
 
 (straight-use-package 'request)         ; Optional dependency
 
