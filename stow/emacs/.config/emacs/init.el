@@ -937,10 +937,10 @@ list of backends, see `company-backends'."
   :config
   (company-flx-mode))
 
-(setq window-resize-pixelwise t)
-
 (unbind-key "C-z")
 (unbind-key "C-x C-z")
+
+(setq window-resize-pixelwise t)
 
 (bind-keys
  ("C-c w h" . split-window-below)

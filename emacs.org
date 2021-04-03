@@ -3187,7 +3187,15 @@ Inherit Clojure snippets.
     (company-flx-mode))
 #+END_SRC
 
-* Windows & buffers
+* Frames, windows & buffers
+
+** Frame commands
+The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
+
+#+BEGIN_SRC emacs-lisp
+  (unbind-key "C-z")
+  (unbind-key "C-x C-z")
+#+END_SRC
 
 ** Window settings
 Resize windows pixelwise, not characterwise.
@@ -3196,14 +3204,7 @@ Resize windows pixelwise, not characterwise.
   (setq window-resize-pixelwise t)
 #+END_SRC
 
-** Window commands
-The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
-
-#+BEGIN_SRC emacs-lisp
-  (unbind-key "C-z")
-  (unbind-key "C-x C-z")
-#+END_SRC
-
+** Window manipulation commands
 The default keybindings assume a QWERTY keyboard layout. Some
 keybindings are cumbersome on non QWERTY keyboard layouts. Rebind
 cumbersome window commands.
@@ -3228,6 +3229,7 @@ above each other right). Bind ~balance-windows-area~.
   (bind-key "C-c w C-b" #'balance-windows-area)
 #+END_SRC
 
+** Window resize commands
 Resizing windows by characters or pixels is slow. Resize windows in
 steps.
 
