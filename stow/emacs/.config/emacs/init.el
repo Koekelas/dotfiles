@@ -940,6 +940,12 @@ list of backends, see `company-backends'."
 (unbind-key "C-z")
 (unbind-key "C-x C-z")
 
+(bind-keys
+ ("C-c v m" . make-frame-command)
+ ("C-c v o" . other-frame)
+ ("C-c v d" . delete-frame)
+ ("C-c v C-d" . delete-other-frames))
+
 (setq window-resize-pixelwise t)
 
 (bind-keys
@@ -1557,6 +1563,7 @@ N is an integer, a workspace number."
     "C-c j" "jump"
     "C-c k" "media"
     "C-c o" "org"
+    "C-c v" "frames"
     "C-c w" "windows"
     "C-c x" "other"
     "C-c z" "system")
