@@ -2456,16 +2456,17 @@ Modes are confident about being derived from text-mode.")
   :config
   (bind-key "C-c d d" #'koek-dl/lookup-erlang 'erlang-mode-map)
 
-  ;; On Windows, executable-find finds the erlc shim. Shadow
-  ;; c:/ProgramData/chocolatey/bin/.
-  (when-let
-      ((erlc-program-name
-        (car                            ; Assume only one version installed
-         (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe" 'full))))
-    (push (file-name-directory erlc-program-name) exec-path))
-  (when-let ((erlc-program-name (executable-find "erlc")))
-    (setq erlang-root-dir
-          (locate-dominating-file (file-truename erlc-program-name) "bin")))
+  ;; Set Erlang home
+  (let* ((file-names
+          (mapcar #'file-name-directory
+                  (file-expand-wildcards "c:/Program Files/erl*/bin/erlc.exe")))
+         ;; Dynamic variable, shadow Chocolatey shim
+         (exec-path (append file-names exec-path)))
+    (when-let ((file-name (executable-find "erlc")))
+      (setq erlang-root-dir
+            (thread-first file-name
+              file-truename
+              (locate-dominating-file "bin")))))
   :delight (erlang-mode "Erl" :major))
 
 (use-package mhtml-mode
