@@ -2238,7 +2238,7 @@ INTERACTIVE is used internally."
 
 (use-package calendar
   :bind
-  ("C-c x q" . calendar)                ; Qalendar [sic]
+  ("C-c x q" . calendar)                ; [Q]alendar [sic]
   :hook (calendar-today-visible . calendar-mark-today)
   :config
   (setq calendar-mark-holidays-flag t))
