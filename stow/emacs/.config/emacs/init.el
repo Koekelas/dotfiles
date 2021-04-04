@@ -3134,7 +3134,7 @@ vivendi."
          `(koek-wm/unselected-workspace ((,class :foreground ,bg-alt)))
          `(pdf-links-read-link          ((,class
                                           :foreground unspecified :background unspecified
-                                          :inherit (modus-theme-intense-magenta bold)))))))
+                                          :inherit (modus-themes-intense-magenta bold)))))))
     ;; After user theme
     (run-hooks 'koek-thm/enable-hook))
 
