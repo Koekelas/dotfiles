@@ -2313,7 +2313,11 @@ INTERACTIVE is used internally."
   (bind-keys
    :map clojure-mode-map
    ("C-c d d" . koek-dl/lookup-clojure)
-   ("C-c d C-j" . koek-dl/lookup-openjdk))
+   ("C-c d C-j" . koek-dl/lookup-openjdk)
+   :map clojurescript-mode-map
+   ("C-c d C-j" . koek-dl/lookup-javascript)
+   ("C-c d C-d" . koek-dl/lookup-dom)
+   ("C-c d C-n" . koek-dl/lookup-node))
   :delight
   (clojure-mode "Clj" :major)
   (clojurescript-mode "Cljs" :major)
@@ -2343,6 +2347,8 @@ INTERACTIVE is used internally."
 (use-package cider-repl
   :defer t
   :config
+  (bind-key "C-c d d" #'koek-dl/lookup-clojure 'cider-repl-mode-map)
+
   ;; Resolve keybinding conflict with company
   (unbind-key "TAB" cider-repl-mode-map)
 
