@@ -3329,7 +3329,7 @@ internally."
     "Truncate string S to LENGTH.
 S is a string, the string to truncate.  LENGTH is an integer, the
 maximum length of S."
-    (substring s 0 (min length (length s))))
+    (truncate-string-to-width s length nil nil t))
 
   (defconst koek-ml/id
     '(:eval
