@@ -3322,7 +3322,8 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace koek-ml/depth
             koek-ml/exwm-workspaces koek-ml/eyebrowse
-            koek-ml/id koek-ml/keycast koek-ml/diff koek-ml/task koek-ml/modes))
+            koek-ml/id koek-ml/keycast
+            koek-ml/diff koek-ml/task koek-ml/modes))
     (force-mode-line-update)
     (dolist (type koek-ml/variant-types)
       (when-let ((buffer (ediff-get-buffer type)))
