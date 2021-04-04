@@ -3212,15 +3212,15 @@ A dummy prevents a package from modifying the mode line.")
 
   (defun koek-ml/get-window-label ()
     "Return window label of selected window."
-    (substring-no-properties (window-parameter nil 'ace-window-path)))
+    (when-let ((label (window-parameter nil 'ace-window-path)))
+      (substring-no-properties label)))
 
   (defconst koek-ml/ace
     '(:eval
       (when (bound-and-true-p ace-window-mode)
-        `(,(moody-ribbon
-            (propertize (koek-ml/get-window-label) 'face 'aw-mode-line-face)
-            nil 'up)
-          koek-ml/separator)))
+        (when-let ((label (koek-ml/get-window-label)))
+          `(,(moody-ribbon (propertize label 'face 'aw-mode-line-face) nil 'up)
+            koek-ml/separator))))
     "Ace mode line construct.")
 
   (defvar-local koek-ml/variant nil
