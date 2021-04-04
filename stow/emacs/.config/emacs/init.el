@@ -2500,7 +2500,6 @@ Modes are confident about being derived from text-mode.")
    ("C-c d C-j" . koek-dl/lookup-jquery)
    ("C-c d C-l" . koek-dl/lookup-lodash)
    ("C-c d C-n" . koek-dl/lookup-node)
-   ("C-c d C-p" . koek-dl/lookup-npm)
    ("C-c d C-x" . koek-dl/lookup-express))
 
   ;; Resolve keybinding conflict with eglot
