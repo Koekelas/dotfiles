@@ -1955,7 +1955,10 @@ playing track, else, enqueue after last track."
    ([remap bongo-dired-insert-enqueue-lines] . koek-bngo/dired-enqueue-next-dwim))
 
   ;; General
-  (setq bongo-enabled-backends '(vlc))
+  (setq bongo-enabled-backends '(mpv))
+  (setq bongo-custom-backend-matchers
+        '((mpv . (local-file "m4a"))
+          (mpv . ("https:" . t))))
   (setq bongo-prefer-library-buffers nil)
   (setq bongo-insert-whole-directory-trees t)
   (setq bongo-join-inserted-tracks nil)

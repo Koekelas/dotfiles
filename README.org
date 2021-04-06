@@ -45,7 +45,7 @@ Git is mandatory, everything else is optional.
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
 - News reader: [[https://curl.haxx.se/][curl]]
 - PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
-- Media player: [[https://www.videolan.org/vlc/][VLC media player]]
+- Media player: [[https://mpv.io/][mpv]] and [[https://github.com/yt-dlp/yt-dlp][yt-dlp]]
 - C family:
   - [[https://gcc.gnu.org/][GCC]]
   - [[https://mesonbuild.com/][Meson]]
@@ -109,7 +109,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   pacman -S poppler-glib libpng zlib imagemagick
 
   ## Media player
-  pacman -S vlc
+  pacman -S mpv youtube-dl
 
   ## C family
   pacman -S gcc meson clang gdb arduino arduino-avr-core
