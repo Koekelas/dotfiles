@@ -289,10 +289,6 @@ for one."
   :config
   (setq magit-diff-refine-hunk t))
 
-(use-package magit-log
-  :bind
-  ("C-c f h" . magit-log-buffer-file))
-
 (use-package git-commit
   :defer t
   :preface
