@@ -413,7 +413,15 @@ When FORCE is truthy, continue commit unconditionally."
   (setq avy-all-windows nil)
   (setq avy-all-windows-alt 'all-frames)
   (setq avy-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
-  (setq avy-dispatch-alist nil))
+  (setq avy-dispatch-alist nil)
+  ;; Hints can touch, making it difficult to identify individual ones.
+  ;; Style all hint characters identical except the first one.
+  (setq avy-lead-faces
+        '(avy-lead-face
+          avy-lead-face-1
+          avy-lead-face-1
+          avy-lead-face-1
+          avy-lead-face-1)))
 
 (use-package link-hint
   :straight t
