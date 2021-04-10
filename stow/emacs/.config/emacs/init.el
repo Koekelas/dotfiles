@@ -89,6 +89,289 @@ information, see `use-package-process-keywords'."
    (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*") "contrib/lisp/*.el"
     ("doc/org" . "org.info") ("doc/orgguide" . "orgguide.info"))))
 
+(use-package gcmh
+  :straight t
+  :hook (after-init . gcmh-mode)
+  :config
+  (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
+  :delight)
+
+;; Prevent exwm from asking to replace window manager after
+;; installation
+(setq exwm-replace nil)
+
+(use-package exwm
+  :straight t
+  :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+  :preface
+  (defun koek-wm/get-process-args (id)
+    "Return arguments of process id ID.
+ID is an integer, the process id of the process."
+    (when-let ((args (alist-get 'args (process-attributes id))))
+      (let ((normalized
+             (thread-last args
+               (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
+               (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
+               (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
+        (split-string normalized "\N{NULL}"))))
+
+  (defun koek-wm/get-process-ids (name)
+    "Return process ids of process NAME.
+NAME is a string, the name of the process."
+    (seq-filter (lambda (id)
+                  (when-let ((args (koek-wm/get-process-args id)))
+                    (let ((nm (thread-first args
+                                car
+                                (split-string "/")
+                                last
+                                car)))
+                      (string-equal nm name))))
+     (list-system-processes)))
+
+  (defun koek-wm/set-xsettingsd-preset ()
+    "Set xsettingsd configuration preset.
+When current theme is a dark theme, set configuration preset to
+dark, else, set it to light."
+    (when-let ((id (car (koek-wm/get-process-ids "xsettingsd"))))
+      (let* ((preset (if (koek-thm/darkp) "dark" "light"))
+             (preset-file
+              (thread-last (xdg-data-home)
+                (expand-file-name "xsettingsd/presets/")
+                (expand-file-name preset)))
+             (config-file
+              (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
+        ;; Third argument truthy overwrites existing link, docstring
+        ;; only mentions not signaling an error
+        (make-symbolic-link preset-file config-file 'overwrite)
+        (signal-process id 'SIGHUP))))
+
+  ;; For systemctl power management commands, see
+  ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
+  (defun koek-wm/power-off ()
+    "Power off system."
+    (make-process :name "poweroff" :command '("systemctl" "poweroff")))
+
+  (defun koek-wm/reboot ()
+    "Reboot system."
+    (make-process :name "reboot" :command '("systemctl" "reboot")))
+
+  (defun koek-wm/kill-power-off (&optional arg)
+    "Kill Emacs and power off system.
+With `\\[universal-argument]' prefix argument ARG, reboot
+system."
+    (interactive "P")
+    (let ((kill-emacs-hook              ; Dynamic variable
+           (append kill-emacs-hook
+                   (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
+      (save-buffers-kill-terminal)))
+
+  (defun koek-wm/suspend ()
+    "Suspend system."
+    (interactive)
+    (make-process :name "suspend" :command '("systemctl" "suspend")))
+
+  (defun koek-wm/launch-firefox (&optional arg)
+    "Launch Firefox.
+With `\\[universal-argument]' prefix argument ARG, create private
+window."
+    (interactive "P")
+    (make-process
+     :name "firefox"
+     :command `("firefox" ,(if arg "--private-window" "--new-window"))))
+  :config
+  ;; Only when package is loaded
+  (bind-keys
+   ("C-c z p" . koek-wm/kill-power-off)
+   ("C-c z z" . koek-wm/suspend)
+   ("C-c x C-f" . koek-wm/launch-firefox))
+
+  (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
+
+(use-package exwm-input
+  :defer t
+  :preface
+  (defvar koek-wm/base-simulation-keys
+    '(("C-f" . "<right>")
+      ("C-b" . "<left>")
+      ("C-n" . "<down>")
+      ("C-p" . "<up>")
+      ("M-f" . "C-<right>")
+      ("M-b" . "C-<left>")
+      ("C-e" . "<end>")
+      ("C-a" . "<home>")
+      ("C-v" . "<next>")
+      ("M-v" . "<prior>")
+      ("M->" . "C-<end>")
+      ("M-<" . "C-<home>")
+      ("C-s" . "C-f")
+      ("C-d" . "<delete>")
+      ("M-d" . "S-C-<right> C-x")
+      ;; Why does <backspace> work but DEL not?
+      ("M-<backspace>" . "S-C-<left> C-x")
+      ("C-k" . "S-<end> C-x")
+      ("M-@" . "S-C-<right>")
+      ("M-h" . "C-a")
+      ("M-w" . "C-c")
+      ("C-w" . "C-x")
+      ("C-y" . "C-v")
+      ("C-/" . "C-z")
+      ("M-/" . "C-y"))
+    "Alist of Emacs keybinding to non Emacs keybinding pairs.
+Keybinding is a string, see `edmacro-mode'.")
+
+  (define-advice exwm-input--update-mode-line
+      (:around (f &rest args) koek-wm/disable-update-process-status)
+    (let ((status mode-line-process))
+      (apply f args)
+      (setq mode-line-process status)
+      (force-mode-line-update)))
+  :config
+  ;; Keybindings in exwm and non exwm buffers, even in char mode,
+  ;; i.e., keybindings mustn't conflict with non Emacs keybindings
+  ;; (e.g. copy, cut and paste). Keybindings associated with desktop
+  ;; environments (e.g. maximize window, close window and switch
+  ;; between windows) meet these requirements.
+  (setq exwm-input-global-keys
+        (mapcar (pcase-lambda (`(,key . ,command))
+                  (cons (kbd key) command))
+                '(("s-s" . exwm-input-toggle-keyboard)
+                  ("s-0" . koek-wm/switch-workspace-0)
+                  ("s-1" . koek-wm/switch-workspace-1)
+                  ("s-2" . koek-wm/switch-workspace-2)
+                  ("s-3" . koek-wm/switch-workspace-3)
+                  ("s-4" . koek-wm/switch-workspace-4)
+                  ("s-5" . koek-wm/switch-workspace-5)
+                  ("s-6" . koek-wm/switch-workspace-6)
+                  ("s-7" . koek-wm/switch-workspace-7)
+                  ("s-8" . koek-wm/switch-workspace-8)
+                  ("s-9" . koek-wm/switch-workspace-9)
+                  ("s-w" . koek-wm/switch-previous-workspace)
+                  ("s-x" . counsel-linux-app)
+                  ("s-q" . bury-buffer)
+                  ("s-d" . kill-current-buffer)
+                  ("<f11>" . exwm-layout-toggle-fullscreen)
+                  ("s-C-f" . koek-wm/launch-firefox))))
+
+  ;; Translate Emacs to non Emacs keybindings in line mode
+  (setq exwm-input-simulation-keys
+        (mapcar (pcase-lambda (`(,from . ,to))
+                  (cons (kbd from) (kbd to)))
+                koek-wm/base-simulation-keys))
+
+  ;; Grab repeat and ivy-resume in line mode
+  (push ?\C-z exwm-input-prefix-keys)
+  (push ?\C-r exwm-input-prefix-keys))
+
+(use-package exwm-workspace
+  :defer t
+  :preface
+  (defvar koek-wm/previous-workspace-n nil
+    "Previously selected workspace number.")
+
+  (defface koek-wm/selected-workspace '((t :inherit mode-line-emphasis))
+    "Face for selected workspace label in mode line."
+    :group 'exwm-workspace)
+
+  (defface koek-wm/unselected-workspace nil
+    "Face for unselected workspace label in mode line."
+    :group 'exwm-workspace)
+
+  (define-advice exwm-workspace-switch
+      (:before (index &optional _force) koek-wm/update-previous-workspace-n)
+    (unless (eq index exwm-workspace-current-index)
+      (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
+
+  (dolist (n (number-sequence 0 9))
+    (defalias (intern (format "koek-wm/switch-workspace-%d" n))
+      (lambda ()
+        (interactive)
+        (exwm-workspace-switch-create n))
+      (format "Switch to workspace %d." n)))
+
+  (defun koek-wm/switch-previous-workspace ()
+    "Switch to previously selected workspace."
+    (interactive)
+    (when koek-wm/previous-workspace-n
+      (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
+
+  (defun koek-wm/rename-current ()
+    "Rename current according to its class or title."
+    ;; Class is the name of an application while instance is the name
+    ;; of an instance of the application. For more information, see
+    ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+    (let ((class (downcase exwm-class-name)))
+      (exwm-workspace-rename-buffer
+       (cond
+        ((string-prefix-p "gimp" class)
+         "GIMP")
+        ((string-prefix-p "firefox" class)
+         (replace-regexp-in-string
+          (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
+          "Firefox" (or exwm-title "Firefox")))
+        ((string-prefix-p "microsoft teams" class)
+         "Teams")
+        ((string-prefix-p "vlc" class)
+         "VLC")
+        (t
+         exwm-class-name)))))
+
+  (defun koek-wm/n-to-label (n)
+    "Convert workspace number N to a workspace label.
+N is an integer, a workspace number."
+    (or (koek-ml/arabic-to-roman n) "N"))
+  :config
+  ;; Only when package is loaded
+  (bind-keys
+   ("C-c w 0" . koek-wm/switch-workspace-0)
+   ("C-c w 1" . koek-wm/switch-workspace-1)
+   ("C-c w 2" . koek-wm/switch-workspace-2)
+   ("C-c w 3" . koek-wm/switch-workspace-3)
+   ("C-c w 4" . koek-wm/switch-workspace-4)
+   ("C-c w 5" . koek-wm/switch-workspace-5)
+   ("C-c w 6" . koek-wm/switch-workspace-6)
+   ("C-c w 7" . koek-wm/switch-workspace-7)
+   ("C-c w 8" . koek-wm/switch-workspace-8)
+   ("C-c w 9" . koek-wm/switch-workspace-9)
+   ("C-c w w" . koek-wm/switch-previous-workspace)
+   ("C-c w e" . exwm-workspace-swap)
+   ("C-c w k" . exwm-workspace-delete))
+
+  (setq exwm-workspace-number 2)
+  (setq exwm-workspace-show-all-buffers t)
+  (setq exwm-workspace-index-map #'koek-wm/n-to-label)
+  (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
+  (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
+
+(use-package exwm-layout
+  :defer t
+  :config
+  (setq exwm-layout-show-all-buffers t))
+
+(use-package exwm-manage
+  :defer t
+  :config
+  (setq exwm-manage-configurations
+        `(((string-prefix-p "firefox" (downcase exwm-class-name))
+           simulation-keys
+           ,(mapcar (pcase-lambda (`(,from . ,to))
+                      (cons (kbd from) (kbd to)))
+                    (append '(("M-o" . "C-n")
+                              ("M-p" . "S-C-p")
+                              ("M-k" . "C-w"))
+                            koek-wm/base-simulation-keys)))
+          ((string-prefix-p "gimp" (downcase exwm-class-name))
+           char-mode t floating-mode-line nil)
+          ((string-prefix-p "inkscape" (downcase exwm-class-name))
+           char-mode t floating-mode-line nil))))
+
+(use-package server
+  :config
+  (server-start))
+
+(setq save-interprogram-paste-before-kill t)
+
+(bind-key "C-z" #'repeat)
+
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
   :config
@@ -954,7 +1237,6 @@ list of backends, see `company-backends'."
   :config
   (company-flx-mode))
 
-(unbind-key "C-z")
 (unbind-key "C-x C-z")
 
 (bind-keys
@@ -1106,289 +1388,6 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
     (bury-buffer)))
 
 (bind-key [remap kill-buffer] #'koek-buff/bury)
-
-(use-package gcmh
-  :straight t
-  :hook (after-init . gcmh-mode)
-  :config
-  (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
-  :delight)
-
-;; Prevent exwm from asking to replace window manager after
-;; installation
-(setq exwm-replace nil)
-
-(use-package exwm
-  :straight t
-  :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
-  :preface
-  (defun koek-wm/get-process-args (id)
-    "Return arguments of process id ID.
-ID is an integer, the process id of the process."
-    (when-let ((args (alist-get 'args (process-attributes id))))
-      (let ((normalized
-             (thread-last args
-               (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
-               (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
-               (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
-        (split-string normalized "\N{NULL}"))))
-
-  (defun koek-wm/get-process-ids (name)
-    "Return process ids of process NAME.
-NAME is a string, the name of the process."
-    (seq-filter (lambda (id)
-                  (when-let ((args (koek-wm/get-process-args id)))
-                    (let ((nm (thread-first args
-                                car
-                                (split-string "/")
-                                last
-                                car)))
-                      (string-equal nm name))))
-     (list-system-processes)))
-
-  (defun koek-wm/set-xsettingsd-preset ()
-    "Set xsettingsd configuration preset.
-When current theme is a dark theme, set configuration preset to
-dark, else, set it to light."
-    (when-let ((id (car (koek-wm/get-process-ids "xsettingsd"))))
-      (let* ((preset (if (koek-thm/darkp) "dark" "light"))
-             (preset-file
-              (thread-last (xdg-data-home)
-                (expand-file-name "xsettingsd/presets/")
-                (expand-file-name preset)))
-             (config-file
-              (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
-        ;; Third argument truthy overwrites existing link, docstring
-        ;; only mentions not signaling an error
-        (make-symbolic-link preset-file config-file 'overwrite)
-        (signal-process id 'SIGHUP))))
-
-  ;; For systemctl power management commands, see
-  ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
-  (defun koek-wm/power-off ()
-    "Power off system."
-    (make-process :name "poweroff" :command '("systemctl" "poweroff")))
-
-  (defun koek-wm/reboot ()
-    "Reboot system."
-    (make-process :name "reboot" :command '("systemctl" "reboot")))
-
-  (defun koek-wm/kill-power-off (&optional arg)
-    "Kill Emacs and power off system.
-With `\\[universal-argument]' prefix argument ARG, reboot
-system."
-    (interactive "P")
-    (let ((kill-emacs-hook              ; Dynamic variable
-           (append kill-emacs-hook
-                   (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
-      (save-buffers-kill-terminal)))
-
-  (defun koek-wm/suspend ()
-    "Suspend system."
-    (interactive)
-    (make-process :name "suspend" :command '("systemctl" "suspend")))
-
-  (defun koek-wm/launch-firefox (&optional arg)
-    "Launch Firefox.
-With `\\[universal-argument]' prefix argument ARG, create private
-window."
-    (interactive "P")
-    (make-process
-     :name "firefox"
-     :command `("firefox" ,(if arg "--private-window" "--new-window"))))
-  :config
-  ;; Only when package is loaded
-  (bind-keys
-   ("C-c z p" . koek-wm/kill-power-off)
-   ("C-c z z" . koek-wm/suspend)
-   ("C-c x C-f" . koek-wm/launch-firefox))
-
-  (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
-
-(use-package exwm-input
-  :defer t
-  :preface
-  (defvar koek-wm/base-simulation-keys
-    '(("C-f" . "<right>")
-      ("C-b" . "<left>")
-      ("C-n" . "<down>")
-      ("C-p" . "<up>")
-      ("M-f" . "C-<right>")
-      ("M-b" . "C-<left>")
-      ("C-e" . "<end>")
-      ("C-a" . "<home>")
-      ("C-v" . "<next>")
-      ("M-v" . "<prior>")
-      ("M->" . "C-<end>")
-      ("M-<" . "C-<home>")
-      ("C-s" . "C-f")
-      ("C-d" . "<delete>")
-      ("M-d" . "S-C-<right> C-x")
-      ;; Why does <backspace> work but DEL not?
-      ("M-<backspace>" . "S-C-<left> C-x")
-      ("C-k" . "S-<end> C-x")
-      ("M-@" . "S-C-<right>")
-      ("M-h" . "C-a")
-      ("M-w" . "C-c")
-      ("C-w" . "C-x")
-      ("C-y" . "C-v")
-      ("C-/" . "C-z")
-      ("M-/" . "C-y"))
-    "Alist of Emacs keybinding to non Emacs keybinding pairs.
-Keybinding is a string, see `edmacro-mode'.")
-
-  (define-advice exwm-input--update-mode-line
-      (:around (f &rest args) koek-wm/disable-update-process-status)
-    (let ((status mode-line-process))
-      (apply f args)
-      (setq mode-line-process status)
-      (force-mode-line-update)))
-  :config
-  ;; Keybindings in exwm and non exwm buffers, even in char mode,
-  ;; i.e., keybindings mustn't conflict with non Emacs keybindings
-  ;; (e.g. copy, cut and paste). Keybindings associated with desktop
-  ;; environments (e.g. maximize window, close window and switch
-  ;; between windows) meet these requirements.
-  (setq exwm-input-global-keys
-        (mapcar (pcase-lambda (`(,key . ,command))
-                  (cons (kbd key) command))
-                '(("s-s" . exwm-input-toggle-keyboard)
-                  ("s-0" . koek-wm/switch-workspace-0)
-                  ("s-1" . koek-wm/switch-workspace-1)
-                  ("s-2" . koek-wm/switch-workspace-2)
-                  ("s-3" . koek-wm/switch-workspace-3)
-                  ("s-4" . koek-wm/switch-workspace-4)
-                  ("s-5" . koek-wm/switch-workspace-5)
-                  ("s-6" . koek-wm/switch-workspace-6)
-                  ("s-7" . koek-wm/switch-workspace-7)
-                  ("s-8" . koek-wm/switch-workspace-8)
-                  ("s-9" . koek-wm/switch-workspace-9)
-                  ("s-w" . koek-wm/switch-previous-workspace)
-                  ("s-x" . counsel-linux-app)
-                  ("s-q" . bury-buffer)
-                  ("s-d" . kill-current-buffer)
-                  ("<f11>" . exwm-layout-toggle-fullscreen)
-                  ("s-C-f" . koek-wm/launch-firefox))))
-
-  ;; Translate Emacs to non Emacs keybindings in line mode
-  (setq exwm-input-simulation-keys
-        (mapcar (pcase-lambda (`(,from . ,to))
-                  (cons (kbd from) (kbd to)))
-                koek-wm/base-simulation-keys))
-
-  ;; Grab repeat and ivy-resume in line mode
-  (push ?\C-z exwm-input-prefix-keys)
-  (push ?\C-r exwm-input-prefix-keys))
-
-(use-package exwm-workspace
-  :defer t
-  :preface
-  (defvar koek-wm/previous-workspace-n nil
-    "Previously selected workspace number.")
-
-  (defface koek-wm/selected-workspace '((t :inherit mode-line-emphasis))
-    "Face for selected workspace label in mode line."
-    :group 'exwm-workspace)
-
-  (defface koek-wm/unselected-workspace nil
-    "Face for unselected workspace label in mode line."
-    :group 'exwm-workspace)
-
-  (define-advice exwm-workspace-switch
-      (:before (index &optional _force) koek-wm/update-previous-workspace-n)
-    (unless (eq index exwm-workspace-current-index)
-      (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
-
-  (dolist (n (number-sequence 0 9))
-    (defalias (intern (format "koek-wm/switch-workspace-%d" n))
-      (lambda ()
-        (interactive)
-        (exwm-workspace-switch-create n))
-      (format "Switch to workspace %d." n)))
-
-  (defun koek-wm/switch-previous-workspace ()
-    "Switch to previously selected workspace."
-    (interactive)
-    (when koek-wm/previous-workspace-n
-      (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
-
-  (defun koek-wm/rename-current ()
-    "Rename current according to its class or title."
-    ;; Class is the name of an application while instance is the name
-    ;; of an instance of the application. For more information, see
-    ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
-    (let ((class (downcase exwm-class-name)))
-      (exwm-workspace-rename-buffer
-       (cond
-        ((string-prefix-p "gimp" class)
-         "GIMP")
-        ((string-prefix-p "firefox" class)
-         (replace-regexp-in-string
-          (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
-          "Firefox" (or exwm-title "Firefox")))
-        ((string-prefix-p "microsoft teams" class)
-         "Teams")
-        ((string-prefix-p "vlc" class)
-         "VLC")
-        (t
-         exwm-class-name)))))
-
-  (defun koek-wm/n-to-label (n)
-    "Convert workspace number N to a workspace label.
-N is an integer, a workspace number."
-    (or (koek-ml/arabic-to-roman n) "N"))
-  :config
-  ;; Only when package is loaded
-  (bind-keys
-   ("C-c w 0" . koek-wm/switch-workspace-0)
-   ("C-c w 1" . koek-wm/switch-workspace-1)
-   ("C-c w 2" . koek-wm/switch-workspace-2)
-   ("C-c w 3" . koek-wm/switch-workspace-3)
-   ("C-c w 4" . koek-wm/switch-workspace-4)
-   ("C-c w 5" . koek-wm/switch-workspace-5)
-   ("C-c w 6" . koek-wm/switch-workspace-6)
-   ("C-c w 7" . koek-wm/switch-workspace-7)
-   ("C-c w 8" . koek-wm/switch-workspace-8)
-   ("C-c w 9" . koek-wm/switch-workspace-9)
-   ("C-c w w" . koek-wm/switch-previous-workspace)
-   ("C-c w e" . exwm-workspace-swap)
-   ("C-c w k" . exwm-workspace-delete))
-
-  (setq exwm-workspace-number 2)
-  (setq exwm-workspace-show-all-buffers t)
-  (setq exwm-workspace-index-map #'koek-wm/n-to-label)
-  (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
-  (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
-
-(use-package exwm-layout
-  :defer t
-  :config
-  (setq exwm-layout-show-all-buffers t))
-
-(use-package exwm-manage
-  :defer t
-  :config
-  (setq exwm-manage-configurations
-        `(((string-prefix-p "firefox" (downcase exwm-class-name))
-           simulation-keys
-           ,(mapcar (pcase-lambda (`(,from . ,to))
-                      (cons (kbd from) (kbd to)))
-                    (append '(("M-o" . "C-n")
-                              ("M-p" . "S-C-p")
-                              ("M-k" . "C-w"))
-                            koek-wm/base-simulation-keys)))
-          ((string-prefix-p "gimp" (downcase exwm-class-name))
-           char-mode t floating-mode-line nil)
-          ((string-prefix-p "inkscape" (downcase exwm-class-name))
-           char-mode t floating-mode-line nil))))
-
-(use-package server
-  :config
-  (server-start))
-
-(setq save-interprogram-paste-before-kill t)
-
-(bind-key "C-z" #'repeat)
 
 (setq enable-recursive-minibuffers t)
 

@@ -191,6 +191,663 @@ latest org and its documentation before loading org.
 
 For org configuration, see [[*Org][Org]].
 
+* System
+
+** gcmh - Collect garbage when idle
+[[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gcmh
+    :straight t
+    :hook (after-init . gcmh-mode)
+    :config
+    (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
+    :delight)
+#+END_SRC
+
+** exwm - X window manager
+[[https://github.com/ch11ng/exwm][exwm (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  ;; Prevent exwm from asking to replace window manager after
+  ;; installation
+  (setq exwm-replace nil)
+
+  (use-package exwm
+    :straight t
+    :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+    :preface
+    (defun koek-wm/get-process-args (id)
+      "Return arguments of process id ID.
+  ID is an integer, the process id of the process."
+      (when-let ((args (alist-get 'args (process-attributes id))))
+        (let ((normalized
+               (thread-last args
+                 (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
+                 (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
+                 (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
+          (split-string normalized "\N{NULL}"))))
+
+    (defun koek-wm/get-process-ids (name)
+      "Return process ids of process NAME.
+  NAME is a string, the name of the process."
+      (seq-filter (lambda (id)
+                    (when-let ((args (koek-wm/get-process-args id)))
+                      (let ((nm (thread-first args
+                                  car
+                                  (split-string "/")
+                                  last
+                                  car)))
+                        (string-equal nm name))))
+       (list-system-processes)))
+
+    (defun koek-wm/set-xsettingsd-preset ()
+      "Set xsettingsd configuration preset.
+  When current theme is a dark theme, set configuration preset to
+  dark, else, set it to light."
+      (when-let ((id (car (koek-wm/get-process-ids "xsettingsd"))))
+        (let* ((preset (if (koek-thm/darkp) "dark" "light"))
+               (preset-file
+                (thread-last (xdg-data-home)
+                  (expand-file-name "xsettingsd/presets/")
+                  (expand-file-name preset)))
+               (config-file
+                (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
+          ;; Third argument truthy overwrites existing link, docstring
+          ;; only mentions not signaling an error
+          (make-symbolic-link preset-file config-file 'overwrite)
+          (signal-process id 'SIGHUP))))
+
+    ;; For systemctl power management commands, see
+    ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
+    (defun koek-wm/power-off ()
+      "Power off system."
+      (make-process :name "poweroff" :command '("systemctl" "poweroff")))
+
+    (defun koek-wm/reboot ()
+      "Reboot system."
+      (make-process :name "reboot" :command '("systemctl" "reboot")))
+
+    (defun koek-wm/kill-power-off (&optional arg)
+      "Kill Emacs and power off system.
+  With `\\[universal-argument]' prefix argument ARG, reboot
+  system."
+      (interactive "P")
+      (let ((kill-emacs-hook              ; Dynamic variable
+             (append kill-emacs-hook
+                     (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
+        (save-buffers-kill-terminal)))
+
+    (defun koek-wm/suspend ()
+      "Suspend system."
+      (interactive)
+      (make-process :name "suspend" :command '("systemctl" "suspend")))
+
+    (defun koek-wm/launch-firefox (&optional arg)
+      "Launch Firefox.
+  With `\\[universal-argument]' prefix argument ARG, create private
+  window."
+      (interactive "P")
+      (make-process
+       :name "firefox"
+       :command `("firefox" ,(if arg "--private-window" "--new-window"))))
+    :config
+    ;; Only when package is loaded
+    (bind-keys
+     ("C-c z p" . koek-wm/kill-power-off)
+     ("C-c z z" . koek-wm/suspend)
+     ("C-c x C-f" . koek-wm/launch-firefox))
+
+    (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
+
+  (use-package exwm-input
+    :defer t
+    :preface
+    (defvar koek-wm/base-simulation-keys
+      '(("C-f" . "<right>")
+        ("C-b" . "<left>")
+        ("C-n" . "<down>")
+        ("C-p" . "<up>")
+        ("M-f" . "C-<right>")
+        ("M-b" . "C-<left>")
+        ("C-e" . "<end>")
+        ("C-a" . "<home>")
+        ("C-v" . "<next>")
+        ("M-v" . "<prior>")
+        ("M->" . "C-<end>")
+        ("M-<" . "C-<home>")
+        ("C-s" . "C-f")
+        ("C-d" . "<delete>")
+        ("M-d" . "S-C-<right> C-x")
+        ;; Why does <backspace> work but DEL not?
+        ("M-<backspace>" . "S-C-<left> C-x")
+        ("C-k" . "S-<end> C-x")
+        ("M-@" . "S-C-<right>")
+        ("M-h" . "C-a")
+        ("M-w" . "C-c")
+        ("C-w" . "C-x")
+        ("C-y" . "C-v")
+        ("C-/" . "C-z")
+        ("M-/" . "C-y"))
+      "Alist of Emacs keybinding to non Emacs keybinding pairs.
+  Keybinding is a string, see `edmacro-mode'.")
+
+    (define-advice exwm-input--update-mode-line
+        (:around (f &rest args) koek-wm/disable-update-process-status)
+      (let ((status mode-line-process))
+        (apply f args)
+        (setq mode-line-process status)
+        (force-mode-line-update)))
+    :config
+    ;; Keybindings in exwm and non exwm buffers, even in char mode,
+    ;; i.e., keybindings mustn't conflict with non Emacs keybindings
+    ;; (e.g. copy, cut and paste). Keybindings associated with desktop
+    ;; environments (e.g. maximize window, close window and switch
+    ;; between windows) meet these requirements.
+    (setq exwm-input-global-keys
+          (mapcar (pcase-lambda (`(,key . ,command))
+                    (cons (kbd key) command))
+                  '(("s-s" . exwm-input-toggle-keyboard)
+                    ("s-0" . koek-wm/switch-workspace-0)
+                    ("s-1" . koek-wm/switch-workspace-1)
+                    ("s-2" . koek-wm/switch-workspace-2)
+                    ("s-3" . koek-wm/switch-workspace-3)
+                    ("s-4" . koek-wm/switch-workspace-4)
+                    ("s-5" . koek-wm/switch-workspace-5)
+                    ("s-6" . koek-wm/switch-workspace-6)
+                    ("s-7" . koek-wm/switch-workspace-7)
+                    ("s-8" . koek-wm/switch-workspace-8)
+                    ("s-9" . koek-wm/switch-workspace-9)
+                    ("s-w" . koek-wm/switch-previous-workspace)
+                    ("s-x" . counsel-linux-app)
+                    ("s-q" . bury-buffer)
+                    ("s-d" . kill-current-buffer)
+                    ("<f11>" . exwm-layout-toggle-fullscreen)
+                    ("s-C-f" . koek-wm/launch-firefox))))
+
+    ;; Translate Emacs to non Emacs keybindings in line mode
+    (setq exwm-input-simulation-keys
+          (mapcar (pcase-lambda (`(,from . ,to))
+                    (cons (kbd from) (kbd to)))
+                  koek-wm/base-simulation-keys))
+
+    ;; Grab repeat and ivy-resume in line mode
+    (push ?\C-z exwm-input-prefix-keys)
+    (push ?\C-r exwm-input-prefix-keys))
+
+  (use-package exwm-workspace
+    :defer t
+    :preface
+    (defvar koek-wm/previous-workspace-n nil
+      "Previously selected workspace number.")
+
+    (defface koek-wm/selected-workspace '((t :inherit mode-line-emphasis))
+      "Face for selected workspace label in mode line."
+      :group 'exwm-workspace)
+
+    (defface koek-wm/unselected-workspace nil
+      "Face for unselected workspace label in mode line."
+      :group 'exwm-workspace)
+
+    (define-advice exwm-workspace-switch
+        (:before (index &optional _force) koek-wm/update-previous-workspace-n)
+      (unless (eq index exwm-workspace-current-index)
+        (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
+
+    (dolist (n (number-sequence 0 9))
+      (defalias (intern (format "koek-wm/switch-workspace-%d" n))
+        (lambda ()
+          (interactive)
+          (exwm-workspace-switch-create n))
+        (format "Switch to workspace %d." n)))
+
+    (defun koek-wm/switch-previous-workspace ()
+      "Switch to previously selected workspace."
+      (interactive)
+      (when koek-wm/previous-workspace-n
+        (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
+
+    (defun koek-wm/rename-current ()
+      "Rename current according to its class or title."
+      ;; Class is the name of an application while instance is the name
+      ;; of an instance of the application. For more information, see
+      ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+      (let ((class (downcase exwm-class-name)))
+        (exwm-workspace-rename-buffer
+         (cond
+          ((string-prefix-p "gimp" class)
+           "GIMP")
+          ((string-prefix-p "firefox" class)
+           (replace-regexp-in-string
+            (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
+            "Firefox" (or exwm-title "Firefox")))
+          ((string-prefix-p "microsoft teams" class)
+           "Teams")
+          ((string-prefix-p "vlc" class)
+           "VLC")
+          (t
+           exwm-class-name)))))
+
+    (defun koek-wm/n-to-label (n)
+      "Convert workspace number N to a workspace label.
+  N is an integer, a workspace number."
+      (or (koek-ml/arabic-to-roman n) "N"))
+    :config
+    ;; Only when package is loaded
+    (bind-keys
+     ("C-c w 0" . koek-wm/switch-workspace-0)
+     ("C-c w 1" . koek-wm/switch-workspace-1)
+     ("C-c w 2" . koek-wm/switch-workspace-2)
+     ("C-c w 3" . koek-wm/switch-workspace-3)
+     ("C-c w 4" . koek-wm/switch-workspace-4)
+     ("C-c w 5" . koek-wm/switch-workspace-5)
+     ("C-c w 6" . koek-wm/switch-workspace-6)
+     ("C-c w 7" . koek-wm/switch-workspace-7)
+     ("C-c w 8" . koek-wm/switch-workspace-8)
+     ("C-c w 9" . koek-wm/switch-workspace-9)
+     ("C-c w w" . koek-wm/switch-previous-workspace)
+     ("C-c w e" . exwm-workspace-swap)
+     ("C-c w k" . exwm-workspace-delete))
+
+    (setq exwm-workspace-number 2)
+    (setq exwm-workspace-show-all-buffers t)
+    (setq exwm-workspace-index-map #'koek-wm/n-to-label)
+    (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
+    (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
+
+  (use-package exwm-layout
+    :defer t
+    :config
+    (setq exwm-layout-show-all-buffers t))
+
+  (use-package exwm-manage
+    :defer t
+    :config
+    (setq exwm-manage-configurations
+          `(((string-prefix-p "firefox" (downcase exwm-class-name))
+             simulation-keys
+             ,(mapcar (pcase-lambda (`(,from . ,to))
+                        (cons (kbd from) (kbd to)))
+                      (append '(("M-o" . "C-n")
+                                ("M-p" . "S-C-p")
+                                ("M-k" . "C-w"))
+                              koek-wm/base-simulation-keys)))
+            ((string-prefix-p "gimp" (downcase exwm-class-name))
+             char-mode t floating-mode-line nil)
+            ((string-prefix-p "inkscape" (downcase exwm-class-name))
+             char-mode t floating-mode-line nil))))
+#+END_SRC
+
+*** exar - Monitors :wip:
+For monitors and monitor layouts, see [[*Monitors][Monitors]].
+
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
+  ;;; exar.el --- Emacs, X Window System and RandR -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020 Nicolas De Jaeghere
+
+  ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
+  ;; Keywords: unix
+  ;; URL: https://github.com/Koekelas/dotfiles
+
+  ;; This file is not part of GNU Emacs.
+
+  ;; This program is free software: you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or
+  ;; (at your option) any later version.
+
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+
+  ;; Emacs, X Window System and RandR
+
+  ;; https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt
+  ;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
+
+  ;;; Code:
+
+  (require 'subr-x)
+  (require 'seq)
+  (require 'eieio)
+  (require 'xcb)
+  (require 'xcb-xproto)
+  (require 'xcb-randr)
+  (require 'exwm-core)
+  (require 'exwm-randr)
+
+  (defvar exar-monitors nil)
+  (defvar exar-layouts nil)
+
+  (defvar exar-manufacturers
+    '(("AUO" . "AU Optronics Corp.")
+      ("MJI" . "Marantz Japan Inc.")))
+
+  (defconst exar--x:True 1)
+  (defconst exar--x:False 0)
+  (defconst exar--x:AnyPropertyType 0)
+
+  (defvar exar--cookie nil)
+  (defvar exar--previous-layout nil)
+
+  (defun exar--plist-to-alist (plist)
+    (mapcar (pcase-lambda (`(,name ,prop))
+              (cons name prop))
+            (seq-partition plist 2)))
+
+  (defun exar--get-in (plist &rest keys)
+    (if keys
+        (apply #'exar--get-in (plist-get plist (car keys)) (cdr keys))
+      plist))
+
+  (defun exar--reverse-endian (bytes)
+    (reverse bytes))
+
+  (defun exar--format-bin (bytes)
+    (concat "0x" (mapconcat (apply-partially #'format "%02x") bytes "")))
+
+  ;; Four byte ints, eight bit bytes, big endian
+  (defun exar--decode-int (bytes)
+    (let ((base (expt 2 8)))
+      (thread-last (exar--reverse-endian bytes)
+        (seq-map-indexed (lambda (byte i)
+                           (* byte (expt base i))))
+        (apply #'+))))
+
+  (defun exar--decode-string (bytes)
+    (decode-coding-string (apply #'unibyte-string bytes) 'utf-8))
+
+  (defun exar--decode-terminated-string (bytes)
+    (exar--decode-string
+     (seq-take-while (lambda (byte)
+                       (/= byte ?\C-j))
+                     bytes)))
+
+  (defun exar--decode-manufacturer (bytes)
+    (let ((base (expt 2 5))
+          (n (exar--decode-int bytes))
+          (chars nil))
+      (while (> n 0)
+        (push (+ (1- ?A) (% n base)) chars)
+        (setq n (/ n base)))
+      (concat chars)))
+
+  (defun exar--decode-edid (bytes)
+    (when bytes
+      (let ((vendor-block   (seq-subseq bytes 8 18))
+            (edid-block     (seq-subseq bytes 18 20))
+            (basic-block    (seq-subseq bytes 20 25))
+            (detailed-block (seq-subseq bytes 54 126)))
+        (list
+         :id (exar--format-bin vendor-block)
+         :vendor   ; Section 3.4, Vendor/product identification
+         (let ((week (car (seq-subseq vendor-block 8 9))))
+           (list
+            :manufacturer
+            (exar--decode-manufacturer (seq-subseq vendor-block 0 2))
+            :product
+            (exar--format-bin (exar--reverse-endian (seq-subseq vendor-block 2 4)))
+            :serial
+            (exar--decode-int (exar--reverse-endian (seq-subseq vendor-block 4 8)))
+            :week (unless (= week 0)
+                    week)
+            :year (+ (car (seq-subseq vendor-block 9 10)) 1990)))
+         :edid     ; Section 3.5, EDID structure version/revision
+         (list :version  (car edid-block) :revision (cadr edid-block))
+         :basic    ; Section 3.6, Basic display parameters/features
+         (let ((horizontal (car (seq-subseq basic-block 1 2)))
+               (vertical   (car (seq-subseq basic-block 2 3))))
+           (list
+            :horizontal (and (not (or (= horizontal 0) (= vertical 0))) horizontal)
+            :vertical   (and (not (or (= horizontal 0) (= vertical 0))) vertical)
+            :gamma      (/ (+ (car (seq-subseq basic-block 3 4)) 100) 100.0)))
+         :detailed ; Section 3.10, Detailed timing descriptions
+         (mapcar
+          (lambda (detailed)
+            (let ((data (seq-drop detailed 5)))
+              (pcase (exar--decode-int (seq-subseq detailed 0 4))
+                (255
+                 (list
+                  :type "serial"
+                  :data (string-trim (exar--decode-terminated-string data))))
+                (254
+                 (list
+                  :type "string"
+                  :data (string-trim (exar--decode-terminated-string data))))
+                (253
+                 (list :type "range"))
+                (252
+                 (list
+                  :type "name"
+                  :data (string-trim (exar--decode-terminated-string data))))
+                (251
+                 (list :type "color"))
+                (250
+                 (list :type "timing"))
+                ((pred (lambda (marker)
+                         (and (<= marker 249) (>= marker 17))))
+                 (list :type nil))
+                (16
+                 (list :type "dummy"))
+                ((pred (lambda (marker)
+                         (<= marker 15)))
+                 (list :type "manufacturer" :data (exar--format-bin data)))
+                (_type
+                 (list :type "timing")))))
+          (seq-partition detailed-block 18))))))
+
+  (defun exar--intern-atom (name)
+    (oref (xcb:+request-unchecked+reply exwm--connection
+              (xcb:InternAtom :only-if-exists exar--x:False
+                              :name-len (length name)
+                              :name name))
+          atom))
+
+  (defun exar--get-output-property (output-id name)
+    (oref (xcb:+request-unchecked+reply exwm--connection
+              (xcb:randr:GetOutputProperty :output output-id
+                                           :property (exar--intern-atom name)
+                                           :type exar--x:AnyPropertyType
+                                           :long-offset 0
+                                           :long-length 100
+                                           :delete exar--x:False
+                                           :pending exar--x:False))
+          data))
+
+  (defun exar--get-output-info (output-id)
+    (with-slots (name connection)
+        (xcb:+request-unchecked+reply exwm--connection
+            (xcb:randr:GetOutputInfo :output output-id
+                                     :config-timestamp exar--cookie))
+      (list :id output-id
+            :name (exar--decode-string name)
+            :edid (exar--decode-edid (exar--get-output-property output-id "EDID"))
+            :connected (eq connection xcb:randr:Connection:Connected))))
+
+  (defun exar--get-outputs ()
+    (with-slots (config-timestamp outputs)
+        (xcb:+request-unchecked+reply exwm--connection
+            ;; Read output properties (e.g. EDID)
+            (xcb:randr:GetScreenResources :window exwm--root))
+      (let ((exar--cookie config-timestamp))
+        (mapcar (lambda (id)
+                  (cons id (exar--get-output-info id)))
+                outputs))))
+
+  (defun exar--get-connected-outputs (outputs)
+    (seq-filter (lambda (output)
+                  (plist-get (cdr output) :connected))
+                outputs))
+
+  (defun exar--get-monitors (outputs)
+    (let ((output-ids
+           (seq-reduce (pcase-lambda (ids `(,id . ,props))
+                         (when-let ((edid (exar--get-in props :edid :id)))
+                           (push (cons edid id) ids))
+                         ids)
+                       outputs nil)))
+      (mapcar (pcase-lambda (`(,id . ,props))
+                (cons id
+                      (append (list :id id) props
+                              (list :output
+                                    (thread-first (plist-get props :edid)
+                                      (assoc output-ids)
+                                      cdr
+                                      (alist-get outputs))))))
+              (exar--plist-to-alist exar-monitors))))
+
+  (defun exar--get-layouts (outputs)
+    (let ((monitors (exar--get-monitors outputs)))
+      (mapcar
+       (lambda (layout)
+         (plist-put (copy-sequence layout)
+                    :monitors
+                    (mapcar (pcase-lambda (`(,id . ,props))
+                              (append props (alist-get id monitors)))
+                            (exar--plist-to-alist (plist-get layout :monitors)))))
+       exar-layouts)))
+
+  (defun exar--get-preferred-layout (layouts)
+    (seq-find (lambda (layout)
+                (seq-every-p (lambda (monitor)
+                               (plist-get monitor :output))
+                             (plist-get layout :monitors)))
+              layouts))
+
+  (defun exar--set-primary-output (output-id)
+    (xcb:+request exwm--connection
+        (xcb:randr:SetOutputPrimary :window exwm--root
+                                    :output output-id)))
+
+  (defun exar--set-primary (monitor-layout)
+    (exar--set-primary-output (exar--get-in (car monitor-layout) :output :id)))
+
+  (defun exar--set-workspaces (monitor-layout)
+    (setq exwm-randr-workspace-monitor-plist
+          (seq-mapcat (lambda (monitor)
+                        (let ((output (exar--get-in monitor :output :name)))
+                          (seq-mapcat (lambda (workspace)
+                                        (list workspace output))
+                                      (plist-get monitor :workspaces))))
+                      monitor-layout)))
+
+  (defun exar--get-display-ns (outputs monitor-layout)
+    (let* ((primary
+            (assq (exar--get-in (car monitor-layout) :output :id) outputs))
+           ;; Sort primary first, mirror dispwin
+           (sorted (cons primary
+                         (seq-filter (lambda (output)
+                                       (/= (car output) (car primary)))
+                                     outputs))))
+      (seq-map-indexed (lambda (output i)
+                         (cons (car output) (1+ i)))
+                       sorted)))
+
+  (defun exar--load-color (display-n file-name)
+    (when (fboundp 'exar--load-color-dispwin)
+      (exar--load-color-dispwin display-n file-name)))
+
+  (when (executable-find "dispwin")
+    (defun exar--load-color-dispwin (display-n file-name)
+      (make-process
+       :name "dispwin"
+       :command `("dispwin" "-d" ,(number-to-string display-n) ,file-name))))
+
+  (defun exar--load-colors (display-ns monitor-layout)
+    (dolist (monitor monitor-layout)
+      (when-let ((color (plist-get monitor :color)))
+        (exar--load-color (alist-get (exar--get-in monitor :output :id)
+                                     display-ns)
+                          color))))
+
+  (defun exar--apply ()
+    (let* ((outputs (exar--get-outputs))
+           (layout (exar--get-preferred-layout (exar--get-layouts outputs)))
+           (monitor-layout (plist-get layout :monitors)))
+      (when (and (not (string-equal (plist-get layout :name)
+                                    (plist-get exar--previous-layout :name)))
+                 monitor-layout)
+        (exar--set-primary monitor-layout)
+        (exar--set-workspaces monitor-layout)
+        (exar--load-colors (exar--get-display-ns outputs monitor-layout)
+                           monitor-layout)
+        (setq exar--previous-layout layout))))
+
+  (defun exar-insert-edid (output)
+    (interactive
+     (let* ((candidates
+             (mapcar
+              (lambda (output)
+                (let* ((props (cdr output))
+                       (manufacturer-name
+                        (exar--get-in props :edid :vendor :manufacturer))
+                       (monitor-names
+                        (thread-last (exar--get-in props :edid :detailed)
+                          (seq-filter (lambda (detailed)
+                                        (let ((type (plist-get detailed :type)))
+                                          (or (string-equal type "name")
+                                              (string-equal type "string")))))
+                          (mapcar (lambda (detailed)
+                                    (plist-get detailed :data)))))
+                       (output-name (plist-get props :name)))
+                  (cons
+                   (concat (or (cdr (assoc manufacturer-name exar-manufacturers))
+                               manufacturer-name)
+                           (when monitor-names
+                             (concat " " (string-join monitor-names " ")))
+                           (concat " connected to " output-name))
+                   output)))
+              (exar--get-connected-outputs (exar--get-outputs))))
+            (output
+             (cdr
+              (assoc (completing-read "Monitor: " candidates nil t) candidates))))
+       (list output)))
+    (insert (exar--get-in (cdr output) :edid :id)))
+
+  ;;;###autoload
+  (defun exar-enable ()
+    (add-hook 'exwm-randr-screen-change-hook #'exar--apply)
+    (exwm-randr-enable))
+
+  (provide 'exar)
+
+  ;;; exar.el ends here
+#+END_SRC
+
+** server - Emacs server
+The advantage of starting the server during initialization compared to
+starting Emacs as daemon is initialization happens in a graphical
+frame, i.e., it's possible to query resolution, color depth, fonts,
+etc.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package server
+    :config
+    (server-start))
+#+END_SRC
+
+** Clipboard
+Add clipboard to kill ring before killing.
+
+#+BEGIN_SRC emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+END_SRC
+
+** Global commands
+The setting ~repeat-on-final-keystroke~ is cumbersome. Rebind ~repeat~ to
+something short.
+
+#+BEGIN_SRC emacs-lisp
+  (bind-key "C-z" #'repeat)
+#+END_SRC
+
 * Files
 
 ** dired - File manager
@@ -3210,7 +3867,6 @@ Inherit Clojure snippets.
 The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
 
 #+BEGIN_SRC emacs-lisp
-  (unbind-key "C-z")
   (unbind-key "C-x C-z")
 #+END_SRC
 
@@ -3420,663 +4076,6 @@ Bury unneeded buffers, computers have more than enough memory.
       (bury-buffer)))
 
   (bind-key [remap kill-buffer] #'koek-buff/bury)
-#+END_SRC
-
-* System
-
-** gcmh - Collect garbage when idle
-[[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package gcmh
-    :straight t
-    :hook (after-init . gcmh-mode)
-    :config
-    (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
-    :delight)
-#+END_SRC
-
-** exwm - X window manager
-[[https://github.com/ch11ng/exwm][exwm (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  ;; Prevent exwm from asking to replace window manager after
-  ;; installation
-  (setq exwm-replace nil)
-
-  (use-package exwm
-    :straight t
-    :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
-    :preface
-    (defun koek-wm/get-process-args (id)
-      "Return arguments of process id ID.
-  ID is an integer, the process id of the process."
-      (when-let ((args (alist-get 'args (process-attributes id))))
-        (let ((normalized
-               (thread-last args
-                 (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
-                 (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
-                 (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
-          (split-string normalized "\N{NULL}"))))
-
-    (defun koek-wm/get-process-ids (name)
-      "Return process ids of process NAME.
-  NAME is a string, the name of the process."
-      (seq-filter (lambda (id)
-                    (when-let ((args (koek-wm/get-process-args id)))
-                      (let ((nm (thread-first args
-                                  car
-                                  (split-string "/")
-                                  last
-                                  car)))
-                        (string-equal nm name))))
-       (list-system-processes)))
-
-    (defun koek-wm/set-xsettingsd-preset ()
-      "Set xsettingsd configuration preset.
-  When current theme is a dark theme, set configuration preset to
-  dark, else, set it to light."
-      (when-let ((id (car (koek-wm/get-process-ids "xsettingsd"))))
-        (let* ((preset (if (koek-thm/darkp) "dark" "light"))
-               (preset-file
-                (thread-last (xdg-data-home)
-                  (expand-file-name "xsettingsd/presets/")
-                  (expand-file-name preset)))
-               (config-file
-                (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
-          ;; Third argument truthy overwrites existing link, docstring
-          ;; only mentions not signaling an error
-          (make-symbolic-link preset-file config-file 'overwrite)
-          (signal-process id 'SIGHUP))))
-
-    ;; For systemctl power management commands, see
-    ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
-    (defun koek-wm/power-off ()
-      "Power off system."
-      (make-process :name "poweroff" :command '("systemctl" "poweroff")))
-
-    (defun koek-wm/reboot ()
-      "Reboot system."
-      (make-process :name "reboot" :command '("systemctl" "reboot")))
-
-    (defun koek-wm/kill-power-off (&optional arg)
-      "Kill Emacs and power off system.
-  With `\\[universal-argument]' prefix argument ARG, reboot
-  system."
-      (interactive "P")
-      (let ((kill-emacs-hook              ; Dynamic variable
-             (append kill-emacs-hook
-                     (list (if arg #'koek-wm/reboot #'koek-wm/power-off)))))
-        (save-buffers-kill-terminal)))
-
-    (defun koek-wm/suspend ()
-      "Suspend system."
-      (interactive)
-      (make-process :name "suspend" :command '("systemctl" "suspend")))
-
-    (defun koek-wm/launch-firefox (&optional arg)
-      "Launch Firefox.
-  With `\\[universal-argument]' prefix argument ARG, create private
-  window."
-      (interactive "P")
-      (make-process
-       :name "firefox"
-       :command `("firefox" ,(if arg "--private-window" "--new-window"))))
-    :config
-    ;; Only when package is loaded
-    (bind-keys
-     ("C-c z p" . koek-wm/kill-power-off)
-     ("C-c z z" . koek-wm/suspend)
-     ("C-c x C-f" . koek-wm/launch-firefox))
-
-    (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
-
-  (use-package exwm-input
-    :defer t
-    :preface
-    (defvar koek-wm/base-simulation-keys
-      '(("C-f" . "<right>")
-        ("C-b" . "<left>")
-        ("C-n" . "<down>")
-        ("C-p" . "<up>")
-        ("M-f" . "C-<right>")
-        ("M-b" . "C-<left>")
-        ("C-e" . "<end>")
-        ("C-a" . "<home>")
-        ("C-v" . "<next>")
-        ("M-v" . "<prior>")
-        ("M->" . "C-<end>")
-        ("M-<" . "C-<home>")
-        ("C-s" . "C-f")
-        ("C-d" . "<delete>")
-        ("M-d" . "S-C-<right> C-x")
-        ;; Why does <backspace> work but DEL not?
-        ("M-<backspace>" . "S-C-<left> C-x")
-        ("C-k" . "S-<end> C-x")
-        ("M-@" . "S-C-<right>")
-        ("M-h" . "C-a")
-        ("M-w" . "C-c")
-        ("C-w" . "C-x")
-        ("C-y" . "C-v")
-        ("C-/" . "C-z")
-        ("M-/" . "C-y"))
-      "Alist of Emacs keybinding to non Emacs keybinding pairs.
-  Keybinding is a string, see `edmacro-mode'.")
-
-    (define-advice exwm-input--update-mode-line
-        (:around (f &rest args) koek-wm/disable-update-process-status)
-      (let ((status mode-line-process))
-        (apply f args)
-        (setq mode-line-process status)
-        (force-mode-line-update)))
-    :config
-    ;; Keybindings in exwm and non exwm buffers, even in char mode,
-    ;; i.e., keybindings mustn't conflict with non Emacs keybindings
-    ;; (e.g. copy, cut and paste). Keybindings associated with desktop
-    ;; environments (e.g. maximize window, close window and switch
-    ;; between windows) meet these requirements.
-    (setq exwm-input-global-keys
-          (mapcar (pcase-lambda (`(,key . ,command))
-                    (cons (kbd key) command))
-                  '(("s-s" . exwm-input-toggle-keyboard)
-                    ("s-0" . koek-wm/switch-workspace-0)
-                    ("s-1" . koek-wm/switch-workspace-1)
-                    ("s-2" . koek-wm/switch-workspace-2)
-                    ("s-3" . koek-wm/switch-workspace-3)
-                    ("s-4" . koek-wm/switch-workspace-4)
-                    ("s-5" . koek-wm/switch-workspace-5)
-                    ("s-6" . koek-wm/switch-workspace-6)
-                    ("s-7" . koek-wm/switch-workspace-7)
-                    ("s-8" . koek-wm/switch-workspace-8)
-                    ("s-9" . koek-wm/switch-workspace-9)
-                    ("s-w" . koek-wm/switch-previous-workspace)
-                    ("s-x" . counsel-linux-app)
-                    ("s-q" . bury-buffer)
-                    ("s-d" . kill-current-buffer)
-                    ("<f11>" . exwm-layout-toggle-fullscreen)
-                    ("s-C-f" . koek-wm/launch-firefox))))
-
-    ;; Translate Emacs to non Emacs keybindings in line mode
-    (setq exwm-input-simulation-keys
-          (mapcar (pcase-lambda (`(,from . ,to))
-                    (cons (kbd from) (kbd to)))
-                  koek-wm/base-simulation-keys))
-
-    ;; Grab repeat and ivy-resume in line mode
-    (push ?\C-z exwm-input-prefix-keys)
-    (push ?\C-r exwm-input-prefix-keys))
-
-  (use-package exwm-workspace
-    :defer t
-    :preface
-    (defvar koek-wm/previous-workspace-n nil
-      "Previously selected workspace number.")
-
-    (defface koek-wm/selected-workspace '((t :inherit mode-line-emphasis))
-      "Face for selected workspace label in mode line."
-      :group 'exwm-workspace)
-
-    (defface koek-wm/unselected-workspace nil
-      "Face for unselected workspace label in mode line."
-      :group 'exwm-workspace)
-
-    (define-advice exwm-workspace-switch
-        (:before (index &optional _force) koek-wm/update-previous-workspace-n)
-      (unless (eq index exwm-workspace-current-index)
-        (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
-
-    (dolist (n (number-sequence 0 9))
-      (defalias (intern (format "koek-wm/switch-workspace-%d" n))
-        (lambda ()
-          (interactive)
-          (exwm-workspace-switch-create n))
-        (format "Switch to workspace %d." n)))
-
-    (defun koek-wm/switch-previous-workspace ()
-      "Switch to previously selected workspace."
-      (interactive)
-      (when koek-wm/previous-workspace-n
-        (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
-
-    (defun koek-wm/rename-current ()
-      "Rename current according to its class or title."
-      ;; Class is the name of an application while instance is the name
-      ;; of an instance of the application. For more information, see
-      ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
-      (let ((class (downcase exwm-class-name)))
-        (exwm-workspace-rename-buffer
-         (cond
-          ((string-prefix-p "gimp" class)
-           "GIMP")
-          ((string-prefix-p "firefox" class)
-           (replace-regexp-in-string
-            (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
-            "Firefox" (or exwm-title "Firefox")))
-          ((string-prefix-p "microsoft teams" class)
-           "Teams")
-          ((string-prefix-p "vlc" class)
-           "VLC")
-          (t
-           exwm-class-name)))))
-
-    (defun koek-wm/n-to-label (n)
-      "Convert workspace number N to a workspace label.
-  N is an integer, a workspace number."
-      (or (koek-ml/arabic-to-roman n) "N"))
-    :config
-    ;; Only when package is loaded
-    (bind-keys
-     ("C-c w 0" . koek-wm/switch-workspace-0)
-     ("C-c w 1" . koek-wm/switch-workspace-1)
-     ("C-c w 2" . koek-wm/switch-workspace-2)
-     ("C-c w 3" . koek-wm/switch-workspace-3)
-     ("C-c w 4" . koek-wm/switch-workspace-4)
-     ("C-c w 5" . koek-wm/switch-workspace-5)
-     ("C-c w 6" . koek-wm/switch-workspace-6)
-     ("C-c w 7" . koek-wm/switch-workspace-7)
-     ("C-c w 8" . koek-wm/switch-workspace-8)
-     ("C-c w 9" . koek-wm/switch-workspace-9)
-     ("C-c w w" . koek-wm/switch-previous-workspace)
-     ("C-c w e" . exwm-workspace-swap)
-     ("C-c w k" . exwm-workspace-delete))
-
-    (setq exwm-workspace-number 2)
-    (setq exwm-workspace-show-all-buffers t)
-    (setq exwm-workspace-index-map #'koek-wm/n-to-label)
-    (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
-    (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
-
-  (use-package exwm-layout
-    :defer t
-    :config
-    (setq exwm-layout-show-all-buffers t))
-
-  (use-package exwm-manage
-    :defer t
-    :config
-    (setq exwm-manage-configurations
-          `(((string-prefix-p "firefox" (downcase exwm-class-name))
-             simulation-keys
-             ,(mapcar (pcase-lambda (`(,from . ,to))
-                        (cons (kbd from) (kbd to)))
-                      (append '(("M-o" . "C-n")
-                                ("M-p" . "S-C-p")
-                                ("M-k" . "C-w"))
-                              koek-wm/base-simulation-keys)))
-            ((string-prefix-p "gimp" (downcase exwm-class-name))
-             char-mode t floating-mode-line nil)
-            ((string-prefix-p "inkscape" (downcase exwm-class-name))
-             char-mode t floating-mode-line nil))))
-#+END_SRC
-
-*** exar - Monitors :wip:
-For monitors and monitor layouts, see [[*Monitors][Monitors]].
-
-#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
-  ;;; exar.el --- Emacs, X Window System and RandR -*- lexical-binding: t; -*-
-
-  ;; Copyright (C) 2020 Nicolas De Jaeghere
-
-  ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
-  ;; Keywords: unix
-  ;; URL: https://github.com/Koekelas/dotfiles
-
-  ;; This file is not part of GNU Emacs.
-
-  ;; This program is free software: you can redistribute it and/or modify
-  ;; it under the terms of the GNU General Public License as published by
-  ;; the Free Software Foundation, either version 3 of the License, or
-  ;; (at your option) any later version.
-
-  ;; This program is distributed in the hope that it will be useful,
-  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ;; GNU General Public License for more details.
-
-  ;; You should have received a copy of the GNU General Public License
-  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-  ;;; Commentary:
-
-  ;; Emacs, X Window System and RandR
-
-  ;; https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt
-  ;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
-
-  ;;; Code:
-
-  (require 'subr-x)
-  (require 'seq)
-  (require 'eieio)
-  (require 'xcb)
-  (require 'xcb-xproto)
-  (require 'xcb-randr)
-  (require 'exwm-core)
-  (require 'exwm-randr)
-
-  (defvar exar-monitors nil)
-  (defvar exar-layouts nil)
-
-  (defvar exar-manufacturers
-    '(("AUO" . "AU Optronics Corp.")
-      ("MJI" . "Marantz Japan Inc.")))
-
-  (defconst exar--x:True 1)
-  (defconst exar--x:False 0)
-  (defconst exar--x:AnyPropertyType 0)
-
-  (defvar exar--cookie nil)
-  (defvar exar--previous-layout nil)
-
-  (defun exar--plist-to-alist (plist)
-    (mapcar (pcase-lambda (`(,name ,prop))
-              (cons name prop))
-            (seq-partition plist 2)))
-
-  (defun exar--get-in (plist &rest keys)
-    (if keys
-        (apply #'exar--get-in (plist-get plist (car keys)) (cdr keys))
-      plist))
-
-  (defun exar--reverse-endian (bytes)
-    (reverse bytes))
-
-  (defun exar--format-bin (bytes)
-    (concat "0x" (mapconcat (apply-partially #'format "%02x") bytes "")))
-
-  ;; Four byte ints, eight bit bytes, big endian
-  (defun exar--decode-int (bytes)
-    (let ((base (expt 2 8)))
-      (thread-last (exar--reverse-endian bytes)
-        (seq-map-indexed (lambda (byte i)
-                           (* byte (expt base i))))
-        (apply #'+))))
-
-  (defun exar--decode-string (bytes)
-    (decode-coding-string (apply #'unibyte-string bytes) 'utf-8))
-
-  (defun exar--decode-terminated-string (bytes)
-    (exar--decode-string
-     (seq-take-while (lambda (byte)
-                       (/= byte ?\C-j))
-                     bytes)))
-
-  (defun exar--decode-manufacturer (bytes)
-    (let ((base (expt 2 5))
-          (n (exar--decode-int bytes))
-          (chars nil))
-      (while (> n 0)
-        (push (+ (1- ?A) (% n base)) chars)
-        (setq n (/ n base)))
-      (concat chars)))
-
-  (defun exar--decode-edid (bytes)
-    (when bytes
-      (let ((vendor-block   (seq-subseq bytes 8 18))
-            (edid-block     (seq-subseq bytes 18 20))
-            (basic-block    (seq-subseq bytes 20 25))
-            (detailed-block (seq-subseq bytes 54 126)))
-        (list
-         :id (exar--format-bin vendor-block)
-         :vendor   ; Section 3.4, Vendor/product identification
-         (let ((week (car (seq-subseq vendor-block 8 9))))
-           (list
-            :manufacturer
-            (exar--decode-manufacturer (seq-subseq vendor-block 0 2))
-            :product
-            (exar--format-bin (exar--reverse-endian (seq-subseq vendor-block 2 4)))
-            :serial
-            (exar--decode-int (exar--reverse-endian (seq-subseq vendor-block 4 8)))
-            :week (unless (= week 0)
-                    week)
-            :year (+ (car (seq-subseq vendor-block 9 10)) 1990)))
-         :edid     ; Section 3.5, EDID structure version/revision
-         (list :version  (car edid-block) :revision (cadr edid-block))
-         :basic    ; Section 3.6, Basic display parameters/features
-         (let ((horizontal (car (seq-subseq basic-block 1 2)))
-               (vertical   (car (seq-subseq basic-block 2 3))))
-           (list
-            :horizontal (and (not (or (= horizontal 0) (= vertical 0))) horizontal)
-            :vertical   (and (not (or (= horizontal 0) (= vertical 0))) vertical)
-            :gamma      (/ (+ (car (seq-subseq basic-block 3 4)) 100) 100.0)))
-         :detailed ; Section 3.10, Detailed timing descriptions
-         (mapcar
-          (lambda (detailed)
-            (let ((data (seq-drop detailed 5)))
-              (pcase (exar--decode-int (seq-subseq detailed 0 4))
-                (255
-                 (list
-                  :type "serial"
-                  :data (string-trim (exar--decode-terminated-string data))))
-                (254
-                 (list
-                  :type "string"
-                  :data (string-trim (exar--decode-terminated-string data))))
-                (253
-                 (list :type "range"))
-                (252
-                 (list
-                  :type "name"
-                  :data (string-trim (exar--decode-terminated-string data))))
-                (251
-                 (list :type "color"))
-                (250
-                 (list :type "timing"))
-                ((pred (lambda (marker)
-                         (and (<= marker 249) (>= marker 17))))
-                 (list :type nil))
-                (16
-                 (list :type "dummy"))
-                ((pred (lambda (marker)
-                         (<= marker 15)))
-                 (list :type "manufacturer" :data (exar--format-bin data)))
-                (_type
-                 (list :type "timing")))))
-          (seq-partition detailed-block 18))))))
-
-  (defun exar--intern-atom (name)
-    (oref (xcb:+request-unchecked+reply exwm--connection
-              (xcb:InternAtom :only-if-exists exar--x:False
-                              :name-len (length name)
-                              :name name))
-          atom))
-
-  (defun exar--get-output-property (output-id name)
-    (oref (xcb:+request-unchecked+reply exwm--connection
-              (xcb:randr:GetOutputProperty :output output-id
-                                           :property (exar--intern-atom name)
-                                           :type exar--x:AnyPropertyType
-                                           :long-offset 0
-                                           :long-length 100
-                                           :delete exar--x:False
-                                           :pending exar--x:False))
-          data))
-
-  (defun exar--get-output-info (output-id)
-    (with-slots (name connection)
-        (xcb:+request-unchecked+reply exwm--connection
-            (xcb:randr:GetOutputInfo :output output-id
-                                     :config-timestamp exar--cookie))
-      (list :id output-id
-            :name (exar--decode-string name)
-            :edid (exar--decode-edid (exar--get-output-property output-id "EDID"))
-            :connected (eq connection xcb:randr:Connection:Connected))))
-
-  (defun exar--get-outputs ()
-    (with-slots (config-timestamp outputs)
-        (xcb:+request-unchecked+reply exwm--connection
-            ;; Read output properties (e.g. EDID)
-            (xcb:randr:GetScreenResources :window exwm--root))
-      (let ((exar--cookie config-timestamp))
-        (mapcar (lambda (id)
-                  (cons id (exar--get-output-info id)))
-                outputs))))
-
-  (defun exar--get-connected-outputs (outputs)
-    (seq-filter (lambda (output)
-                  (plist-get (cdr output) :connected))
-                outputs))
-
-  (defun exar--get-monitors (outputs)
-    (let ((output-ids
-           (seq-reduce (pcase-lambda (ids `(,id . ,props))
-                         (when-let ((edid (exar--get-in props :edid :id)))
-                           (push (cons edid id) ids))
-                         ids)
-                       outputs nil)))
-      (mapcar (pcase-lambda (`(,id . ,props))
-                (cons id
-                      (append (list :id id) props
-                              (list :output
-                                    (thread-first (plist-get props :edid)
-                                      (assoc output-ids)
-                                      cdr
-                                      (alist-get outputs))))))
-              (exar--plist-to-alist exar-monitors))))
-
-  (defun exar--get-layouts (outputs)
-    (let ((monitors (exar--get-monitors outputs)))
-      (mapcar
-       (lambda (layout)
-         (plist-put (copy-sequence layout)
-                    :monitors
-                    (mapcar (pcase-lambda (`(,id . ,props))
-                              (append props (alist-get id monitors)))
-                            (exar--plist-to-alist (plist-get layout :monitors)))))
-       exar-layouts)))
-
-  (defun exar--get-preferred-layout (layouts)
-    (seq-find (lambda (layout)
-                (seq-every-p (lambda (monitor)
-                               (plist-get monitor :output))
-                             (plist-get layout :monitors)))
-              layouts))
-
-  (defun exar--set-primary-output (output-id)
-    (xcb:+request exwm--connection
-        (xcb:randr:SetOutputPrimary :window exwm--root
-                                    :output output-id)))
-
-  (defun exar--set-primary (monitor-layout)
-    (exar--set-primary-output (exar--get-in (car monitor-layout) :output :id)))
-
-  (defun exar--set-workspaces (monitor-layout)
-    (setq exwm-randr-workspace-monitor-plist
-          (seq-mapcat (lambda (monitor)
-                        (let ((output (exar--get-in monitor :output :name)))
-                          (seq-mapcat (lambda (workspace)
-                                        (list workspace output))
-                                      (plist-get monitor :workspaces))))
-                      monitor-layout)))
-
-  (defun exar--get-display-ns (outputs monitor-layout)
-    (let* ((primary
-            (assq (exar--get-in (car monitor-layout) :output :id) outputs))
-           ;; Sort primary first, mirror dispwin
-           (sorted (cons primary
-                         (seq-filter (lambda (output)
-                                       (/= (car output) (car primary)))
-                                     outputs))))
-      (seq-map-indexed (lambda (output i)
-                         (cons (car output) (1+ i)))
-                       sorted)))
-
-  (defun exar--load-color (display-n file-name)
-    (when (fboundp 'exar--load-color-dispwin)
-      (exar--load-color-dispwin display-n file-name)))
-
-  (when (executable-find "dispwin")
-    (defun exar--load-color-dispwin (display-n file-name)
-      (make-process
-       :name "dispwin"
-       :command `("dispwin" "-d" ,(number-to-string display-n) ,file-name))))
-
-  (defun exar--load-colors (display-ns monitor-layout)
-    (dolist (monitor monitor-layout)
-      (when-let ((color (plist-get monitor :color)))
-        (exar--load-color (alist-get (exar--get-in monitor :output :id)
-                                     display-ns)
-                          color))))
-
-  (defun exar--apply ()
-    (let* ((outputs (exar--get-outputs))
-           (layout (exar--get-preferred-layout (exar--get-layouts outputs)))
-           (monitor-layout (plist-get layout :monitors)))
-      (when (and (not (string-equal (plist-get layout :name)
-                                    (plist-get exar--previous-layout :name)))
-                 monitor-layout)
-        (exar--set-primary monitor-layout)
-        (exar--set-workspaces monitor-layout)
-        (exar--load-colors (exar--get-display-ns outputs monitor-layout)
-                           monitor-layout)
-        (setq exar--previous-layout layout))))
-
-  (defun exar-insert-edid (output)
-    (interactive
-     (let* ((candidates
-             (mapcar
-              (lambda (output)
-                (let* ((props (cdr output))
-                       (manufacturer-name
-                        (exar--get-in props :edid :vendor :manufacturer))
-                       (monitor-names
-                        (thread-last (exar--get-in props :edid :detailed)
-                          (seq-filter (lambda (detailed)
-                                        (let ((type (plist-get detailed :type)))
-                                          (or (string-equal type "name")
-                                              (string-equal type "string")))))
-                          (mapcar (lambda (detailed)
-                                    (plist-get detailed :data)))))
-                       (output-name (plist-get props :name)))
-                  (cons
-                   (concat (or (cdr (assoc manufacturer-name exar-manufacturers))
-                               manufacturer-name)
-                           (when monitor-names
-                             (concat " " (string-join monitor-names " ")))
-                           (concat " connected to " output-name))
-                   output)))
-              (exar--get-connected-outputs (exar--get-outputs))))
-            (output
-             (cdr
-              (assoc (completing-read "Monitor: " candidates nil t) candidates))))
-       (list output)))
-    (insert (exar--get-in (cdr output) :edid :id)))
-
-  ;;;###autoload
-  (defun exar-enable ()
-    (add-hook 'exwm-randr-screen-change-hook #'exar--apply)
-    (exwm-randr-enable))
-
-  (provide 'exar)
-
-  ;;; exar.el ends here
-#+END_SRC
-
-** server - Emacs server
-The advantage of starting the server during initialization compared to
-starting Emacs as daemon is initialization happens in a graphical
-frame, i.e., it's possible to query resolution, color depth, fonts,
-etc.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package server
-    :config
-    (server-start))
-#+END_SRC
-
-** Clipboard
-Add clipboard to kill ring before killing.
-
-#+BEGIN_SRC emacs-lisp
-  (setq save-interprogram-paste-before-kill t)
-#+END_SRC
-
-** Global commands
-The setting ~repeat-on-final-keystroke~ is cumbersome. Rebind ~repeat~ to
-something short.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-key "C-z" #'repeat)
 #+END_SRC
 
 * Minibuffer
