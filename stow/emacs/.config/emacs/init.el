@@ -372,6 +372,158 @@ N is an integer, a workspace number."
 
 (bind-key "C-z" #'repeat)
 
+(unbind-key "C-x C-z")
+
+(bind-keys
+ ("C-c v m" . make-frame-command)
+ ("C-c v o" . other-frame)
+ ("C-c v d" . delete-frame)
+ ("C-c v C-d" . delete-other-frames))
+
+(setq window-resize-pixelwise t)
+
+(bind-keys
+ ("C-c w h" . split-window-below)
+ ("C-c w v" . split-window-right)
+ ("C-c w b" . balance-windows)
+ ("C-c w d" . delete-window)
+ ("C-c w C-d" . delete-other-windows)
+ ("C-c w M-d" . kill-buffer-and-window))
+
+(bind-key "C-c w C-b" #'balance-windows-area)
+
+(defvar koek-wind/n-hor-steps 32
+  "Number of horizontal steps to resize a window from monitor width to zero.")
+
+(defun koek-wind/resize (shrink vertical)
+  "Resize selected window.
+When SHRINK is truthy, shrink window, else, grow window.  When
+VERTICAL is truthy, resize vertically, else, resize
+horizontally."
+  (let* ((width (nth 2 (frame-monitor-geometry)))
+         (step (/ width koek-wind/n-hor-steps))
+         (delta (if shrink (* step -1) step)))
+    (window-resize nil delta (not vertical) nil 'pixelwise)))
+
+(defun koek-wind/grow (&optional arg)
+  "Grow selected window.
+With `\\[universal-argument]' prefix argument ARG, grow
+vertically, else, grow horizontally."
+  (interactive "P")
+  (koek-wind/resize nil arg))
+
+(defun koek-wind/shrink (&optional arg)
+  "Shrink selected window.
+With `\\[universal-argument]' prefix argument ARG, shrink
+vertically, else, shrink horizontally."
+  (interactive "P")
+  (koek-wind/resize 'shrink arg))
+
+(bind-keys
+ ("C-c w g" . koek-wind/grow)
+ ("C-c w s" . koek-wind/shrink))
+
+(use-package ace-window
+  :straight t
+  :bind
+  ([remap other-window] . ace-window)
+  :preface
+  (define-advice ace-window-display-mode
+      (:around (f &rest args) koek-ace/disable-setup-mode-line)
+    (let ((format (default-value 'mode-line-format)))
+      (apply f args)
+      (setq-default mode-line-format format)
+      (force-mode-line-update 'all)))
+  :config
+  (setq aw-scope 'frame)
+  (setq aw-swap-invert t)
+  (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
+  (setq aw-dispatch-alist '((?o aw-flip-window)))
+  (setq aw-leading-char-style 'path)
+  (ace-window-display-mode)
+  ;; Ace isn't a minor mode but it can be delighted [sic]
+  :delight)
+
+(use-package transpose-frame
+  :straight t
+  :bind
+  ("C-c w t" . transpose-frame)
+  :preface
+  (defun koek-tf/flip (&optional arg)
+    "Flip window layout.
+With `\\[universal-argument]' prefix argument ARG, flip
+vertically, else, flip horizontally."
+    (interactive "P")
+    (if arg
+        (flip-frame)
+      (flop-frame)))
+
+  (defun koek-tf/rotate (&optional arg)
+    "Rotate window layout.
+With `\\[universal-argument]' prefix argument ARG, rotate
+clockwise, else, rotate counterclockwise."
+    (interactive "P")
+    (if arg
+        (rotate-frame-clockwise)
+      (rotate-frame-anticlockwise)))
+  :init
+  (bind-keys
+   ("C-c w f" . koek-tf/flip)
+   ("C-c w c" . koek-tf/rotate)))
+
+(use-package winner
+  :demand t
+  :bind
+  (("C-c w l" . winner-undo)
+   ("C-c w r" . winner-redo))
+  :config
+  (winner-mode))
+
+(use-package eyebrowse
+  :straight t
+  :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+  :bind
+  (("C-c w 0" . eyebrowse-switch-to-window-config-0)
+   ("C-c w 1" . eyebrowse-switch-to-window-config-1)
+   ("C-c w 2" . eyebrowse-switch-to-window-config-2)
+   ("C-c w 3" . eyebrowse-switch-to-window-config-3)
+   ("C-c w 4" . eyebrowse-switch-to-window-config-4)
+   ("C-c w 5" . eyebrowse-switch-to-window-config-5)
+   ("C-c w 6" . eyebrowse-switch-to-window-config-6)
+   ("C-c w 7" . eyebrowse-switch-to-window-config-7)
+   ("C-c w 8" . eyebrowse-switch-to-window-config-8)
+   ("C-c w 9" . eyebrowse-switch-to-window-config-9)
+   ("C-c w w" . eyebrowse-last-window-config)
+   ("C-c w k" . eyebrowse-close-window-config))
+  :init
+  (setq eyebrowse-keymap-prefix (kbd "C-c w"))
+  :config
+  ;; Resolve keybinding conflict with transpose-frame
+  (unbind-key "C-c w c" eyebrowse-mode-map)
+
+  (setq eyebrowse-default-workspace-slot 0)
+  (setq eyebrowse-mode-line-style 'hide)
+  (eyebrowse-mode))
+
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-trailing-separator-p t))
+
+(use-package ibuffer
+  :bind
+  ([remap list-buffers] . ibuffer))
+
+(defun koek-buff/bury (&optional arg)
+  "Bury current.
+With `\\[universal-argument]' prefix argument ARG, kill current."
+  (interactive "P")
+  (if arg
+      (kill-buffer)
+    (bury-buffer)))
+
+(bind-key [remap kill-buffer] #'koek-buff/bury)
+
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
   :config
@@ -1236,158 +1388,6 @@ list of backends, see `company-backends'."
   :after company
   :config
   (company-flx-mode))
-
-(unbind-key "C-x C-z")
-
-(bind-keys
- ("C-c v m" . make-frame-command)
- ("C-c v o" . other-frame)
- ("C-c v d" . delete-frame)
- ("C-c v C-d" . delete-other-frames))
-
-(setq window-resize-pixelwise t)
-
-(bind-keys
- ("C-c w h" . split-window-below)
- ("C-c w v" . split-window-right)
- ("C-c w b" . balance-windows)
- ("C-c w d" . delete-window)
- ("C-c w C-d" . delete-other-windows)
- ("C-c w M-d" . kill-buffer-and-window))
-
-(bind-key "C-c w C-b" #'balance-windows-area)
-
-(defvar koek-wind/n-hor-steps 32
-  "Number of horizontal steps to resize a window from monitor width to zero.")
-
-(defun koek-wind/resize (shrink vertical)
-  "Resize selected window.
-When SHRINK is truthy, shrink window, else, grow window.  When
-VERTICAL is truthy, resize vertically, else, resize
-horizontally."
-  (let* ((width (nth 2 (frame-monitor-geometry)))
-         (step (/ width koek-wind/n-hor-steps))
-         (delta (if shrink (* step -1) step)))
-    (window-resize nil delta (not vertical) nil 'pixelwise)))
-
-(defun koek-wind/grow (&optional arg)
-  "Grow selected window.
-With `\\[universal-argument]' prefix argument ARG, grow
-vertically, else, grow horizontally."
-  (interactive "P")
-  (koek-wind/resize nil arg))
-
-(defun koek-wind/shrink (&optional arg)
-  "Shrink selected window.
-With `\\[universal-argument]' prefix argument ARG, shrink
-vertically, else, shrink horizontally."
-  (interactive "P")
-  (koek-wind/resize 'shrink arg))
-
-(bind-keys
- ("C-c w g" . koek-wind/grow)
- ("C-c w s" . koek-wind/shrink))
-
-(use-package ace-window
-  :straight t
-  :bind
-  ([remap other-window] . ace-window)
-  :preface
-  (define-advice ace-window-display-mode
-      (:around (f &rest args) koek-ace/disable-setup-mode-line)
-    (let ((format (default-value 'mode-line-format)))
-      (apply f args)
-      (setq-default mode-line-format format)
-      (force-mode-line-update 'all)))
-  :config
-  (setq aw-scope 'frame)
-  (setq aw-swap-invert t)
-  (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
-  (setq aw-dispatch-alist '((?o aw-flip-window)))
-  (setq aw-leading-char-style 'path)
-  (ace-window-display-mode)
-  ;; Ace isn't a minor mode but it can be delighted [sic]
-  :delight)
-
-(use-package transpose-frame
-  :straight t
-  :bind
-  ("C-c w t" . transpose-frame)
-  :preface
-  (defun koek-tf/flip (&optional arg)
-    "Flip window layout.
-With `\\[universal-argument]' prefix argument ARG, flip
-vertically, else, flip horizontally."
-    (interactive "P")
-    (if arg
-        (flip-frame)
-      (flop-frame)))
-
-  (defun koek-tf/rotate (&optional arg)
-    "Rotate window layout.
-With `\\[universal-argument]' prefix argument ARG, rotate
-clockwise, else, rotate counterclockwise."
-    (interactive "P")
-    (if arg
-        (rotate-frame-clockwise)
-      (rotate-frame-anticlockwise)))
-  :init
-  (bind-keys
-   ("C-c w f" . koek-tf/flip)
-   ("C-c w c" . koek-tf/rotate)))
-
-(use-package winner
-  :demand t
-  :bind
-  (("C-c w l" . winner-undo)
-   ("C-c w r" . winner-redo))
-  :config
-  (winner-mode))
-
-(use-package eyebrowse
-  :straight t
-  :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
-  :bind
-  (("C-c w 0" . eyebrowse-switch-to-window-config-0)
-   ("C-c w 1" . eyebrowse-switch-to-window-config-1)
-   ("C-c w 2" . eyebrowse-switch-to-window-config-2)
-   ("C-c w 3" . eyebrowse-switch-to-window-config-3)
-   ("C-c w 4" . eyebrowse-switch-to-window-config-4)
-   ("C-c w 5" . eyebrowse-switch-to-window-config-5)
-   ("C-c w 6" . eyebrowse-switch-to-window-config-6)
-   ("C-c w 7" . eyebrowse-switch-to-window-config-7)
-   ("C-c w 8" . eyebrowse-switch-to-window-config-8)
-   ("C-c w 9" . eyebrowse-switch-to-window-config-9)
-   ("C-c w w" . eyebrowse-last-window-config)
-   ("C-c w k" . eyebrowse-close-window-config))
-  :init
-  (setq eyebrowse-keymap-prefix (kbd "C-c w"))
-  :config
-  ;; Resolve keybinding conflict with transpose-frame
-  (unbind-key "C-c w c" eyebrowse-mode-map)
-
-  (setq eyebrowse-default-workspace-slot 0)
-  (setq eyebrowse-mode-line-style 'hide)
-  (eyebrowse-mode))
-
-(use-package uniquify
-  :config
-  (setq uniquify-buffer-name-style 'forward)
-  (setq uniquify-trailing-separator-p t))
-
-(use-package ibuffer
-  :bind
-  ([remap list-buffers] . ibuffer))
-
-(defun koek-buff/bury (&optional arg)
-  "Bury current.
-With `\\[universal-argument]' prefix argument ARG, kill current."
-  (interactive "P")
-  (if arg
-      (kill-buffer)
-    (bury-buffer)))
-
-(bind-key [remap kill-buffer] #'koek-buff/bury)
 
 (setq enable-recursive-minibuffers t)
 
