@@ -20,7 +20,6 @@
 
 (defvar bootstrap-version)              ; Must be a dynamic variable
 
-(setq straight-vc-git-default-protocol 'ssh)
 (setq straight-check-for-modifications '(check-on-save find-when-checking))
 
 (let ((bootstrap-file
