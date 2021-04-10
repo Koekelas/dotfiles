@@ -524,6 +524,79 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
 
 (bind-key [remap kill-buffer] #'koek-buff/bury)
 
+(setq enable-recursive-minibuffers t)
+
+;; Optional dependencies
+(straight-use-package 'flx)
+(straight-use-package 'wgrep)
+
+(use-package ivy
+  :straight t
+  :demand t
+  :bind
+  ("C-r" . ivy-resume)
+  :config
+  (use-package ivy-avy
+    :bind
+    (:map ivy-minibuffer-map
+     ("C-c j" . ivy-avy)))
+
+  ;; When counsel loads, various commands setup initial input
+  (use-package counsel
+    :defer t
+    :config
+    (setq ivy-initial-inputs-alist nil))
+
+  (unbind-key "C-o" ivy-minibuffer-map) ; hydra-ivy/body
+
+  (setq ivy-re-builders-alist
+        '((swiper-isearch . ivy--regex-plus)
+          (counsel-rg . ivy--regex-plus)
+          (counsel-unicode-char . ivy--regex-ignore-order)
+          (t . ivy--regex-fuzzy)))
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-virtual-abbreviate 'abbreviate)
+  (setq ivy-on-del-error-function 'ignore)
+  (setq ivy-use-selectable-prompt t)
+  (setq ivy-count-format "%d/%d ")
+  (ivy-mode)
+  :delight)
+
+(use-package ivy-avy
+  :straight t
+  :defer t
+  :init
+  (setq ivy-avy-style 'at-full))
+
+(use-package counsel
+  :straight t
+  :bind
+  (([remap find-file] . counsel-find-file)
+   ([remap insert-char] . counsel-unicode-char)
+   ([remap yank-pop] . counsel-yank-pop)
+   ([remap execute-extended-command] . counsel-M-x)
+   ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+   ("C-M-s" . counsel-rg)
+   ("C-c f s" . counsel-file-jump)
+   ("C-c f l" . counsel-find-library)
+   ("C-c j d" . counsel-imenu)
+   ("C-c j o" . counsel-org-goto-all)
+   ("C-c x x" . counsel-linux-app)
+   ("C-c d f" . counsel-describe-face)
+   :map minibuffer-local-map
+   ("C-r" . counsel-minibuffer-history))
+  :config
+  (ivy-add-actions 'counsel-M-x
+                   `(("h"
+                      ,(lambda (candidate)
+                         (helpful-function (intern candidate)))
+                      "help")))
+
+  (setq counsel-linux-app-format-function
+        #'counsel-linux-app-format-function-name-first)
+  (setq counsel-yank-pop-separator (format "\n%s\n" (make-string 80 ?―)))
+  (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
+
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
   :config
@@ -1388,79 +1461,6 @@ list of backends, see `company-backends'."
   :after company
   :config
   (company-flx-mode))
-
-(setq enable-recursive-minibuffers t)
-
-;; Optional dependencies
-(straight-use-package 'flx)
-(straight-use-package 'wgrep)
-
-(use-package ivy
-  :straight t
-  :demand t
-  :bind
-  ("C-r" . ivy-resume)
-  :config
-  (use-package ivy-avy
-    :bind
-    (:map ivy-minibuffer-map
-     ("C-c j" . ivy-avy)))
-
-  ;; When counsel loads, various commands setup initial input
-  (use-package counsel
-    :defer t
-    :config
-    (setq ivy-initial-inputs-alist nil))
-
-  (unbind-key "C-o" ivy-minibuffer-map) ; hydra-ivy/body
-
-  (setq ivy-re-builders-alist
-        '((swiper-isearch . ivy--regex-plus)
-          (counsel-rg . ivy--regex-plus)
-          (counsel-unicode-char . ivy--regex-ignore-order)
-          (t . ivy--regex-fuzzy)))
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-virtual-abbreviate 'abbreviate)
-  (setq ivy-on-del-error-function 'ignore)
-  (setq ivy-use-selectable-prompt t)
-  (setq ivy-count-format "%d/%d ")
-  (ivy-mode)
-  :delight)
-
-(use-package ivy-avy
-  :straight t
-  :defer t
-  :init
-  (setq ivy-avy-style 'at-full))
-
-(use-package counsel
-  :straight t
-  :bind
-  (([remap find-file] . counsel-find-file)
-   ([remap insert-char] . counsel-unicode-char)
-   ([remap yank-pop] . counsel-yank-pop)
-   ([remap execute-extended-command] . counsel-M-x)
-   ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-   ("C-M-s" . counsel-rg)
-   ("C-c f s" . counsel-file-jump)
-   ("C-c f l" . counsel-find-library)
-   ("C-c j d" . counsel-imenu)
-   ("C-c j o" . counsel-org-goto-all)
-   ("C-c x x" . counsel-linux-app)
-   ("C-c d f" . counsel-describe-face)
-   :map minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history))
-  :config
-  (ivy-add-actions 'counsel-M-x
-                   `(("h"
-                      ,(lambda (candidate)
-                         (helpful-function (intern candidate)))
-                      "help")))
-
-  (setq counsel-linux-app-format-function
-        #'counsel-linux-app-format-function-name-first)
-  (setq counsel-yank-pop-separator (format "\n%s\n" (make-string 80 ?―)))
-  (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
 
 (use-package help-mode
   :defer t
