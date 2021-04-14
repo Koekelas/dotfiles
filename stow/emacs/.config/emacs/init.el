@@ -248,7 +248,6 @@ Keybinding is a string, see `edmacro-mode'.")
                   ("<f11>" . exwm-layout-toggle-fullscreen)
                   ("s-q" . bury-buffer)
                   ("s-d" . kill-current-buffer)
-                  ("s-x" . counsel-linux-app)
                   ("s-C-f" . koek-wm/launch-firefox)
                   ("s-s" . exwm-input-toggle-keyboard))))
 
@@ -256,10 +255,7 @@ Keybinding is a string, see `edmacro-mode'.")
   (setq exwm-input-simulation-keys
         (mapcar (pcase-lambda (`(,from . ,to))
                   (cons (kbd from) (kbd to)))
-                koek-wm/base-simulation-keys))
-
-  ;; Grab ivy-resume in line mode
-  (push ?\C-r exwm-input-prefix-keys))
+                koek-wm/base-simulation-keys)))
 
 (use-package exwm-workspace
   :defer t
@@ -641,78 +637,290 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
 
 (bind-key [remap kill-buffer] #'koek-buff/bury)
 
-(setq enable-recursive-minibuffers t)
-
-;; Optional dependencies
-(straight-use-package 'flx)
-(straight-use-package 'wgrep)
-
-(use-package ivy
-  :straight t
-  :demand t
-  :bind
-  ("C-r" . ivy-resume)
-  :config
-  (use-package ivy-avy
-    :bind
-    (:map ivy-minibuffer-map
-     ("C-c j" . ivy-avy)))
-
-  ;; When counsel loads, various commands setup initial input
-  (use-package counsel
-    :defer t
-    :config
-    (setq ivy-initial-inputs-alist nil))
-
-  (unbind-key "C-o" ivy-minibuffer-map) ; hydra-ivy/body
-
-  (setq ivy-re-builders-alist
-        '((swiper-isearch . ivy--regex-plus)
-          (counsel-rg . ivy--regex-plus)
-          (counsel-unicode-char . ivy--regex-ignore-order)
-          (t . ivy--regex-fuzzy)))
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-virtual-abbreviate 'abbreviate)
-  (setq ivy-on-del-error-function 'ignore)
-  (setq ivy-use-selectable-prompt t)
-  (setq ivy-count-format "%d/%d ")
-  (ivy-mode)
-  :delight)
-
-(use-package ivy-avy
-  :straight t
+(use-package minibuffer
   :defer t
-  :init
-  (setq ivy-avy-style 'at-full))
+  :config
+  (use-package consult
+    :bind
+    (:map minibuffer-local-map
+     ("C-r" . consult-history)))
 
-(use-package counsel
+  (setq enable-recursive-minibuffers t)
+  (setq completion-in-region-function #'consult-completion-in-region)
+
+  (let ((default-styles '(orderless basic)))
+    (setq completion-styles default-styles)
+    ;; completion-category-defaults
+    (setq completion-category-overrides
+          `((buffer       . ((styles . ,default-styles)))
+            (email        . ((styles . ,default-styles)))
+            ;; tramp
+            (file         . ((styles . (basic ,@(remq 'basic default-styles)))))
+            (info-menu    . ((styles . ,default-styles)))
+            (project-file . ((styles . ,default-styles)))
+            (unicode-name . ((styles . ,default-styles))))))
+
+  (setq echo-keystrokes 0.3)
+
+  ;; prompt
+  (plist-put minibuffer-prompt-properties 'cursor-intangible t)
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
+
+(use-package crm
+  :defer t
+  :preface
+  (defface koek-mbuf/crm-indicator '((t . (:box t :inherit minibuffer-prompt)))
+    "Face for CRM indicator in minibuffer prompt."
+    :group 'minibuffer)
+
+  (define-advice completing-read-multiple
+      (:filter-args (args) koek-mbuf/insert-crm-indicator)
+    (cons (replace-regexp-in-string
+           (rx (group-n 1 (zero-or-one ": ")) line-end)
+           (concat " " (propertize "CRM" 'face 'koek-mbuf/crm-indicator) "\\1")
+           (car args))
+          (cdr args))))
+
+(use-package orderless
+  :straight t
+  :after minibuffer
+  :preface
+  (defun koek-rdls/dispatch (component _component-n _n-components)
+    "Dispatch orderless component.
+COMPONENT is a string, the component to dispatch.  Four patterns
+are recognized:
+
+- term@= is style `orderless-literal'
+- term@, is style `orderless-initialism'
+- term@$ is style `orderless-regexp'
+- term@! is style `orderless-without-literal'"
+    (when (string-match (rx (group-n 2 (one-or-more not-newline))
+                            "@" (group-n 1 (any "=,$!")) line-end)
+                        component)
+      (let* ((dispatcher (match-string 1 component))
+             (normalized (match-string 2 component))
+             (style (pcase dispatcher
+                      ("=" 'orderless-literal)
+                      ("," 'orderless-initialism)
+                      ("$" 'orderless-regexp)
+                      ("!" 'orderless-without-literal))))
+        (cons style normalized))))
+  :config
+  (setq orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq orderless-matching-styles
+        '(orderless-literal orderless-initialism orderless-regexp))
+  (setq orderless-style-dispatchers '(koek-rdls/dispatch)))
+
+(use-package savehist
+  :config
+  (setq savehist-autosave-interval nil)
+  (savehist-mode))
+
+(use-package consult
   :straight t
   :bind
-  (([remap find-file] . counsel-find-file)
-   ([remap insert-char] . counsel-unicode-char)
-   ([remap yank-pop] . counsel-yank-pop)
-   ([remap execute-extended-command] . counsel-M-x)
-   ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-   ("C-M-s" . counsel-rg)
-   ("C-c f s" . counsel-file-jump)
-   ("C-c f l" . counsel-find-library)
-   ("C-c j d" . counsel-imenu)
-   ("C-c j o" . counsel-org-goto-all)
-   ("C-c x x" . counsel-linux-app)
-   ("C-c d f" . counsel-describe-face)
-   :map minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history))
-  :config
-  (ivy-add-actions 'counsel-M-x
-                   `(("h"
-                      ,(lambda (candidate)
-                         (helpful-function (intern candidate)))
-                      "help")))
+  (([remap switch-to-buffer] . consult-buffer)
+   ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
+   ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+   ("C-c f f" . consult-find)
+   ([remap bookmark-jump] . consult-bookmark)
+   ("C-§" . consult-line)
+   ("M-s s" . consult-ripgrep)
+   ("C-c j d" . consult-imenu)
+   ("C-c e f" . consult-keep-lines)
+   ([remap yank-pop] . consult-yank-pop))
+  :preface
+  (autoload #'bookmark-get-bookmark "bookmark")
+  (autoload #'bookmark-get-handler "bookmark")
 
-  (setq counsel-linux-app-format-function
-        #'counsel-linux-app-format-function-name-first)
-  (setq counsel-yank-pop-separator (format "\n%s\n" (make-string 80 ?―)))
-  (setq counsel-org-goto-all-outline-path-prefix 'buffer-name))
+  (defvar koek-cslt/inhibited-buffer-modes '(exwm-mode))
+
+  (defvar koek-cslt/inhibited-file-names
+    (rx (or ".pdf" ".png" ".jpg") line-end))
+
+  (defvar koek-cslt/inhibited-bookmark-handlers nil)
+
+  (defun koek-cslt/inhibit-preview-p (candidate)
+    (let* ((buffer (get-buffer candidate))
+           (bookmark (unless buffer
+                       (bookmark-get-bookmark candidate 'no-error)))
+           (file-name (unless (or buffer bookmark)
+                        candidate)))
+      (cond
+       (buffer
+        (apply #'provided-mode-derived-p
+               (buffer-local-value 'major-mode buffer)
+               koek-cslt/inhibited-buffer-modes))
+       (file-name
+        (when koek-cslt/inhibited-file-names
+          (string-match koek-cslt/inhibited-file-names file-name)))
+       (bookmark
+        (memq (or (bookmark-get-handler bookmark) 'bookmark-default-handler)
+              koek-cslt/inhibited-bookmark-handlers)))))
+
+  (defmacro koek-cslt/install-inhibit-preview (state-ctor candidate &rest body)
+    (declare (indent 2))
+    (let ((handler-sym (gensym))
+          (action-sym (gensym))
+          (candidate-sym (gensym)))
+      `(define-advice ,state-ctor
+           (:filter-return (,handler-sym) koek-cslt/inhibit-preview)
+         (lambda (,action-sym ,candidate-sym)
+           (if (and (eq ,action-sym 'preview)
+                    ,candidate-sym
+                    (koek-cslt/inhibit-preview-p ,candidate-sym))
+               (progn
+                 (let ((inhibit-message t)) ; Dynamic variable
+                   (funcall ,handler-sym ,action-sym nil))
+                 (let ((,candidate ,candidate-sym))
+                   ,@body))
+             (funcall ,handler-sym ,action-sym ,candidate-sym))))))
+
+  (koek-cslt/install-inhibit-preview consult--buffer-state buffer-name
+    (message "No preview for `%s'" buffer-name))
+
+  (koek-cslt/install-inhibit-preview consult--file-state file-name
+    (message "No preview for `%s'" (file-name-nondirectory file-name)))
+
+  (koek-cslt/install-inhibit-preview consult--bookmark-state bookmark-name
+    (message "No preview for `%s'" bookmark-name))
+
+  (defvar koek-cslt/exwm-buffer-source
+    `(:category buffer
+      :items ,(lambda ()
+                (thread-last
+                  (buffer-list)
+                  (seq-filter
+                   (lambda (buffer)
+                     (provided-mode-derived-p
+                      (buffer-local-value 'major-mode buffer) 'exwm-mode)))
+                  (mapcar #'buffer-name)))
+      :history buffer-name-history
+      :hidden t
+      :narrow ?x
+      :state consult--buffer-state
+      :name "EXWM"
+      :face consult-buffer))
+
+  (defvar koek-cslt/dir-buffer-source
+    `(:category buffer
+      :items ,(lambda ()
+                (thread-last (buffer-list)
+                  (seq-filter #'koek-buff/dirp)
+                  (mapcar #'buffer-name)))
+      :history buffer-name-history
+      :hidden t
+      :narrow ?r
+      :state consult--buffer-state
+      :name "Directory"
+      :face consult-buffer))
+
+  (defvar koek-cslt/doc-buffer-source
+    `(:category buffer
+      :items ,(lambda ()
+                (thread-last (buffer-list)
+                  (seq-filter #'koek-buff/docp)
+                  (mapcar #'buffer-name)))
+      :history buffer-name-history
+      :hidden t
+      :narrow ?d
+      :state consult--buffer-state
+      :name "Help and documentation"
+      :face consult-buffer))
+
+  (defvar koek-cslt/shell-buffer-source
+    `(:category buffer
+      :items ,(lambda ()
+                (thread-last (buffer-list)
+                  (seq-filter #'koek-buff/shellp)
+                  (mapcar #'buffer-name)))
+      :history buffer-name-history
+      :hidden t
+      :narrow ?s
+      :state consult--buffer-state
+      :name "Shell"
+      :face consult-buffer))
+
+  (defvar koek-cslt/web-buffer-source
+    `(:category buffer
+      :items ,(lambda ()
+                (thread-last (buffer-list)
+                  (seq-filter #'koek-buff/webp)
+                  (mapcar #'buffer-name)))
+      :history buffer-name-history
+      :hidden t
+      :narrow ?w
+      :state consult--buffer-state
+      :name "Web"
+      :face consult-buffer))
+  :config
+  (setq consult-narrow-key "C-+")
+  (setq consult-buffer-sources
+        '(consult--source-buffer
+          consult--source-recent-file
+          consult--source-bookmark
+          consult--source-hidden-buffer
+          koek-cslt/exwm-buffer-source
+          koek-cslt/dir-buffer-source
+          koek-cslt/doc-buffer-source
+          koek-cslt/shell-buffer-source
+          koek-cslt/web-buffer-source
+          consult--source-project-buffer
+          consult--source-project-recent-file))
+  (setq consult-bookmark-narrow '((?f "File" bookmark-default-handler))))
+
+(use-package embark
+  :straight t
+  :bind
+  ("C-&" . embark-act)
+  :config
+  (use-package helpful
+    :bind
+    (:map embark-symbol-map
+     ("h" . helpful-symbol)
+     :map embark-become-help-map
+     ("s" . helpful-symbol)
+     ("v" . helpful-variable)
+     ("f" . helpful-function)))
+
+  (setq embark-help-key (kbd "?")))
+
+(straight-use-package 'embark-consult)
+
+(use-package vertico
+  :straight (vertico :files (:defaults "extensions/*.el"))
+  :config
+  (use-package vertico-quick
+    :bind
+    (:map vertico-map
+     ("C-c j" . vertico-quick-exit)))
+
+  (setq vertico-resize t)
+  (setq vertico-multiline
+        (cons (propertize "\N{DOWNWARDS ARROW WITH TIP LEFTWARDS}" 'face 'vertico-multiline)
+              (propertize truncate-string-ellipsis 'face 'vertico-multiline)))
+  (vertico-mode))
+
+(use-package vertico-repeat
+  :bind
+  ("M-z" . vertico-repeat)
+  :hook (minibuffer-setup . vertico-repeat-save))
+
+(use-package vertico-quick
+  :defer t
+  :config
+  ;; Mirror avy
+  (setq vertico-quick1 "qsdfjkl")
+  (setq vertico-quick2 "m"))
+
+(use-package marginalia
+  :straight t
+  ;; embark benefits from marginalia as it tries to guess the
+  ;; completion category of completion tables missing one, see
+  ;; `marginalia--completion-metadata-get'
+  :after (:any embark vertico)
+  :config
+  (marginalia-mode))
 
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
@@ -848,6 +1056,14 @@ When not in a project, prompt for one."
             (project-root (project-current 'maybe-prompt))))
       (magit-status-setup-buffer)))
 
+  (defun koek-proj/consult-ripgrep ()
+    "Launch ripgrep in current project.
+When not in a project, prompt for one."
+    (interactive)
+    (let ((default-directory            ; Dynamic variable
+            (project-root (project-current 'maybe-prompt))))
+      (consult-ripgrep)))
+
   (defun koek-proj/vterm (&optional arg)
     "Launch or switch to a vterm session in current project.
 With numeric prefix argument ARG, launch or switch to a numbered
@@ -876,9 +1092,15 @@ for one."
            (eshell-buffer-name (project-prefixed-buffer-name "eshell")))
       (eshell arg)))
   :config
+  (use-package consult
+    :bind
+    (:map project-prefix-map
+     ("b" . consult-project-buffer)))
+
   (bind-keys
    :map project-prefix-map
    ("m" . koek-proj/magit-status)
+   ("s" . koek-proj/consult-ripgrep)
    ("t" . koek-proj/vterm)
    ("e" . koek-proj/eshell))
 
@@ -887,8 +1109,9 @@ for one."
         '((project-find-file "Find file")
           (project-dired "Dired")
           (project-find-dir "Find directory")
-          (project-switch-to-buffer "Buffer")
+          (consult-project-buffer "Buffer")
           (koek-proj/magit-status "Magit")
+          (koek-proj/consult-ripgrep "Ripgrep")
           (koek-proj/vterm "Vterm")
           (koek-proj/eshell "Eshell"))))
 
@@ -1020,15 +1243,6 @@ When FORCE is truthy, continue commit unconditionally."
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-(use-package swiper
-  :straight t
-  :bind
-  ;; Why does [remap isearch-forward] prevent pdf-view-mode from
-  ;; rebinding C-s?
-  (("C-s" . swiper-isearch)
-   :map swiper-map
-   ("C-c j" . swiper-avy)))
-
 (use-package avy
   :straight t
   :bind
@@ -1090,15 +1304,10 @@ dictionary links before LIMIT."
       (funcall f)
       (setq n (1- n)))))
 
-(use-package replace
-  :bind
-  (("C-c e k" . flush-lines)
-   ("C-c e C-k" . keep-lines)))
-
 (use-package sort
   :bind
   (("C-c e s" . sort-lines)
-   ("C-c e M-k" . delete-duplicate-lines)))
+   ("C-c e k" . delete-duplicate-lines)))
 
 (use-package align
   :bind
@@ -1406,6 +1615,8 @@ more strings, the delimiters that call the handler."
   :straight t
   :defer t
   :config
+  (setq xref-show-xrefs-function #'consult-xref)
+  (setq xref-show-definitions-function #'consult-xref)
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 
 (use-package flymake
@@ -1586,6 +1797,10 @@ list of backends, see `company-backends'."
     :bind
     (:map help-mode-map
      ("j" . link-hint-open-link))))
+
+(use-package help-fns
+  :bind
+  ("C-c d f" . describe-face))
 
 (use-package descr-text
   :bind
@@ -2280,16 +2495,10 @@ INTERACTIVE is used internally."
         (when (and (derived-mode-p 'pdf-view-mode) koek-pdf/stain-mode)
           (koek-pdf/stain)))))
   :config
-  ;; Only isearch is supported
-  (use-package isearch
+  (use-package consult
     :bind
     (:map pdf-view-mode-map
-     ([remap swiper-isearch] . isearch-forward)))
-
-  (use-package counsel
-    :bind
-    (:map pdf-view-mode-map
-     ("d" . counsel-imenu)))
+     ("d" . consult-imenu)))
 
   (bind-keys
    :map pdf-view-mode-map
@@ -2741,11 +2950,10 @@ Modes are confident about being derived from text-mode.")
     (:map org-mode-map
      ("C-c j h" . avy-org-goto-heading-timer)))
 
-  (use-package counsel
+  (use-package consult
     :bind
     (:map org-mode-map
-     ([remap counsel-imenu] . counsel-org-goto)
-     ([remap org-set-tags-command] . counsel-org-tag)))
+     ([remap consult-imenu] . consult-org-heading)))
 
   (use-package org-clock
     :bind
@@ -2821,11 +3029,6 @@ Modes are confident about being derived from text-mode.")
   :bind
   ("C-c o a" . org-agenda)
   :config
-  (use-package counsel
-    :bind
-    (:map org-agenda-mode-map
-     ([remap org-agenda-set-tags] . counsel-org-tag-agenda)))
-
   (setq org-agenda-time-leading-zero t))
 
 (use-package org-capture
@@ -3030,11 +3233,6 @@ TITLE is a string, a note title."
   :config
   (setq org-roam-title-to-slug-function #'koek-org/title-to-slug)
   :delight)
-
-(use-package org-roam-completion
-  :defer t
-  :config
-  (setq org-roam-completion-system 'ivy))
 
 (use-package org-roam-db
   :defer t
