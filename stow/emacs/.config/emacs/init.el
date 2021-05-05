@@ -292,7 +292,7 @@ Keybinding is a string, see `edmacro-mode'.")
   (defun koek-wm/rename-current ()
     "Rename current according to its class or title."
     ;; Class is the name of an application while instance is the name
-    ;; of an instance of the application. For more information, see
+    ;; of an instance of the application, see
     ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
     (exwm-workspace-rename-buffer
      (cond
