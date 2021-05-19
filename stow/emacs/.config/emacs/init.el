@@ -1406,6 +1406,12 @@ When FORCE is truthy, continue commit unconditionally."
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
+(use-package wgrep
+  :straight t
+  :after grep
+  :config
+  (setq wgrep-enable-key (kbd "C-x C-q")))
+
 (use-package avy
   :straight t
   :bind

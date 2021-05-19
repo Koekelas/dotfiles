@@ -2056,6 +2056,17 @@ Save auto-save files in =~/.emacs.d/var/auto-save/=.
 
 * Editor
 
+** wgrep - Writable grep buffers
+[[https://github.com/mhayashi1120/Emacs-wgrep][wgrep (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package wgrep
+    :straight t
+    :after grep
+    :config
+    (setq wgrep-enable-key (kbd "C-x C-q")))
+#+END_SRC
+
 ** avy - Jump to visible position
 [[https://github.com/abo-abo/avy][avy (GitHub)]]
 
