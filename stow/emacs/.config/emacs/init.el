@@ -1274,6 +1274,10 @@ for one."
           (koek-proj/vterm "Vterm")
           (koek-proj/eshell "Eshell"))))
 
+(use-package find-func
+  :bind
+  ("C-c f l" . find-library))
+
 (use-package vc-hooks
   :defer t
   :config

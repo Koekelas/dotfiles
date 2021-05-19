@@ -1887,6 +1887,13 @@ Move deleted files to trash.
             (koek-proj/eshell "Eshell"))))
 #+END_SRC
 
+** find-func - Library files
+#+BEGIN_SRC emacs-lisp
+  (use-package find-func
+    :bind
+    ("C-c f l" . find-library))
+#+END_SRC
+
 ** vc - Version control
 VC is a placeholder.
 
