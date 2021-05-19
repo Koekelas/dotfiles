@@ -1227,7 +1227,112 @@ buffers.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
     :bind
-    ([remap list-buffers] . ibuffer))
+    ([remap list-buffers] . ibuffer)
+    :config
+    (setq ibuffer-movement-cycle nil)
+    (setq ibuffer-jump-offer-only-visible-buffers t)
+    (setq ibuffer-formats
+          '((mark
+             " " (name 40 40 :left :elide)
+             " " read-only modified
+             " " (size 8 8 :right :elide)
+             " " (mode 16 16 :left :elide)
+             " " filename-and-process)))
+    (setq ibuffer-eliding-string truncate-string-ellipsis))
+
+  (use-package ibuf-ext
+    :after ibuffer
+    :preface
+    (defun koek-ibuf/urip (s)
+      "Return whether S is a URI.
+  S is a string, the string to interrogate."
+      (when s
+        (string-match-p (rx line-start (one-or-more (any alnum "+-.")) ":") s)))
+
+    (defun koek-ibuf/get-host (&optional buffer)
+      (let ((url
+             (buffer-local-value
+              'list-buffers-directory (get-buffer (or buffer (current-buffer))))))
+        (when (koek-ibuf/urip url)
+          (let* ((parsed (url-generic-parse-url url))
+                 (host (url-host parsed)))
+            (unless (string-empty-p host)
+              host)))))
+
+    (defun koek-ibuf/part-project-p (file-name)
+      "Return whether current displays a file part of project FILE-NAME.
+  FILE-NAME is a string, the root of the project to compare with."
+      (string-equal (koek-proj/locate-root) file-name))
+
+    (defun koek-ibuf/part-host-p (host)
+      "Return whether current displays a webpage part of HOST.
+  HOST is a string, the host to compare with."
+      (string-equal (koek-ibuf/get-host) host))
+
+    (defun koek-ibuf/group-project ()
+      "Group buffers by project."
+      (interactive)
+      (let ((file-names (thread-last (buffer-list)
+                          (mapcar #'koek-proj/locate-root)
+                          (remq nil)
+                          seq-uniq
+                          (seq-sort #'string-lessp))))
+        (setq ibuffer-filter-groups
+              (mapcar (lambda (file-name)
+                        `(,file-name
+                          . ((predicate . (koek-ibuf/part-project-p ,file-name)))))
+                      file-names))
+        (ibuffer-update nil 'silent)))
+
+    (defun koek-ibuf/group-host ()
+      "Group buffers by host."
+      (interactive)
+      (let ((hosts (thread-last (buffer-list)
+                     (mapcar #'koek-ibuf/get-host)
+                     (remq nil)
+                     seq-uniq
+                     (seq-sort #'string-lessp))))
+        (setq ibuffer-filter-groups
+              (mapcar (lambda (host)
+                        `(,host . ((predicate . (koek-ibuf/part-host-p ,host)))))
+                      hosts))
+        (ibuffer-update nil 'silent)))
+
+    (defun koek-ibuf/clear-filters (&optional what)
+      "Clear filters and filter groups.
+  WHAT is a symbol, the filter to clear, either filter (only
+  filters), group (only groups) or all (filters and groups)."
+      (interactive
+       (let ((what (pcase (prefix-numeric-value current-prefix-arg)
+                     (4     'filter)
+                     (16    'group)
+                     (_what 'all))))
+         (list what)))
+      (let ((current (ibuffer-current-buffer)))
+        (when (or (null what)
+                  (eq what 'filter)
+                  (eq what 'all))
+          (setq ibuffer-filtering-qualifiers nil))
+        (when (or (eq what 'group)
+                  (eq what 'all))
+          (setq ibuffer-filter-groups nil))
+        (ibuffer-update nil 'silent)
+        (when current
+          (ibuffer-jump-to-buffer (buffer-name current)))))
+    :config
+    (bind-keys
+     :map ibuffer-mode-map
+     ("\\ p" . koek-ibuf/group-project)
+     ("\\ h" . koek-ibuf/group-host)
+     ("/ /" . koek-ibuf/clear-filters))
+
+    (setq ibuffer-saved-filters
+          '(("Directory" . ((predicate . (koek-buff/dirp))))
+            ("Help and documentation" . ((predicate . (koek-buff/docp))))
+            ("Shell"     . ((predicate . (koek-buff/shellp))))
+            ("Web"       . ((predicate . (koek-buff/webp))))
+            ("Project"   . ((predicate . (koek-proj/locate-root))))))
+    (setq ibuffer-show-empty-filter-groups nil))
 #+END_SRC
 
 ** Buffer commands
