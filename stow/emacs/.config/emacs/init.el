@@ -1082,6 +1082,9 @@ are recognized:
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
   :config
+  (autoload #'dired-dwim-target-next-visible "dired-aux")
+
+  (setq dired-dwim-target #'dired-dwim-target-next-visible)
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
   (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
@@ -1092,7 +1095,6 @@ are recognized:
   :after dired
   :config
   (setq dired-vc-rename-file t)
-  (setq dired-dwim-target #'dired-dwim-target-next-visible)
   (setq dired-create-destination-dirs 'ask))
 
 (use-package dired-x
