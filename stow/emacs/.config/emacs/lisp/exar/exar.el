@@ -83,7 +83,7 @@
 (defun exar--decode-terminated-string (bytes)
   (exar--decode-string
    (seq-take-while (lambda (byte)
-                     (/= byte ?\C-j))
+                     (/= byte ?\n))
                    bytes)))
 
 (defun exar--decode-manufacturer (bytes)
