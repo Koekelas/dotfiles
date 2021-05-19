@@ -391,18 +391,18 @@ N is an integer, a workspace number."
   :defer t
   :config
   (setq exwm-manage-configurations
-        `(((koek-wm/classp "firefox")
+        `(((koek-wm/classp "gimp")
+           char-mode t floating-mode-line nil)
+          ((koek-wm/classp "inkscape")
+           char-mode t floating-mode-line nil)
+          ((koek-wm/classp "firefox")
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
                       (cons (kbd from) (kbd to)))
                     (append '(("M-o" . "C-n")
                               ("M-p" . "S-C-p")
                               ("M-k" . "C-w"))
-                            koek-wm/base-simulation-keys)))
-          ((koek-wm/classp "gimp")
-           char-mode t floating-mode-line nil)
-          ((koek-wm/classp "inkscape")
-           char-mode t floating-mode-line nil))))
+                            koek-wm/base-simulation-keys))))))
 
 (use-package server
   :config
