@@ -1735,7 +1735,8 @@ more strings, the delimiters that call the handler."
   :hook ((prog-mode conf-mode) . whitespace-mode)
   :config
   (setq whitespace-style '(tab-mark face tabs))
-  (setq whitespace-display-mappings '((tab-mark ?\t [?⇥ ?\t])))
+  (setq whitespace-display-mappings
+        '((tab-mark ?\t [?\N{RIGHTWARDS ARROW TO BAR} ?\t])))
   :delight)
 
 (use-package eglot
@@ -2916,7 +2917,7 @@ Modes are confident about being derived from text-mode.")
       (conf-desktop-mode . "Desktop")
       (conf-javaprop-mode . "Properties")
       (conf-ppd-mode . "PPD")
-      (conf-space-mode . "Conf·")
+      (conf-space-mode . "Conf\N{MIDDLE DOT}")
       (conf-toml-mode . "TOML")
       (conf-unix-mode . "Unix")
       (conf-windows-mode . "INI")

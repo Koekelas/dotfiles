@@ -2532,7 +2532,8 @@ produce noisy diffs.
     :hook ((prog-mode conf-mode) . whitespace-mode)
     :config
     (setq whitespace-style '(tab-mark face tabs))
-    (setq whitespace-display-mappings '((tab-mark ?\t [?⇥ ?\t])))
+    (setq whitespace-display-mappings
+          '((tab-mark ?\t [?\N{RIGHTWARDS ARROW TO BAR} ?\t])))
     :delight)
 #+END_SRC
 
@@ -6247,7 +6248,7 @@ Configure conf-mode afterwards.
         (conf-desktop-mode . "Desktop")
         (conf-javaprop-mode . "Properties")
         (conf-ppd-mode . "PPD")
-        (conf-space-mode . "Conf·")
+        (conf-space-mode . "Conf\N{MIDDLE DOT}")
         (conf-toml-mode . "TOML")
         (conf-unix-mode . "Unix")
         (conf-windows-mode . "INI")
