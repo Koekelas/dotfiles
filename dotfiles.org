@@ -544,6 +544,11 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
 * Firefox :setup:
 
+** KeePass Helper
+[[https://addons.mozilla.org/en-US/firefox/addon/keepass-helper-url-in-title/][KeePass Helper (Firefox Add-ons)]]
+
+Enable all components.
+
 ** Saka Key
 [[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
 

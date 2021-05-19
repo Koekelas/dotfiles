@@ -260,6 +260,73 @@ Keybinding is a string, see `edmacro-mode'.")
 (use-package exwm-workspace
   :defer t
   :preface
+  (defun koek-wm/classp (class &optional buffer)
+    ;; `exwm-class-name' is the name of the application while
+    ;; `exwm-instance-name' is the name of the instance of the
+    ;; application, see
+    ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+    (when (boundp 'exwm-class-name)
+      (when-let ((cl
+                  (buffer-local-value
+                   'exwm-class-name (get-buffer (or buffer (current-buffer))))))
+        (let ((case-fold-search t))     ; Dynamic variable
+          (string-match-p (regexp-quote class) cl)))))
+
+  (defun koek-wm/get-firefox-page ()
+    (string-match
+     ;; Mozilla Firefox
+     ;; Mozilla Firefox Private Browsing
+     ;; Mozilla Firefox (Private Browsing)
+     ;; URL - Title — Mozilla Firefox
+     ;; URL - — Mozilla Firefox
+     ;; URL - Title - Mozilla Firefox
+     ;; URL - - Mozilla Firefox
+     ;; URL - Title — Mozilla Firefox Private Browsing
+     ;; URL - — Mozilla Firefox Private Browsing
+     ;; URL - Title — Mozilla Firefox (Private Browsing)
+     ;; URL - — Mozilla Firefox (Private Browsing)
+     ;; URL - Title - Mozilla Firefox (Private Browsing)
+     ;; URL - - Mozilla Firefox (Private Browsing)
+     (rx line-start
+         ;; URL
+         (group-n 1 alpha (zero-or-more (any alnum "+-.")) ":" (minimal-match (zero-or-more not-newline)))
+         ;; Separator
+         " - "
+         ;; Title
+         (zero-or-one (group-n 2 (minimal-match (one-or-more not-newline))))
+         ;; Suffix
+         (zero-or-one " ") (any "-\N{EM DASH}") " Mozilla Firefox" (zero-or-one " " (or "Private Browsing" "(Private Browsing)"))
+         line-end)
+     exwm-title)
+    (list :url (match-string 1 exwm-title) :title (match-string 2 exwm-title)))
+
+  (defun koek-wm/update-current ()
+    (cond
+     ((koek-wm/classp "gimp")
+      (exwm-workspace-rename-buffer "*GIMP*"))
+     ((koek-wm/classp "firefox")
+      (let* ((page (koek-wm/get-firefox-page))
+             (title (plist-get page :title))
+             (url (plist-get page :url))
+             (parsed (url-generic-parse-url url))
+             (scheme (url-type parsed))
+             (id (if (member scheme '("about" "chrome"))
+                     title
+                   (or title url))))
+        (exwm-workspace-rename-buffer
+         (concat "*FF"
+                 (when id
+                   (concat ": " id))
+                 "*"))
+        ;; ibuffer, marginalia
+        (setq list-buffers-directory url)))
+     ((koek-wm/classp "microsoft teams")
+      (exwm-workspace-rename-buffer "*Teams*"))
+     ((koek-wm/classp "vlc")
+      (exwm-workspace-rename-buffer "*VLC*"))
+     (t
+      (exwm-workspace-rename-buffer (format "*%s*" exwm-class-name)))))
+
   (defvar koek-wm/previous-workspace-n nil
     "Previously selected workspace number.")
 
@@ -289,26 +356,6 @@ Keybinding is a string, see `edmacro-mode'.")
     (when koek-wm/previous-workspace-n
       (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
 
-  (defun koek-wm/rename-current ()
-    "Rename current according to its class or title."
-    ;; Class is the name of an application while instance is the name
-    ;; of an instance of the application, see
-    ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
-    (exwm-workspace-rename-buffer
-     (cond
-      ((string-prefix-p "gimp" exwm-class-name 'ignore-case)
-       "GIMP")
-      ((string-prefix-p "firefox" exwm-class-name 'ignore-case)
-       (replace-regexp-in-string
-        (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
-        "Firefox" (or exwm-title "Firefox")))
-      ((string-prefix-p "microsoft teams" exwm-class-name 'ignore-case)
-       "Teams")
-      ((string-prefix-p "vlc" exwm-class-name 'ignore-case)
-       "VLC")
-      (t
-       exwm-class-name))))
-
   (defun koek-wm/n-to-label (n)
     "Convert workspace number N to a workspace label.
 N is an integer, a workspace number."
@@ -333,8 +380,7 @@ N is an integer, a workspace number."
   (setq exwm-workspace-number 2)
   (setq exwm-workspace-show-all-buffers t)
   (setq exwm-workspace-index-map #'koek-wm/n-to-label)
-  (add-hook 'exwm-update-class-hook #'koek-wm/rename-current)
-  (add-hook 'exwm-update-title-hook #'koek-wm/rename-current))
+  (add-hook 'exwm-update-title-hook #'koek-wm/update-current))
 
 (use-package exwm-layout
   :defer t
@@ -345,7 +391,7 @@ N is an integer, a workspace number."
   :defer t
   :config
   (setq exwm-manage-configurations
-        `(((string-prefix-p "firefox" exwm-class-name 'ignore-case)
+        `(((koek-wm/classp "firefox")
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
                       (cons (kbd from) (kbd to)))
@@ -353,9 +399,9 @@ N is an integer, a workspace number."
                               ("M-p" . "S-C-p")
                               ("M-k" . "C-w"))
                             koek-wm/base-simulation-keys)))
-          ((string-prefix-p "gimp" exwm-class-name 'ignore-case)
+          ((koek-wm/classp "gimp")
            char-mode t floating-mode-line nil)
-          ((string-prefix-p "inkscape" exwm-class-name 'ignore-case)
+          ((koek-wm/classp "inkscape")
            char-mode t floating-mode-line nil))))
 
 (use-package server
