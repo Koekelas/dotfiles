@@ -1,6 +1,6 @@
 ;;; belgian-holidays --- Belgian holidays -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020 Nicolas De Jaeghere
+;; Copyright (C) 2020-2021 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: calendar
