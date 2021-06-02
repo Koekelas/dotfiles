@@ -17,18 +17,6 @@ Enable lexical binding.
   ;;; Code:
 #+END_SRC
 
-Increasing cons threshold makes garbage collection more efficient and
-decreasing it makes garbage collection less noticeable, i.e., a cons
-threshold x freezes Emacs longer than half x collected one time but
-shorter than half x collected two times. Increase cons threshold
-during initialization. Reduces startup time.
-
-#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
-  (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
-#+END_SRC
-
-Once initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
-
 Require libraries.
 
 #+BEGIN_SRC emacs-lisp
@@ -192,7 +180,20 @@ For org configuration, see [[*Org][Org]].
 
 * System
 
-** gcmh - Collect garbage when idle
+** Garbage collector
+Increasing cons threshold makes garbage collection more efficient and
+decreasing it makes garbage collection less noticeable, i.e., a cons
+threshold x freezes Emacs longer than half x collected one time but
+shorter than half x collected two times. Increase cons threshold
+during initialization. Reduces startup time.
+
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
+  (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
+#+END_SRC
+
+Once initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
+
+*** gcmh - Collect garbage when idle
 [[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
 
 #+BEGIN_SRC emacs-lisp
