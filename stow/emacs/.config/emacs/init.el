@@ -1246,7 +1246,7 @@ more strings, the delimiters that call the handler."
   :straight t
   :bind
   (:map eglot-mode-map
-   ("C-c e f" . eglot-code-actions)
+   ("C-c e x" . eglot-code-actions)
    ("C-c e r" . eglot-rename))
   :hook
   ((c-mode c++-mode erlang-mode java-mode js-mode python-mode) . eglot-ensure)
