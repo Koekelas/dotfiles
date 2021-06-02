@@ -3271,9 +3271,9 @@ NAME is a string, the variable's name."
        (lambda (value)
          (let ((parts (split-string value "=")))
            (cons (car parts)
-                 (replace-regexp-in-string (rx (or (seq line-start "\"")
-                                                   (seq "\"" line-end)))
-                                           "" (string-join (cdr parts) "="))))))
+                 (replace-regexp-in-string
+                  (rx (or (seq line-start "\"") (seq "\"" line-end))) ""
+                  (string-join (cdr parts) "="))))))
       (seq-find (pcase-lambda (`(,nm))
                   (string-equal nm name)))
       cdr))
@@ -3394,9 +3394,8 @@ age of the person.  _AGE-SUFFIX is ignored."
 
   ;; Setup hyperref
   (let ((options
-         (let ((normalized
-                (replace-regexp-in-string (rx (any " \n")) ""
-                                          org-latex-hyperref-template)))
+         (let ((normalized (replace-regexp-in-string
+                            (rx (any " \n")) "" org-latex-hyperref-template)))
            (string-match
             (rx "{" (group-n 1 (one-or-more (any alpha "={}%,"))) "}")
             normalized)
@@ -3414,9 +3413,8 @@ age of the person.  _AGE-SUFFIX is ignored."
   (defun koek-org/title-to-slug (title)
     "Convert note title TITLE to a file name slug.
 TITLE is a string, a note title."
-    (let ((parts
-           (split-string (replace-regexp-in-string (rx (not (any alnum)))
-                                                   " " title))))
+    (let ((parts (split-string
+                  (replace-regexp-in-string (rx (not (any alnum))) " " title))))
       (downcase (string-join parts "-"))))
   :config
   (setq org-roam-title-to-slug-function #'koek-org/title-to-slug)

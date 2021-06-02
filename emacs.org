@@ -758,13 +758,11 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                          ids)
                        outputs nil)))
       (mapcar (pcase-lambda (`(,id . ,props))
-                (cons id
-                      (append (list :id id) props
-                              (list :output
-                                    (thread-first (plist-get props :edid)
-                                      (assoc output-ids)
-                                      cdr
-                                      (alist-get outputs))))))
+                (let ((output (thread-first (plist-get props :edid)
+                                (assoc output-ids)
+                                cdr
+                                (alist-get outputs))))
+                  (cons id (append (list :id id) props (list :output output)))))
               (exar--plist-to-alist exar-monitors))))
 
   (defun exar--get-layouts (outputs)
@@ -867,9 +865,9 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                            (concat " connected to " output-name))
                    output)))
               (exar--get-connected-outputs (exar--get-outputs))))
-            (output
-             (cdr
-              (assoc (completing-read "Monitor: " candidates nil t) candidates))))
+            (output (thread-first (completing-read "Monitor: " candidates nil t)
+                      (assoc candidates)
+                      cdr)))
        (list output)))
     (insert (exar--get-in (cdr output) :edid :id)))
 
@@ -6672,9 +6670,9 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
          (lambda (value)
            (let ((parts (split-string value "=")))
              (cons (car parts)
-                   (replace-regexp-in-string (rx (or (seq line-start "\"")
-                                                     (seq "\"" line-end)))
-                                             "" (string-join (cdr parts) "="))))))
+                   (replace-regexp-in-string
+                    (rx (or (seq line-start "\"") (seq "\"" line-end))) ""
+                    (string-join (cdr parts) "="))))))
         (seq-find (pcase-lambda (`(,nm))
                     (string-equal nm name)))
         cdr))
@@ -6801,9 +6799,8 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
     ;; Setup hyperref
     (let ((options
-           (let ((normalized
-                  (replace-regexp-in-string (rx (any " \n")) ""
-                                            org-latex-hyperref-template)))
+           (let ((normalized (replace-regexp-in-string
+                              (rx (any " \n")) "" org-latex-hyperref-template)))
              (string-match
               (rx "{" (group-n 1 (one-or-more (any alpha "={}%,"))) "}")
               normalized)
@@ -6826,9 +6823,8 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
     (defun koek-org/title-to-slug (title)
       "Convert note title TITLE to a file name slug.
   TITLE is a string, a note title."
-      (let ((parts
-             (split-string (replace-regexp-in-string (rx (not (any alnum)))
-                                                     " " title))))
+      (let ((parts (split-string
+                    (replace-regexp-in-string (rx (not (any alnum))) " " title))))
         (downcase (string-join parts "-"))))
     :config
     (setq org-roam-title-to-slug-function #'koek-org/title-to-slug)

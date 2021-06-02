@@ -210,13 +210,11 @@
                        ids)
                      outputs nil)))
     (mapcar (pcase-lambda (`(,id . ,props))
-              (cons id
-                    (append (list :id id) props
-                            (list :output
-                                  (thread-first (plist-get props :edid)
-                                    (assoc output-ids)
-                                    cdr
-                                    (alist-get outputs))))))
+              (let ((output (thread-first (plist-get props :edid)
+                              (assoc output-ids)
+                              cdr
+                              (alist-get outputs))))
+                (cons id (append (list :id id) props (list :output output)))))
             (exar--plist-to-alist exar-monitors))))
 
 (defun exar--get-layouts (outputs)
@@ -319,9 +317,9 @@
                          (concat " connected to " output-name))
                  output)))
             (exar--get-connected-outputs (exar--get-outputs))))
-          (output
-           (cdr
-            (assoc (completing-read "Monitor: " candidates nil t) candidates))))
+          (output (thread-first (completing-read "Monitor: " candidates nil t)
+                    (assoc candidates)
+                    cdr)))
      (list output)))
   (insert (exar--get-in (cdr output) :edid :id)))
 
