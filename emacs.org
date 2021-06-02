@@ -303,21 +303,11 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
       "Suspend system."
       (interactive)
       (call-process "systemctl" nil 0 nil "suspend"))
-
-    (defun koek-wm/launch-firefox (&optional arg)
-      "Launch Firefox.
-  With `\\[universal-argument]' prefix argument ARG, create private
-  window."
-      (interactive "P")
-      (make-process
-       :name "firefox"
-       :command `("firefox" ,(if arg "--private-window" "--new-window"))))
     :config
     ;; Only when package is loaded
     (bind-keys
      ("C-c z p" . koek-wm/kill-power-off)
-     ("C-c z z" . koek-wm/suspend)
-     ("C-c x C-f" . koek-wm/launch-firefox))
+     ("C-c z z" . koek-wm/suspend))
 
     (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
 
@@ -383,7 +373,9 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
                     ("<f11>" . exwm-layout-toggle-fullscreen)
                     ("s-q" . bury-buffer)
                     ("s-d" . kill-current-buffer)
-                    ("s-C-f" . koek-wm/launch-firefox)
+                    ("s-x" . koek-xde/launch-app)
+                    ("s-C-f" . koek-xde/launch-file-manager)
+                    ("s-C-b" . koek-xde/launch-browser)
                     ("s-s" . exwm-input-toggle-keyboard))))
 
     ;; Translate Emacs to non Emacs keybindings in line mode
@@ -906,6 +898,119 @@ something short.
 
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-z" #'repeat)
+#+END_SRC
+
+** XDG desktop entries
+#+BEGIN_SRC emacs-lisp
+  (defvar koek-xde/entries-dirs
+    (mapcar (apply-partially #'expand-file-name "applications/")
+            (cons (xdg-data-home) (xdg-data-dirs)))
+    "List of directories where to look for desktop entries.
+  Directories are sorted from highest to lowest priority, i.e.,
+  earlier directories shadow entries in later ones.")
+
+  (defun koek-xde/read-entries ()
+    (let ((file-names
+           (thread-last koek-xde/entries-dirs
+             (seq-filter #'file-accessible-directory-p)
+             (seq-mapcat
+              (lambda (file-name)
+                (directory-files file-name
+                                 'full (rx ".desktop" line-end) 'nosort))))))
+      (seq-reduce (lambda (entries file-name)
+                    (let ((id (file-name-base file-name)))
+                      (unless (gethash id entries)
+                        (puthash id (xdg-desktop-read-file file-name) entries)))
+                    entries)
+                  file-names (make-hash-table :test #'equal))))
+
+  (defun koek-xde/enabledp (entry desktops)
+    (let ((no-display (gethash "NoDisplay" entry "false"))
+          (hidden (gethash "Hidden" entry "false"))
+          (onlys (split-string (gethash "OnlyShowIn" entry "") ";" 'omit-nulls))
+          (nots (split-string (gethash "NotShowIn" entry "") ";" 'omit-nulls)))
+      (null (or (string-equal no-display "true")
+                (string-equal hidden "true")
+                (and onlys (null (seq-intersection desktops onlys)))
+                (and nots (seq-intersection desktops nots))))))
+
+  (defun koek-xde/get-entries ()
+    (let ((entries (koek-xde/read-entries))
+          (desktops (split-string (getenv "XDG_CURRENT_DESKTOP") path-separator))
+          (disabled nil))
+      (maphash (lambda (id entry)
+                 (unless (koek-xde/enabledp entry desktops)
+                   (push id disabled)))
+               entries)
+      (dolist (id disabled)
+        (remhash id entries))
+      entries))
+
+  (defun koek-xde/make-completion-table (candidates)
+    (let ((annotate (lambda (candidate)
+                      (when-let ((comment (thread-last candidates
+                                            (gethash candidate)
+                                            (gethash "Comment"))))
+                        (concat " " comment)))))
+      (lambda (input pred action)
+        (pcase action
+          ('metadata
+           `(metadata . ((category . xdg-desktop-entry)
+                         (annotation-function . ,annotate))))
+          (_action
+           (complete-with-action action candidates input pred))))))
+
+  (defvar koek-xde/entry-history nil
+    "History of entry names read.")
+
+  (defun koek-xde/read-id (prompt)
+    (let* ((entries (koek-xde/get-entries))
+           (ids (let ((ids nil))
+                  (maphash (lambda (id entry)
+                             (push (cons (gethash "Name" entry) id) ids))
+                           entries)
+                  ids))
+           (candidates
+            (seq-reduce (pcase-lambda (candidates `(,name . ,id))
+                          (puthash name (gethash id entries) candidates)
+                          candidates)
+                        ids (make-hash-table :test #'equal))))
+      (thread-first
+          (completing-read prompt (koek-xde/make-completion-table candidates)
+                           nil t nil 'koek-xde/entry-history)
+        (assoc ids)
+        cdr)))
+
+  (defun koek-xde/launch (id &rest uris)
+    ;; default-directory
+    (apply #'call-process "gtk-launch" nil 0 nil id
+           (mapcar (lambda (uri)
+                     (if (koek-subr/urip uri)
+                         uri
+                       (expand-file-name uri)))
+                   uris)))
+
+  (defvar koek-xde/file-manager-id "org.gnome.Nautilus")
+  (defvar koek-xde/browser-id "firefox")
+
+  (defun koek-xde/launch-app (id)
+    (interactive (list (koek-xde/read-id "Launch: ")))
+    (koek-xde/launch id))
+
+  (defun koek-xde/launch-file-manager ()
+    "Launch file manager."
+    (interactive)
+    (koek-xde/launch koek-xde/file-manager-id))
+
+  (defun koek-xde/launch-browser ()
+    "Launch browser."
+    (interactive)
+    (koek-xde/launch koek-xde/browser-id))
+
+  (bind-keys
+   ("C-c x x" . koek-xde/launch-app)
+   ("C-c x C-f" . koek-xde/launch-file-manager)
+   ("C-c x C-b" . koek-xde/launch-browser))
 #+END_SRC
 
 * Frames, windows & buffers
@@ -1685,7 +1790,19 @@ minibuffer.
     ;; completion category of completion tables missing one, see
     ;; `marginalia--completion-metadata-get'
     :after (:any embark vertico)
+    :preface
+    (defun koek-mgnl/builtin-annotator (candidate)
+      "Annotator for types with a builtin annotator.
+  CANDIDATE is a string, the candidate to annotate.  Identical to
+  the builtin annotator except it aligns the annotation."
+      (when-let* ((annotate (alist-get 'annotation-function marginalia--metadata))
+                  (annotation (funcall annotate candidate)))
+        (marginalia--fields
+         ((string-trim annotation)
+          :truncate 1.0 :face 'completions-annotations))))
     :config
+    (push '(xdg-desktop-entry . (koek-mgnl/builtin-annotator builtin none))
+          marginalia-annotator-registry)
     (marginalia-mode))
 #+END_SRC
 
