@@ -98,15 +98,12 @@ information, see `use-package-process-keywords'."
                 (seq-subseq use-package-keywords i))))
 
 (straight-use-package
- `(org-plus-contrib
+ `(org
    :pre-build
    ,(list (if (eq system-type 'berkeley-unix) "gmake" "make")
           "autoloads" "info"
           (concat "EMACS=" invocation-directory invocation-name))
-   :build (:not autoloads info)
-   :files
-   (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*") "contrib/lisp/*.el"
-    ("doc/org" . "org.info") ("doc/orgguide" . "orgguide.info"))))
+   :build (:not autoloads info)))
 
 (use-package gcmh
   :straight t
