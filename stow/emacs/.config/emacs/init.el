@@ -165,12 +165,13 @@ dark, else, set it to light."
   ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
   (defun koek-wm/power-off ()
     "Power off system."
-    (make-process :name "poweroff" :command '("systemctl" "poweroff")))
+    (call-process "systemctl" nil 0 nil "poweroff"))
 
   (defun koek-wm/reboot ()
     "Reboot system."
-    (make-process :name "reboot" :command '("systemctl" "reboot")))
+    (call-process "systemctl" nil 0 nil "reboot"))
 
+  ;; make-process
   (defun koek-wm/kill-power-off (&optional arg)
     "Kill Emacs and power off system.
 With `\\[universal-argument]' prefix argument ARG, reboot
@@ -184,7 +185,7 @@ system."
   (defun koek-wm/suspend ()
     "Suspend system."
     (interactive)
-    (make-process :name "suspend" :command '("systemctl" "suspend")))
+    (call-process "systemctl" nil 0 nil "suspend"))
 
   (defun koek-wm/launch-firefox (&optional arg)
     "Launch Firefox.
@@ -3615,13 +3616,10 @@ dark, else, clear frame theme variant."
     "Set theme variant of FRAME.
 Mustn't be called directly, see
 `koek-thm/set-frame-theme-variant'."
-    (make-process
-     :name "xprop"
-     :command
-     `("xprop"
-       "-id" ,(frame-parameter frame 'outer-window-id)
-       "-f" "_GTK_THEME_VARIANT" "8u"
-       "-set" "_GTK_THEME_VARIANT" ,(if (koek-thm/darkp) "dark" "")))))
+    (call-process "xprop" nil 0 nil
+                  "-id" (frame-parameter frame 'outer-window-id)
+                  "-f" "_GTK_THEME_VARIANT" "8u"
+                  "-set" "_GTK_THEME_VARIANT" (if (koek-thm/darkp) "dark" ""))))
 
 (defun koek-thm/update-frame-theme-variant ()
   "Update theme variant of all frames."

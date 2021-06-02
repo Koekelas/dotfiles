@@ -272,9 +272,7 @@
 
 (when (executable-find "dispwin")
   (defun exar--load-color-dispwin (display-n file-name)
-    (make-process
-     :name "dispwin"
-     :command `("dispwin" "-d" ,(number-to-string display-n) ,file-name))))
+    (call-process "dispwin" nil 0 nil (number-to-string display-n) file-name)))
 
 (defun exar--load-colors (display-ns monitor-layout)
   (dolist (monitor monitor-layout)
