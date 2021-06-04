@@ -1845,12 +1845,6 @@ more strings, the delimiters that call the handler."
 
 (setq require-final-newline t)
 
-(defun koek-ws/disable-final-empty-line ()
-  "Disable final empty line for current."
-  (setq-local require-final-newline nil))
-
-(add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
-
 (bind-key "C-c e w" #'delete-trailing-whitespace)
 
 (use-package tabify

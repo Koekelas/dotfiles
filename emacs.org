@@ -2621,12 +2621,6 @@ End files with empty line.
 
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
-
-  (defun koek-ws/disable-final-empty-line ()
-    "Disable final empty line for current."
-    (setq-local require-final-newline nil))
-
-  (add-hook 'snippet-mode-hook #'koek-ws/disable-final-empty-line)
 #+END_SRC
 
 *** Whitespace commands
