@@ -149,7 +149,7 @@ information, see `use-package-process-keywords'."
 (use-package magit-status
   :straight magit
   :bind
-  ("C-c f g" . magit-status))
+  ("C-c f m" . magit-status))
 
 (use-package magit-diff
   :defer t
