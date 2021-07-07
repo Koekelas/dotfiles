@@ -196,8 +196,6 @@ For org configuration, see [[*Org][Org]].
 ** dired - File manager
 #+BEGIN_SRC emacs-lisp
   (use-package dired
-    :bind
-    ("C-c f f" . dired)
     :hook (dired-mode . dired-hide-details-mode)
     :config
     (setq dired-recursive-copies 'always)
@@ -216,7 +214,7 @@ For org configuration, see [[*Org][Org]].
   (use-package dired-x
     :after dired
     :bind
-    ("C-c f C-f" . dired-jump))
+    ("C-c f d" . dired-jump))
 #+END_SRC
 
 *** diredfl - Visualize file properties

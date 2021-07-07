@@ -90,8 +90,6 @@ information, see `use-package-process-keywords'."
     ("doc/org" . "org.info") ("doc/orgguide" . "orgguide.info"))))
 
 (use-package dired
-  :bind
-  ("C-c f f" . dired)
   :hook (dired-mode . dired-hide-details-mode)
   :config
   (setq dired-recursive-copies 'always)
@@ -110,7 +108,7 @@ information, see `use-package-process-keywords'."
 (use-package dired-x
   :after dired
   :bind
-  ("C-c f C-f" . dired-jump))
+  ("C-c f d" . dired-jump))
 
 (use-package diredfl
   :straight t
