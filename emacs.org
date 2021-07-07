@@ -1161,11 +1161,10 @@ steps.
 ** winner - Undo & redo window layout changes
 #+BEGIN_SRC emacs-lisp
   (use-package winner
-    :demand t
     :bind
     (("C-c w l" . winner-undo)
      ("C-c w r" . winner-redo))
-    :config
+    :init
     (winner-mode))
 #+END_SRC
 
@@ -2294,11 +2293,10 @@ When popping mark, skip consecutive identical marks.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :straight t
-    :demand t
     :bind
     (:map undo-tree-map
      ("M-/" . undo-tree-redo))
-    :config
+    :init
     (global-undo-tree-mode)
     :delight)
 #+END_SRC

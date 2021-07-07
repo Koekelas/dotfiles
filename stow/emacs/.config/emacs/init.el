@@ -634,11 +634,10 @@ clockwise, else, rotate counterclockwise."
    ("C-c w c" . koek-tf/rotate)))
 
 (use-package winner
-  :demand t
   :bind
   (("C-c w l" . winner-undo)
    ("C-c w r" . winner-redo))
-  :config
+  :init
   (winner-mode))
 
 (use-package eyebrowse
@@ -1616,11 +1615,10 @@ dictionary links before LIMIT."
 
 (use-package undo-tree
   :straight t
-  :demand t
   :bind
   (:map undo-tree-map
    ("M-/" . undo-tree-redo))
-  :config
+  :init
   (global-undo-tree-mode)
   :delight)
 
