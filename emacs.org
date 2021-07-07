@@ -1041,6 +1041,137 @@ steps.
     (setq uniquify-trailing-separator-p t))
 #+END_SRC
 
+** Buffer categories
+Parts of this configuration want to act on buffer categories, not only
+on the per package buffers in a specific major mode or with a specific
+name. Define functionality to make buffer categories.
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro koek-buff/def-category-pred (name)
+    "Define buffer category predicate NAME."
+    (let* ((prefix (replace-regexp-in-string
+                    (rx (zero-or-one "-") "p" line-end) "" (symbol-name name)))
+           (category (car (last (split-string prefix (rx (any "-/"))))))
+           (modes-sym (intern (concat prefix "-modes")))
+           (names-sym (intern (concat prefix "-names")))
+           (fs-sym (intern (concat prefix "-fs")))
+           (mode-pred-sym (intern (concat prefix "-mode-p")))
+           (name-pred-sym (intern (concat prefix "-name-p"))))
+      `(progn
+         (defvar ,modes-sym nil
+           ,(format "List of %s major mode symbols." category))
+
+         (defvar ,names-sym nil
+           ,(format "Regular expression matching names of %s buffers." category))
+
+         (defvar ,fs-sym '(,mode-pred-sym ,name-pred-sym)
+           ,(format "List of %s interrogation functions." category))
+
+         (defun ,mode-pred-sym (&optional buffer)
+           ,(string-join
+             (list
+              (format
+               "Return whether major mode of BUFFER is derived from a %s mode."
+               category)
+              "Optional BUFFER is a buffer or string, respectively the buffer or"
+              "name of the buffer to interrogate and defaults to the current"
+              (format "buffer.  For %s major modes, see `%s'."
+                      category modes-sym))
+             "\n")
+           (apply #'provided-mode-derived-p
+                  (buffer-local-value
+                   'major-mode (get-buffer (or buffer (current-buffer))))
+                  ,modes-sym))
+
+         (defun ,name-pred-sym (&optional buffer)
+           ,(string-join
+             (list
+              (format "Return whether name of BUFFER is a %s name." category)
+              "Optional BUFFER is a buffer or string, respectively the buffer or"
+              "name of the buffer to interrogate and defaults to the current"
+              (format "buffer.  For %s names, see `%s'." category names-sym))
+             "\n")
+           (when ,names-sym
+             (let ((buffer-name (if (stringp buffer)
+                                    buffer
+                                  (buffer-name (or buffer (current-buffer))))))
+               (string-match ,names-sym buffer-name))))
+
+         (defun ,name (&optional buffer)
+           ,(string-join
+             (list
+              (format "Return whether BUFFER is a %s buffer." category)
+              "Optional BUFFER is a buffer or string, respectively the buffer or"
+              "name of the buffer to interrogate and defaults to the current"
+              (format "buffer.  For %s interrogation functions, see" category)
+              (format "`%s'." fs-sym))
+             "\n")
+           (with-current-buffer (get-buffer (or buffer (current-buffer)))
+             (seq-some #'funcall ,fs-sym))))))
+#+END_SRC
+
+Define buffer categories for directory, documentation, shell and web
+buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (koek-buff/def-category-pred koek-buff/dirp)
+  (koek-buff/def-category-pred koek-buff/docp)
+  (koek-buff/def-category-pred koek-buff/shellp)
+  (koek-buff/def-category-pred koek-buff/webp)
+
+  (defun koek-buff/doc-page-p (&optional buffer)
+    "Return whether BUFFER displays a documentation webpage.
+  Optional BUFFER is a buffer or string, respectively the buffer or
+  name of the buffer to interrogate and defaults to the current
+  buffer."
+    (let* ((url
+            (buffer-local-value
+             'list-buffers-directory (get-buffer (or buffer (current-buffer)))))
+           (parsed (url-generic-parse-url url))
+           (host (url-host parsed))
+           (path (url-filename parsed)))
+      (cond
+       ((string-suffix-p "devdocs.io" host))
+       ((string-suffix-p "lispworks.com" host)
+        (or (string-prefix-p "/documentation" path)
+            (string-prefix-p "/reference" path))))))
+
+  ;; Directory buffers
+  (setq koek-buff/dir-modes '(dired-mode))
+
+  ;; Help and documentation buffers
+  (setq koek-buff/doc-modes
+        '(help-mode helpful-mode Info-mode Man-mode apropos-mode
+          cider-docview-mode sly-apropos-mode geiser-doc-mode))
+  (setq koek-buff/doc-names
+        (rx line-start
+            (or "*eldoc*"
+                "*cider-clojuredocs*"
+                "*sly-description*"
+                ;; When new buffer, major mode is set after calling
+                ;; `display-buffer'
+                "*info*"
+                "*Man"
+                ;; When no matches, major mode is `fundamental-mode'
+                "*Apropos*")))
+  (setq koek-buff/doc-fs
+        '(koek-buff/doc-mode-p koek-buff/doc-name-p koek-buff/doc-page-p))
+
+  ;; Shell buffers
+  (setq koek-buff/shell-modes
+        '(vterm-mode eshell-mode cider-repl-mode sly-mrepl-mode erlang-shell-mode
+          indium-repl-mode inferior-octave-mode inferior-python-mode
+          geiser-repl-mode sql-interactive-mode))
+  (setq koek-buff/shell-names
+        (rx line-start "*" (zero-or-one (one-or-more (not "*")) "-")
+            ;; When new buffer, major mode is set after calling
+            ;; `display-buffer'
+            (or "vterm*" "eshell*")))
+
+  ;; Web buffers
+  (setq koek-buff/web-modes '(eww-mode))
+#+END_SRC
+
 ** ibuffer - list-buffers replacement
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
