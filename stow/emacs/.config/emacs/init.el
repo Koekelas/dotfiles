@@ -186,8 +186,8 @@ When FORCE is truthy, continue commit unconditionally."
 
 (use-package ediff
   :bind
-  (("C-c f d" . ediff-files)
-   ("C-c f b" . ediff-current-file))
+  (("C-c f e" . ediff-files)
+   ("C-c f C-e" . ediff-current-file))
   :preface
   (defface koek-diff/variant '((t :inherit mode-line-emphasis))
     "Face for variant label in mode line."
