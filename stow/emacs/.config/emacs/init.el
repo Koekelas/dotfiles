@@ -298,21 +298,20 @@ Keybinding is a string, see `edmacro-mode'.")
     ;; Class is the name of an application while instance is the name
     ;; of an instance of the application. For more information, see
     ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
-    (let ((class (downcase exwm-class-name)))
-      (exwm-workspace-rename-buffer
-       (cond
-        ((string-prefix-p "gimp" class)
-         "GIMP")
-        ((string-prefix-p "firefox" class)
-         (replace-regexp-in-string
-          (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
-          "Firefox" (or exwm-title "Firefox")))
-        ((string-prefix-p "microsoft teams" class)
-         "Teams")
-        ((string-prefix-p "vlc" class)
-         "VLC")
-        (t
-         exwm-class-name)))))
+    (exwm-workspace-rename-buffer
+     (cond
+      ((string-prefix-p "gimp" exwm-class-name 'ignore-case)
+       "GIMP")
+      ((string-prefix-p "firefox" exwm-class-name 'ignore-case)
+       (replace-regexp-in-string
+        (rx "Mozilla Firefox" (zero-or-one " (Private Browsing)") line-end)
+        "Firefox" (or exwm-title "Firefox")))
+      ((string-prefix-p "microsoft teams" exwm-class-name 'ignore-case)
+       "Teams")
+      ((string-prefix-p "vlc" exwm-class-name 'ignore-case)
+       "VLC")
+      (t
+       exwm-class-name))))
 
   (defun koek-wm/n-to-label (n)
     "Convert workspace number N to a workspace label.
@@ -350,7 +349,7 @@ N is an integer, a workspace number."
   :defer t
   :config
   (setq exwm-manage-configurations
-        `(((string-prefix-p "firefox" (downcase exwm-class-name))
+        `(((string-prefix-p "firefox" exwm-class-name 'ignore-case)
            simulation-keys
            ,(mapcar (pcase-lambda (`(,from . ,to))
                       (cons (kbd from) (kbd to)))
@@ -358,9 +357,9 @@ N is an integer, a workspace number."
                               ("M-p" . "S-C-p")
                               ("M-k" . "C-w"))
                             koek-wm/base-simulation-keys)))
-          ((string-prefix-p "gimp" (downcase exwm-class-name))
+          ((string-prefix-p "gimp" exwm-class-name 'ignore-case)
            char-mode t floating-mode-line nil)
-          ((string-prefix-p "inkscape" (downcase exwm-class-name))
+          ((string-prefix-p "inkscape" exwm-class-name 'ignore-case)
            char-mode t floating-mode-line nil))))
 
 (use-package server
