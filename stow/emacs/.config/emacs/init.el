@@ -1520,6 +1520,9 @@ When FORCE is truthy, continue commit unconditionally."
   :config
   (require 'find-func)
 
+  (setq recentf-max-saved-items 100)
+
+  ;; Ignore Emacs libraries
   (let ((file-names
          (list
           (rx line-start
@@ -1528,6 +1531,7 @@ When FORCE is truthy, continue commit unconditionally."
           ;; True and symbolic file name variants
           (regexp-quote (file-relative-name user-emacs-directory "~/")))))
     (setq recentf-exclude (append file-names recentf-exclude)))
+
   (recentf-mode))
 
 (use-package saveplace

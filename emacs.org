@@ -2159,6 +2159,9 @@ VC is a placeholder.
     :config
     (require 'find-func)
 
+    (setq recentf-max-saved-items 100)
+
+    ;; Ignore Emacs libraries
     (let ((file-names
            (list
             (rx line-start
@@ -2167,6 +2170,7 @@ VC is a placeholder.
             ;; True and symbolic file name variants
             (regexp-quote (file-relative-name user-emacs-directory "~/")))))
       (setq recentf-exclude (append file-names recentf-exclude)))
+
     (recentf-mode))
 #+END_SRC
 
