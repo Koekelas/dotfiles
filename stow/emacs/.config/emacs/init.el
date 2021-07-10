@@ -1901,10 +1901,7 @@ earlier directories shadow later ones.")
     (let ((paths (parse-colon-path (getenv "CLASSPATH"))))
       (unless (member file-name paths)
         (setenv "CLASSPATH"
-                (string-join (cons file-name paths) path-separator)))))
-
-  ;; Register clangd
-  (push '((c-mode c++-mode) . ("clangd")) eglot-server-programs))
+                (string-join (cons file-name paths) path-separator))))))
 
 (use-package tree-sitter
   :straight t
