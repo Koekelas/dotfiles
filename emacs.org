@@ -2278,6 +2278,11 @@ When popping mark, skip consecutive identical marks.
         (setq n (1- n)))))
 #+END_SRC
 
+** Narrow commands
+#+BEGIN_SRC emacs-lisp
+  (put 'narrow-to-region 'disabled nil)
+#+END_SRC
+
 ** sort - Sort occurrences
 #+BEGIN_SRC emacs-lisp
   (use-package sort

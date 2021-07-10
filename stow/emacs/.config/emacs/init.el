@@ -1608,6 +1608,8 @@ dictionary links before LIMIT."
       (funcall f)
       (setq n (1- n)))))
 
+(put 'narrow-to-region 'disabled nil)
+
 (use-package sort
   :bind
   (("C-c e s" . sort-lines)
