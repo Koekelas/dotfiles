@@ -1267,6 +1267,14 @@ the builtin annotator except it aligns the annotation."
   :config
   (save-place-mode))
 
+(setq auto-save-file-name-transforms
+      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
+(use-package autorevert
+  :config
+  (global-auto-revert-mode)
+  :delight auto-revert-mode)
+
 (setq delete-by-moving-to-trash t)
 
 (use-package project
@@ -1538,14 +1546,6 @@ When FORCE is truthy, continue commit unconditionally."
   (setq ediff-grab-mouse nil)
   (setq ediff-window-setup-function #'ediff-setup-windows-plain)
   (setq ediff-split-window-function #'split-window-right))
-
-(use-package autorevert
-  :config
-  (global-auto-revert-mode)
-  :delight auto-revert-mode)
-
-(setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
 (use-package wgrep
   :straight t

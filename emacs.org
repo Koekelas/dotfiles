@@ -1878,6 +1878,22 @@ minibuffer.
     (save-place-mode))
 #+END_SRC
 
+** Auto save files
+Save auto-save files in =~/.emacs.d/var/auto-save/=.
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+#+END_SRC
+
+** autorevert - Revert file on external change
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert
+    :config
+    (global-auto-revert-mode)
+    :delight auto-revert-mode)
+#+END_SRC
+
 ** Trash
 Move deleted files to trash.
 
@@ -2177,22 +2193,6 @@ VC is a placeholder.
     (setq ediff-grab-mouse nil)
     (setq ediff-window-setup-function #'ediff-setup-windows-plain)
     (setq ediff-split-window-function #'split-window-right))
-#+END_SRC
-
-** autorevert - Revert file on external change
-#+BEGIN_SRC emacs-lisp
-  (use-package autorevert
-    :config
-    (global-auto-revert-mode)
-    :delight auto-revert-mode)
-#+END_SRC
-
-** Auto save files
-Save auto-save files in =~/.emacs.d/var/auto-save/=.
-
-#+BEGIN_SRC emacs-lisp
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+END_SRC
 
 * Editor
