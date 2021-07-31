@@ -1899,6 +1899,22 @@ more strings, the delimiters that call the handler."
     "List of directories where to look for JDT LS.
 Directories are sorted from highest to lowest priority, i.e.,
 earlier directories shadow later ones.")
+
+  (defun koek-eglt/init-clangd (root db)
+    (interactive
+     (let* ((root (or (koek-proj/locate-root) (user-error "Not in a project")))
+            (default
+              (let ((db (expand-file-name "build/compile_commands.json" root)))
+                (when (file-exists-p db)
+                  db)))
+            (db
+             (or default
+                 (expand-file-name
+                  (read-file-name "Compilation database: " root nil t) root))))
+       (list root db)))
+    (make-symbolic-link (file-relative-name (expand-file-name db root) root)
+                        (expand-file-name "compile_commands.json" root)
+                        'overwrite))
   :config
   ;; JDT LS lacks an executable. Eglot expects to find the JDT LS
   ;; launcher on the CLASSPATH environment variable.
@@ -2935,8 +2951,10 @@ INTERACTIVE is used internally."
   :config
   (bind-keys
    :map c-mode-map
+   ("C-x p i l" . koek-eglt/init-clangd)
    ("C-c d d" . koek-dl/lookup-c)
    :map c++-mode-map
+   ("C-x p i l" . koek-eglt/init-clangd)
    ("C-c d d" . koek-dl/lookup-cpp)
    :map java-mode-map
    ("C-c d d" . koek-dl/lookup-openjdk))

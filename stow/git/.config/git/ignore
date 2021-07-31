@@ -1,5 +1,6 @@
 # C family
 build/
+compile_commands.json
 
 # Clojure & ClojureScript
 .shadow-cljs/
