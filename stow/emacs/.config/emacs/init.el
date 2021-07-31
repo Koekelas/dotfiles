@@ -1457,8 +1457,13 @@ for one."
   :config
   (setq diff-hl-draw-borders nil))
 
-(use-package magit-status
+(use-package magit-mode
   :straight magit
+  :defer t
+  :config
+  (setq magit-bury-buffer-function #'magit-mode-quit-window))
+
+(use-package magit-status
   :bind
   ("C-c f m" . magit-status))
 

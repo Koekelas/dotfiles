@@ -2101,8 +2101,13 @@ VC is a placeholder.
 [[https://github.com/magit/magit][magit (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit-status
+  (use-package magit-mode
     :straight magit
+    :defer t
+    :config
+    (setq magit-bury-buffer-function #'magit-mode-quit-window))
+
+  (use-package magit-status
     :bind
     ("C-c f m" . magit-status))
 
