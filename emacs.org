@@ -1343,6 +1343,21 @@ buffers.
           ,(apply-partially #'koek-wm/classp "firefox")))
 #+END_SRC
 
+** Buffer commands
+Bury unneeded buffers, computers have more than enough memory.
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek-buff/bury (&optional arg)
+    "Bury current.
+  With `\\[universal-argument]' prefix argument ARG, kill current."
+    (interactive "P")
+    (if arg
+        (kill-buffer)
+      (bury-buffer)))
+
+  (bind-key [remap kill-buffer] #'koek-buff/bury)
+#+END_SRC
+
 ** ibuffer - list-buffers replacement
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
@@ -1453,21 +1468,6 @@ buffers.
             ("Web"       . ((predicate . (koek-buff/webp))))
             ("Project"   . ((predicate . (koek-proj/locate-root))))))
     (setq ibuffer-show-empty-filter-groups nil))
-#+END_SRC
-
-** Buffer commands
-Bury unneeded buffers, computers have more than enough memory.
-
-#+BEGIN_SRC emacs-lisp
-  (defun koek-buff/bury (&optional arg)
-    "Bury current.
-  With `\\[universal-argument]' prefix argument ARG, kill current."
-    (interactive "P")
-    (if arg
-        (kill-buffer)
-      (bury-buffer)))
-
-  (bind-key [remap kill-buffer] #'koek-buff/bury)
 #+END_SRC
 
 * Minibuffer

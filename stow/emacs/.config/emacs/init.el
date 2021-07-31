@@ -795,6 +795,16 @@ buffer."
         koek-buff/web-name-p
         ,(apply-partially #'koek-wm/classp "firefox")))
 
+(defun koek-buff/bury (&optional arg)
+  "Bury current.
+With `\\[universal-argument]' prefix argument ARG, kill current."
+  (interactive "P")
+  (if arg
+      (kill-buffer)
+    (bury-buffer)))
+
+(bind-key [remap kill-buffer] #'koek-buff/bury)
+
 (use-package ibuffer
   :bind
   ([remap list-buffers] . ibuffer)
@@ -903,16 +913,6 @@ filters), group (only groups) or all (filters and groups)."
           ("Web"       . ((predicate . (koek-buff/webp))))
           ("Project"   . ((predicate . (koek-proj/locate-root))))))
   (setq ibuffer-show-empty-filter-groups nil))
-
-(defun koek-buff/bury (&optional arg)
-  "Bury current.
-With `\\[universal-argument]' prefix argument ARG, kill current."
-  (interactive "P")
-  (if arg
-      (kill-buffer)
-    (bury-buffer)))
-
-(bind-key [remap kill-buffer] #'koek-buff/bury)
 
 (use-package minibuffer
   :defer t
