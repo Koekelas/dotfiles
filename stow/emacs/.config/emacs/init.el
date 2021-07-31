@@ -1245,6 +1245,28 @@ the builtin annotator except it aligns the annotation."
   :config
   (diredfl-global-mode))
 
+(use-package recentf
+  :config
+  (require 'find-func)
+
+  (setq recentf-max-saved-items 100)
+
+  ;; Ignore Emacs libraries
+  (let ((file-names
+         (list
+          (rx line-start
+              (literal (locate-dominating-file (find-library-name "files")
+                                               emacs-version)))
+          ;; True and symbolic file name variants
+          (regexp-quote (file-relative-name user-emacs-directory "~/")))))
+    (setq recentf-exclude (append file-names recentf-exclude)))
+
+  (recentf-mode))
+
+(use-package saveplace
+  :config
+  (save-place-mode))
+
 (setq delete-by-moving-to-trash t)
 
 (use-package project
@@ -1521,28 +1543,6 @@ When FORCE is truthy, continue commit unconditionally."
   :config
   (global-auto-revert-mode)
   :delight auto-revert-mode)
-
-(use-package recentf
-  :config
-  (require 'find-func)
-
-  (setq recentf-max-saved-items 100)
-
-  ;; Ignore Emacs libraries
-  (let ((file-names
-         (list
-          (rx line-start
-              (literal (locate-dominating-file (find-library-name "files")
-                                               emacs-version)))
-          ;; True and symbolic file name variants
-          (regexp-quote (file-relative-name user-emacs-directory "~/")))))
-    (setq recentf-exclude (append file-names recentf-exclude)))
-
-  (recentf-mode))
-
-(use-package saveplace
-  :config
-  (save-place-mode))
 
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))

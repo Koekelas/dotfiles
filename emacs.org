@@ -1850,6 +1850,34 @@ minibuffer.
     (diredfl-global-mode))
 #+END_SRC
 
+** recentf - Recent files
+#+BEGIN_SRC emacs-lisp
+  (use-package recentf
+    :config
+    (require 'find-func)
+
+    (setq recentf-max-saved-items 100)
+
+    ;; Ignore Emacs libraries
+    (let ((file-names
+           (list
+            (rx line-start
+                (literal (locate-dominating-file (find-library-name "files")
+                                                 emacs-version)))
+            ;; True and symbolic file name variants
+            (regexp-quote (file-relative-name user-emacs-directory "~/")))))
+      (setq recentf-exclude (append file-names recentf-exclude)))
+
+    (recentf-mode))
+#+END_SRC
+
+** saveplace - Restore point on revisit
+#+BEGIN_SRC emacs-lisp
+  (use-package saveplace
+    :config
+    (save-place-mode))
+#+END_SRC
+
 ** Trash
 Move deleted files to trash.
 
@@ -2157,34 +2185,6 @@ VC is a placeholder.
     :config
     (global-auto-revert-mode)
     :delight auto-revert-mode)
-#+END_SRC
-
-** recentf - Recent files
-#+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :config
-    (require 'find-func)
-
-    (setq recentf-max-saved-items 100)
-
-    ;; Ignore Emacs libraries
-    (let ((file-names
-           (list
-            (rx line-start
-                (literal (locate-dominating-file (find-library-name "files")
-                                                 emacs-version)))
-            ;; True and symbolic file name variants
-            (regexp-quote (file-relative-name user-emacs-directory "~/")))))
-      (setq recentf-exclude (append file-names recentf-exclude)))
-
-    (recentf-mode))
-#+END_SRC
-
-** saveplace - Restore point on revisit
-#+BEGIN_SRC emacs-lisp
-  (use-package saveplace
-    :config
-    (save-place-mode))
 #+END_SRC
 
 ** Auto save files
