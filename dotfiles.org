@@ -535,11 +535,18 @@ Sign commits.
 Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
 
 #+BEGIN_SRC fundamental :tangle stow/git/.config/git/ignore
-  .shadow-cljs/
+  # C family
   build/
-  node_modules/
-  ,*.elc
+
+  # Clojure & ClojureScript
+  .shadow-cljs/
   .nrepl-port
+
+  # Emacs Lisp
+  ,*.elc
+
+  # JavaScript
+  node_modules/
 #+END_SRC
 
 * Firefox :setup:

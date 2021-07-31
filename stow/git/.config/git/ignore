@@ -1,5 +1,12 @@
-.shadow-cljs/
+# C family
 build/
-node_modules/
-*.elc
+
+# Clojure & ClojureScript
+.shadow-cljs/
 .nrepl-port
+
+# Emacs Lisp
+*.elc
+
+# JavaScript
+node_modules/
