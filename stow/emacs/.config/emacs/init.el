@@ -1683,7 +1683,11 @@ dictionary links before LIMIT."
 (delight 'buffer-face-mode nil 'face-remap)
 
 (use-package hl-line
-  :bind ("C-c a l" . hl-line-mode))     ; [L]ine
+  :bind ("C-c a l" . hl-line-mode)      ; [L]ine
+  :hook
+  ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode
+    bongo-playlist-mode)
+   . hl-line-mode))
 
 (use-package expand-region
   :straight t

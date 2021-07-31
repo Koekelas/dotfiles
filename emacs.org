@@ -2396,7 +2396,11 @@ For more information, see ~man 5 hunspell~.
 ** hl-line - Highlight current line
 #+BEGIN_SRC emacs-lisp
   (use-package hl-line
-    :bind ("C-c a l" . hl-line-mode))     ; [L]ine
+    :bind ("C-c a l" . hl-line-mode)      ; [L]ine
+    :hook
+    ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode
+      bongo-playlist-mode)
+     . hl-line-mode))
 #+END_SRC
 
 * Constructs
