@@ -197,6 +197,8 @@ system."
 (use-package exwm-input
   :defer t
   :preface
+  ;; The S modifier isn't recognized on the left. DEL isn't recognized
+  ;; but <backspace> is.
   (defvar koek-wm/base-simulation-keys
     '(("C-f" . "<right>")
       ("C-b" . "<left>")
@@ -212,10 +214,9 @@ system."
       ("M-<" . "C-<home>")
       ("C-s" . "C-f")
       ("C-d" . "<delete>")
-      ("M-d" . "S-C-<right> C-x")
-      ;; Why does <backspace> work but DEL not?
-      ("M-<backspace>" . "S-C-<left> C-x")
-      ("C-k" . "S-<end> C-x")
+      ("M-d" . "C-<delete>")
+      ("M-<backspace>" . "C-<backspace>")
+      ("C-k" . "S-<end> <backspace>")
       ("M-@" . "S-C-<right>")
       ("M-h" . "C-a")
       ("M-w" . "C-c")
