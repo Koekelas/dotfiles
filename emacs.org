@@ -1832,6 +1832,11 @@ minibuffer.
     :after dired
     :bind
     ("C-c f d" . dired-jump))
+
+  (use-package ls-lisp
+    :defer t
+    :config
+    (setq ls-lisp-dirs-first t))
 #+END_SRC
 
 *** diredfl - Visualize file properties

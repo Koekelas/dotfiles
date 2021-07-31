@@ -1234,6 +1234,11 @@ the builtin annotator except it aligns the annotation."
   :bind
   ("C-c f d" . dired-jump))
 
+(use-package ls-lisp
+  :defer t
+  :config
+  (setq ls-lisp-dirs-first t))
+
 (use-package diredfl
   :straight t
   :after dired
