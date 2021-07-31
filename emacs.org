@@ -1159,16 +1159,6 @@ steps.
      ("C-c w c" . koek-tf/rotate)))
 #+END_SRC
 
-** winner - Undo & redo window layout changes
-#+BEGIN_SRC emacs-lisp
-  (use-package winner
-    :bind
-    (("C-c w l" . winner-undo)
-     ("C-c w r" . winner-redo))
-    :init
-    (winner-mode))
-#+END_SRC
-
 ** eyebrowse - Workspaces
 [[https://depp.brause.cc/eyebrowse/][eyebrowse]]
 
@@ -1198,6 +1188,16 @@ steps.
     (setq eyebrowse-default-workspace-slot 0)
     (setq eyebrowse-mode-line-style 'hide)
     (eyebrowse-mode))
+#+END_SRC
+
+** winner - Undo & redo window layout changes
+#+BEGIN_SRC emacs-lisp
+  (use-package winner
+    :bind
+    (("C-c w l" . winner-undo)
+     ("C-c w r" . winner-redo))
+    :init
+    (winner-mode))
 #+END_SRC
 
 ** uniquify - Descriptive buffer names

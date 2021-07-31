@@ -634,13 +634,6 @@ clockwise, else, rotate counterclockwise."
    ("C-c w f" . koek-tf/flip)
    ("C-c w c" . koek-tf/rotate)))
 
-(use-package winner
-  :bind
-  (("C-c w l" . winner-undo)
-   ("C-c w r" . winner-redo))
-  :init
-  (winner-mode))
-
 (use-package eyebrowse
   :straight t
   :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
@@ -666,6 +659,13 @@ clockwise, else, rotate counterclockwise."
   (setq eyebrowse-default-workspace-slot 0)
   (setq eyebrowse-mode-line-style 'hide)
   (eyebrowse-mode))
+
+(use-package winner
+  :bind
+  (("C-c w l" . winner-undo)
+   ("C-c w r" . winner-redo))
+  :init
+  (winner-mode))
 
 (use-package uniquify
   :config
