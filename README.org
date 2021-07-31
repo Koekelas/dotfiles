@@ -57,7 +57,9 @@ Git is mandatory, everything else is optional.
   - [[https://clang.llvm.org/][Clang]] (language server)
   - [[https://www.gnu.org/software/gdb/][GDB]]
   - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
-- Clojure & ClojureScript (depends on Java and JavaScript): [[https://leiningen.org/][Leiningen]]
+- Clojure & ClojureScript (depends on Java and JavaScript):
+  - [[https://leiningen.org/][Leiningen]]
+  - [[https://github.com/clj-kondo/clj-kondo][clj-kondo]]
 - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
 - Erlang:
   - [[https://www.erlang.org/][Erlang/OTP]]
@@ -124,6 +126,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
   ## Clojure & ClojureScript
   pacman -S leiningen
+  # Install clj-kondo-bin from AUR
 
   ## Common Lisp
   pacman -S sbcl

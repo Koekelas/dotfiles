@@ -540,6 +540,7 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   compile_commands.json
 
   # Clojure & ClojureScript
+  .clj-kondo/
   .shadow-cljs/
   .nrepl-port
 

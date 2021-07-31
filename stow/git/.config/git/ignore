@@ -3,6 +3,7 @@ build/
 compile_commands.json
 
 # Clojure & ClojureScript
+.clj-kondo/
 .shadow-cljs/
 .nrepl-port
 

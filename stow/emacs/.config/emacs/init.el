@@ -1961,7 +1961,7 @@ earlier directories shadow later ones.")
    ("C-c e n" . flymake-goto-next-error)
    ("C-c e p" . flymake-goto-prev-error)
    ("C-c e l" . flymake-show-diagnostics-buffer))
-  :hook (emacs-lisp-mode . flymake-mode)
+  :hook ((clojure-mode emacs-lisp-mode) . flymake-mode)
   :config
   (setq flymake-wrap-around nil)
   :delight)
@@ -1970,6 +1970,53 @@ earlier directories shadow later ones.")
   :defer t
   :config
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
+
+(use-package flymake-kondor
+  :straight t
+  :hook (clojure-mode . flymake-kondor-setup)
+  :preface
+  (defun koek-kndr/init (root &optional interactive)
+    (interactive
+     (let ((root (or (koek-proj/locate-root) (user-error "Not in a project"))))
+       (list root 'interactive)))
+    (when interactive
+      (message "Initializing clj-kondo..."))
+    (let* ((default-directory root)     ; Dynamic variable
+           (build-system
+            (cond
+             ((file-exists-p "project.clj")
+              'lein)
+             ((file-exists-p "shadow-cljs.edn")
+              'shadow)
+             (t
+              (error
+               "No supported build system found, supported are Leiningen and shadow-cljs"))))
+           (classpath
+            (with-temp-buffer
+              (let ((result
+                     (pcase build-system
+                       ('lein
+                        (call-process "lein" nil '(t nil) nil "classpath"))
+                       ('shadow
+                        (call-process "npx" nil '(t nil) nil
+                                      "shadow-cljs" "classpath")))))
+                (unless (zerop result)
+                  (error "%s returned %d"
+                         (pcase build-system
+                           ('lein "Leiningen")
+                           ('shadow "shadow-cljs"))
+                         result)))
+              (buffer-substring (point-min) (point-max))))
+           (result
+            (progn
+              (make-directory ".clj-kondo" 'no-error)
+              (call-process "clj-kondo" nil nil nil
+                            "--lint" classpath
+                            "--parallel" "--dependencies" "--copy-configs"))))
+      (unless (zerop result)
+        (error "clj-kondo returned %d" result)))
+    (when interactive
+      (message "Initializing clj-kondo...done"))))
 
 (setq tab-always-indent 'complete)
 
@@ -2994,6 +3041,7 @@ INTERACTIVE is used internally."
   :config
   (bind-keys
    :map clojure-mode-map
+   ("C-x p i k" . koek-kndr/init)
    ("C-c d d" . koek-dl/lookup-clojure)
    ("C-c d C-j" . koek-dl/lookup-openjdk)
    :map clojurescript-mode-map
@@ -4052,7 +4100,8 @@ maximum length of S."
   (defvar koek-ml/checker-names
     '((eglot-flymake-backend . "LSP")
       (elisp-flymake-byte-compile . "El")
-      (elisp-flymake-checkdoc . "CDoc"))
+      (elisp-flymake-checkdoc . "CDoc")
+      (flymake-kondor-backend . "Kondo"))
     "Alist of checker symbol to checker name pairs.")
 
   (defun koek-ml/state-to-description (state)
