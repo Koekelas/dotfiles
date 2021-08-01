@@ -2153,7 +2153,7 @@ list of backends, see `company-backends'."
    ((company-indium-repl company-files :with company-yasnippet)))
   (koek-cpny/setup-backends geiser-mode geiser-repl-mode
    ((geiser-company-backend company-files :with company-yasnippet)))
-  (koek-cpny/setup-backends makefile-mode scad-mode
+  (koek-cpny/setup-backends cmake-mode makefile-mode scad-mode
    ((company-dabbrev-code company-files :with company-yasnippet)))
   (koek-cpny/setup-backends conf-mode
    ((company-dabbrev company-files :with company-yasnippet)))
@@ -3020,9 +3020,11 @@ Modes are confident about being derived from text-mode.")
   (bind-keys
    :map c-mode-map
    ("C-x p i l" . koek-eglt/init-clangd)
+   ("C-x p i c" . koek-cmke/init)
    ("C-c d d" . koek-dl/lookup-c)
    :map c++-mode-map
    ("C-x p i l" . koek-eglt/init-clangd)
+   ("C-x p i c" . koek-cmke/init)
    ("C-c d d" . koek-dl/lookup-cpp)
    :map java-mode-map
    ("C-c d d" . koek-dl/lookup-openjdk))
@@ -3104,6 +3106,36 @@ Modes are confident about being derived from text-mode.")
   (unbind-key "TAB" cider-repl-mode-map)
 
   (setq cider-repl-use-pretty-printing t))
+
+(use-package cmake-mode
+  :straight t
+  :mode ((rx (or ".cmake" "/CMakeLists.txt") string-end) . cmake-mode)
+  :preface
+  ;; source tree, relative
+  (defun koek-cmke/init (root config &optional interactive)
+    (interactive
+     (let ((root (or (koek-proj/locate-root) (user-error "Not in a project")))
+           (config
+            (or (car (koek-proj/locate-configs "CMakeLists.txt" nil 'prompt))
+                (user-error "No CMake configuration found"))))
+       (list root config 'interactive)))
+    (when interactive
+      (message "Initializing CMake..."))
+    (let* ((default-directory root)     ; Dynamic variable
+           (result
+            (progn
+              (make-directory "build" 'no-error)
+              (make-symbolic-link
+               "build/compile_commands.json" "compile_commands.json" 'overwrite)
+              (call-process "cmake" nil nil nil
+                            "-S" config "-B" "build/"
+                            "-D" "CMAKE_EXPORT_COMPILE_COMMANDS=ON"))))
+      (unless (zerop result)
+        (error "CMake returned %d" result)))
+    (when interactive
+      (message "Initializing CMake...done")))
+  :config
+  (bind-key "C-x p i c" #'koek-cmke/init cmake-mode-map))
 
 (use-package lisp-mode
   :mode (rx ".lisp" string-end))

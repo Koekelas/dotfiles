@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: CMake code block
+# key: scmake
+# --
+#+BEGIN_SRC cmake
+$0
+#+END_SRC
