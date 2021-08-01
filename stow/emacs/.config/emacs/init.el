@@ -2126,7 +2126,10 @@ name."
   :straight t
   :bind
   (:map company-mode-map
+   ;; TAB or C-i (terminal)
    ([remap indent-for-tab-command] . company-indent-or-complete-common)
+   ;; M-TAB or C-M-i (terminal)
+   ([remap completion-at-point] . company-complete-common)
    :map company-active-map
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous))
