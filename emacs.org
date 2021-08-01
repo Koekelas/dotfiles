@@ -3356,6 +3356,17 @@ Inherit Clojure snippets.
   ,#+END_SRC
 #+END_SRC
 
+*** Markdown code block
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/smd
+  # -*- mode: snippet; -*-
+  # name: Markdown code block
+  # key: smd
+  # --
+  ,#+BEGIN_SRC markdown
+  $0
+  ,#+END_SRC
+#+END_SRC
+
 *** Meson code block
 #+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/smeson
   # -*- mode: snippet; -*-
@@ -3403,6 +3414,17 @@ Inherit Clojure snippets.
   # key: sscad
   # --
   ,#+BEGIN_SRC scad
+  $0
+  ,#+END_SRC
+#+END_SRC
+
+*** Org code block
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/sorg
+  # -*- mode: snippet; -*-
+  # name: Org code block
+  # key: sorg
+  # --
+  ,#+BEGIN_SRC org
   $0
   ,#+END_SRC
 #+END_SRC
@@ -3459,6 +3481,28 @@ Inherit Clojure snippets.
   # key: ssql
   # --
   ,#+BEGIN_SRC sql
+  $0
+  ,#+END_SRC
+#+END_SRC
+
+*** Text code block
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/stxt
+  # -*- mode: snippet; -*-
+  # name: Text code block
+  # key: stxt
+  # --
+  ,#+BEGIN_SRC text
+  $0
+  ,#+END_SRC
+#+END_SRC
+
+*** Wolfram Language code block
+#+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/swl
+  # -*- mode: snippet; -*-
+  # name: Wolfram Language code block
+  # key: swl
+  # --
+  ,#+BEGIN_SRC wolfram
   $0
   ,#+END_SRC
 #+END_SRC

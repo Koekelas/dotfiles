@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Wolfram Language code block
+# key: swl
+# --
+#+BEGIN_SRC wolfram
+$0
+#+END_SRC

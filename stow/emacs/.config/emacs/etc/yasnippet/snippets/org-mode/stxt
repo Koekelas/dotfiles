@@ -1,0 +1,7 @@
+# -*- mode: snippet; -*-
+# name: Text code block
+# key: stxt
+# --
+#+BEGIN_SRC text
+$0
+#+END_SRC
