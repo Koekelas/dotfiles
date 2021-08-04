@@ -2364,17 +2364,16 @@ Output is between `compilation-filter-start' and point."
                "*")
        'unique)))
 
-  (defvar koek-eww/redirect-fs nil
-    "List of redirect functions.
-A redirect function redirects a URL.  It's passed a URL struct,
-the URL to redirect, which it's allowed to modify.  For URL
-fields, see `url-generic-parse-url'.  The redirect function must
-return a redirected URL, a string, or, to not redirect the URL,
-nil.")
+  (defvar koek-eww/rewrite-fs nil
+    "List of rewrite functions.
+A rewrite function rewrites a URL.  It's passed a URL struct, the
+URL to rewrite, which it's allowed to modify.  For URL fields,
+see `url-generic-parse-url'.  The rewrite function must return a
+rewritten URL, a string, or, to not rewrite the URL, nil.")
 
-  (defun koek-eww/redirect-reddit (url)
-    "Redirect Reddit to Reddit mobile.
-URL is a URL struct, the URL to redirect."
+  (defun koek-eww/rewrite-reddit (url)
+    "Rewrite Reddit to Reddit mobile.
+URL is a URL struct, the URL to rewrite."
     (when (string-match-p
            (rx line-start
                (zero-or-one (or "www" "old") ".") "reddit.com"
@@ -2383,27 +2382,36 @@ URL is a URL struct, the URL to redirect."
       (setf (url-host url) "i.reddit.com")
       (url-recreate-url url)))
 
-  (defun koek-eww/redirect (url)
-    "Redirect URL.
-URL is a string, the URL to redirect.  The redirected URL is the
-result of the first redirect function to return a URL or, when
-none return a URL, nil.  For redirect functions, see
-`koek-eww/redirect-fs'."
-    (require 'url)
-    (let ((expanded (eww--dwim-expand-url url)))
-      (thread-last koek-eww/redirect-fs
-        (mapcar (lambda (f)
-                  (funcall f (url-generic-parse-url expanded))))
-        (seq-find #'identity))))
+  (defun koek-eww/rewrite (url)
+    "Rewrite URL.
+URL is a string, the URL to rewrite.  The rewritten URL is the
+result of the first rewrite function to return a URL or, when
+none return a URL, nil.  For rewrite functions, see
+`koek-eww/rewrite-fs'."
+    (seq-some (lambda (f)
+                (funcall f (url-generic-parse-url url)))
+              koek-eww/rewrite-fs))
 
-  (define-advice eww (:filter-args (args) koek-eww/redirect-url)
-    (let ((url (car args)))
-      (cons (or (koek-eww/redirect url) url) (cdr args))))
+  (defun koek-eww/redirect (url &optional interactive)
+    (interactive
+     (let* ((page (koek-eww/get-page))
+            (url (or (plist-get page :url) (user-error "Not visiting a URL"))))
+       (list url 'interactive)))
+    (let ((rewritten (koek-eww/rewrite url)))
+      (unless rewritten
+        (let* ((parsed (url-generic-parse-url url))
+               (host (url-host parsed)))
+          (user-error "Redirect failed, no rewrite function for `%s'" host)))
+      (when interactive
+        (message "Redirecting to `%s'" rewritten))
+      (eww rewritten)))
   :config
   (use-package link-hint
     :bind
     (:map eww-mode-map
      ("j" . link-hint-open-link)))
+
+  (bind-key "m" #'koek-eww/redirect eww-mode-map)
 
   (push #'koek-eww/redirect-reddit koek-eww/redirect-fs)
   (add-hook 'eww-after-render-hook #'koek-eww/update-current))
