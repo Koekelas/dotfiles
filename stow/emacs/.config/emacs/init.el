@@ -3096,10 +3096,12 @@ Modes are confident about being derived from text-mode.")
    :map c-mode-map
    ("C-x p i l" . koek-eglt/init-clangd)
    ("C-x p i c" . koek-cmke/init)
+   ("C-x p i m" . koek-mson/init)
    ("C-c d d" . koek-dl/lookup-c)
    :map c++-mode-map
    ("C-x p i l" . koek-eglt/init-clangd)
    ("C-x p i c" . koek-cmke/init)
+   ("C-x p i m" . koek-mson/init)
    ("C-c d d" . koek-dl/lookup-cpp)
    :map java-mode-map
    ("C-c d d" . koek-dl/lookup-openjdk))
@@ -3397,7 +3399,28 @@ Modes are confident about being derived from text-mode.")
 
 (use-package meson-mode
   :straight t
-  :mode (rx "meson.build" string-end))
+  :mode (rx "meson.build" string-end)
+  :preface
+  (defun koek-mson/init (root config &optional interactive)
+    (interactive
+     (let ((root (or (koek-proj/locate-root) (user-error "Not in a project")))
+           (config
+            (or (car (koek-proj/locate-configs "meson.build" nil 'prompt))
+                (user-error "No Meson configuration found"))))
+       (list root config 'interactive)))
+    (when interactive
+      (message "Initializing Meson..."))
+    (let* ((default-directory root)     ; Dynamic variable
+           (result
+            (progn
+              (make-directory "build" 'no-error)
+              (make-symbolic-link
+               "build/compile_commands.json" "compile_commands.json" 'overwrite)
+              (call-process "meson" nil nil nil config "build/"))))
+      (unless (zerop result)
+        (error "Meson returned %d" result)))
+    (when interactive
+      (message "Initializing Meson...done"))))
 
 (use-package octave
   :mode ((rx ".m" string-end) . octave-mode)
