@@ -2651,17 +2651,15 @@ none return a URL, nil.  For rewrite functions, see
     "Import vCards from directory FILE-NAME and its subdirectories.
 INTERACTIVE is used internally."
     (interactive
-     (let ((file-name
-            (progn
-              (require 'bbdb-vcard)
-              (expand-file-name
-               (read-directory-name
-                "vCard directory: "
-                (if (file-accessible-directory-p bbdb-vcard-default-dir)
-                    bbdb-vcard-default-dir
-                  default-directory)
-                nil t)))))
-       (list file-name 'interactive)))
+     (progn
+       (require 'bbdb-vcard)
+       (let* ((root (if (file-accessible-directory-p bbdb-vcard-default-dir)
+                        bbdb-vcard-default-dir
+                      default-directory))
+              (file-name
+               (expand-file-name
+                (read-directory-name "vCard directory: " root nil t) root)))
+         (list file-name 'interactive))))
     (require 'bbdb-vcard)
     (let* ((file-names
             (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
