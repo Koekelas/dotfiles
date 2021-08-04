@@ -5799,18 +5799,18 @@ Configure elfeed afterwards.
     :preface
     ;; Show hints in minuscule
     (define-advice pdf-links-read-link-action--create-keys
-        (:around (f &rest args) koek-pdf/downcase-hints)
+        (:filter-return (hints) koek-pdf/downcase-hints)
       (mapcar (lambda (chars)
                 (mapcar #'downcase chars))
-              (apply f args)))
+              hints))
 
     (define-advice pdf-links-read-link-action--read-chars
-        (:around (f prompt actions) koek-pdf/normalize-hints)
-      (funcall f prompt
-               (mapcar (pcase-lambda (`(,hint . ,link))
-                         (cons (mapcar #'upcase hint)
-                               link))
-                       actions)))
+        (:filter-args (args) koek-pdf/normalize-hints)
+      (list (car args)
+            (mapcar (pcase-lambda (`(,hint . ,link))
+                      (cons (mapcar #'upcase hint)
+                            link))
+                    (cadr args))))
     :config
     (let ((spec
            (seq-mapcat
