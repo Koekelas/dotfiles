@@ -2347,6 +2347,23 @@ Output is between `compilation-filter-start' and point."
   :bind
   ("C-c x b" . eww)
   :preface
+  (defun koek-eww/get-page ()
+    (let ((url (plist-get eww-data :url))
+          (title (plist-get eww-data :title)))
+      (list :url url :title (unless (string-empty-p title) title))))
+
+  (defun koek-eww/update-current ()
+    (let* ((page (koek-eww/get-page))
+           (title (plist-get page :title))
+           (url (plist-get page :url))
+           (id (or title url)))
+      (rename-buffer
+       (concat "*eww"
+               (when id
+                (concat ": " id))
+               "*")
+       'unique)))
+
   (defvar koek-eww/redirect-fs nil
     "List of redirect functions.
 A redirect function redirects a URL.  It's passed a URL struct,
@@ -2388,7 +2405,8 @@ none return a URL, nil.  For redirect functions, see
     (:map eww-mode-map
      ("j" . link-hint-open-link)))
 
-  (push #'koek-eww/redirect-reddit koek-eww/redirect-fs))
+  (push #'koek-eww/redirect-reddit koek-eww/redirect-fs)
+  (add-hook 'eww-after-render-hook #'koek-eww/update-current))
 
 (use-package shr
   :defer t
