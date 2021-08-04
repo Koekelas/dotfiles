@@ -2299,25 +2299,6 @@ see `company-backends'."
   (setq eldoc-echo-area-use-multiline-p nil)
   :delight)
 
-(use-package which-key
-  :straight t
-  :config
-  (which-key-add-key-based-replacements
-    "C-c &" "yasnippet"
-    "C-c a" "aids"
-    "C-c d" "documentation"
-    "C-c e" "editor"
-    "C-c f" "files"
-    "C-c j" "jump"
-    "C-c k" "media"
-    "C-c o" "org"
-    "C-c v" "frames"
-    "C-c w" "windows"
-    "C-c x" "other"
-    "C-c z" "system")
-  (which-key-mode)
-  :delight)
-
 (use-package vterm
   :straight t
   :bind
