@@ -2171,7 +2171,7 @@ see `company-backends'."
   :config
   (setq company-backends
         '((company-capf company-files :with company-yasnippet)))
-  (setq company-idle-delay 1)           ; In seconds
+  (setq company-idle-delay nil)
   (setq company-show-numbers t)
   :delight)
 
