@@ -2172,7 +2172,7 @@ see `company-backends'."
   (setq company-backends
         '((company-capf company-files :with company-yasnippet)))
   (setq company-idle-delay nil)
-  (setq company-show-numbers t)
+  (setq company-show-quick-access t)
   :delight)
 
 (use-package company-dabbrev
