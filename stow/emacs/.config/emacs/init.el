@@ -1397,39 +1397,12 @@ N is an integer, a workspace number."
 (use-package vterm
   :straight t
   :bind
-  (:map vterm-mode-map
-   ("C-c C-z" . vterm-send-C-z))
-  :preface
-  (defvar koek-term/buffer-base-name "*vterm*"
-    "Base name of vterm buffers.")
-
-  (defun koek-term/launch (&optional arg)
-    "Launch a vterm session or switch to it when one exists.
-With numeric prefix argument ARG, launch a numbered session or
-switch to it when it exists.  With `\\[universal-argument]'
-prefix argument ARG, launch a new numbered session, taking the
-first available number."
-    (interactive "P")
-    (require 'vterm)
-    (pop-to-buffer-same-window
-     (cond
-      ((integerp arg)
-       (format "%s<%d>" koek-term/buffer-base-name arg))
-      (arg
-       (generate-new-buffer-name koek-term/buffer-base-name))
-      (t
-       koek-term/buffer-base-name)))
-    (unless (derived-mode-p 'vterm-mode)
-      (vterm-mode)))
-  :init
-  (bind-key "C-c x t" #'koek-term/launch)
-
-  (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=yes")
+  ("C-c x t" . vterm)
   :config
   ;; Resolve keybinding conflict with repeat
-  (unbind-key "C-z" vterm-mode-map)
-
-  (setq vterm-kill-buffer-on-exit t))
+  (push "C-z" vterm-keymap-exceptions)
+  (vterm--exclude-keys vterm-mode-map vterm-keymap-exceptions)
+  (bind-key "C-c C-z" #'vterm-send-C-z vterm-mode-map))
 
 (use-package eshell
   :bind
