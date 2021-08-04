@@ -1160,6 +1160,14 @@ are recognized:
      ("v" . helpful-variable)
      ("f" . helpful-function)))
 
+  (bind-keys
+   :map embark-email-map
+   ("RET" . koek-mu4e/compose-message)
+   ("c" . koek-mu4e/compose-message)
+   ("t" . koek-mu4e/display-messages-to)
+   ("f" . koek-mu4e/display-messages-from)
+   ("a" . koek-bbdb/display-email))
+
   (setq embark-help-key (kbd "?")))
 
 (straight-use-package 'embark-consult)
@@ -1208,6 +1216,8 @@ the builtin annotator except it aligns the annotation."
         :truncate 1.0 :face 'completions-annotations))))
   :config
   (push '(xdg-desktop-entry . (koek-mgnl/builtin-annotator builtin none))
+        marginalia-annotator-registry)
+  (push '(email . (koek-mgnl/builtin-annotator builtin none))
         marginalia-annotator-registry)
   (marginalia-mode))
 
@@ -2426,6 +2436,10 @@ none return a URL, nil.  For rewrite functions, see
 (use-package mu4e
   :bind
   ("C-c x m" . mu4e)
+  :preface
+  (defun koek-mu4e/compose-message (email)
+    (interactive (list (koek-bbdb/read-email "To: ")))
+    (compose-mail email))
   :init
   (bind-key "C-c x C-m" #'compose-mail)
 
@@ -2457,6 +2471,18 @@ none return a URL, nil.  For rewrite functions, see
 
 (use-package mu4e-headers
   :defer t
+  :preface
+  (autoload #'mu4e-headers-search "mu4e-headers")
+
+  (defun koek-mu4e/display-messages-to (email)
+    (interactive (list (koek-bbdb/read-email "To: ")))
+    (mu4e-headers-search (mapconcat (lambda (field)
+                                      (concat field ":" email))
+                                    '("to" "cc" "bcc") " or ")))
+
+  (defun koek-mu4e/display-messages-from (email)
+    (interactive (list (koek-bbdb/read-email "From: ")))
+    (mu4e-headers-search (concat "from:" email)))
   :config
   (use-package mu4e-utils
     :bind
@@ -2582,6 +2608,37 @@ none return a URL, nil.  For rewrite functions, see
 (use-package bbdb
   :straight t
   :after mu4e
+  :preface
+  (defvar koek-bbdb/email-history nil
+    "History of e-mail addresses read.")
+
+  (defun koek-bbdb/make-completion-table (candidates)
+    (let ((annotate (lambda (candidate)
+                      (when-let ((name (thread-first candidate
+                                         (assoc candidates)
+                                         cdr
+                                         bbdb-record-name)))
+                        (concat " " name)))))
+      (lambda (input pred action)
+        (pcase action
+          ('metadata
+           `(metadata . ((category . email)
+                         (annotation-function . ,annotate))))
+          (_action
+           (complete-with-action action candidates input pred))))))
+
+  (defun koek-bbdb/read-email (prompt)
+    (let ((candidates (seq-mapcat (lambda (record)
+                                    (mapcar (lambda (email)
+                                              (cons email record))
+                                            (bbdb-record-mail record)))
+                                  (bbdb-records))))
+      (completing-read prompt (koek-bbdb/make-completion-table candidates)
+                       nil t nil 'koek-bbdb/email-history)))
+
+  (defun koek-bbdb/display-email (email)
+    (interactive (list (koek-bbdb/read-email "E-mail: ")))
+    (bbdb-search-mail (rx line-start (literal email) line-end)))
   :config
   (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
         bbdb-address-format-list)
