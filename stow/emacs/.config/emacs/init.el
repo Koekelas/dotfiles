@@ -2502,10 +2502,12 @@ none return a URL, nil.  For rewrite functions, see
                               (:subject    . nil)))
 
   ;; Style thread segments
-  (let ((specs '((mu4e-headers-thread-child-prefix         . "├─")
-                 (mu4e-headers-thread-last-child-prefix    . "└─")
-                 (mu4e-headers-thread-orphan-prefix        . "┌─")
-                 (mu4e-headers-thread-single-orphan-prefix . "╶─")
+  (let ((specs '((mu4e-headers-thread-root-prefix          . "■ ")
+                 (mu4e-headers-thread-first-child-prefix   . "▪ ")
+                 (mu4e-headers-thread-child-prefix         . "├╴")
+                 (mu4e-headers-thread-last-child-prefix    . "└╴")
+                 (mu4e-headers-thread-orphan-prefix        . "□ ")
+                 (mu4e-headers-thread-single-orphan-prefix . "□ ")
                  (mu4e-headers-thread-duplicate-prefix     . "= ")
                  (mu4e-headers-thread-connection-prefix    . "│ ")
                  (mu4e-headers-thread-blank-prefix         . "  "))))
@@ -2547,21 +2549,10 @@ none return a URL, nil.  For rewrite functions, see
     (:map mu4e-view-mode-map
      ("G" . mu4e-update-mail-and-index)))
 
-  (use-package mu4e-actions
-    :defer t
-    :config
-    (unless mu4e-msg2pdf
-      (setq mu4e-view-actions
-            (rassq-delete-all 'mu4e-action-view-as-pdf mu4e-view-actions))))
-
   (use-package mu4e-org
     :bind
     (:map mu4e-view-mode-map
-     ("C-c o c" . mu4e-org-store-and-capture)))
-
-  (add-to-list 'mu4e-view-actions
-               '("open in browser" . mu4e-action-view-in-browser) 'append)
-  (setq mu4e-view-show-addresses t))
+     ("C-c o c" . mu4e-org-store-and-capture))))
 
 ;; Prefer variables of package mu4e-compose to those of message and
 ;; those of message to those of sendmail
