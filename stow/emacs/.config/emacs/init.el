@@ -2281,7 +2281,7 @@ see `company-backends'."
                     (thread-last id
                       (replace-regexp-in-string
                        (rx "~" (one-or-more (any digit ".")) line-end) "")
-                      (replace-regexp-in-string (rx "_") "-")
+                      (replace-regexp-in-string "_" "-")
                       (concat "koek-dl/lookup-")
                       intern)))
         (defalias symbol
