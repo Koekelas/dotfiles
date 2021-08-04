@@ -1685,7 +1685,7 @@ dictionary links before LIMIT."
 (use-package hl-line
   :bind ("C-c a l" . hl-line-mode)      ; [L]ine
   :hook
-  ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode
+  ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode proced-mode
     bongo-playlist-mode)
    . hl-line-mode))
 
@@ -2325,6 +2325,10 @@ see `company-backends'."
   (setq eshell-cp-interactive-query t)
   (setq eshell-ln-interactive-query t)
   (setq eshell-rm-interactive-query t))
+
+(use-package proced
+  :bind
+  ("C-c x p" . proced))
 
 (use-package compile
   :bind

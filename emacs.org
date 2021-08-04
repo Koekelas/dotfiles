@@ -2398,7 +2398,7 @@ For more information, see ~man 5 hunspell~.
   (use-package hl-line
     :bind ("C-c a l" . hl-line-mode)      ; [L]ine
     :hook
-    ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode
+    ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode proced-mode
       bongo-playlist-mode)
      . hl-line-mode))
 #+END_SRC
@@ -5189,6 +5189,13 @@ On [[https://devdocs.io/][DevDocs]], enable:
 #+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/etc/eshell/aliases
   alias ls ls -lah $*
   alias nb jupyter notebook $*
+#+END_SRC
+
+** proced - Processes
+#+BEGIN_SRC emacs-lisp
+  (use-package proced
+    :bind
+    ("C-c x p" . proced))
 #+END_SRC
 
 ** compile - Run asynchronous processes
