@@ -2590,6 +2590,8 @@ none return a URL, nil.  For rewrite functions, see
   (setq mu4e-compose-context-policy 'ask-if-none))
 
 (use-package mu4e-org
+  ;; system
+  :when (executable-find "mu")
   :after org
   :config
   (require 'mu4e)
