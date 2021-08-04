@@ -2990,6 +2990,27 @@ INTERACTIVE is used internally."
   (setq keycast-separator-width 3)
   (setq keycast-remove-tail-elements nil))
 
+(use-package text-mode
+  :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
+  :preface
+  (defvar koek-txt/insecure-modes
+    '(sgml-mode                         ; mhtml-mode derives from sgml-mode
+      snippet-mode)
+    "List of major mode symbols.
+Modes are insecure about being derived from text-mode.")
+
+  (defvar koek-txt/confident-hook nil
+    "Normal hook run after enabling text-mode or derived modes.
+Modes are confident about being derived from text-mode.")
+
+  (defun koek-txt/run-confident-hook ()
+    "Run `koek-txt/confident-hook'."
+    (unless (apply #'derived-mode-p koek-txt/insecure-modes)
+      (run-hooks 'koek-txt/confident-hook)))
+  :config
+  (add-hook 'text-mode-hook #'koek-txt/run-confident-hook)
+  :delight (text-mode "Txt" :major))
+
 (use-package cc-mode
   :mode
   (((rx ".c" string-end) . c-mode)
@@ -3102,27 +3123,6 @@ INTERACTIVE is used internally."
   :config
   ;; Resolve keybinding conflict with company
   (unbind-key "TAB" sly-mrepl-mode-map))
-
-(use-package text-mode
-  :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
-  :preface
-  (defvar koek-txt/insecure-modes
-    '(sgml-mode                         ; mhtml-mode derives from sgml-mode
-      snippet-mode)
-    "List of major mode symbols.
-Modes are insecure about being derived from text-mode.")
-
-  (defvar koek-txt/confident-hook nil
-    "Normal hook run after enabling text-mode or derived modes.
-Modes are confident about being derived from text-mode.")
-
-  (defun koek-txt/run-confident-hook ()
-    "Run `koek-txt/confident-hook'."
-    (unless (apply #'derived-mode-p koek-txt/insecure-modes)
-      (run-hooks 'koek-txt/confident-hook)))
-  :config
-  (add-hook 'text-mode-hook #'koek-txt/run-confident-hook)
-  :delight (text-mode "Txt" :major))
 
 (use-package conf-mode
   :mode (rx (or ".desktop" "cross.txt") string-end)

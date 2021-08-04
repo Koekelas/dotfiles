@@ -6080,6 +6080,13 @@ Stavrou)]].
 #+END_SRC
 
 * Languages
+Several modes want the =txt= file extension. Insert [[*Text][text-mode]]
+configuration here so [[*Conf][conf-mode]] can shadow the catchall
+~auto-mode-alist~ entry.
+
+#+BEGIN_SRC emacs-lisp :noweb no-export
+  <<text-mode-config>>
+#+END_SRC
 
 ** C family
 #+BEGIN_SRC emacs-lisp
@@ -6449,15 +6456,6 @@ Stavrou)]].
 #+END_SRC
 
 ** Conf
-Conf-mode's mode declaration must precede over [[*Text][text-mode's]]. Configure
-text-mode first.
-
-#+BEGIN_SRC emacs-lisp :noweb no-export
-  <<text-mode-config>>
-#+END_SRC
-
-Configure conf-mode afterwards.
-
 #+BEGIN_SRC emacs-lisp
   (use-package conf-mode
     :mode (rx (or ".desktop" "cross.txt") string-end)
