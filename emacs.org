@@ -2386,11 +2386,11 @@ For more information, see ~man 5 hunspell~.
     (add-hook 'conf-mode-hook #'koek-fi/setup-indicator))
 #+END_SRC
 
-** buffer-face - Remap default face
+** face-remap - Remap faces
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
-  (add-hook 'org-mode-hook #'variable-pitch-mode)
-  (delight 'buffer-face-mode nil 'face-remap)
+  (use-package face-remap
+    :hook ((markdown-mode org-mode) . variable-pitch-mode)
+    :delight buffer-face-mode)
 #+END_SRC
 
 ** hl-line - Highlight current line

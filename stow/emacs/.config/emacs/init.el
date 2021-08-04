@@ -1678,9 +1678,9 @@ dictionary links before LIMIT."
   (add-hook 'conf-mode-hook #'display-fill-column-indicator-mode)
   (add-hook 'conf-mode-hook #'koek-fi/setup-indicator))
 
-(add-hook 'markdown-mode-hook #'variable-pitch-mode)
-(add-hook 'org-mode-hook #'variable-pitch-mode)
-(delight 'buffer-face-mode nil 'face-remap)
+(use-package face-remap
+  :hook ((markdown-mode org-mode) . variable-pitch-mode)
+  :delight buffer-face-mode)
 
 (use-package hl-line
   :bind ("C-c a l" . hl-line-mode)      ; [L]ine
