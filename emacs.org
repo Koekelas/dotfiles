@@ -4931,31 +4931,44 @@ Inherit Clojure snippets.
      ("C-p" . company-select-previous))
     :hook ((prog-mode conf-mode comint-mode cider-repl-mode) . company-mode)
     :preface
-    (defmacro koek-cpny/setup-backends (&rest args)
-      "Setup backends in modes.
-  ARGS are one or more symbols, the modes to setup, followed by a
-  list of backends, see `company-backends'."
-      (let ((modes (butlast args))
-            (backends (car (last args))))
-        `(let ((setup-backends (lambda ()
-                                 (setq-local company-backends ',backends))))
-           ,@(mapcar (lambda (mode)
-                       `(add-hook ',(intern (concat (symbol-name mode) "-hook"))
-                                  setup-backends))
-                     modes))))
+    (defmacro koek-cpny/set-backends (modes backends)
+      "Set BACKENDS in MODES.
+  MODES is a list of symbols, the modes to set backends in.
+  BACKENDS evaluates to a list of backends, the backends to set,
+  see `company-backends'."
+      (declare (indent 1))
+      (let ((value-sym (gensym)))
+        `(let ((,value-sym ,backends))
+           ,@(seq-mapcat
+              (lambda (mode)
+                (let* ((prefix "koek-cpny/")
+                       (mode-name (symbol-name mode))
+                       (backends-sym
+                        (intern (concat prefix mode-name "-backends")))
+                       (f-sym
+                        (intern (concat prefix "setup-" mode-name "-backends")))
+                       (hook-sym (intern (concat mode-name "-hook"))))
+                  `((defvar ,backends-sym (copy-tree ,value-sym)
+                      ,(format "List of backends in `%s'." mode))
+
+                    (defun ,f-sym ()
+                      ,(format "Setup backends in `%s'." mode)
+                      (setq-local company-backends ,backends-sym))
+
+                    (add-hook ',hook-sym #',f-sym))))
+              modes))))
+
+    (koek-cpny/set-backends (indium-repl-mode)
+      '((company-indium-repl company-files :with company-yasnippet)))
+    (koek-cpny/set-backends (geiser-mode geiser-repl-mode)
+      '((geiser-company-backend company-files :with company-yasnippet)))
+    (koek-cpny/set-backends (cmake-mode conf-mode makefile-mode scad-mode)
+      '((company-dabbrev-code company-files :with company-yasnippet)))
     :config
     (setq company-backends
           '((company-capf company-files :with company-yasnippet)))
     (setq company-idle-delay 1)           ; In seconds
     (setq company-show-numbers t)
-    (koek-cpny/setup-backends indium-repl-mode
-     ((company-indium-repl company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends geiser-mode geiser-repl-mode
-     ((geiser-company-backend company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends cmake-mode makefile-mode scad-mode
-     ((company-dabbrev-code company-files :with company-yasnippet)))
-    (koek-cpny/setup-backends conf-mode
-     ((company-dabbrev company-files :with company-yasnippet)))
     :delight)
 
   (use-package company-dabbrev
