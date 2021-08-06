@@ -3234,7 +3234,7 @@ Modes are confident about being derived from text-mode.")
   (unbind-key "TAB" sly-mrepl-mode-map))
 
 (use-package conf-mode
-  :mode (rx (or ".desktop" "cross.txt") string-end)
+  :mode (rx (or ".desktop" "/cross.txt") string-end)
   :preface
   (defvar koek-conf/mode-names
     '((conf-colon-mode . "Conf:")
@@ -3399,7 +3399,7 @@ Modes are confident about being derived from text-mode.")
 
 (use-package meson-mode
   :straight t
-  :mode (rx "meson.build" string-end)
+  :mode (rx "/meson.build" string-end)
   :preface
   (defun koek-mson/init (root config &optional interactive)
     (interactive
