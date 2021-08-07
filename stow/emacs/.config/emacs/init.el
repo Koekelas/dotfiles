@@ -3544,6 +3544,7 @@ Modes are confident about being derived from text-mode.")
   :bind
   ("C-c o a" . org-agenda)
   :config
+  (setq org-agenda-sticky t)
   (setq org-agenda-time-leading-zero t))
 
 (use-package org-capture
