@@ -3515,6 +3515,7 @@ Modes are confident about being derived from text-mode.")
 
   ;; Appearance
   (setq org-hide-emphasis-markers t)
+  (setq org-use-sub-superscripts '{})
   (setq org-pretty-entities t)
   (setq org-highlight-latex-and-related '(native))
   (push '("" "listings" nil) org-latex-packages-alist)
