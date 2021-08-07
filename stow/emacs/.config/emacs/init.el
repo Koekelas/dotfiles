@@ -4462,7 +4462,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
   (when-let ((file-name (getenv name)))
     (file-name-as-directory file-name)))
 
-(defconst koek/home-dir (expand-file-name "~/")
+(defconst koek/home-dir "~/"
   "File name to home directory.")
 
 (defconst koek/documents-dir
