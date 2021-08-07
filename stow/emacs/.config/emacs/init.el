@@ -4311,7 +4311,8 @@ checkers)."
 
   (defconst koek-ml/task
     '(:eval
-      (when (and (org-clock-is-active) (moody-window-active-p))
+      (when (and (fboundp 'org-clock-is-active) (org-clock-is-active)
+                 (moody-window-active-p))
         `("" koek-ml/separator
           ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
     "Task mode line construct.")
