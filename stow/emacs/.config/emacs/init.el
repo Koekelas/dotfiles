@@ -3521,9 +3521,8 @@ Modes are confident about being derived from text-mode.")
   (push '("" "listings" nil) org-latex-packages-alist)
 
   ;; Appearance - Headings
-  (setq org-fontify-whole-heading-line t)
   (setq org-fontify-done-headline nil)
-  (setq org-ellipsis "…")
+  (setq org-ellipsis truncate-string-ellipsis)
 
   ;; Appearance - Images
   (setq org-startup-with-inline-images t)
