@@ -4547,8 +4547,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
     (thread-last (koek/get-agenda-dirs)
       (seq-mapcat (lambda (file-name)
                     (directory-files file-name 'full (rx ".org" line-end))))
-      (seq-filter (lambda (file-name)
-                    (not (koek/lock-file-p file-name))))
+      (seq-remove #'koek/lock-file-p)
       seq-uniq))
 
   (define-advice org-agenda-files
