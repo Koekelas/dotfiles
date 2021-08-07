@@ -3912,6 +3912,8 @@ TITLE is a string, a note title."
              "%b"))))
         " - Emacs"))
 
+(blink-cursor-mode 0)
+
 (defvar koek-thm/enable-hook nil
   "Normal hook run after enabling theme.")
 
@@ -4435,8 +4437,6 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
                   koek-ml/id koek-ml/state keycast-marker
                   koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
                   koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
-
-(blink-cursor-mode 0)
 
 (use-package calendar
   :defer t

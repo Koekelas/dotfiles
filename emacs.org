@@ -7447,6 +7447,8 @@ For the minor mode, see [[*yasnippet - Snippets][yasnippet - Snippets]].
 #+END_SRC
 
 * Appearance
+
+** Frame settings
 Maximize frames. Configuring this during early initialization reduces
 startup time.
 
@@ -7482,6 +7484,13 @@ early initialization reduces startup time.
   (push '(vertical-scroll-bars . nil) default-frame-alist)
 #+END_SRC
 
+Disable blink cursor mode.
+
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode 0)
+#+END_SRC
+
+** Theme infrastructure
 Parts of this configuration need to act on theme changes and need to
 know the theme variant, whether a theme is a light or a dark theme.
 Define theme infrastructure.
@@ -7533,7 +7542,8 @@ current theme.
   (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant)
 #+END_SRC
 
-Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
+** modus-themes - Accessible light and dark theme
+[[https://gitlab.com/protesilaos/modus-themes][modus-themes (GitLab)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
@@ -7589,8 +7599,9 @@ Load [[https://protesilaos.com/modus-themes/][Modus]] theme.
     (koek-mt/load 'vivendi))
 #+END_SRC
 
-Set fonts. Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM Plex]] for
-variable pitch.
+** Fonts
+Try [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]] or [[https://typeof.net/Iosevka/][Iosevka]] for fixed pitch and [[https://www.ibm.com/plex/][IBM Plex]] for variable
+pitch.
 
 #+BEGIN_SRC emacs-lisp
   (defvar koek-font/pairs
@@ -7622,16 +7633,18 @@ variable pitch.
     (apply #'set-face-attribute 'variable-pitch nil variable))
 #+END_SRC
 
-Show vertical divider between windows. The default divider is drawn in
-the left fringe of the right window, the ~window-divider-mode~ divider
-is drawn between windows.
+** window-divider - Show window divider
+Unlike the default window divider, which is drawn in the left fringe
+of the right window, the ~window-divider-mode~ divider is drawn between
+windows and continues in the mode line.
 
 #+BEGIN_SRC emacs-lisp
   (setq window-divider-default-right-width 1)
   (window-divider-mode)
 #+END_SRC
 
-Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
+** moody - Style mode line
+[[https://github.com/tarsius/moody][moody (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package moody
@@ -8034,12 +8047,6 @@ Set mode line. Style it with [[https://github.com/tarsius/moody][moody]].
                     koek-ml/id koek-ml/state keycast-marker
                     koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
                     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
-#+END_SRC
-
-Disable blink cursor mode.
-
-#+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode 0)
 #+END_SRC
 
 * Personal
