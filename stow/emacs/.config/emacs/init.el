@@ -3584,6 +3584,7 @@ Candidates are collected from agenda files."
     (format "*org-src: %s*" org-buffer-name))
   :config
   (setq org-src-window-setup 'plain)
+  (setq org-src-ask-before-returning-to-edit-buffer nil)
   :delight)
 
 (use-package ob-core
