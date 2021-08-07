@@ -3827,9 +3827,7 @@ TITLE is a string, a note title."
   :defer t
   :config
   ;; Resolve keybinding conflict with company
-  (unbind-key "TAB" geiser-repl-mode-map)
-
-  (setq geiser-repl-query-on-exit-p t))
+  (unbind-key "TAB" geiser-repl-mode-map))
 
 (use-package sql
   :mode ((rx ".sql" string-end) . sql-mode)

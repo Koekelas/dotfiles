@@ -7321,9 +7321,7 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
     :defer t
     :config
     ;; Resolve keybinding conflict with company
-    (unbind-key "TAB" geiser-repl-mode-map)
-
-    (setq geiser-repl-query-on-exit-p t))
+    (unbind-key "TAB" geiser-repl-mode-map))
 #+END_SRC
 
 ** SQL
