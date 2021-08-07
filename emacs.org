@@ -8387,7 +8387,7 @@ Configure downloads.
 #+END_SRC
 
 ** E-mail accounts
-Configure e-mail accounts. For server details, see [[file:~/.ststore/documents/Projecten/Dotfiles/dotfiles/dotfiles.org::*isync][isync]], specifically
+Configure e-mail accounts. For server details, see [[file:dotfiles.org::*isync][isync]], specifically
 the instructions on storing passwords.
 
 #+BEGIN_SRC emacs-lisp
