@@ -8164,22 +8164,21 @@ of ~koek/projects-dir~, are agenda files. Configure agendas.
       "Return whether FILE-NAME is a lock file."
       (string-prefix-p ".#" (file-name-nondirectory file-name)))
 
-    (defun koek/get-subdirs (file-name &optional full)
-      "Return subdirectories in directory FILE-NAME.
-  When optional FULL is truthy, return absolute file names."
-      (thread-last (directory-files-and-attributes file-name full)
+    (defun koek/get-subdirs (file-name)
+      "Return subdirectories in directory FILE-NAME."
+      (thread-last (directory-files-and-attributes file-name 'full)
         (seq-filter (pcase-lambda (`(,file-name ,type))
                       (let ((name (file-name-nondirectory file-name)))
                         (and (eq type t)  ; Directory
-                             (not (or (string-equal name ".")
-                                      (string-equal name "..")))))))
+                             (string-match-p directory-files-no-dot-files-regexp
+                                             name)))))
         (mapcar (lambda (spec)
                   (file-name-as-directory (car spec))))))
 
     (defun koek/get-agenda-dirs ()
       "Return directories storing agenda files."
       (append (list koek/documents-dir koek/calendars-dir)
-              (koek/get-subdirs koek/projects-dir 'full)))
+              (koek/get-subdirs koek/projects-dir)))
 
     (defun koek/get-agenda-files ()
       "Return agenda files."
