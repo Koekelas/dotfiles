@@ -3582,6 +3582,8 @@ Candidates are collected from agenda files."
       (:override (org-buffer-name _lang) koek-org/construct-edit-buffer-name)
     ;; Mirror helpful buffer names
     (format "*org-src: %s*" org-buffer-name))
+  :config
+  (setq org-src-window-setup 'plain)
   :delight)
 
 (use-package ob-core
