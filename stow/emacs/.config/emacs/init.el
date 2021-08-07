@@ -4283,9 +4283,7 @@ checkers)."
                                   koek-ml/checker-names)))
              (concat name " "))
           ,(pcase (koek-ml/get-flymake-state)
-             (`running
-              "-;-;-")
-             (`finished
+             ((or `running `finished)
               (let ((n-diags (koek-ml/get-flymake-n-diags)))
                 (mapconcat
                  (lambda (cat)
