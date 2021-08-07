@@ -7294,6 +7294,8 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
 [[https://github.com/jaor/geiser][geiser (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
+  (straight-use-package 'geiser-guile)    ; Optional dependency
+
   (use-package geiser
     :straight t
     :after scheme)
@@ -7310,11 +7312,6 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
       (let ((backends company-backends))
         (apply f args)
         (setq company-backends backends))))
-
-  (use-package geiser-impl
-    :defer t
-    :config
-    (setq geiser-default-implementation 'guile))
 
   (use-package geiser-mode
     :defer t

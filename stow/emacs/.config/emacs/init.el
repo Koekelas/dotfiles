@@ -3800,6 +3800,8 @@ TITLE is a string, a note title."
       "Scm"))
    :major))
 
+(straight-use-package 'geiser-guile)    ; Optional dependency
+
 (use-package geiser
   :straight t
   :after scheme)
@@ -3816,11 +3818,6 @@ TITLE is a string, a note title."
     (let ((backends company-backends))
       (apply f args)
       (setq company-backends backends))))
-
-(use-package geiser-impl
-  :defer t
-  :config
-  (setq geiser-default-implementation 'guile))
 
 (use-package geiser-mode
   :defer t
