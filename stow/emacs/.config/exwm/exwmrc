@@ -1,6 +1,8 @@
 xset -dpms
 xset s off
 
+xset b off
+
 picom &
 
 xsettingsd_preset_file="${XDG_DATA_HOME:-$HOME/.local/share}/xsettingsd/presets/dark"

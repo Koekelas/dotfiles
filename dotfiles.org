@@ -201,6 +201,12 @@ disable turning off monitors.
   xset s off
 #+END_SRC
 
+Disable bell.
+
+#+BEGIN_SRC sh
+  xset b off
+#+END_SRC
+
 Launch [[*picom][picom]].
 
 #+BEGIN_SRC sh
