@@ -1,0 +1,5 @@
+#!/bin/bash
+stylus="Wacom Intuos BT M Pen stylus"
+
+xsetwacom set "$stylus" MapToOutput "HDMI-1"
+xsetwacom set "$stylus" Area "0 0 21600 12150"

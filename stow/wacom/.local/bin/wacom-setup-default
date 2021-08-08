@@ -1,0 +1,14 @@
+#!/bin/bash
+pad="Wacom Intuos BT M Pad pad"
+stylus="Wacom Intuos BT M Pen stylus"
+
+wacom-map-primary
+xsetwacom set "$pad" Button 1
+xsetwacom set "$pad" Button 2
+xsetwacom set "$pad" Button 3
+xsetwacom set "$pad" Button 8
+xsetwacom set "$stylus" TabletPCButton on
+xsetwacom set "$stylus" Button 1 "button +1"
+xsetwacom set "$stylus" Button 2 pan
+xsetwacom set "$stylus" Button 3 "button +3"
+xsetwacom set "$stylus" PanScrollThreshold 250

@@ -45,6 +45,7 @@ Git is mandatory, everything else is optional.
   - [[https://github.com/derat/xsettingsd][xsettingsd]]
   - [[https://x.org/][xsetroot]] and [[https://github.com/Airblader/unclutter-xfixes][unclutter]]
   - [[https://www.argyllcms.com/][ArgyllCMS]] (dispwin, load color profile)
+  - [[https://github.com/linuxwacom/xf86-input-wacom][xf86-input-wacom]] (xsetwacom, setup tablet)
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
 - E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
@@ -97,6 +98,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
   ## X window manager
   pacman -S xorg-xset picom xsettingsd xorg-xsetroot unclutter argyllcms
+  pacman -S xf86-input-wacom
   # Install exwm-gdm from source
 
   ## Terminal emulator
