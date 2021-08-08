@@ -92,9 +92,9 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
 #+BEGIN_SRC sh
   ## General
-  pacman -S ripgrep git hunspell hunspell-en_US xorg-xprop ttf-ibm-plex
-
-  # Install PragmataPro from source or ttf-iosevka from AUR
+  pacman -S ripgrep git hunspell hunspell-en_us xorg-xprop ttf-ibm-plex
+  pacman -S ttc-iosevka
+  # Install PragmataPro from source
 
   ## X window manager
   pacman -S xorg-xset picom xsettingsd xorg-xsetroot unclutter argyllcms
