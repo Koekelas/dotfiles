@@ -574,14 +574,14 @@ Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
   node_modules/
 #+END_SRC
 
-* Firefox :setup:
+* Firefox
 
-** KeePass Helper
+** KeePass Helper :setup:
 [[https://addons.mozilla.org/en-US/firefox/addon/keepass-helper-url-in-title/][KeePass Helper (Firefox Add-ons)]]
 
 Enable all components.
 
-** Saka Key
+** Saka Key :setup:
 [[https://addons.mozilla.org/en-US/firefox/addon/saka-key/][Saka Key (Firefox Add-ons)]]
 
 Create a new profile. Change:
