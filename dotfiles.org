@@ -361,6 +361,7 @@ To apply configuration, run:
 ** Leisure
 #+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Leisure.category
   makemkv.desktop
+  mpv.desktop
   org.gnome.Lollypop.desktop
   org.musicbrainz.Picard.desktop
   puddletag.desktop
