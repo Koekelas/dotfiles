@@ -2,6 +2,7 @@ blueman-manager.desktop
 ca.desrt.dconf-editor.desktop
 gnome-control-center.desktop
 gnome-system-monitor.desktop
+nm-connection-editor.desktop
 org.gnome.DiskUtility.desktop
 org.gnome.Extensions.desktop
 org.gnome.Logs.desktop
