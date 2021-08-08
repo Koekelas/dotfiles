@@ -1,0 +1,8 @@
+#!/bin/bash
+pad="Wacom Intuos BT M Pad pad"
+
+wacom-setup-default
+xsetwacom set "$pad" Button 1 "key f9"
+xsetwacom set "$pad" Button 2 "key +ctrl f9 -ctrl"
+xsetwacom set "$pad" Button 3 "key f8"
+xsetwacom set "$pad" Button 8 "key +shift f9 -shift"

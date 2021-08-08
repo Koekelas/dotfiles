@@ -845,6 +845,33 @@ Show Steam with native runtime as Steam.
   Exec=steam steam://open/friends
 #+END_SRC
 
+* Gromit MPX
+#+BEGIN_SRC sh :tangle stow/gromit/.local/bin/wacom-setup-gromit :noweb yes :shebang #!/bin/bash
+  pad="<<wacom-pad>>"
+
+  wacom-setup-default
+  xsetwacom set "$pad" Button 1 "key f9"
+  xsetwacom set "$pad" Button 2 "key +ctrl f9 -ctrl"
+  xsetwacom set "$pad" Button 3 "key f8"
+  xsetwacom set "$pad" Button 8 "key +shift f9 -shift"
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle stow/gromit/.config/gromit-mpx.cfg
+  "base pen" = PEN (size=8 color="black");
+  "yellow pen" = "base pen" (color="#D0BC00");
+  "cyan pen" = "base pen" (color="#00D3D0");
+  "base recolor" = RECOLOR (size=128);
+  "yellow recolor" = "base recolor" (color="#D0BC00");
+  "cyan recolor" = "base recolor" (color="#00D3D0");
+  "eraser" = ERASER (size=128);
+
+  "default" = "yellow pen";
+  "default"[CONTROL] = "cyan pen";
+  "default"[ALT] = "yellow recolor";
+  "default"[CONTROL, ALT] = "cyan recolor";
+  "default"[SHIFT] = "eraser";
+#+END_SRC
+
 * DisplayCAL :setup:
 Calibration settings:
 - Whitepoint: 6500 K
