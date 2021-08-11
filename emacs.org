@@ -8048,6 +8048,11 @@ windows and continues in the mode line.
                     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes)))
 #+END_SRC
 
+** Ellipsis string
+#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
+  (setq truncate-string-ellipsis "~")
+#+END_SRC
+
 * Personal
 
 ** Locale
