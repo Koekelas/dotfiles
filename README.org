@@ -83,7 +83,6 @@ Git is mandatory, everything else is optional.
 - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
 - SQL: [[https://www.postgresql.org/][PostgreSQL]]
 - TeX, Org & Markdown:
-  - [[https://www.sqlite.org/][SQLite]] (track Org backlinks)
   - [[https://www.latex-project.org/][LaTeX]]
   - [[https://pandoc.org/][pandoc]]
 - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
@@ -170,7 +169,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   createdb
 
   ## TeX, Org & Markdown
-  pacman -S sqlite texlive-core texlive-latexextra pandoc
+  pacman -S texlive-core texlive-latexextra pandoc
 
   ## Wolfram Language
   # Install mathematica from AUR

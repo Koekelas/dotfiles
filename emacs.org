@@ -6927,16 +6927,15 @@ templates]].
       (:map org-mode-map
        ("C-c o i" . org-clock-in)))
 
-    (use-package org-roam
+    (use-package org-roam-node
       :bind
       (:map org-mode-map
-       ("C-c o n" . org-roam-insert)
-       ("C-c o C-n" . org-roam-insert-immediate)))
+       ("C-c o n" . org-roam-node-insert)))
 
-    (use-package org-roam-buffer
+    (use-package org-roam-mode
       :bind
       (:map org-mode-map
-       ("C-c o b" . org-roam-buffer-toggle-display)))
+       ("C-c o b" . org-roam-buffer-toggle)))
 
     (use-package outline
       :bind
@@ -7209,25 +7208,14 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
 [[https://github.com/org-roam/org-roam][org-roam (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :straight t
-    :bind
-    ("C-c o f" . org-roam-find-file)
-    :preface
-    (defun koek-org/title-to-slug (title)
-      "Convert note title TITLE to a file name slug.
-  TITLE is a string, a note title."
-      (let ((parts (split-string
-                    (replace-regexp-in-string (rx (not (any alnum))) " " title))))
-        (downcase (string-join parts "-"))))
-    :config
-    (setq org-roam-title-to-slug-function #'koek-org/title-to-slug)
-    :delight)
+  ;; Prevent org-roam from nagging about org-roam 2
+  (setq org-roam-v2-ack t)
 
-  (use-package org-roam-db
-    :defer t
-    :config
-    (setq org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")))
+  (straight-use-package 'org-roam)
+
+  (use-package org-roam-node
+    :bind
+    ("C-c f n" . org-roam-node-file))
 
   (use-package org-roam-protocol
     :after org-protocol)
@@ -8256,10 +8244,8 @@ Configure notes.
   (use-package org-roam
     :after org
     :config
-    (setq org-roam-directory koek/notes-dir)
-    (setq org-roam-index-file (expand-file-name "index.org" koek/notes-dir))
-    (find-file-noselect org-roam-index-file 'nowarn)
-    (org-roam-mode))
+    (setq org-roam-directory (file-truename koek/notes-dir))
+    (org-roam-db-autosync-mode))
 #+END_SRC
 
 ** Capture templates :setup:
@@ -8350,35 +8336,14 @@ Configure roam capture templates.
     :defer t
     :config
     (setq org-roam-capture-templates
-          `(("n" "Note" plain (function org-roam-capture--get-point)
-             "%?"
-             :file-name "%<%s>-${slug}"
-             :head
-             ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
-                             ""
-                             "#+TITLE: ${title}"
-                             ""
-                             "")
-                           "\n")
-             :unnarrowed t)))
-    (setq org-roam-capture-immediate-template
-          (append (seq-find (pcase-lambda (`(,key))
-                              (string-equal key "n"))
-                            org-roam-capture-templates)
-                  '(:immediate-finish t)))
-    (setq org-roam-capture-ref-templates
-          `(("w" "Webpage" plain (function org-roam-capture--get-point)
-             "%?"
-             :file-name "%(secure-hash 'md5 \"${ref}\")" ; One note per reference
-             :head
-             ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
-                             ""
-                             "#+TITLE: ${title}"
-                             "#+ROAM_KEY: ${ref}"
-                             ""
-                             "")
-                           "\n")
-             :unnarrowed t))))
+          `(("n" "Note" plain "%?"
+             :if-new
+             (file+head "%<%s>-${slug}.org"
+              ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
+                              "#+TITLE: ${title}"
+                              ""
+                              "")
+                            "\n"))))))
 #+END_SRC
 
 ** Downloads
