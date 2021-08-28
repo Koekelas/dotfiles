@@ -3983,10 +3983,9 @@ age of the person.  _AGE-SUFFIX is ignored."
           (with-temp-buffer
             (insert-file-contents (find-library-name "sql"))
             (search-forward "ANSI Reserved keywords")
-            (buffer-substring (re-search-forward
-                               (rx (one-or-more (not (any "\"")))))
-                              (re-search-forward
-                               (rx (one-or-more (not (any ")")))))))
+            (buffer-substring
+             (re-search-forward (rx (one-or-more (not "\""))))
+             (re-search-forward (rx (one-or-more (not  ")"))))))
           (rx (any " \n")) 'omit-nulls "\"")))
     (dolist (keyword keywords)
       (define-abbrev
@@ -4420,7 +4419,7 @@ checkers)."
           ;; For format, see `vc-default-mode-line-string'
           (string-match
            (rx (group-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
-               (zero-or-one (not (any ":")) ":")
+               (zero-or-one (not ":") ":")
                (group-n 2 (one-or-more not-newline)))
            state)
           `("" koek-ml/separator

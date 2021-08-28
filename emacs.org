@@ -3195,7 +3195,7 @@ Inherit Clojure snippets.
 
   $0
 
-  (provide '${1:$(replace-regexp-in-string (rx "." (zero-or-more (not (any "."))) line-end) "" yas-text)})
+  (provide '${1:$(replace-regexp-in-string (rx "." (zero-or-more (not ".")) line-end) "" yas-text)})
 
   ;;; $1 ends here
 #+END_SRC
@@ -7475,10 +7475,9 @@ It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
             (with-temp-buffer
               (insert-file-contents (find-library-name "sql"))
               (search-forward "ANSI Reserved keywords")
-              (buffer-substring (re-search-forward
-                                 (rx (one-or-more (not (any "\"")))))
-                                (re-search-forward
-                                 (rx (one-or-more (not (any ")")))))))
+              (buffer-substring
+               (re-search-forward (rx (one-or-more (not "\""))))
+               (re-search-forward (rx (one-or-more (not  ")"))))))
             (rx (any " \n")) 'omit-nulls "\"")))
       (dolist (keyword keywords)
         (define-abbrev
@@ -8025,7 +8024,7 @@ windows and continues in the mode line.
             ;; For format, see `vc-default-mode-line-string'
             (string-match
              (rx (group-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
-                 (zero-or-one (not (any ":")) ":")
+                 (zero-or-one (not ":") ":")
                  (group-n 2 (one-or-more not-newline)))
              state)
             `("" koek-ml/separator
