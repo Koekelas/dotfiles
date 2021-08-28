@@ -595,13 +595,16 @@ earlier directories shadow entries in later ones.")
 
 (setq window-resize-pixelwise t)
 
+(setq window-sides-vertical t)
+
 (bind-keys
  ("C-c w h" . split-window-below)
  ("C-c w v" . split-window-right)
  ("C-c w b" . balance-windows)
  ("C-c w d" . delete-window)
  ("C-c w C-d" . delete-other-windows)
- ("C-c w M-d" . kill-buffer-and-window))
+ ("C-c w M-d" . kill-buffer-and-window)
+ ("C-c w m" . window-toggle-side-windows))
 
 (bind-key "C-c w C-b" #'balance-windows-area)
 
@@ -639,7 +642,7 @@ vertically, else, shrink horizontally."
 (use-package ace-window
   :straight t
   :bind
-  ([remap other-window] . ace-window)
+  ("C-c j w" . ace-window)
   :preface
   (define-advice ace-window-display-mode
       (:around (f &rest args) koek-ace/disable-setup-mode-line)
@@ -651,7 +654,7 @@ vertically, else, shrink horizontally."
   (setq aw-scope 'frame)
   (setq aw-swap-invert t)
   (setq aw-keys '(?q ?s ?d ?f ?j ?k ?l ?m))
-  (setq aw-dispatch-alist '((?o aw-flip-window)))
+  (setq aw-dispatch-alist nil)
   (setq aw-leading-char-style 'path)
   (ace-window-display-mode)
   ;; Ace isn't a minor mode but it can be delighted [sic]
@@ -859,6 +862,64 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
     (bury-buffer)))
 
 (bind-key [remap kill-buffer] #'koek-buff/bury)
+
+(defun koek-buff/display-project-shell-p (name _action)
+  ;; Shell then project, project is expensive
+  (and (koek-buff/shellp name) (koek-proj/locate-root name)))
+
+(defun koek-buff/display-doc-p (name _action)
+  (koek-buff/docp name))
+
+(let ((default-hor-actions
+        '((window-parameters . ((no-other-window . t) (no-delete-other-windows . t)))
+          (preserve-size     . (nil . t))
+          (window-height     . 0.15)))
+      (default-vert-actions
+        '((window-parameters . ((no-other-window . t) (no-delete-other-windows . t)))
+          (preserve-size     . (t . nil))
+          (window-width      . 80))))
+  (setq display-buffer-alist
+        `((,(rx line-start
+                (or "*magit"
+                    "*vterm*"
+                    "*eshell*"
+                    "*Proced*"
+                    "*org-src"))
+           . ((display-buffer-reuse-window display-buffer-same-window)))
+          ;; Below selected
+          (,(rx line-start (or " *transient*" "*Calendar*"))
+           . (display-buffer-below-selected))
+          ;; Top
+          (,(rx line-start
+                (or "*Occur*"
+                    "*grep*"
+                    "*Flymake"
+                    "*PDF-Occur*"))
+           . (display-buffer-in-side-window . ((side . top) ,@default-hor-actions)))
+          ;; Left
+          (,(rx line-start
+                (or "*Customize"
+                    "*Network Security Manager*"
+                    "*BBDB*"
+                    "*Dictionary*"
+                    "*Holidays*"
+                    "*Pp"
+                    "*org-roam*"))
+           . (display-buffer-in-side-window . ((side . left) ,@default-vert-actions)))
+          (,(rx line-start "*Messages*")
+           . (display-buffer-in-side-window . ((side . left) (slot . 1) ,@default-vert-actions)))
+          (koek-buff/display-doc-p
+           . (display-buffer-in-side-window . ((side . left) (slot . 1) ,@default-vert-actions)))
+          ;; Bottom
+          (,(rx line-start
+                (or "*Backtrace*"
+                    "*Warnings*"
+                    "*trace-output*"
+                    "*compilation"
+                    "*Compile-Log*"))
+           . (display-buffer-in-side-window . ,default-hor-actions))
+          (koek-buff/display-project-shell-p
+           . (display-buffer-in-side-window . ((slot . 1) ,@default-hor-actions))))))
 
 (use-package ibuffer
   :bind
@@ -1526,7 +1587,9 @@ for one."
   :straight magit
   :defer t
   :config
-  (setq magit-bury-buffer-function #'magit-mode-quit-window))
+  (setq magit-uniquify-buffer-names nil)
+  (setq magit-display-buffer-function #'display-buffer)
+  (setq magit-bury-buffer-function #'quit-window))
 
 (use-package magit-status
   :bind
@@ -2692,6 +2755,11 @@ none return a URL, nil.  For rewrite functions, see
         bbdb-address-format-list)
   (setq bbdb-default-country nil)
   (setq bbdb-phone-style nil)
+
+  ;; Delegate to `display-buffer', respect `display-buffer-alist'
+  (setq bbdb-pop-up-window-size t)
+  (setq bbdb-mua-pop-up-window-size t)
+
   (bbdb-initialize 'mu4e 'message))
 
 (use-package bbdb-com
