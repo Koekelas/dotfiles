@@ -1393,6 +1393,10 @@ the builtin annotator except it aligns the annotation."
   :config
   (save-place-mode))
 
+(use-package so-long
+  :init
+  (global-so-long-mode))
+
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 

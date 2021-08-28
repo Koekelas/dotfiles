@@ -2009,6 +2009,13 @@ minibuffer.
     (save-place-mode))
 #+END_SRC
 
+** so-long - Problematic files
+#+BEGIN_SRC emacs-lisp
+  (use-package so-long
+    :init
+    (global-so-long-mode))
+#+END_SRC
+
 ** Auto save files
 Save auto-save files in =~/.emacs.d/var/auto-save/=.
 
