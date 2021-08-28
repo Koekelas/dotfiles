@@ -520,7 +520,7 @@ For a guide on encrypted e-mail, see [[https://emailselfdefense.fsf.org/][Email 
 * Syncthing :setup:
 Stores:
 - archive: Archief
-- documents: Bureaublad, Documenten, Inbox and Projecten
+- documents: .Bureaublad, Documenten, Inbox and Projecten
 - documents-extra: Boeken, Sjablonen and Varia
 - music: Muziek and Podcasts
 - pictures: Afbeeldingen
