@@ -161,8 +161,6 @@ dark, else, set it to light."
         (make-symbolic-link preset-file config-file 'overwrite)
         (signal-process id 'SIGHUP))))
 
-  ;; For systemctl power management commands, see
-  ;; https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings#shutting-down-suspending-hibernating-system_managing-services-with-systemd
   (defun koek-wm/power-off ()
     "Power off system."
     (call-process "systemctl" nil 0 nil "poweroff"))
