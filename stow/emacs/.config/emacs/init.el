@@ -311,8 +311,13 @@ Keybinding is a string, see `edmacro-mode'.")
 
   (defun koek-wm/update-current ()
     (cond
+     ;; Creative
      ((koek-wm/classp "gimp")
       (exwm-workspace-rename-buffer "*GIMP*"))
+     ;; Internet
+     ((koek-wm/classp "epiphany")
+      (exwm-workspace-rename-buffer
+       (concat "*Web: " exwm-title "*")))
      ((koek-wm/classp "firefox")
       (let* ((page (koek-wm/get-firefox-page))
              (title (plist-get page :title))
@@ -331,8 +336,34 @@ Keybinding is a string, see `edmacro-mode'.")
         (setq list-buffers-directory url)))
      ((koek-wm/classp "microsoft teams")
       (exwm-workspace-rename-buffer "*Teams*"))
+     ;; Leisure
      ((koek-wm/classp "vlc")
       (exwm-workspace-rename-buffer "*VLC*"))
+     ;; System
+     ((koek-wm/classp "blueman")
+      (exwm-workspace-rename-buffer "*Bluetooth Manager*"))
+     ((koek-wm/classp "nm-connection")
+      (exwm-workspace-rename-buffer "*Network Configuration*"))
+     ((koek-wm/classp "seahorse")
+      (exwm-workspace-rename-buffer "*Passwords*"))
+     ((koek-wm/classp "pavucontrol")
+      (exwm-workspace-rename-buffer "*PulseAudio Volume Control*"))
+     ;; Utilities
+     ((koek-wm/classp "evince")
+      (let ((title (replace-regexp-in-string
+                    (rx " \N{EM DASH} " (one-or-more not-newline) line-end) ""
+                    exwm-title)))
+        (exwm-workspace-rename-buffer
+         (concat "*Doc View: " title "*"))))
+     ((koek-wm/classp "nautilus")
+      (exwm-workspace-rename-buffer
+       (concat "*Files: " exwm-title "/*")))
+     ((koek-wm/classp "gnome-screenshot")
+      (exwm-workspace-rename-buffer "*Screenshot*"))
+     ;; Work
+     ((koek-wm/classp "gnome-connections")
+      (exwm-workspace-rename-buffer "*Connections*"))
+     ;; Default
      (t
       (exwm-workspace-rename-buffer (format "*%s*" exwm-class-name)))))
 
@@ -401,10 +432,21 @@ N is an integer, a workspace number."
   :config
   (let ((defaults '(floating-mode-line nil)))
     (setq exwm-manage-configurations
-          `(((koek-wm/classp "gimp")
+          `(;; Creative
+            ((koek-wm/classp "gimp")
              char-mode t ,@defaults)
             ((koek-wm/classp "inkscape")
              char-mode t ,@defaults)
+            ;; Internet
+            ((koek-wm/classp "epiphany")
+             simulation-keys
+             ,(mapcar (pcase-lambda (`(,from . ,to))
+                        (cons (kbd from) (kbd to)))
+                      (append '(("M-o" . "C-n")
+                                ("M-p" . "S-C-p")
+                                ("M-k" . "C-w"))
+                              koek-wm/base-simulation-keys))
+             ,@defaults)
             ((koek-wm/classp "firefox")
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
@@ -413,7 +455,17 @@ N is an integer, a workspace number."
                                 ("M-p" . "S-C-p")
                                 ("M-k" . "C-w"))
                               koek-wm/base-simulation-keys))
-             ,@defautls)))))
+             ,@defaults)
+            ;; Utilities
+            ((koek-wm/classp "nautilus")
+             simulation-keys
+             ,(mapcar (pcase-lambda (`(,from . ,to))
+                        (cons (kbd from) (kbd to)))
+                      (cons '("M-k" . "C-w") koek-wm/base-simulation-keys))
+             ,@defaults)
+            ;; Default
+            (t
+             ,@defaults)))))
 
 (use-package server
   :config
@@ -756,6 +808,10 @@ buffer."
 
 ;; Directory buffers
 (setq koek-buff/dir-modes '(dired-mode))
+(setq koek-buff/dir-fs
+      `(koek-buff/dir-mode-p
+        koek-buff/dir-name-p
+        ,(apply-partially #'koek-wm/classp "nautilus")))
 
 ;; Help and documentation buffers
 (setq koek-buff/doc-modes
@@ -791,6 +847,7 @@ buffer."
 (setq koek-buff/web-fs
       `(koek-buff/web-mode-p
         koek-buff/web-name-p
+        ,(apply-partially #'koek-wm/classp "epiphany")
         ,(apply-partially #'koek-wm/classp "firefox")))
 
 (defun koek-buff/bury (&optional arg)
