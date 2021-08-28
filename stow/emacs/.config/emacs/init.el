@@ -3422,6 +3422,15 @@ Modes are confident about being derived from text-mode.")
 
 (use-package elisp-mode
   :mode ((rx ".el" string-end) . emacs-lisp-mode)
+  :preface
+  ;; koek/default+load-path
+  (define-advice elisp-flymake-byte-compile
+      (:around (f &rest args) koek-el/normalize-flymake-load-path)
+    (let ((elisp-flymake-byte-compile-load-path ; Dynamic variable
+           (if (eq elisp-flymake-byte-compile-load-path 'koek/default+load-path)
+               (cons "." load-path)
+             elisp-flymake-byte-compile-load-path)))
+      (apply f args)))
   :config
   (use-package pp
     :bind
@@ -3444,6 +3453,8 @@ Modes are confident about being derived from text-mode.")
    ("C-c C-c" . eval-buffer)
    :map lisp-interaction-mode-map
    ("C-c C-c" . eval-buffer))
+
+  (setq elisp-flymake-byte-compile-load-path 'koek/default+load-path)
   :delight (emacs-lisp-mode "El" :major))
 
 (use-package checkdoc
