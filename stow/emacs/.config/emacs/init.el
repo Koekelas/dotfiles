@@ -818,7 +818,7 @@ buffer."
 
 ;; Help and documentation buffers
 (setq koek-buff/doc-modes
-      '(help-mode helpful-mode Info-mode Man-mode apropos-mode
+      '(help-mode helpful-mode Info-mode Man-mode apropos-mode devdocs-mode
         cider-docview-mode sly-apropos-mode geiser-doc-mode))
 (setq koek-buff/doc-names
       (rx line-start
@@ -2374,50 +2374,99 @@ see `company-backends'."
     (:map apropos-mode-map
      ("j" . link-hint-open-link))))
 
-(use-package devdocs-lookup
-  :straight (:host github :repo "skeeto/devdocs-lookup")
+(use-package devdocs
+  :straight t
   :bind
   ("C-c d d" . devdocs-lookup)
+  :autoload (devdocs--available-docs devdocs--installed-docs)
   :preface
-  (let ((specs '(("C"            . "c")
-                 ("C++"          . "cpp")
-                 ("OpenJDK"      . "openjdk~15")
-                 ("Clojure"      . "clojure~1.10")
-                 ("Erlang"       . "erlang~24")
-                 ("HTML"         . "html")
-                 ("CSS"          . "css")
-                 ("JavaScript"   . "javascript")
-                 ("DOM"          . "dom")
-                 ("jQuery"       . "jquery")
-                 ("lodash"       . "lodash~4")
-                 ("Node.js"      . "node")
-                 ("npm"          . "npm")
-                 ("Express"      . "express")
-                 ("Octave"       . "octave")
-                 ("Python"       . "python~3.9")
-                 ("NumPy"        . "numpy~1.20")
-                 ("pandas"       . "pandas~1")
-                 ("StatsModels"  . "statsmodels")
-                 ("scikit-learn" . "scikit_learn")
-                 ("scikit-image" . "scikit_image")
-                 ("TensorFlow"   . "tensorflow~2.4")
-                 ("Matplotlib"   . "matplotlib~3.4")
-                 ("PostgreSQL"   . "postgresql~13"))))
-    (dolist (spec specs)
-      (pcase-let* ((`(,name . ,id) spec)
-                   (symbol
-                    (thread-last id
-                      (replace-regexp-in-string
-                       (rx "~" (one-or-more (any digit ".")) line-end) "")
-                      (replace-regexp-in-string "_" "-")
-                      (concat "koek-dl/lookup-")
-                      intern)))
-        (defalias symbol
-          (lambda ()
-            (interactive)
-            (require 'devdocs-lookup)
-            (devdocs-lookup id (devdocs-read-entry id)))
-          (format "Lookup documentation for %s on DevDocs." name))))))
+  (defvar koek-devd/docs nil)
+
+  (defun koek-devd/register (docs)
+    (setq koek-devd/docs (seq-uniq (append docs koek-devd/docs))))
+
+  (defun koek-devd/install (&optional interactive)
+    (interactive (list 'interactive))
+    (let* ((installed (mapcar (apply-partially #'alist-get 'slug)
+                              (devdocs--installed-docs)))
+           (missing (seq-difference (mapcar #'symbol-name koek-devd/docs)
+                                    installed))
+           (docs (seq-filter (lambda (doc)
+                               (member (alist-get 'slug doc) missing))
+                             (devdocs--available-docs)))
+           (doc-n 1)
+           (n-docs (length docs)))
+      (dolist (doc docs)
+        (when interactive
+          (message "Installing `%s' (%d/%d)..."
+                   (alist-get 'name doc) doc-n n-docs))
+        (let ((inhibit-message t))      ; Dynamic variable
+          (devdocs-install doc))
+        (setq doc-n (1+ doc-n))))
+    (when interactive
+      (message "Installing documentation...done")))
+
+  (defmacro koek-devd/set-docs (modes docs)
+    (declare (indent 1))
+    (let ((value-sym (gensym)))
+      `(let ((,value-sym ,docs))
+         (koek-devd/register ,value-sym)
+         ,@(seq-mapcat
+            (lambda (mode)
+              (let* ((prefix "koek-devd/")
+                     (mode-name (symbol-name mode))
+                     (docs-sym (intern (concat prefix mode-name "-docs")))
+                     (f-sym (intern (concat prefix "setup-" mode-name "-docs")))
+                     (hook-sym (intern (concat mode-name "-hook"))))
+                `((defvar ,docs-sym (copy-sequence ,value-sym)
+                    ,(format "List of docs in `%s'." mode))
+
+                  (defun ,f-sym ()
+                    ,(format "Setup docs in `%s'." mode)
+                    ;; local
+                    (setq-local devdocs-current-docs
+                                (mapcar #'symbol-name ,docs-sym)))
+
+                  (add-hook ',hook-sym #',f-sym))))
+            modes))))
+
+  (koek-devd/set-docs (c-mode)
+    '(c))
+  (koek-devd/set-docs (c++-mode)
+    '(cpp))
+  (koek-devd/set-docs (java-mode)
+    '(openjdk~19))
+  (koek-devd/set-docs (clojure-mode)
+    '(clojure~1.11 openjdk~19))
+  (koek-devd/set-docs (clojurescript-mode)
+    '(clojure~1.11 javascript dom node))
+  (koek-devd/set-docs (cider-repl-mode)
+    '(clojure~1.11))
+  (koek-devd/set-docs (erlang-mode erlang-shell-mode)
+    '(erlang~26))
+  (koek-devd/set-docs (mhtml-mode)
+    '(html))
+  (koek-devd/set-docs (css-mode)
+    '(css))
+  (koek-devd/set-docs (js-mode indium-repl-mode)
+    '(javascript dom jquery lodash~4 node express))
+  (koek-devd/set-docs (json-mode)
+    '(npm))
+  (koek-devd/set-docs (octave-mode inferior-octave-mode)
+    '(octave))
+  (koek-devd/set-docs (python-mode inferior-python-mode)
+    '(python~3.12 numpy~1.23 pandas~1 statsmodels scikit_learn scikit_image
+      tensorflow~2.9 matplotlib~3.7))
+  (koek-devd/set-docs (sql-mode sql-interactive-mode)
+    '(postgresql~16))
+  :config
+  (use-package link-hint
+    :bind
+    (:map devdocs-mode-map
+     ("j" . link-hint-open-link)))
+
+  (setq devdocs-window-select t)
+  (setq devdocs-separator " > "))       ; Mirror info
 
 (use-package eldoc
   :straight t
@@ -3220,14 +3269,10 @@ Modes are confident about being derived from text-mode.")
    ("C-x p i l" . koek-eglt/init-clangd)
    ("C-x p i c" . koek-cmke/init)
    ("C-x p i m" . koek-mson/init)
-   ("C-c d d" . koek-dl/lookup-c)
    :map c++-mode-map
    ("C-x p i l" . koek-eglt/init-clangd)
    ("C-x p i c" . koek-cmke/init)
-   ("C-x p i m" . koek-mson/init)
-   ("C-c d d" . koek-dl/lookup-cpp)
-   :map java-mode-map
-   ("C-c d d" . koek-dl/lookup-openjdk))
+   ("C-x p i m" . koek-mson/init))
 
   ;; Resolve keybinding conflict with company
   (unbind-key "TAB" c-mode-base-map))
@@ -3262,15 +3307,7 @@ Modes are confident about being derived from text-mode.")
    ((rx ".cljc" string-end) . clojurec-mode)
    ((rx ".edn" string-end) . clojure-mode))
   :config
-  (bind-keys
-   :map clojure-mode-map
-   ("C-x p i k" . koek-kndr/init)
-   ("C-c d d" . koek-dl/lookup-clojure)
-   ("C-c d C-j" . koek-dl/lookup-openjdk)
-   :map clojurescript-mode-map
-   ("C-c d C-j" . koek-dl/lookup-javascript)
-   ("C-c d C-d" . koek-dl/lookup-dom)
-   ("C-c d C-n" . koek-dl/lookup-node))
+  (bind-key "C-x p i k" #'koek-kndr/init clojure-mode-map)
   :delight
   (clojure-mode "Clj" :major)
   (clojurescript-mode "Cljs" :major)
@@ -3300,8 +3337,6 @@ Modes are confident about being derived from text-mode.")
 (use-package cider-repl
   :defer t
   :config
-  (bind-key "C-c d d" #'koek-dl/lookup-clojure 'cider-repl-mode-map)
-
   ;; Resolve keybinding conflict with company
   (unbind-key "TAB" cider-repl-mode-map)
 
@@ -3416,8 +3451,6 @@ Modes are confident about being derived from text-mode.")
   :straight t
   :mode ((rx ".erl" string-end) . erlang-mode)
   :config
-  (bind-key "C-c d d" #'koek-dl/lookup-erlang 'erlang-mode-map)
-
   ;; Set Erlang home
   (let* ((file-names
           (mapcar #'file-name-directory
@@ -3433,14 +3466,10 @@ Modes are confident about being derived from text-mode.")
 
 (use-package mhtml-mode
   :mode (rx (or ".htm" ".html") string-end)
-  :config
-  (bind-key "C-c d d" #'koek-dl/lookup-html 'mhtml-mode-map)
   :delight (mhtml-mode "HTML" :major))
 
 (use-package css-mode
-  :mode (rx ".css" string-end)
-  :config
-  (bind-key "C-c d d" #'koek-dl/lookup-css 'css-mode-map))
+  :mode (rx ".css" string-end))
 
 (use-package emmet-mode
   :straight t
@@ -3455,15 +3484,6 @@ Modes are confident about being derived from text-mode.")
 (use-package js
   :mode ((rx ".js" string-end) . js-mode)
   :config
-  (bind-keys
-   :map js-mode-map
-   ("C-c d d" . koek-dl/lookup-javascript)
-   ("C-c d C-d" . koek-dl/lookup-dom)
-   ("C-c d C-j" . koek-dl/lookup-jquery)
-   ("C-c d C-l" . koek-dl/lookup-lodash)
-   ("C-c d C-n" . koek-dl/lookup-node)
-   ("C-c d C-x" . koek-dl/lookup-express))
-
   ;; Resolve keybinding conflict with eglot
   (unbind-key "M-." js-mode-map)
 
@@ -3497,9 +3517,7 @@ Modes are confident about being derived from text-mode.")
 
 (use-package json-mode
   :straight t
-  :mode (rx ".json" string-end)
-  :config
-  (bind-key "C-c d C-n" #'koek-dl/lookup-npm 'json-mode-map))
+  :mode (rx ".json" string-end))
 
 (use-package make-mode
   :mode ((rx "/Makefile" string-end) . makefile-gmake-mode)
@@ -3548,8 +3566,6 @@ Modes are confident about being derived from text-mode.")
 (use-package octave
   :mode ((rx ".m" string-end) . octave-mode)
   :config
-  (bind-key "C-c d d" #'koek-dl/lookup-octave 'octave-mode-map)
-
   ;; Insert MATLAB compatible comments
   (setq octave-comment-char ?%)
   (setq octave-comment-start (char-to-string octave-comment-char))
@@ -3882,17 +3898,6 @@ age of the person.  _AGE-SUFFIX is ignored."
     "Disable Python checker for current."
     (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
   :config
-  (bind-keys
-   :map python-mode-map
-   ("C-c d d" . koek-dl/lookup-python)
-   ("C-c d C-n" . koek-dl/lookup-numpy)
-   ("C-c d C-p" . koek-dl/lookup-pandas)
-   ("C-c d C-s" . koek-dl/lookup-statsmodels)
-   ("C-c d C-l" . koek-dl/lookup-scikit-learn)
-   ("C-c d C-i" . koek-dl/lookup-scikit-image)
-   ("C-c d C-t" . koek-dl/lookup-tensorflow)
-   ("C-c d C-m" . koek-dl/lookup-matplotlib))
-
   (add-hook 'python-mode-hook #'koek-py/disable-checker)
   :delight (python-mode "Py" :major))
 
@@ -3965,8 +3970,6 @@ age of the person.  _AGE-SUFFIX is ignored."
                 "SQL"
               (sql-get-product-feature sql-product :name)))))
   :config
-  (bind-key "C-c d d" #'koek-dl/lookup-postgresql 'sql-mode-map)
-
   ;; Upcase keywords after insertion
   (require 'find-func)
   (require 'abbrev)
