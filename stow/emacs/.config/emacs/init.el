@@ -3907,6 +3907,9 @@ age of the person.  _AGE-SUFFIX is ignored."
 
 (use-package python
   :mode ((rx ".py" string-end) . python-mode)
+  :bind
+  (:map python-mode-map
+   ("C-x C-e" . python-shell-send-statement))
   :preface
   (defun koek-py/disable-checker ()
     "Disable Python checker for current."
