@@ -57,7 +57,7 @@
 
 (defmacro koek-pkg/register (package)
   "Register embedded package.
-PACKAGE is a symbol, the package name."
+PACKAGE is a symbol, the name of the package."
   (declare (indent 1))
   (let ((package-name (symbol-name package)))
     `(progn
@@ -80,10 +80,11 @@ PACKAGE is a symbol, the package name."
 
 (defun koek-up/process-koek (package _keyword arg rem state)
   "Process :koek keyword.
-PACKAGE is a symbol, the package name.  ARG is a symbol, the
-keyword argument, either t or nil.  REM is a plist, the remaining
-keywords.  STATE is a plist, the state of the keywords.  For more
-information, see `use-package-process-keywords'."
+PACKAGE is a symbol, the name of the package.  ARG is a symbol,
+the argument of the keyword, either t or nil.  REM is a plist,
+the remaining keywords.  STATE is a plist, the state of the
+keywords.  For more information, see
+`use-package-process-keywords'."
   (use-package-concat (when arg
                         `((koek-pkg/register ,package)))
                       (use-package-process-keywords package rem state)))
@@ -2234,8 +2235,8 @@ TO is a symbol, the language scheme to, see
 
   (defun koek-ys/make-ensure-result-dir (name)
     "Return function to ensure result directory of current code block exists.
-NAME is a string, the variable name storing the result file
-name."
+NAME is a string, the name of the variable storing the result
+file name."
     (lambda ()
       (when-let ((file-name
                   (file-name-directory
@@ -3744,7 +3745,7 @@ Candidates are collected from agenda files."
   :preface
   (defun koek-org/get-code-block-var-value (name)
     "Return value of variable NAME for current code block.
-NAME is a string, the variable's name."
+NAME is a string, the name of the variable."
     (thread-last (org-babel-get-src-block-info 'light)
       (nth 2)                           ; Header arguments
       (seq-filter (pcase-lambda (`(,type))
@@ -4089,8 +4090,8 @@ Mustn't be called directly, see
   :preface
   (defun koek-mt/load (variant)
     "Load and enable Modus theme variant VARIANT.
-VARIANT is a symbol, the Modus theme variant, either operandi or
-vivendi."
+VARIANT is a symbol, the variant of the Modus theme, either
+operandi or vivendi."
     (pcase-let* ((koek-thm/enable-hook nil) ; Dynamic variable
                  (themes '(modus-operandi modus-vivendi))
                  (`(,new ,old)
@@ -4471,7 +4472,8 @@ checkers)."
 
   (defun koek-ml/get-variant-state (type)
     "Return state of variant type TYPE for current diff.
-TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
+TYPE is a symbol, the type of the variant, see
+`koek-ml/variant-types'."
     (when (ediff-valid-difference-p)
       (let* ((diff
               (let ((diff
