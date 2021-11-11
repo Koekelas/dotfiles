@@ -118,11 +118,12 @@
        :edid     ; Section 3.5, EDID structure version/revision
        (list :version  (car edid-block) :revision (cadr edid-block))
        :basic    ; Section 3.6, Basic display parameters/features
-       (let ((horizontal (car (seq-subseq basic-block 1 2)))
-             (vertical   (car (seq-subseq basic-block 2 3))))
+       (let* ((horizontal (car (seq-subseq basic-block 1 2)))
+              (vertical   (car (seq-subseq basic-block 2 3)))
+              (valid (not (or (= horizontal 0) (= vertical 0)))))
          (list
-          :horizontal (and (not (or (= horizontal 0) (= vertical 0))) horizontal)
-          :vertical   (and (not (or (= horizontal 0) (= vertical 0))) vertical)
+          :horizontal (and valid horizontal)
+          :vertical   (and valid vertical)
           :gamma      (/ (+ (car (seq-subseq basic-block 3 4)) 100) 100.0)))
        :detailed ; Section 3.10, Detailed timing descriptions
        (mapcar
