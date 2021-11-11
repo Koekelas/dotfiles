@@ -1,0 +1,1 @@
+../../../../../secrets/emacs/.config/emacs/etc/bookmark-default.el

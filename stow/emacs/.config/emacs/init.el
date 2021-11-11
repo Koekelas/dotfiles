@@ -311,6 +311,18 @@ Keybinding is a string, see `edmacro-mode'.")
      exwm-title)
     (list :url (match-string 1 exwm-title) :title (match-string 2 exwm-title)))
 
+  (defun koek-wm/make-firefox-record ()
+    (let* ((page (koek-wm/get-firefox-page))
+           (url (or (plist-get page :url) (user-error "Not visiting a URL")))
+           (title (plist-get page :title)))
+      (koek-bmrk/generic-url-record url title)))
+
+  (defun koek-wm/setup-current ()
+    (cond
+     ((koek-wm/classp "firefox")
+      (setq-local bookmark-make-record-function
+                  #'koek-wm/make-firefox-record))))
+
   (defun koek-wm/update-current ()
     (cond
      ;; Creative
@@ -422,6 +434,7 @@ N is an integer, a workspace number."
   (setq exwm-workspace-number 2)
   (setq exwm-workspace-show-all-buffers t)
   (setq exwm-workspace-index-map #'koek-wm/n-to-label)
+  (add-hook 'exwm-update-class-hook #'koek-wm/setup-current)
   (add-hook 'exwm-update-title-hook #'koek-wm/update-current))
 
 (use-package exwm-layout
@@ -1133,7 +1146,8 @@ are recognized:
   (defvar koek-cslt/inhibited-file-names
     (rx (or ".pdf" ".png" ".jpg") line-end))
 
-  (defvar koek-cslt/inhibited-bookmark-handlers nil)
+  (defvar koek-cslt/inhibited-bookmark-handlers
+    '(koek-bmrk/handle-generic-url elfeed-show-bookmark-handler))
 
   (defun koek-cslt/inhibit-preview-p (candidate)
     (let* ((buffer (get-buffer candidate))
@@ -1262,7 +1276,10 @@ are recognized:
           koek-cslt/web-buffer-source
           consult--source-project-buffer
           consult--source-project-recent-file))
-  (setq consult-bookmark-narrow '((?f "File" bookmark-default-handler))))
+  (setq consult-bookmark-narrow
+        '((?f "File" bookmark-default-handler)
+          (?w "Web" koek-bmrk/handle-generic-url)
+          (?n "News" elfeed-show-bookmark-handler))))
 
 (use-package embark
   :straight t
@@ -1285,6 +1302,10 @@ are recognized:
    ("t" . koek-mu4e/display-messages-to)
    ("f" . koek-mu4e/display-messages-from)
    ("a" . koek-bbdb/display-email))
+
+  (bind-keys
+   :map embark-bookmark-map
+   ("e" . koek-eww/jump-bookmark))
 
   (setq embark-help-key (kbd "?")))
 
@@ -1372,6 +1393,50 @@ the builtin annotator except it aligns the annotation."
   :after dired
   :config
   (diredfl-global-mode))
+
+(use-package bookmark
+  :bind
+  (("C-x r m" . bookmark-set-no-overwrite)
+   ("C-x r C-m" . bookmark-set))
+  :preface
+  ;; Violates handler contract, a handler must set but not select
+  ;; current
+  (defun koek-bmrk/handle-browse-url (bookmark)
+    (browse-url (bookmark-get-filename bookmark)))
+
+  (defvar koek-bmrk/handle-generic-url-f #'koek-bmrk/handle-browse-url)
+
+  (defun koek-bmrk/handle-generic-url (bookmark)
+    (funcall koek-bmrk/handle-generic-url-f bookmark))
+  (put 'koek-bmrk/handle-generic-url 'bookmark-handler-type "Web")
+
+  (defun koek-bmrk/generic-url-record (url &optional name)
+    `(,name . ((handler . koek-bmrk/handle-generic-url)
+               (filename . ,url))))
+
+  (defvar koek-bmrk/generic-url-history nil
+    "History of generic URL titles read.")
+
+  (defun koek-bmrk/read-generic-url (prompt)
+    (require 'bookmark)
+    (bookmark-maybe-load-default-file)
+    (let ((candidates (seq-filter (lambda (bookmark)
+                                    (eq (bookmark-get-handler bookmark)
+                                        'koek-bmrk/handle-generic-url))
+                                  bookmark-alist)))
+      (completing-read
+       prompt
+       (lambda (input pred action)
+         (pcase action
+           ('metadata
+            '(metadata . ((category . bookmark))))
+           (_action
+            (complete-with-action action candidates input pred))))
+       nil t nil 'koek-bmrk/generic-url-history)))
+  :config
+  (setq bookmark-default-file
+        (no-littering-expand-etc-file-name "bookmark-default.el"))
+  (setq bookmark-bmenu-file-column 42)) ; padding
 
 (use-package recentf
   :config
@@ -1819,8 +1884,8 @@ dictionary links before LIMIT."
 (use-package hl-line
   :bind ("C-c a l" . hl-line-mode)      ; [L]ine
   :hook
-  ((ibuffer-mode embark-collect-mode dired-mode occur-mode grep-mode proced-mode
-    bongo-playlist-mode)
+  ((ibuffer-mode embark-collect-mode dired-mode bookmark-bmenu-mode occur-mode
+    grep-mode proced-mode bongo-playlist-mode)
    . hl-line-mode))
 
 (use-package expand-region
@@ -2530,10 +2595,32 @@ Output is between `compilation-filter-start' and point."
   :bind
   ("C-c x b" . eww)
   :preface
+  (defun koek-eww/handle-eww (bookmark)
+    (let ((name (bookmark-name-from-full-record bookmark)))
+      (set-buffer
+       (generate-new-buffer (koek-subr/construct-earmuffed-name "eww" name)))
+      (eww-mode)
+      (eww (bookmark-get-filename bookmark))))
+
+  (defun koek-eww/jump-bookmark (bookmark)
+    (interactive (list (koek-bmrk/read-generic-url "Bookmark: ")))
+    (let ((koek-bmrk/handle-generic-url-f ; Dynamic variable
+           #'koek-eww/handle-eww))
+      (bookmark-jump bookmark)))
+
   (defun koek-eww/get-page ()
     (let ((url (plist-get eww-data :url))
           (title (plist-get eww-data :title)))
       (list :url url :title (unless (string-empty-p title) title))))
+
+  (defun koek-eww/make-record ()
+    (let* ((page (koek-eww/get-page))
+           (url (or (plist-get page :url) (user-error "Not visiting a URL")))
+           (title (plist-get page :title)))
+      (koek-bmrk/generic-url-record url title)))
+
+  (defun koek-eww/setup-current ()
+    (setq-local bookmark-make-record-function #'koek-eww/make-record))
 
   (defun koek-eww/update-current ()
     (let* ((page (koek-eww/get-page))
@@ -2597,6 +2684,7 @@ none return a URL, nil.  For rewrite functions, see
   (bind-key "m" #'koek-eww/redirect eww-mode-map)
 
   (push #'koek-eww/redirect-reddit koek-eww/redirect-fs)
+  (add-hook 'eww-mode-hook #'koek-eww/setup-current)
   (add-hook 'eww-after-render-hook #'koek-eww/update-current))
 
 (use-package shr
@@ -3039,6 +3127,8 @@ playing track, else, enqueue after last track."
 
 (use-package elfeed-show
   :defer t
+  :init
+  (put 'elfeed-show-bookmark-handler 'bookmark-handler-type "News")
   :config
   (use-package link-hint
     :bind
@@ -4742,15 +4832,6 @@ TYPE is a symbol, the type of the variant, see
            ,(string-join '("* %^{Name}"
                            "%^T"
                            "%^{LOCATION}p" ; Inserted after heading
-                           "%?")
-                         "\n")
-           :empty-lines 1)
-          ("b" "Bookmark" entry (file+olp "Inbox.org" "Bladwijzers")
-           ,(string-join '("* %:description %^g"
-                           ":PROPERTIES:"
-                           ":URL: %L"
-                           ":END:"
-                           ""
                            "%?")
                          "\n")
            :empty-lines 1)
