@@ -616,6 +616,7 @@ earlier directories shadow entries in later ones.")
  ("C-c w h" . split-window-below)
  ("C-c w v" . split-window-right)
  ("C-c w b" . balance-windows)
+ ("C-c w a" . fit-window-to-buffer)     ; [A]dapt
  ("C-c w d" . delete-window)
  ("C-c w C-d" . delete-other-windows)
  ("C-c w M-d" . kill-buffer-and-window)
