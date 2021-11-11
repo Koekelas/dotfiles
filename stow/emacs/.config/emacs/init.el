@@ -53,7 +53,7 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+  (load bootstrap-file nil 'no-message))
 
 (defmacro koek-pkg/register (package)
   "Register embedded package.
@@ -69,7 +69,7 @@ PACKAGE is a symbol, the package name."
                          (expand-file-name "lisp/")
                          (expand-file-name package-name))))
        (load ,(concat package-name "-autoloads.el")
-             'noerror 'nomessage 'nosuffix))))
+             'no-error 'no-message 'no-suffix))))
 
 (straight-use-package 'no-littering)
 (require 'no-littering)
@@ -489,7 +489,7 @@ earlier directories shadow entries in later ones.")
            (seq-mapcat
             (lambda (file-name)
               (directory-files file-name
-                               'full (rx ".desktop" line-end) 'nosort))))))
+                               'full (rx ".desktop" line-end) 'no-sort))))))
     (seq-reduce (lambda (entries file-name)
                   (let ((id (file-name-base file-name)))
                     (unless (gethash id entries)
@@ -4555,7 +4555,7 @@ TYPE is a symbol, the variant type, see `koek-ml/variant-types'."
       (with-current-buffer buffer
         (calendar-set-mode-line
          (calendar-date-string (calendar-current-date)
-                               'abbreviate 'nodayname)))))
+                               'abbreviate 'no-dayname)))))
   :config
   (setq x-underline-at-descent-line t)
   (setq moody-mode-line-height 24)
