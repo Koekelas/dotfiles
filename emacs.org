@@ -155,7 +155,7 @@ Install use-package.
   (require 'use-package)
 #+END_SRC
 
-The keyword ~:koek~ registers [[*Embedded packages][embedded packages]]. It is a predicate
+The keyword ~:koek~ registers [[*Embedded packages][embedded packages]]. It's a predicate
 keyword, i.e., it accepts as argument =t=, =nil= or nothing.
 
 #+BEGIN_SRC emacs-lisp
@@ -2319,7 +2319,7 @@ VC is a placeholder.
   (use-package ediff-util
     :defer t
     :preface
-    ;; `ediff-before-setup-hook' is too early, the control buffer is not
+    ;; `ediff-before-setup-hook' is too early, the control buffer isn't
     ;; yet created. `ediff-startup-hook' is too late, the window
     ;; configuration was already modified.
     (define-advice ediff-setup
@@ -7190,11 +7190,11 @@ templates]].
 
 *** Babel
 Tangling is modified in two important ways. First, the function
-~koek-org/gen-autoloads~ generates autoloads for Emacs Lisp packages. It
-is part of tangling [[*Embedded packages][embedded packages]]. Second, the function
+~koek-org/gen-autoloads~ generates autoloads for Emacs Lisp packages.
+It's part of tangling [[*Embedded packages][embedded packages]]. Second, the function
 ~koek-org/process-file-end~ processes the file end according to the
 value of the variable ~require-final-newline~, see [[*Whitespace settings][Whitespace settings]].
-It is part of tangling [[*yasnippet - Snippets][embedded snippets]].
+It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package ob-core

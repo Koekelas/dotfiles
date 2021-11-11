@@ -1664,7 +1664,7 @@ When FORCE is truthy, continue commit unconditionally."
 (use-package ediff-util
   :defer t
   :preface
-  ;; `ediff-before-setup-hook' is too early, the control buffer is not
+  ;; `ediff-before-setup-hook' is too early, the control buffer isn't
   ;; yet created. `ediff-startup-hook' is too late, the window
   ;; configuration was already modified.
   (define-advice ediff-setup
