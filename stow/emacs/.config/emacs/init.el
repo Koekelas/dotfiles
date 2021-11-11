@@ -212,6 +212,7 @@ system."
       ("M->" . "C-<end>")
       ("M-<" . "C-<home>")
       ("C-s" . "C-f")
+      ("C-§" . "C-f")
       ("C-d" . "<delete>")
       ("M-d" . "C-<delete>")
       ("M-<backspace>" . "C-<backspace>")
