@@ -670,6 +670,10 @@ buffer."
 
 ;; Web buffers
 (setq koek-buff/web-modes '(eww-mode))
+(setq koek-buff/web-fs
+      `(koek-buff/web-mode-p
+        koek-buff/web-name-p
+        ,(apply-partially #'koek-wm/classp "firefox")))
 
 (use-package ibuffer
   :bind
