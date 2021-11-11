@@ -390,19 +390,20 @@ N is an integer, a workspace number."
 (use-package exwm-manage
   :defer t
   :config
-  (setq exwm-manage-configurations
-        `(((koek-wm/classp "gimp")
-           char-mode t floating-mode-line nil)
-          ((koek-wm/classp "inkscape")
-           char-mode t floating-mode-line nil)
-          ((koek-wm/classp "firefox")
-           simulation-keys
-           ,(mapcar (pcase-lambda (`(,from . ,to))
-                      (cons (kbd from) (kbd to)))
-                    (append '(("M-o" . "C-n")
-                              ("M-p" . "S-C-p")
-                              ("M-k" . "C-w"))
-                            koek-wm/base-simulation-keys))))))
+  (let ((defaults '(floating-mode-line nil)))
+    (setq exwm-manage-configurations
+          `(((koek-wm/classp "gimp")
+             char-mode t ,@defaults)
+            ((koek-wm/classp "inkscape")
+             char-mode t ,@defaults)
+            ((koek-wm/classp "firefox")
+             simulation-keys
+             ,(mapcar (pcase-lambda (`(,from . ,to))
+                        (cons (kbd from) (kbd to)))
+                      (append '(("M-o" . "C-n")
+                                ("M-p" . "S-C-p")
+                                ("M-k" . "C-w"))
+                              koek-wm/base-simulation-keys)))))))
 
 (use-package server
   :config
