@@ -122,8 +122,8 @@
               (vertical   (car (seq-subseq basic-block 2 3)))
               (valid (not (or (= horizontal 0) (= vertical 0)))))
          (list
-          :horizontal (and valid horizontal)
-          :vertical   (and valid vertical)
+          :horizontal (when valid horizontal)
+          :vertical   (when valid vertical)
           :gamma      (/ (+ (car (seq-subseq basic-block 3 4)) 100) 100.0)))
        :detailed ; Section 3.10, Detailed timing descriptions
        (mapcar
