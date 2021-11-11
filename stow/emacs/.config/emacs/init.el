@@ -113,7 +113,7 @@ keywords.  For more information, see
   (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
   :delight)
 
-;; Prevent exwm from asking to replace window manager after
+;; Prevent exwm from querying whether to replace window manager after
 ;; installation
 (setq exwm-replace nil)
 
