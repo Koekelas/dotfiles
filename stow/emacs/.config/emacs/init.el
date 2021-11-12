@@ -1989,8 +1989,8 @@ negative, move point to beginning of next word."
   :preface
   (defun koek-sp/separate-sexp (open-delimiter action _context)
     "Separate just inserted sexp from previous and/or next sexp.
-OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
-symbol, the action performed, see `sp-pair'.  _CONTEXT is
+OPEN-DELIMITER is a string, the inserted delimiter.  ACTION is a
+symbol, the performed action, see `sp-pair'.  _CONTEXT is
 ignored."
     (when (and (eq action 'insert)
                ;; Outer context, _context is inner context
@@ -2017,8 +2017,8 @@ more strings, the delimiters that call the handler."
 
   (defun koek-sp/format-c-block (open-delimiter action _context)
     "Format just inserted multiple line C block.
-OPEN-DELIMITER is a string, the delimiter inserted.  ACTION is a
-symbol, the action performed, see `sp-pair'.  _CONTEXT is
+OPEN-DELIMITER is a string, the inserted delimiter.  ACTION is a
+symbol, the performed action, see `sp-pair'.  _CONTEXT is
 ignored."
     (when (and (eq action 'insert)
                (save-excursion
