@@ -1700,7 +1700,7 @@ for one."
   :preface
   (defun koek-git/check-spelling (force)
     "Check spelling of commit message.
-When FORCE is truthy, continue commit unconditionally."
+When FORCE is truthy, unconditionally continue commit."
     (let ((tick (buffer-chars-modified-tick))
           (result
            (let ((ispell-skip-region-alist ; Dynamic variable
