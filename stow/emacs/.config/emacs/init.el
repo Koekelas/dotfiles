@@ -1378,7 +1378,7 @@ the builtin annotator except it aligns the annotation."
   (setq dired-dwim-target #'dired-dwim-target-next-visible)
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
-  (let* ((safe "-lah") ; For safe switches, see `ls-lisp--insert-directory'
+  (let* ((safe "-lAh") ; For safe switches, see `ls-lisp--insert-directory'
          (unsafe (concat safe " --group-directories-first")))
     (setq dired-listing-switches (if (executable-find "ls") unsafe safe))))
 
