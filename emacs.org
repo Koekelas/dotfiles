@@ -2777,10 +2777,11 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
           (unless (looking-at (rx (or (any ")]}" blank) line-end)))
             (insert " ")))))
 
-    (defun koek-sp/setup-separate-sexp-handler (mode &rest open-delimiters)
-      "Setup separate-sexp handler in MODE for OPEN-DELIMITERS.
-  MODE is a symbol, the mode to setup.  OPEN-DELIMITERS are one or
-  more strings, the delimiters that call the handler."
+    (defun koek-sp/install-separate-sexp-handler (mode &rest open-delimiters)
+      "Install separate-sexp handler in MODE for OPEN-DELIMITERS.
+  MODE is a symbol, the mode to install handler in.
+  OPEN-DELIMITERS are one or more strings, the delimiters to
+  install handler for."
       (dolist (delimiter open-delimiters)
         (sp-local-pair mode delimiter nil
                        :post-handlers '(:add koek-sp/separate-sexp))))
@@ -2798,11 +2799,12 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
           (indent-according-to-mode))
         (indent-according-to-mode)))
 
-    (defun koek-sp/setup-format-c-block-on-return-handler
+    (defun koek-sp/install-format-c-block-on-return-handler
         (mode &rest open-delimiters)
-      "Setup format-c-block handler in MODE for OPEN-DELIMITERS.
-  MODE is a symbol, the mode to setup.  OPEN-DELIMITERS are one or
-  more strings, the delimiters that call the handler."
+      "Install format-c-block handler in MODE for OPEN-DELIMITERS.
+  MODE is a symbol, the mode to install handler in.
+  OPEN-DELIMITERS are one or more strings, the delimiters to
+  install handler for."
       (dolist (delimiter open-delimiters)
         (sp-local-pair mode delimiter nil
                        ;; For event names, see `single-key-description'
@@ -2815,19 +2817,19 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
     (setq sp-navigate-interactive-always-progress-point t)
     (setq sp-navigate-reindent-after-up nil)
     (setq sp-highlight-pair-overlay nil)
-    (koek-sp/setup-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
-    (koek-sp/setup-separate-sexp-handler 'cider-repl-mode "(" "[" "{" "\"")
-    (koek-sp/setup-separate-sexp-handler 'lisp-mode "(" "\"")
-    (koek-sp/setup-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
-    (koek-sp/setup-separate-sexp-handler 'scheme-mode "(" "\"")
-    (koek-sp/setup-format-c-block-on-return-handler 'c-mode "{")
-    (koek-sp/setup-format-c-block-on-return-handler 'c++-mode "{")
-    (koek-sp/setup-format-c-block-on-return-handler 'css-mode "{")
-    (koek-sp/setup-format-c-block-on-return-handler 'java-mode "{")
-    (koek-sp/setup-format-c-block-on-return-handler 'js-mode "{" "[")
-    (koek-sp/setup-format-c-block-on-return-handler 'json-mode "{" "[")
-    (koek-sp/setup-format-c-block-on-return-handler 'scad-mode "{")
-    (koek-sp/setup-format-c-block-on-return-handler 'python-mode "{" "[" "(")
+    (koek-sp/install-separate-sexp-handler 'clojure-mode "(" "[" "{" "\"")
+    (koek-sp/install-separate-sexp-handler 'cider-repl-mode "(" "[" "{" "\"")
+    (koek-sp/install-separate-sexp-handler 'lisp-mode "(" "\"")
+    (koek-sp/install-separate-sexp-handler 'emacs-lisp-mode "(" "[" "\"")
+    (koek-sp/install-separate-sexp-handler 'scheme-mode "(" "\"")
+    (koek-sp/install-format-c-block-on-return-handler 'c-mode "{")
+    (koek-sp/install-format-c-block-on-return-handler 'c++-mode "{")
+    (koek-sp/install-format-c-block-on-return-handler 'css-mode "{")
+    (koek-sp/install-format-c-block-on-return-handler 'java-mode "{")
+    (koek-sp/install-format-c-block-on-return-handler 'js-mode "{" "[")
+    (koek-sp/install-format-c-block-on-return-handler 'json-mode "{" "[")
+    (koek-sp/install-format-c-block-on-return-handler 'scad-mode "{")
+    (koek-sp/install-format-c-block-on-return-handler 'python-mode "{" "[" "(")
     :delight)
 
   (use-package lisp
