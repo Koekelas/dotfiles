@@ -1990,8 +1990,7 @@ negative, move point to beginning of next word."
   (defun koek-sp/separate-sexp (open-delimiter action _context)
     "Separate just inserted sexp from previous and/or next sexp.
 OPEN-DELIMITER is a string, the inserted delimiter.  ACTION is a
-symbol, the performed action, see `sp-pair'.  _CONTEXT is
-ignored."
+symbol, the performed action, see `sp-pair'."
     (when (and (eq action 'insert)
                ;; Outer context, _context is inner context
                (save-excursion
@@ -2018,8 +2017,7 @@ more strings, the delimiters that call the handler."
   (defun koek-sp/format-c-block (open-delimiter action _context)
     "Format just inserted multiple line C block.
 OPEN-DELIMITER is a string, the inserted delimiter.  ACTION is a
-symbol, the performed action, see `sp-pair'.  _CONTEXT is
-ignored."
+symbol, the performed action, see `sp-pair'."
     (when (and (eq action 'insert)
                (save-excursion
                  (search-backward open-delimiter)
@@ -3964,7 +3962,7 @@ nil, delete empty line at end of file."
   (defun koek-org/construct-birthday-entry-name (name age _age-suffix)
     "Return name of agenda entry for birthday.
 NAME is a string, the name of the person.  AGE is an integer, the
-age of the person.  _AGE-SUFFIX is ignored."
+age of the person."
     (format "[[bbdb:%s][%s (%d %s old)]]"
             name name age (if (= age 1) "year" "years")))
   :config
