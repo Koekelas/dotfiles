@@ -1421,6 +1421,12 @@ buffers.
 #+END_SRC
 
 ** Buffer commands
+#+BEGIN_SRC emacs-lisp
+  (bind-keys
+   ("C-c b l" . previous-buffer)
+   ("C-c b r" . next-buffer))
+#+END_SRC
+
 Bury unneeded buffers, computers have more than enough memory.
 
 #+BEGIN_SRC emacs-lisp

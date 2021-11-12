@@ -869,6 +869,10 @@ buffer."
         ,(apply-partially #'koek-wm/classp "epiphany")
         ,(apply-partially #'koek-wm/classp "firefox")))
 
+(bind-keys
+ ("C-c b l" . previous-buffer)
+ ("C-c b r" . next-buffer))
+
 (defun koek-buff/bury (&optional arg)
   "Bury current.
 With `\\[universal-argument]' prefix argument ARG, kill current."
