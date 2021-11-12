@@ -1814,7 +1814,8 @@ dictionary links before LIMIT."
   (link-hint-define-type 'dictionary-link
     :next #'koek-lh/next-dictionary-link
     :at-point-p #'koek-lh/point-at-dictionary-link-p
-    ;; dictionary-mode doesn't bind the symbol dictionary-mode
+    ;; `dictionary-mode' isn't a proper mode, it doesn't define the
+    ;; variable dictionary-mode
     :predicates '(koek-lh/dictionary-mode-p)
     :open #'koek-lh/open-dictionary-link)
   (push 'link-hint-dictionary-link link-hint-types))
