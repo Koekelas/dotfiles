@@ -1451,7 +1451,7 @@ the builtin annotator except it aligns the annotation."
 
 (use-package recentf
   :config
-  (require 'find-func)
+  (autoload #'find-library-name "find-func")
 
   (setq recentf-max-saved-items 100)
 
@@ -2593,10 +2593,11 @@ see `company-backends'."
   :bind
   ("C-c x c" . compile)
   :preface
+  (autoload #'ansi-color-apply-on-region "ansi-color")
+
   (defun koek-cmpl/style-output ()
     "Style process output.
 Output is between `compilation-filter-start' and point."
-    (require 'ansi-color)
     (ansi-color-apply-on-region compilation-filter-start (point)))
   :config
   (setq compilation-scroll-output 'first-error)
@@ -2924,6 +2925,9 @@ none return a URL, nil.  For rewrite functions, see
   :straight t
   :after bbdb
   :preface
+  (autoload #'bbdb-vcard-import-vcard "bbdb-vcard")
+  (autoload #'bbdb-vcard-iterate-vcards "bbdb-vcard")
+
   (defun koek-bbdb/import-dir (file-name &optional interactive)
     "Import vCards from directory FILE-NAME and its subdirectories.
 INTERACTIVE is used internally."
@@ -2937,7 +2941,6 @@ INTERACTIVE is used internally."
                (expand-file-name
                 (read-directory-name "vCard directory: " root nil t) root)))
          (list file-name 'interactive))))
-    (require 'bbdb-vcard)
     (let* ((file-names
             (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
            (vcards (with-temp-buffer
@@ -2972,7 +2975,6 @@ INTERACTIVE is used internally."
   :preface
   (define-advice bongo-default-library-buffer
       (:override () koek-bngo/get-default-library-buffer)
-    (require 'dired)
     (dired-noselect bongo-default-directory))
 
   ;; Disable banner
@@ -3059,6 +3061,12 @@ playing track, else, enqueue after last track."
   :bind
   ("C-c x n" . elfeed)
   :preface
+  (eval-when-compile
+    (require 'bongo))
+  (autoload #'bongo-enqueue-region "bongo")
+  (autoload #'bongo-insert-uri "bongo")
+  (autoload #'bongo-library-mode "bongo") ; with-temp-bongo-library-buffer
+
   (defun koek-feed/get-entries ()
     "Return selected entries.
 When called from show buffer, return current entry.  When called
@@ -3070,7 +3078,6 @@ line."
 
   (defun koek-feed/visit (entries)
     "Visit ENTRIES in eww."
-    (require 'eww)
     (thread-last entries
       (mapcar (lambda (entry)
                 (let ((buffer
@@ -3097,7 +3104,6 @@ line."
     "Enqueue ENTRIES in bongo.
 When NEXT is truthy, enqueue after playing track, else, enqueue
 after last track."
-    (require 'bongo)
     (with-temp-bongo-library-buffer
       (dolist (entry entries)
         (bongo-insert-uri (elfeed-entry-link entry)
@@ -3888,6 +3894,8 @@ NAME is a string, the name of the variable."
 (use-package ob-tangle
   :defer t
   :preface
+  (autoload #'byte-recompile-file "bytecomp")
+
   (define-advice org-babel-tangle
       (:around (f &rest args) koek-org/disable-recentf)
     ;; Dynamic variables
@@ -3915,7 +3923,6 @@ NAME is a string, the name of the variable."
   (defun koek-org/compile-emacs-lisp ()
     "Compile Emacs Lisp files."
     (when (derived-mode-p 'emacs-lisp-mode)
-      (require 'bytecomp)
       (byte-recompile-file (buffer-file-name) nil 0)))
 
   (defun koek-org/process-file-end ()
@@ -4095,10 +4102,10 @@ age of the person.  _AGE-SUFFIX is ignored."
                 "SQL"
               (sql-get-product-feature sql-product :name)))))
   :config
-  ;; Upcase keywords after insertion
-  (require 'find-func)
-  (require 'abbrev)
+  (autoload #'find-library-name "find-func")
+  (autoload #'define-abbrev "abbrev")
 
+  ;; Upcase keywords after insertion
   (let ((keywords
          (split-string
           (with-temp-buffer

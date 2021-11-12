@@ -2069,7 +2069,7 @@ minibuffer.
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
     :config
-    (require 'find-func)
+    (autoload #'find-library-name "find-func")
 
     (setq recentf-max-saved-items 100)
 
@@ -5464,10 +5464,11 @@ Inherit Clojure snippets.
     :bind
     ("C-c x c" . compile)
     :preface
+    (autoload #'ansi-color-apply-on-region "ansi-color")
+
     (defun koek-cmpl/style-output ()
       "Style process output.
   Output is between `compilation-filter-start' and point."
-      (require 'ansi-color)
       (ansi-color-apply-on-region compilation-filter-start (point)))
     :config
     (setq compilation-scroll-output 'first-error)
@@ -5823,6 +5824,9 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     :straight t
     :after bbdb
     :preface
+    (autoload #'bbdb-vcard-import-vcard "bbdb-vcard")
+    (autoload #'bbdb-vcard-iterate-vcards "bbdb-vcard")
+
     (defun koek-bbdb/import-dir (file-name &optional interactive)
       "Import vCards from directory FILE-NAME and its subdirectories.
   INTERACTIVE is used internally."
@@ -5836,7 +5840,6 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
                  (expand-file-name
                   (read-directory-name "vCard directory: " root nil t) root)))
            (list file-name 'interactive))))
-      (require 'bbdb-vcard)
       (let* ((file-names
               (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
              (vcards (with-temp-buffer
@@ -5877,6 +5880,12 @@ Configure elfeed afterwards.
     :bind
     ("C-c x n" . elfeed)
     :preface
+    (eval-when-compile
+      (require 'bongo))
+    (autoload #'bongo-enqueue-region "bongo")
+    (autoload #'bongo-insert-uri "bongo")
+    (autoload #'bongo-library-mode "bongo") ; with-temp-bongo-library-buffer
+
     (defun koek-feed/get-entries ()
       "Return selected entries.
   When called from show buffer, return current entry.  When called
@@ -5888,7 +5897,6 @@ Configure elfeed afterwards.
 
     (defun koek-feed/visit (entries)
       "Visit ENTRIES in eww."
-      (require 'eww)
       (thread-last entries
         (mapcar (lambda (entry)
                   (let ((buffer
@@ -5915,7 +5923,6 @@ Configure elfeed afterwards.
       "Enqueue ENTRIES in bongo.
   When NEXT is truthy, enqueue after playing track, else, enqueue
   after last track."
-      (require 'bongo)
       (with-temp-bongo-library-buffer
         (dolist (entry entries)
           (bongo-insert-uri (elfeed-entry-link entry)
@@ -6289,7 +6296,6 @@ Stavrou)]].
     :preface
     (define-advice bongo-default-library-buffer
         (:override () koek-bngo/get-default-library-buffer)
-      (require 'dired)
       (dired-noselect bongo-default-directory))
 
     ;; Disable banner
@@ -7356,6 +7362,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
   (use-package ob-tangle
     :defer t
     :preface
+    (autoload #'byte-recompile-file "bytecomp")
+
     (define-advice org-babel-tangle
         (:around (f &rest args) koek-org/disable-recentf)
       ;; Dynamic variables
@@ -7383,7 +7391,6 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
     (defun koek-org/compile-emacs-lisp ()
       "Compile Emacs Lisp files."
       (when (derived-mode-p 'emacs-lisp-mode)
-        (require 'bytecomp)
         (byte-recompile-file (buffer-file-name) nil 0)))
 
     (defun koek-org/process-file-end ()
@@ -7598,10 +7605,10 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
                   "SQL"
                 (sql-get-product-feature sql-product :name)))))
     :config
-    ;; Upcase keywords after insertion
-    (require 'find-func)
-    (require 'abbrev)
+    (autoload #'find-library-name "find-func")
+    (autoload #'define-abbrev "abbrev")
 
+    ;; Upcase keywords after insertion
     (let ((keywords
            (split-string
             (with-temp-buffer
