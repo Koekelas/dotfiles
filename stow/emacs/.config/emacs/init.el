@@ -1390,6 +1390,7 @@ the builtin annotator except it aligns the annotation."
 
 (use-package dired-x
   :after dired
+  :demand t ; Install keybindings of package, :after precedes :demand
   :bind
   ("C-c f d" . dired-jump))
 
