@@ -403,7 +403,8 @@ N is an integer, a workspace number."
                       (append '(("M-o" . "C-n")
                                 ("M-p" . "S-C-p")
                                 ("M-k" . "C-w"))
-                              koek-wm/base-simulation-keys)))))))
+                              koek-wm/base-simulation-keys))
+             ,@defautls)))))
 
 (use-package server
   :config
