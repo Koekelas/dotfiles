@@ -1894,11 +1894,17 @@ dictionary links before LIMIT."
   :delight buffer-face-mode)
 
 (use-package hl-line
-  :bind ("C-c a l" . hl-line-mode)      ; [L]ine
+  :bind ("C-c a l" . hl-line-mode))     ; [L]ine
+
+(use-package lin
+  :straight t
   :hook
-  ((ibuffer-mode embark-collect-mode dired-mode bookmark-bmenu-mode occur-mode
-    grep-mode proced-mode bongo-playlist-mode)
-   . hl-line-mode))
+  ((ibuffer-mode embark-collect-mode dired-mode bookmark-bmenu-mode
+    git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
+    elfeed-search-mode bongo-playlist-mode)
+   . lin-mode)
+  :config
+  (setq lin-face 'lin-blue-override-fg))
 
 (use-package expand-region
   :straight t
@@ -4220,6 +4226,7 @@ operandi or vivendi."
         (custom-set-faces
          `(koek-wm/selected-workspace ((,class :inherit bold)))
          `(eyebrowse-mode-line-active ((,class :foreground unspecified)))
+         `(dired-directory            ((,class :inherit bold)))
          `(koek-diff/variant          ((,class :inherit bold)))
          `(pdf-links-read-link        ((,class
                                         :foreground unspecified :background unspecified
