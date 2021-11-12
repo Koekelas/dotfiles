@@ -1370,6 +1370,11 @@ the builtin annotator except it aligns the annotation."
   :config
   (autoload #'dired-dwim-target-next-visible "dired-aux")
 
+  (use-package gnus-dired
+    :bind
+    (:map dired-mode-map
+     ("C-c f a" . gnus-dired-attach)))
+
   (setq dired-dwim-target #'dired-dwim-target-next-visible)
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
@@ -3146,6 +3151,11 @@ playing track, else, enqueue after last track."
    ("B" . elfeed-show-visit)
    ("e" . koek-feed/enqueue-dwim)
    ("E" . koek-feed/enqueue-next-dwim)))
+
+(use-package gnus-dired
+  :hook (dired-mode . turn-on-gnus-dired-mode)
+  :config
+  (setq gnus-dired-mail-mode mail-user-agent))
 
 (use-package pdf-tools
   :straight t
