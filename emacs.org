@@ -2500,7 +2500,8 @@ VC is a placeholder.
 #+END_SRC
 
 ** Return to marked positions
-When popping mark, skip consecutive identical marks.
+When popping mark, skip consecutive identical marks. The idea is from
+[[https://endlessparentheses.com/faster-pop-to-mark-command.html][Faster pop-to-mark command (Endless Parentheses)]].
 
 #+BEGIN_SRC emacs-lisp
   (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
