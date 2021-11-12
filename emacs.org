@@ -2564,7 +2564,7 @@ When popping mark, skip consecutive identical marks. The idea is from
 
 *** Spell checking contractions fails :issue:setup:
 Visit the dictionary's affix file. On Arch Linux, affix files are
-saved in =/usr/share/hunspell/=. Add:
+stored in =/usr/share/hunspell/=. Add:
 
 #+BEGIN_SRC fundamental
   ICONV 1
