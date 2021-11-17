@@ -1669,7 +1669,7 @@ for one."
   :straight magit
   :defer t
   :config
-  (setq magit-uniquify-buffer-names nil)
+  (setq magit-buffer-name-format "*%M%V: %t*")
   (setq magit-display-buffer-function #'display-buffer)
   (setq magit-bury-buffer-function #'quit-window))
 
