@@ -2318,8 +2318,8 @@ TO is a symbol, the language scheme to, see
                                             (plist-get spec :org)))
                                     koek-ys/languages)))
 
-  (defun koek-ys/make-ensure-result-dir (name)
-    "Return function to ensure result directory of current code block exists.
+  (defun koek-ys/make-mkdir-result (name)
+    "Return function to make result directory of current code block.
 NAME is a string, the name of the variable storing the result
 file name."
     (lambda ()
