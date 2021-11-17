@@ -2410,6 +2410,11 @@ see `company-backends'."
   :config
   (company-flx-mode))
 
+(use-package help
+  :defer t
+  :config
+  (setq help-window-select t))
+
 (use-package help-mode
   :defer t
   :config

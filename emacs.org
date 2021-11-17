@@ -5238,6 +5238,11 @@ Inherit Clojure snippets.
 
 *** help - Help viewer
 #+BEGIN_SRC emacs-lisp
+  (use-package help
+    :defer t
+    :config
+    (setq help-window-select t))
+
   (use-package help-mode
     :defer t
     :config
