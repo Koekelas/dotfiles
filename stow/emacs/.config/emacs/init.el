@@ -2401,8 +2401,8 @@ see `company-backends'."
   :defer t
   :config
   (setq company-dabbrev-other-buffers t) ; Same major mode
-  (setq company-dabbrev-ignore-case t) ; Case typed, during candidate collection
-  (setq company-dabbrev-downcase nil)) ; Case candidate, when inserted
+  (setq company-dabbrev-ignore-case t)   ; Case typed, during completion
+  (setq company-dabbrev-downcase nil))   ; Case candidate, when inserted
 
 (use-package company-flx
   :straight t
