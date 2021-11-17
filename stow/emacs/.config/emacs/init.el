@@ -1677,6 +1677,10 @@ for one."
   :bind
   ("C-c f m" . magit-status))
 
+(use-package magit-files
+  :bind
+  ("C-c f C-m" . magit-file-dispatch))
+
 (use-package magit-diff
   :defer t
   :config
