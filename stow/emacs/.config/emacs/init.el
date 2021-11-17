@@ -2462,7 +2462,15 @@ see `company-backends'."
 
 (use-package man
   :bind
-  ("C-c d m" . man))
+  ("C-c d m" . man)
+  :preface
+  (define-advice Man-notify-when-ready
+      (:around (f buffer) koek-man/normalize-notify-method)
+    (if (eq Man-notify-method 'koek/pop-to-buffer)
+        (pop-to-buffer buffer)
+      (funcall f buffer)))
+  :config
+  (setq Man-notify-method 'koek/pop-to-buffer))
 
 (use-package apropos
   :bind
