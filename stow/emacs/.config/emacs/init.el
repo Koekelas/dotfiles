@@ -2470,6 +2470,11 @@ see `company-backends'."
         (pop-to-buffer buffer)
       (funcall f buffer)))
   :config
+  (use-package link-hint
+    :bind
+    (:map Man-mode-map
+     ("j" . link-hint-open-link)))
+
   (setq Man-notify-method 'koek/pop-to-buffer))
 
 (use-package apropos
