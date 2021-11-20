@@ -5568,21 +5568,20 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 
     (defvar koek-eww/rewrite-fs nil
       "List of rewrite functions.
-  A rewrite function rewrites a URL.  It's passed a URL struct, the
-  URL to rewrite, which it's allowed to modify.  For URL fields,
-  see `url-generic-parse-url'.  The rewrite function must return a
-  rewritten URL, a string, or, to not rewrite the URL, nil.")
+  A rewrite function rewrites a URL.  It's passed a string, the URL
+  to rewrite.  It must return a string, the rewritten URL, or, to
+  not rewrite the URL, nil.")
 
     (defun koek-eww/rewrite-reddit (url)
       "Rewrite Reddit to Reddit mobile.
-  URL is a URL struct, the URL to rewrite."
-      (when (string-match-p
-             (rx line-start
-                 (zero-or-one (or "www" "old") ".") "reddit.com"
-                 line-end)
-             (or (url-host url) ""))
-        (setf (url-host url) "i.reddit.com")
-        (url-recreate-url url)))
+  URL is a string, the URL to rewrite."
+      (let ((parsed (url-generic-parse-url url)))
+        (when (string-match-p (rx line-start
+                                  (zero-or-one (or "www" "old") ".") "reddit.com"
+                                  line-end)
+                              (url-host parsed))
+          (setf (url-host parsed) "i.reddit.com")
+          (url-recreate-url parsed))))
 
     (defun koek-eww/rewrite (url)
       "Rewrite URL.
@@ -5591,7 +5590,7 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
   none return a URL, nil.  For rewrite functions, see
   `koek-eww/rewrite-fs'."
       (seq-some (lambda (f)
-                  (funcall f (url-generic-parse-url url)))
+                  (funcall f url))
                 koek-eww/rewrite-fs))
 
     (defun koek-eww/redirect (url &optional interactive)
