@@ -2591,12 +2591,20 @@ see `company-backends'."
 (use-package vterm
   :straight t
   :bind
-  ("C-c x t" . vterm)
+  (("C-c x t" . vterm)
+   :map vterm-mode-map
+   ("C-x C-q" . vterm-copy-mode)
+   ("C-c C-l" . vterm-clear)
+   :map vterm-copy-mode-map
+   ("C-x C-q" . vterm-copy-mode))
   :config
   ;; Resolve keybinding conflict with repeat
   (push "C-z" vterm-keymap-exceptions)
   (vterm--exclude-keys vterm-mode-map vterm-keymap-exceptions)
-  (bind-key "C-c C-z" #'vterm-send-C-z vterm-mode-map))
+
+  (bind-key "C-c C-c" #'vterm-send-C-c vterm-mode-map)
+  (bind-key "C-c C-z" #'vterm-send-C-z vterm-mode-map)
+  :delight (vterm-copy-mode " Copy"))
 
 (use-package eshell
   :bind
