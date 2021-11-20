@@ -2684,12 +2684,6 @@ Output is between `compilation-filter-start' and point."
                "*")
        'unique)))
 
-  (defvar koek-eww/rewrite-fs nil
-    "List of rewrite functions.
-A rewrite function rewrites a URL.  It's passed a string, the URL
-to rewrite.  It must return a string, the rewritten URL, or, to
-not rewrite the URL, nil.")
-
   (defun koek-eww/rewrite-reddit (url)
     "Rewrite Reddit to Reddit mobile.
 URL is a string, the URL to rewrite."
@@ -2700,6 +2694,12 @@ URL is a string, the URL to rewrite."
                             (url-host parsed))
         (setf (url-host parsed) "i.reddit.com")
         (url-recreate-url parsed))))
+
+  (defvar koek-eww/rewrite-fs '(koek-eww/rewrite-reddit)
+    "List of rewrite functions.
+A rewrite function rewrites a URL.  It's passed a string, the URL
+to rewrite.  It must return a string, the rewritten URL, or, to
+not rewrite the URL, nil.")
 
   (defun koek-eww/rewrite (url)
     "Rewrite URL.
@@ -2732,7 +2732,6 @@ none return a URL, nil.  For rewrite functions, see
 
   (bind-key "m" #'koek-eww/redirect eww-mode-map)
 
-  (push #'koek-eww/redirect-reddit koek-eww/redirect-fs)
   (add-hook 'eww-mode-hook #'koek-eww/setup-current)
   (add-hook 'eww-after-render-hook #'koek-eww/update-current))
 
