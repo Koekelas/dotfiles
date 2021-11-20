@@ -5449,6 +5449,8 @@ Inherit Clojure snippets.
 ** vterm - Terminal emulator
 [[https://github.com/akermu/emacs-libvterm][vterm (GitHub)]]
 
+For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
+
 #+BEGIN_SRC emacs-lisp
   (use-package vterm
     :straight t
