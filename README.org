@@ -58,7 +58,7 @@ Git is mandatory, everything else is optional.
   - [[https://clang.llvm.org/][Clang]] (language server)
   - [[https://www.gnu.org/software/gdb/][GDB]]
   - [[https://www.arduino.cc/en/Main/Software][Arduino IDE]]
-- Clojure & ClojureScript (depends on Java and JavaScript):
+- Clojure and ClojureScript (depends on Java and JavaScript):
   - [[https://leiningen.org/][Leiningen]]
   - [[https://github.com/clj-kondo/clj-kondo][clj-kondo]]
 - Common Lisp: [[http://www.sbcl.org/][Steel Bank Common Lisp]]
@@ -74,7 +74,7 @@ Git is mandatory, everything else is optional.
   - [[https://nodejs.org/][Node.js]]
   - [[https://github.com/theia-ide/typescript-language-server][TypeScript Language Server]]
   - [[https://github.com/NicolasPetton/Indium][Indium]]
-- Octave & MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
+- Octave and MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
 - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
 - Python:
   - [[https://www.python.org/][Python]]
@@ -82,7 +82,7 @@ Git is mandatory, everything else is optional.
   - [[https://github.com/palantir/python-language-server][Python Language Server]]
 - Scheme: [[https://www.gnu.org/software/guile/][Guile]]
 - SQL: [[https://www.postgresql.org/][PostgreSQL]]
-- TeX, Org & Markdown:
+- TeX, Org and Markdown:
   - [[https://www.latex-project.org/][LaTeX]]
   - [[https://pandoc.org/][pandoc]]
 - Wolfram Language: [[https://www.wolfram.com/mathematica/][Mathematica]]
@@ -125,7 +125,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   # Setup Arduino
   gpasswd -a $(whoami) uucp
 
-  ## Clojure & ClojureScript
+  ## Clojure and ClojureScript
   pacman -S leiningen
   # Install clj-kondo-bin from AUR
 
@@ -145,7 +145,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   npm i -g indium
   # Install typescript-language-server from AUR
 
-  ## Octave & MATLAB
+  ## Octave and MATLAB
   pacman -S octave
 
   ## OpenSCAD
@@ -168,7 +168,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   sudo -u postgres createuser -s $(whoami)
   createdb
 
-  ## TeX, Org & Markdown
+  ## TeX, Org and Markdown
   pacman -S texlive-core texlive-latexextra pandoc
 
   ## Wolfram Language

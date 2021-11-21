@@ -1080,7 +1080,7 @@ something short.
    ("C-c x C-b" . koek-xde/launch-browser))
 #+END_SRC
 
-* Frames, windows & buffers
+* Frames, windows and buffers
 
 ** Frame commands
 The command ~suspend-frame~ is disorienting. Unbind ~suspend-frame~.
@@ -1262,7 +1262,7 @@ steps.
     (eyebrowse-mode))
 #+END_SRC
 
-** winner - Undo & redo window layout changes
+** winner - Undo and redo window layout changes
 #+BEGIN_SRC emacs-lisp
   (use-package winner
     :bind
@@ -2539,7 +2539,7 @@ When popping mark, skip consecutive identical marks. The idea is from
     ("C-c e a" . align-regexp))
 #+END_SRC
 
-** undo-tree - Undo & redo replacement
+** undo-tree - Undo and redo replacement
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :straight t
@@ -2730,7 +2730,7 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
 
 ** Expressions
 
-*** smartparens - Pairs & symbolic expressions
+*** smartparens - Pairs and symbolic expressions
 [[https://github.com/Fuco1/smartparens][smartparens (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -2842,7 +2842,7 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
      ("C-M-}" . end-of-defun)))
 #+END_SRC
 
-**** Smartparens & GNOME Shell keybindings conflict :issue:setup:
+**** Smartparens and GNOME Shell keybindings conflict :issue:setup:
 Run:
 
 #+BEGIN_SRC sh
@@ -3000,7 +3000,7 @@ produce noisy diffs.
     :hook ((c-mode c++-mode java-mode js-mode) . tree-sitter-hl-mode))
 #+END_SRC
 
-** xref - Jump to definition & references
+** xref - Jump to definition and references
 #+BEGIN_SRC emacs-lisp
   (use-package xref
     :straight t
@@ -3011,7 +3011,7 @@ produce noisy diffs.
     (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 #+END_SRC
 
-** flymake - Show syntax & style errors
+** flymake - Show syntax and style errors
 #+BEGIN_SRC emacs-lisp
   (use-package flymake
     :straight t
@@ -5232,7 +5232,7 @@ Inherit Clojure snippets.
     (company-flx-mode))
 #+END_SRC
 
-* Help & documentation
+* Help and documentation
 
 ** Help
 
@@ -5860,7 +5860,7 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     ("C-c x a" . bbdb))
 #+END_SRC
 
-*** bbdb-vcard - Import from & export to vCard
+*** bbdb-vcard - Import from and export to vCard
 [[https://github.com/tohojo/bbdb-vcard][bbdb-vcard (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -6833,7 +6833,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
   ;;; gino.el ends here
 #+END_SRC
 
-** Clojure & ClojureScript
+** Clojure and ClojureScript
 [[https://github.com/clojure-emacs/clojure-mode][clojure-mode (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
@@ -7046,7 +7046,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
     :delight (erlang-mode "Erl" :major))
 #+END_SRC
 
-** HTML & CSS
+** HTML and CSS
 #+BEGIN_SRC emacs-lisp
   (use-package mhtml-mode
     :mode (rx (or ".htm" ".html") string-end)
@@ -7181,7 +7181,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
         (message "Initializing Meson...done"))))
 #+END_SRC
 
-** Octave & MATLAB
+** Octave and MATLAB
 #+BEGIN_SRC emacs-lisp
   (use-package octave
     :mode ((rx ".m" string-end) . octave-mode)
