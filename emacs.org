@@ -2632,6 +2632,11 @@ For more information, see ~man 5 hunspell~.
     (setq goto-address-mail-mouse-face goto-address-url-mouse-face))
 #+END_SRC
 
+** visible - Show hidden
+#+BEGIN_SRC emacs-lisp
+  (bind-key "C-c a h" #'visible-mode)     ; [H]idden
+#+END_SRC
+
 ** hl-line - Highlight current line
 #+BEGIN_SRC emacs-lisp
   (use-package hl-line

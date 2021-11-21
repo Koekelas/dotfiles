@@ -1903,6 +1903,8 @@ dictionary links before LIMIT."
   (setq goto-address-mail-face goto-address-url-face)
   (setq goto-address-mail-mouse-face goto-address-url-mouse-face))
 
+(bind-key "C-c a h" #'visible-mode)     ; [H]idden
+
 (use-package hl-line
   :bind ("C-c a l" . hl-line-mode))     ; [L]ine
 
