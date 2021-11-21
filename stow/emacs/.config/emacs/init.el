@@ -1897,6 +1897,12 @@ dictionary links before LIMIT."
   :hook ((markdown-mode org-mode) . variable-pitch-mode)
   :delight buffer-face-mode)
 
+(use-package goto-addr
+  :hook ((prog-mode conf-mode) . goto-address-prog-mode)
+  :config
+  (setq goto-address-mail-face goto-address-url-face)
+  (setq goto-address-mail-mouse-face goto-address-url-mouse-face))
+
 (use-package hl-line
   :bind ("C-c a l" . hl-line-mode))     ; [L]ine
 
