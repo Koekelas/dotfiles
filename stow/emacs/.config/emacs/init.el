@@ -862,7 +862,7 @@ buffer."
           (or "vterm*" "eshell*")))
 
 ;; Web buffers
-(setq koek-buff/web-modes '(eww-mode))
+(setq koek-buff/web-modes '(eww-mode elpher-mode))
 (setq koek-buff/web-fs
       `(koek-buff/web-mode-p
         koek-buff/web-name-p
@@ -1152,7 +1152,9 @@ are recognized:
     (rx (or ".pdf" ".png" ".jpg") line-end))
 
   (defvar koek-cslt/inhibited-bookmark-handlers
-    '(koek-bmrk/handle-generic-url elfeed-show-bookmark-handler))
+    '(koek-bmrk/handle-generic-url
+      elpher-bookmark-jump
+      elfeed-show-bookmark-handler))
 
   (defun koek-cslt/inhibit-preview-p (candidate)
     (let* ((buffer (get-buffer candidate))
@@ -1284,6 +1286,7 @@ are recognized:
   (setq consult-bookmark-narrow
         '((?f "File" bookmark-default-handler)
           (?w "Web" koek-bmrk/handle-generic-url)
+          (?g "Gopher and Gemini" elpher-bookmark-jump)
           (?n "News" elfeed-show-bookmark-handler))))
 
 (use-package embark
@@ -2749,6 +2752,17 @@ none return a URL, nil.  For rewrite functions, see
   (setq shr-use-colors nil)
   (setq shr-max-image-proportion 0.6)
   (setq shr-image-animate nil))
+
+(use-package elpher
+  :straight t
+  :defer t
+  :init
+  (put 'elpher-bookmark-jump 'bookmark-handler-type "Gopher and Gemini")
+  :config
+  (use-package link-hint
+    :bind
+    (:map elpher-mode-map
+     ("j" . link-hint-open-link))))
 
 (use-package mu4e
   :bind

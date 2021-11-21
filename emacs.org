@@ -1412,7 +1412,7 @@ buffers.
             (or "vterm*" "eshell*")))
 
   ;; Web buffers
-  (setq koek-buff/web-modes '(eww-mode))
+  (setq koek-buff/web-modes '(eww-mode elpher-mode))
   (setq koek-buff/web-fs
         `(koek-buff/web-mode-p
           koek-buff/web-name-p
@@ -1733,7 +1733,9 @@ Bury unneeded buffers, computers have more than enough memory.
       (rx (or ".pdf" ".png" ".jpg") line-end))
 
     (defvar koek-cslt/inhibited-bookmark-handlers
-      '(koek-bmrk/handle-generic-url elfeed-show-bookmark-handler))
+      '(koek-bmrk/handle-generic-url
+        elpher-bookmark-jump
+        elfeed-show-bookmark-handler))
 
     (defun koek-cslt/inhibit-preview-p (candidate)
       (let* ((buffer (get-buffer candidate))
@@ -1865,6 +1867,7 @@ Bury unneeded buffers, computers have more than enough memory.
     (setq consult-bookmark-narrow
           '((?f "File" bookmark-default-handler)
             (?w "Web" koek-bmrk/handle-generic-url)
+            (?g "Gopher and Gemini" elpher-bookmark-jump)
             (?n "News" elfeed-show-bookmark-handler))))
 #+END_SRC
 
@@ -5642,6 +5645,22 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
     (setq shr-use-colors nil)
     (setq shr-max-image-proportion 0.6)
     (setq shr-image-animate nil))
+#+END_SRC
+
+** elpher - Gopher and Gemini browser
+[[gopher://thelambdalab.xyz/1/projects/elpher][elpher]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpher
+    :straight t
+    :defer t
+    :init
+    (put 'elpher-bookmark-jump 'bookmark-handler-type "Gopher and Gemini")
+    :config
+    (use-package link-hint
+      :bind
+      (:map elpher-mode-map
+       ("j" . link-hint-open-link))))
 #+END_SRC
 
 ** mu4e - E-mail client
