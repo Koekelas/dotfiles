@@ -2261,7 +2261,7 @@ Snippet is between `yas-snippet-beg' and `yas-snippet-end'."
 CANDIDATES is an alist of pretty candidate to candidate pairs."
     (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
-  ;; Clojure & ClojureScript
+  ;; Clojure and ClojureScript
   (defun koek-ys/determine-ns-name ()
     "Determine Clojure namespace name for current.
 Assumes source path is the root of the project."
@@ -2275,7 +2275,7 @@ Assumes source path is the root of the project."
         (replace-regexp-in-string (regexp-quote separator) ".")
         (replace-regexp-in-string "_" "-"))))
 
-  ;; Org & Markdown
+  ;; Org and Markdown
   (defvar koek-ys/languages
     '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
       (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
