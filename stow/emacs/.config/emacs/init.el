@@ -4183,18 +4183,6 @@ age of the person."
 (use-package sql
   :mode ((rx ".sql" string-end) . sql-mode)
   :preface
-  ;; When SQL dialect is setup, whitespace-mode faces are overridden
-  (define-advice sql-mode (:around (f) koek-sql/defer-whitespace-mode)
-    (let ((prog-mode-hook               ; Dynamic variable
-           (remq 'whitespace-mode prog-mode-hook)))
-      (funcall f)))
-
-  (define-advice sql-highlight-product
-      (:around (f) koek-sql/re-enable-whitespace-mode)
-    (whitespace-mode 0)
-    (funcall f)
-    (whitespace-mode))
-
   ;; When SQL dialect is setup, mode-name is overridden, i.e., delight
   ;; is undone
   (define-advice sql-highlight-product (:after () koek-sql/update-mode-name)
