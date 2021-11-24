@@ -3771,7 +3771,7 @@ Modes are confident about being derived from text-mode.")
   :mode (rx ".scad" string-end)
   :config
   ;; Resolve smartparens' handlers not being called
-  (unbind-key "<return>" scad-mode-map) ; Why does <return> work but RET not?
+  (unbind-key "<return>" scad-mode-map)
 
   (setq scad-indent-style "stroustrup"))
 

@@ -7244,7 +7244,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
     :mode (rx ".scad" string-end)
     :config
     ;; Resolve smartparens' handlers not being called
-    (unbind-key "<return>" scad-mode-map) ; Why does <return> work but RET not?
+    (unbind-key "<return>" scad-mode-map)
 
     (setq scad-indent-style "stroustrup"))
 #+END_SRC
