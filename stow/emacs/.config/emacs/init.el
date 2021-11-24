@@ -3311,7 +3311,7 @@ INTERACTIVE is used internally."
    ("C-c e s" . koek-pdf/stain-mode))
 
   (setq-default pdf-view-display-size 'fit-page)
-  ;; First invalidate, then restain. `add-hook' adds to the front. The
+  ;; Invalidate then restain. `add-hook' adds to the front. The
   ;; reverse invalidates the restained page.
   (add-hook 'koek-thm/enable-hook #'koek-pdf/restain-all)
   (add-hook 'koek-thm/enable-hook #'koek-pdf/invalidate-all)
