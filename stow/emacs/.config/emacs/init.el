@@ -4617,7 +4617,7 @@ STATE is a symbol, a flymake state."
                                   koek-ml/checker-names)))
              (concat name " "))
           ,(pcase (koek-ml/get-flymake-state)
-             ((or `running `finished)
+             ((or 'running 'finished)
               (let ((n-diags (koek-ml/get-flymake-n-diags)))
                 (mapconcat
                  (lambda (level)
