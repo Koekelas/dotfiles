@@ -3900,6 +3900,10 @@ Candidates are collected from agenda files."
 
   (org-clock-load))
 
+(use-package org-list
+  :bind
+  ("C-c o t" . org-cycle-list-bullet))  ; List [t]ype
+
 (use-package org-refile
   :defer t
   :config
