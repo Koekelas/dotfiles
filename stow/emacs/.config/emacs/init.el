@@ -3057,8 +3057,8 @@ When playback is stopped, play from beginning."
 
   (defun koek-bngo/enqueue (file-names &optional next)
     "Enqueue FILE-NAMES.
-When NEXT is truthy, enqueue after playing track, else, enqueue
-after last track."
+When optional NEXT is truthy, enqueue after playing track, else,
+enqueue after last track."
     (with-temp-bongo-library-buffer
       (dolist (file-name file-names)
         (bongo-insert-file file-name))
@@ -3160,8 +3160,8 @@ line."
 
   (defun koek-feed/enqueue (entries &optional next)
     "Enqueue ENTRIES in bongo.
-When NEXT is truthy, enqueue after playing track, else, enqueue
-after last track."
+When optional NEXT is truthy, enqueue after playing track, else,
+enqueue after last track."
     (with-temp-bongo-library-buffer
       (dolist (entry entries)
         (bongo-insert-uri (elfeed-entry-link entry)
