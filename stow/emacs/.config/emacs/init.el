@@ -3031,6 +3031,9 @@ INTERACTIVE is used internally."
    ("C-c k x" . bongo-stop))
   :hook (dired-mode . bongo-dired-library-mode)
   :preface
+  (eval-when-compile
+    (require 'bongo))
+
   (define-advice bongo-default-library-buffer
       (:override () koek-bngo/get-default-library-buffer)
     (dired-noselect bongo-default-directory))
