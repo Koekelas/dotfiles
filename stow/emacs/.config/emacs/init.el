@@ -4005,7 +4005,8 @@ nil, delete empty line at end of file."
   :config
   (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
   (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads)
-  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
+  (add-hook 'org-babel-post-tangle-hook #'hack-local-variables))
 
 (use-package ob-clojure
   :defer t

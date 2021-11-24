@@ -7494,7 +7494,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
     :config
     (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
     (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads)
-    (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
+    (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
+    (add-hook 'org-babel-post-tangle-hook #'hack-local-variables))
 
   (use-package ob-clojure
     :defer t
