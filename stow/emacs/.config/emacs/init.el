@@ -3971,6 +3971,17 @@ NAME is a string, the name of the variable."
            (remq 'recentf-track-opened-file write-file-functions)))
       (apply f args)))
 
+  (defun koek-org/process-file-end ()
+    "Process end of tangled file.
+Code blocks end with empty line.  When `require-final-newline' is
+nil, delete empty line at end of file."
+    (unless require-final-newline
+      (save-excursion
+        (goto-char (point-max))
+        (unless (bobp)
+          (delete-char -1)
+          (save-buffer)))))
+
   (defun koek-org/gen-autoloads ()
     "Generate autoloads for Emacs Lisp packages."
     (when (derived-mode-p 'emacs-lisp-mode)
@@ -3991,21 +4002,10 @@ NAME is a string, the name of the variable."
     "Compile Emacs Lisp files."
     (when (derived-mode-p 'emacs-lisp-mode)
       (byte-recompile-file (buffer-file-name) nil 0)))
-
-  (defun koek-org/process-file-end ()
-    "Process end of tangled file.
-Code blocks end with empty line.  When `require-final-newline' is
-nil, delete empty line at end of file."
-    (unless require-final-newline
-      (save-excursion
-        (goto-char (point-max))
-        (unless (bobp)
-          (delete-char -1)
-          (save-buffer)))))
   :config
-  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
   (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
-  (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads))
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads)
+  (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end))
 
 (use-package ob-clojure
   :defer t
