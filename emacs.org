@@ -40,7 +40,8 @@ Enable lexical binding.
 Require libraries.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'subr-x)
+  (eval-when-compile
+    (require 'subr-x))
   (require 'seq)
   (require 'xdg)
 #+END_SRC
@@ -636,7 +637,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
   ;;; Code:
 
-  (require 'subr-x)
+  (eval-when-compile
+    (require 'subr-x))
   (require 'seq)
   (require 'eieio)
   (require 'xcb)
@@ -6503,7 +6505,8 @@ Stavrou)]].
 
   ;;; Code:
 
-  (require 'subr-x)
+  (eval-when-compile
+    (require 'subr-x))
   (require 'seq)
 
   (defgroup prepcast nil

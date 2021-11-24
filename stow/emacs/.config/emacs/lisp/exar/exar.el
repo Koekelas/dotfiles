@@ -30,7 +30,8 @@
 
 ;;; Code:
 
-(require 'subr-x)
+(eval-when-compile
+  (require 'subr-x))
 (require 'seq)
 (require 'eieio)
 (require 'xcb)

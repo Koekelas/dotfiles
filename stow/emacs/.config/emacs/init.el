@@ -26,7 +26,8 @@
 
 ;;; Code:
 
-(require 'subr-x)
+(eval-when-compile
+  (require 'subr-x))
 (require 'seq)
 (require 'xdg)
 
