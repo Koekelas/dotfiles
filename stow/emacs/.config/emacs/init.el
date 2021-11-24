@@ -3129,6 +3129,41 @@ playing track, else, enqueue after last track."
   (autoload #'bongo-insert-uri "bongo")
   (autoload #'bongo-library-mode "bongo") ; with-temp-bongo-library-buffer
 
+  (defvar koek-feed/feeds-file
+    (no-littering-expand-etc-file-name "elfeed-feeds.el"))
+
+  (defun koek-feed/read-feeds ()
+    (when (file-readable-p koek-feed/feeds-file)
+      (with-temp-buffer
+        (insert-file-contents koek-feed/feeds-file)
+        (read (current-buffer)))))
+
+  (defun koek-feed/add-feed (title url &rest tags)
+    "Add news feed to database.
+TITLE and URL are strings.  TAGS are zero or more symbols."
+    (setf (elfeed-feed-title (elfeed-db-get-feed url)) title)
+    (push (cons url tags) elfeed-feeds))
+
+  (defun koek-feed/init-feeds ()
+    (dolist (feed (koek-feed/read-feeds))
+      (let ((args
+             (pcase feed
+               (`(,title reddit month ,id . ,tags)
+                `(,(concat title " (Reddit - Month)")
+                  ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
+                  post ,@tags))
+               (`(,title reddit ,id . ,tags)
+                `(,(concat title " (Reddit)")
+                  ,(format "https://www.reddit.com/r/%s/top.rss?t=week" id)
+                  post ,@tags))
+               (`(,title youtube ,id . ,tags)
+                `(,(concat title " (YouTube)")
+                  ,(format "https://www.youtube.com/feeds/videos.xml?channel_id=%s" id)
+                  video ,@tags))
+               (_feed
+                feed))))
+        (apply #'koek-feed/add-feed args))))
+
   (defun koek-feed/get-entries ()
     "Return selected entries.
 When called from show buffer, return current entry.  When called
@@ -4992,57 +5027,6 @@ TYPE is a symbol, the type of the variant, see
 
 (use-package elfeed
   :defer t
-  :preface
-  (defvar koek/feeds
-    '(("3Blue1Brown" youtube "UCYO_jab_esuFRV4b17AJtAw" mathematics)
-      ("Arch Linux" "https://www.archlinux.org/feeds/news/" notice linux)
-      ("Baggers" youtube "UCMV8p6Lb-bd6UZtTc_QD4zA" lisp)
-      ("Caches to Caches" "http://cachestocaches.com/feed" blog ai)
-      ("Clickspring" youtube "UCworsKCR-Sx6R6-BnIjS2MA" metalwork)
-      ("Clojure" reddit month "Clojure" clojure)
-      ("ClojureTV" youtube "UCaLlzGqiPE2QRj6sSOawJRg" clojure)
-      ("Emacs" reddit "emacs" emacs)
-      ("Erlang Solutions" youtube "UCKrD_GYN3iDpG_uMmADPzJQ" erlang)
-      ("Erlang" reddit month "erlang" erlang)
-      ("Factorio" "https://www.factorio.com/blog/rss" blog program)
-      ("Furniture Making" reddit month "FurnitureMaking" woodwork)
-      ("Ishitani Furniture" youtube "UC7FkqjV8SU5I8FCHXQSQe9Q" woodwork)
-      ("John Heisz" youtube "UCjA8vRlL1c7BDixQRJ39-LQ" woodwork)
-      ("Layout Land" youtube "UC7TizprGknbDalbHplROtag" css)
-      ("Linux" reddit month "linux" linux)
-      ("Lisp" reddit month "lisp" lisp)
-      ("LiveOverflow" youtube "UClcE-kVhqyiHCcjYwcpfj9w" hack)
-      ("Luke Smith" youtube "UC2eYFnH61tmytImy1mTYvhA" foss)
-      ("Mastering Emacs" "https://www.masteringemacs.org/feed" blog emacs)
-      ("Mr. Chickadee" youtube "UCHkYrJ2Fbe7pBjEZvkFzi3A" woodwork)
-      ("Netflix TechBlog" "https://medium.com/feed/netflix-techblog" blog ai)
-      ("Professor Leonard" youtube "UCoHhuummRZaIVX7bD4t2czg" mathematics)
-      ("Programming" reddit month "programming" program)
-      ("Protesilaos Stavrou" youtube "UC0uTPqBCFIpZxlz_Lv1tk_g" emacs)
-      ("ROBOHEMIAN!" youtube "UCPelotG5UTbWYKrMfG0ynKg" electronics)
-      ("Rainfall Projects" youtube "UCPO4D4-UeeFQceK8XrgwXug" woodwork metalwork)
-      ("Sacha Chua" "http://sachachua.com/blog/category/emacs/feed/" blog emacs)
-      ("Two-Bit History" "https://twobithistory.org/feed.xml" blog history)
-      ("Wait But Why" "https://waitbutwhy.com/feed" blog popsci)
-      ("frank howarth" youtube "UC3_VCOJMaivgcGqPCTePLBA" woodwork)
-      ("krtwood" youtube "UCrI3NWmFF45LwKwk5TEYihQ" woodwork)
-      ("scanlime" youtube "UCaEgw3321ct_PE4PJvdhXEQ" electronics))
-    "List of news feeds.
-A news feed is a list of form:
-
-'(\"title\" \"url\" tag-1 tag-2 tag-n) or
-'(\"title\" reddit \"id\" tag-1 tag-2 tag-n) or
-'(\"title\" reddit month \"id\" tag-1 tag-2 tag-n) or
-'(\"title\" youtube \"id\" tag-1 tag-2 tag-n)
-
-Reddit news feeds are tagged with post and YouTube news feeds are
-tagged with video.")
-
-  (defun koek/add-feed (title url &rest tags)
-    "Add news feed to database.
-TITLE and URL are strings.  TAGS are zero or more symbols."
-    (setf (elfeed-feed-title (elfeed-db-get-feed url)) title)
-    (push (cons url tags) elfeed-feeds))
   :config
   (setq elfeed-db-directory koek/news-dir)
 
@@ -5051,24 +5035,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
     :config
     (push (rx line-start (literal elfeed-db-directory)) recentf-exclude))
 
-  (dolist (feed koek/feeds)
-    (let ((args
-           (pcase feed
-             (`(,title reddit month ,id . ,tags)
-              `(,(concat title " (Reddit - Month)")
-                ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
-                post ,@tags))
-             (`(,title reddit ,id . ,tags)
-              `(,(concat title " (Reddit)")
-                ,(format "https://www.reddit.com/r/%s/top.rss?t=week" id)
-                post ,@tags))
-             (`(,title youtube ,id . ,tags)
-              `(,(concat title " (YouTube)")
-                ,(format "https://www.youtube.com/feeds/videos.xml?channel_id=%s" id)
-                video ,@tags))
-             (_feed
-              feed))))
-      (apply #'koek/add-feed args))))
+  (koek-feed/init-feeds))
 
 (use-package bongo
   :defer t
