@@ -3779,6 +3779,7 @@ Modes are confident about being derived from text-mode.")
   :mode ((rx ".org" string-end) . org-mode)
   :bind
   (:map org-mode-map
+   ("C-c o k" . org-clone-subtree-with-time-shift) ; [K]lone [sic]
    ("C-M-f" . org-forward-heading-same-level)
    ("C-M-b" . org-backward-heading-same-level)
    ("C-M-n" . org-next-visible-heading)
