@@ -3883,7 +3883,7 @@ Modes are confident about being derived from text-mode.")
    ("C-c j s" . org-capture-goto-last-stored))
   :preface
   (defun koek-org/setup-tag-completion ()
-    "Setup tag completion for current.
+    "Setup tag completion in current.
 Candidates are collected from agenda files."
     (setq-local org-complete-tags-always-offer-all-agenda-tags t))
   :config
@@ -4090,7 +4090,7 @@ age of the person."
    ("C-x C-e" . python-shell-send-statement))
   :preface
   (defun koek-py/disable-checker ()
-    "Disable Python checker for current."
+    "Disable Python checker in current."
     (remove-hook 'flymake-diagnostic-functions #'python-flymake 'local))
   :config
   (add-hook 'python-mode-hook #'koek-py/disable-checker)
