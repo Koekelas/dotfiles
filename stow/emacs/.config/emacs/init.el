@@ -3272,7 +3272,7 @@ INTERACTIVE is used internally."
     "Stain document for reading under different light conditions."
     :lighter " Stain"
     (unless (derived-mode-p 'pdf-view-mode)
-      (user-error "Not a PDF buffer"))
+      (user-error "Not in a PDF buffer"))
     (if koek-pdf/stain-mode
         (progn
           (add-hook 'after-save-hook #'koek-pdf/stain nil 'local)
