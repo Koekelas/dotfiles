@@ -7167,7 +7167,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 #+END_SRC
 
 ** Org
-For agendas or capture templates, see [[*Agendas][Agendas]] respectively [[*Capture templates][Capture
+For agendas or capture templates, respectively see [[*Agendas][Agendas]] or [[*Capture templates][Capture
 templates]].
 
 #+BEGIN_SRC emacs-lisp
