@@ -4496,9 +4496,7 @@ compatible checkers disabled) or no-checker (no compatible
 checkers)."
     (let* ((enabled (flymake-running-backends))
            (finished (flymake-reporting-backends))
-           (running (seq-filter (lambda (checker)
-                                  (not (memq checker finished)))
-                                enabled))
+           (running (seq-difference enabled finished))
            (disabled (flymake-disabled-backends)))
       (cond
        (running
