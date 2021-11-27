@@ -2165,7 +2165,9 @@ earlier directories shadow later ones.")
     (let ((paths (parse-colon-path (getenv "CLASSPATH"))))
       (unless (member file-name paths)
         (setenv "CLASSPATH"
-                (string-join (cons file-name paths) path-separator))))))
+                (string-join (cons file-name paths) path-separator)))))
+
+  (push 'company-backends eglot-stay-out-of))
 
 (use-package tree-sitter
   :straight t
