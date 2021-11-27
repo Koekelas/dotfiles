@@ -2177,7 +2177,8 @@ earlier directories shadow later ones.")
   (:map flymake-mode-map
    ("C-c e n" . flymake-goto-next-error)
    ("C-c e p" . flymake-goto-prev-error)
-   ("C-c e l" . flymake-show-diagnostics-buffer))
+   ("C-c e l" . flymake-show-buffer-diagnostics)
+   ("C-c e C-l" . flymake-show-project-diagnostics))
   :hook ((clojure-mode emacs-lisp-mode) . flymake-mode)
   :config
   (setq flymake-wrap-around nil)
@@ -4481,6 +4482,8 @@ maximum length of S."
           ,(moody-ribbon current-input-method-title nil 'up))))
     "Input mode line construct.")
 
+  (defvar koek-ml/flymake-levels '(:error :warning :note))
+
   (defvar koek-ml/checker-names
     '((eglot-flymake-backend . "LSP")
       (elisp-flymake-byte-compile . "El")
@@ -4515,14 +4518,11 @@ STATE is a symbol, a flymake state."
       (string-join (cons (capitalize (car words)) (cdr words)) " ")))
 
   (defun koek-ml/get-flymake-n-diags ()
-    "Return number of diagnoses per error type."
-    (thread-last (hash-table-values flymake--backend-state)
-      (seq-mapcat #'flymake--backend-state-diags)
-      (seq-group-by (lambda (diag)
-                      (flymake--lookup-type-property (flymake--diag-type diag)
-                                                     'flymake-category)))
-      (mapcar (pcase-lambda (`(,cat . ,diags))
-                (cons cat (length diags))))))
+    "Return number of diagnoses per level."
+    (thread-last (flymake-diagnostics)
+      (seq-group-by #'flymake-diagnostic-type)
+      (mapcar (pcase-lambda (`(,level . ,diags))
+                (cons level (length diags))))))
 
   (defconst koek-ml/flymake
     '(:eval
@@ -4537,11 +4537,12 @@ STATE is a symbol, a flymake state."
              ((or `running `finished)
               (let ((n-diags (koek-ml/get-flymake-n-diags)))
                 (mapconcat
-                 (lambda (cat)
+                 (lambda (level)
                    (propertize
-                    (number-to-string (alist-get cat n-diags 0))
-                    'face (flymake--lookup-type-property cat 'mode-line-face)))
-                 '(flymake-error flymake-warning flymake-note) ";")))
+                    (number-to-string (alist-get level n-diags 0))
+                    'face (flymake--lookup-type-property level
+                                                         'mode-line-face)))
+                 koek-ml/flymake-levels ";")))
              (state
               (koek-ml/state-to-description state))))))
     "Flymake mode line construct.")
