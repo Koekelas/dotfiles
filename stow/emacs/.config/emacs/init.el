@@ -4488,12 +4488,6 @@ maximum length of S."
       (flymake-kondor-backend . "Kondo"))
     "Alist of checker symbol to checker name pairs.")
 
-  (defun koek-ml/state-to-description (state)
-    "Convert checker state STATE to a description.
-STATE is a symbol, a flymake state."
-    (let ((words (split-string (symbol-name state) "-")))
-      (string-join (cons (capitalize (car words)) (cdr words)) " ")))
-
   (defun koek-ml/get-flymake-state ()
     "Return state of flymake.
 State is the symbol running (some checkers running),
@@ -4515,6 +4509,12 @@ checkers)."
         'all-disabled)
        (t
         'no-checker))))
+
+  (defun koek-ml/state-to-description (state)
+    "Convert checker state STATE to a description.
+STATE is a symbol, a flymake state."
+    (let ((words (split-string (symbol-name state) "-")))
+      (string-join (cons (capitalize (car words)) (cdr words)) " ")))
 
   (defun koek-ml/get-flymake-n-diags ()
     "Return number of diagnoses per error type."
