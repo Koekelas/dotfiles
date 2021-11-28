@@ -4877,7 +4877,7 @@ NAME is a string, the name of the user directory."
                 (file-name-as-directory (car spec))))))
 
   (defun koek/get-agenda-dirs ()
-    "Return directories storing agenda files."
+    "Return agenda directories."
     (append (list koek/documents-dir koek/calendars-dir)
             (koek/get-child-dirs koek/projects-dir)))
 
