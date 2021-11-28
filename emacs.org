@@ -7857,7 +7857,7 @@ Disable blink cursor.
 
 ** Theme infrastructure
 Parts of this configuration need to act on theme changes and need to
-know the theme variant, whether a theme is a light or a dark theme.
+know the theme variant, whether a theme is a light or dark theme.
 Define theme infrastructure.
 
 #+BEGIN_SRC emacs-lisp
