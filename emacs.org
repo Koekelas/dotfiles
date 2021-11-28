@@ -8639,9 +8639,9 @@ Configure notes.
   })({protocol: "capture", template: "t", url: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
-To capture /Webpage/ and /Book/ from the browser, create two [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
+To capture /Note/ and /Book/ from the browser, create two [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
 
-#+CAPTION: Notitie (webpage)
+#+CAPTION: Notitie (note)
 #+BEGIN_SRC js
   javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
 #+END_SRC
