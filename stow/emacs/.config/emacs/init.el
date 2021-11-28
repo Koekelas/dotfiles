@@ -4329,6 +4329,7 @@ operandi or vivendi."
   (bind-key "C-c z t" #'koek-mt/toggle-variant)
 
   (setq modus-themes-success-deuteranopia t)
+  (setq modus-themes-mixed-fonts t)
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-italic-constructs t)
   (setq modus-themes-region '(bg-only))
