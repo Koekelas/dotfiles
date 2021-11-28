@@ -8648,7 +8648,7 @@ To capture /Note/ and /Book/ from the browser, create two [[https://en.wikipedia
 
 #+CAPTION: Boek (book)
 #+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "B", url: location.href, body: window.getSelection()});
+  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "capture", template: "b", url: location.href, body: window.getSelection()});
 #+END_SRC
 
 In [[https://www.mozilla.org/en-US/firefox/new/][Firefox]], to show bookmarklets to the left of the menu ([[https://en.wikipedia.org/wiki/Hamburger_button][hamburger]]):
@@ -8687,7 +8687,7 @@ Configure org capture templates.
                              "%?")
                            "\n")
              :empty-lines 1)
-            ("B" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
+            ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
              "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
     (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 #+END_SRC

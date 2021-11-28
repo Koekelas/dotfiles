@@ -4951,7 +4951,7 @@ NAME is a string, the name of the user directory."
                            "%?")
                          "\n")
            :empty-lines 1)
-          ("B" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
+          ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
            "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
   (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 
