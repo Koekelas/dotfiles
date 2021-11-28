@@ -4258,7 +4258,7 @@ age of the person."
 (define-advice enable-theme (:after (&rest _args) koek-thm/run-enable-hook)
   (run-hooks 'koek-thm/enable-hook))
 
-(defvar koek-thm/dark-themes nil
+(defvar koek-thm/dark-themes '(modus-vivendi)
   "List of theme symbols.
 Themes are dark themes.")
 
@@ -4342,7 +4342,6 @@ operandi or vivendi."
   (setq modus-themes-org-blocks 'gray-background)
   :config
   (setq face-near-same-color-threshold 70000)
-  (push 'modus-vivendi koek-thm/dark-themes)
   (koek-mt/load 'vivendi))
 
 (defvar koek-font/pairs
