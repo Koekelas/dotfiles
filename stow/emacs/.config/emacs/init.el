@@ -4270,8 +4270,8 @@ to the current theme."
 
 (defun koek-thm/set-frame-theme-variant (frame)
   "Set theme variant of FRAME.
-When current theme is a dark theme, set frame theme variant to
-dark, else, clear frame theme variant."
+When current theme is a dark theme, set theme variant to dark,
+else, clear it."
   (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
     (koek-thm/set-frame-theme-variant-xprop frame)))
 
