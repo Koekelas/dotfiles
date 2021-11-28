@@ -4865,8 +4865,8 @@ NAME is a string, the name of the user directory."
     "Return whether FILE-NAME is a lock file."
     (string-prefix-p ".#" (file-name-nondirectory file-name)))
 
-  (defun koek/get-subdirs (file-name)
-    "Return subdirectories in directory FILE-NAME."
+  (defun koek/get-child-dirs (file-name)
+    "Return child directories in directory FILE-NAME."
     (thread-last (directory-files-and-attributes file-name 'full)
       (seq-filter (pcase-lambda (`(,file-name ,type))
                     (let ((name (file-name-nondirectory file-name)))
@@ -4879,7 +4879,7 @@ NAME is a string, the name of the user directory."
   (defun koek/get-agenda-dirs ()
     "Return directories storing agenda files."
     (append (list koek/documents-dir koek/calendars-dir)
-            (koek/get-subdirs koek/projects-dir)))
+            (koek/get-child-dirs koek/projects-dir)))
 
   (defun koek/get-agenda-files ()
     "Return agenda files."
