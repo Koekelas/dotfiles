@@ -7849,7 +7849,7 @@ early initialization reduces startup time.
   (push '(vertical-scroll-bars . nil) default-frame-alist)
 #+END_SRC
 
-Disable blink cursor mode.
+Disable blink cursor.
 
 #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode 0)
