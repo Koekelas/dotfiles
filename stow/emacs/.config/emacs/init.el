@@ -4796,7 +4796,8 @@ TYPE is a symbol, the type of the variant, see
   (setq auth-sources '("secrets:Login")))
 
 (defun koek/get-user-dir (name)
-  "Return user directory NAME."
+  "Return user directory NAME.
+NAME is a string, the name of the user directory."
   (when-let ((file-name (getenv name)))
     (file-name-as-directory file-name)))
 
