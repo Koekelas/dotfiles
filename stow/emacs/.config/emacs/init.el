@@ -1403,6 +1403,25 @@ the builtin annotator except it aligns the annotation."
   :config
   (setq ls-lisp-dirs-first t))
 
+(use-package wdired
+  :defer t
+  :preface
+  ;; wdired-mode isn't a proper mode, it doesn't define the variable
+  ;; `wdired-mode' or run the hook `wdired-mode-hook' on mode disable
+  (defvar wdired-mode nil)
+
+  (defmacro koek-wdir/install-run-mode-hook (f mode-enabled)
+    `(define-advice ,f (:around (f &rest args) koek-wdir/run-mode-hook)
+       (let ((wdired-mode-hook nil))    ; Dynamic variable
+         (apply f args))
+       (let ((wdired-mode ,mode-enabled)) ; Dynamic variable
+         (run-hooks 'wdired-mode-hook))))
+
+  (koek-wdir/install-run-mode-hook wdired-change-to-wdired-mode t)
+  (koek-wdir/install-run-mode-hook wdired-finish-edit nil)
+  (koek-wdir/install-run-mode-hook wdired-exit nil)
+  (koek-wdir/install-run-mode-hook wdired-abort-changes nil))
+
 (use-package diredfl
   :straight t
   :after dired
