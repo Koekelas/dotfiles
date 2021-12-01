@@ -1938,8 +1938,14 @@ dictionary links before LIMIT."
     git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
     elfeed-search-mode bongo-playlist-mode)
    . lin-mode)
+  :preface
+  (defun koek-lin/reconfigure-for-wdired ()
+    "Reconfigure lin for use with wdired.
+When wdired is enabled, disable lin, else, enable lin."
+    (lin-mode (if wdired-mode 0 1)))
   :config
-  (setq lin-face 'lin-blue-override-fg))
+  (setq lin-face 'lin-blue-override-fg)
+  (add-hook 'wdired-mode-hook #'koek-lin/reconfigure-for-wdired))
 
 (use-package expand-region
   :straight t
