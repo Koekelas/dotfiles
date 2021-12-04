@@ -3092,6 +3092,12 @@ INTERACTIVE is used internally."
       (:override () koek-bngo/get-default-library-buffer)
     (dired-noselect bongo-default-directory))
 
+  (defun koek-bngo/reconfigure-for-wdired ()
+    "Reconfigure bongo-dired-library for use with wdired.
+When wdired is enabled, disable bongo-dired-library, else, enable
+it."
+    (bongo-dired-library-mode (if wdired-mode 0 1)))
+
   (defun koek-bngo/enqueue (file-names &optional next)
     "Enqueue FILE-NAMES.
 When optional NEXT is truthy, enqueue after playing track, else,
@@ -3144,9 +3150,6 @@ When playback is stopped, play from beginning."
           (goto-char (point-min))
           (bongo-play)))))
   :config
-  ;; Resolve keybinding conflict with wdired
-  (unbind-key "SPC" bongo-dired-library-mode-map)
-
   (bind-keys
    ("C-c k k" . koek-bngo/play-pause)
    :map bongo-dired-library-mode-map
@@ -3162,6 +3165,7 @@ When playback is stopped, play from beginning."
   ;; Libraries
   (setq bongo-prefer-library-buffers nil)
   (setq bongo-insert-whole-directory-trees t)
+  (add-hook 'wdired-mode-hook #'koek-bngo/reconfigure-for-wdired)
 
   ;; Playlists
   (setq bongo-join-inserted-tracks nil)
