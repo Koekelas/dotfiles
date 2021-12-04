@@ -3092,26 +3092,6 @@ INTERACTIVE is used internally."
       (:override () koek-bngo/get-default-library-buffer)
     (dired-noselect bongo-default-directory))
 
-  ;; Disable banner
-  (define-advice bongo-default-playlist-buffer
-      (:override () koek-bngo/get-default-playlist-buffer)
-    (let ((buffer (get-buffer-create bongo-default-playlist-buffer-name)))
-      (with-current-buffer buffer
-        (unless (derived-mode-p 'bongo-playlist-mode)
-          (bongo-playlist-mode)))
-      buffer))
-
-  (defun koek-bngo/play-pause ()
-    "Pause or resume playback.
-When playback is stopped, play from beginning."
-    (interactive)
-    (if (bongo-playing-p)
-        (bongo-pause/resume)
-      (with-bongo-playlist-buffer
-        (save-excursion
-          (goto-char (point-min))
-          (bongo-play)))))
-
   (defun koek-bngo/enqueue (file-names &optional next)
     "Enqueue FILE-NAMES.
 When optional NEXT is truthy, enqueue after playing track, else,
@@ -3143,6 +3123,26 @@ playing track, else, enqueue after last track."
     "Enqueue current line or marked lines after playing track."
     (interactive)
     (koek-bngo/dired-enqueue-dwim t))
+
+  ;; Disable banner
+  (define-advice bongo-default-playlist-buffer
+      (:override () koek-bngo/get-default-playlist-buffer)
+    (let ((buffer (get-buffer-create bongo-default-playlist-buffer-name)))
+      (with-current-buffer buffer
+        (unless (derived-mode-p 'bongo-playlist-mode)
+          (bongo-playlist-mode)))
+      buffer))
+
+  (defun koek-bngo/play-pause ()
+    "Pause or resume playback.
+When playback is stopped, play from beginning."
+    (interactive)
+    (if (bongo-playing-p)
+        (bongo-pause/resume)
+      (with-bongo-playlist-buffer
+        (save-excursion
+          (goto-char (point-min))
+          (bongo-play)))))
   :config
   ;; Resolve keybinding conflict with wdired
   (unbind-key "SPC" bongo-dired-library-mode-map)
@@ -3153,13 +3153,17 @@ playing track, else, enqueue after last track."
    ([remap bongo-dired-append-enqueue-lines] . koek-bngo/dired-enqueue-dwim)
    ([remap bongo-dired-insert-enqueue-lines] . koek-bngo/dired-enqueue-next-dwim))
 
-  ;; General
+  ;; Backends
   (setq bongo-enabled-backends '(mpv))
   (setq bongo-custom-backend-matchers
         '((mpv . (local-file "m4a"))
           (mpv . ("https:" . t))))
+
+  ;; Libraries
   (setq bongo-prefer-library-buffers nil)
   (setq bongo-insert-whole-directory-trees t)
+
+  ;; Playlists
   (setq bongo-join-inserted-tracks nil)
   (setq bongo-display-playlist-after-enqueue nil)
 
