@@ -1792,6 +1792,22 @@ When FORCE is truthy, unconditionally continue commit."
 (use-package wgrep
   :straight t
   :after grep
+  :preface
+  ;; wgrep-mode isn't a proper mode, it doesn't define the variable
+  ;; `wgrep-mode' or the hook `wgrep-mode-hook'
+  (defvar wgrep-mode nil)
+  (defvar wgrep-mode-hook nil)
+
+  (defmacro koek-wgrp/install-run-mode-hook (f mode-enabled)
+    `(define-advice ,f (:around (f &rest args) koek-wgrp/run-mode-hook)
+       (let ((wgrep-mode ,mode-enabled)) ; Dynamic variable
+         (apply f args)
+         (run-hooks 'wgrep-mode-hook))))
+
+  (koek-wgrp/install-run-mode-hook wgrep-change-to-wgrep-mode t)
+  (koek-wgrp/install-run-mode-hook wgrep-finish-edit nil)
+  (koek-wgrp/install-run-mode-hook wgrep-exit nil)
+  (koek-wgrp/install-run-mode-hook wgrep-abort-changes nil)
   :config
   (setq wgrep-enable-key (kbd "C-x C-q")))
 
@@ -1943,9 +1959,15 @@ dictionary links before LIMIT."
     "Reconfigure lin for use with wdired.
 When wdired is enabled, disable lin, else, enable lin."
     (lin-mode (if wdired-mode 0 1)))
+
+  (defun koek-lin/reconfigure-for-wgrep ()
+    "Reconfigure lin for use with wgrep.
+When wgrep is enabled, disable lin, else, enable lin."
+    (lin-mode (if wgrep-mode 0 1)))
   :config
   (setq lin-face 'lin-blue-override-fg)
-  (add-hook 'wdired-mode-hook #'koek-lin/reconfigure-for-wdired))
+  (add-hook 'wdired-mode-hook #'koek-lin/reconfigure-for-wdired)
+  (add-hook 'wgrep-mode-hook #'koek-lin/reconfigure-for-wgrep))
 
 (use-package expand-region
   :straight t
