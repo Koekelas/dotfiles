@@ -2305,6 +2305,10 @@ earlier directories shadow later ones.")
 
 (use-package abbrev
   :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
+  :preface
+  (defun koek-bbrv/in-code-p ()
+    "Return whether point is in code."
+    (null (syntax-ppss-context (syntax-ppss))))
   :delight)
 
 (use-package yasnippet
@@ -4256,8 +4260,8 @@ age of the person."
              (re-search-forward (rx (one-or-more (not  ")"))))))
           (rx (any " \n")) 'omit-nulls "\"")))
     (dolist (keyword keywords)
-      (define-abbrev
-        sql-mode-abbrev-table keyword (upcase keyword) nil :system t)))
+      (define-abbrev sql-mode-abbrev-table keyword (upcase keyword)
+                     nil :enable-function #'koek-bbrv/in-code-p :system t)))
 
   (setq sql-product 'postgres))
 

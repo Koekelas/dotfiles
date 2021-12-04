@@ -3168,6 +3168,10 @@ When line is indented, press =TAB= to complete text before point.
 #+BEGIN_SRC emacs-lisp
   (use-package abbrev
     :hook ((sql-mode sql-interactive-mode) . abbrev-mode)
+    :preface
+    (defun koek-bbrv/in-code-p ()
+      "Return whether point is in code."
+      (null (syntax-ppss-context (syntax-ppss))))
     :delight)
 #+END_SRC
 
@@ -7783,8 +7787,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
                (re-search-forward (rx (one-or-more (not  ")"))))))
             (rx (any " \n")) 'omit-nulls "\"")))
       (dolist (keyword keywords)
-        (define-abbrev
-          sql-mode-abbrev-table keyword (upcase keyword) nil :system t)))
+        (define-abbrev sql-mode-abbrev-table keyword (upcase keyword)
+                       nil :enable-function #'koek-bbrv/in-code-p :system t)))
 
     (setq sql-product 'postgres))
 #+END_SRC
