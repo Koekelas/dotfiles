@@ -4010,7 +4010,6 @@ Candidates are collected from agenda files."
    ("C-c o x" . org-clock-cancel))
   :config
   (setq org-clock-persist 'clock)
-
   (org-clock-load))
 
 (use-package org-list
