@@ -420,6 +420,7 @@ To apply configuration, run:
   emacs.desktop
   org.gnome.Boxes.desktop
   org.gnome.Calculator.desktop
+  org.gnome.Connections.desktop
   org.gnome.Maps.desktop
   org.gnome.Weather.desktop
   org.gnome.clocks.desktop
