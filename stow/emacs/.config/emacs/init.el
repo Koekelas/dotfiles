@@ -4020,6 +4020,9 @@ Candidates are collected from agenda files."
 (use-package org-refile
   :defer t
   :config
+  (setq org-refile-targets
+        '((nil . (:maxlevel . 3))       ; Current
+          (org-agenda-files . (:maxlevel . 3))))
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-use-outline-path 'buffer-name))
 
@@ -4954,10 +4957,7 @@ NAME is a string, the name of the user directory."
       (:before (&rest _args) koek/update-agenda-files)
     (setq org-agenda-files (koek/get-agenda-files)))
   :config
-  (setq org-directory koek/documents-dir)
-  (setq org-refile-targets
-        '((nil . (:maxlevel . 3))       ; Current
-          (org-agenda-files . (:maxlevel . 3)))))
+  (setq org-directory koek/documents-dir))
 
 (koek-pkg/register belgian-holidays)    ; Optional dependency
 
