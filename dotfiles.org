@@ -355,6 +355,7 @@ To apply configuration, run:
   firefox.desktop
   io.github.qtox.qTox.desktop
   jami-gnome.desktop
+  org.gnome.Epiphany.desktop
   teams.desktop
 #+END_SRC
 
