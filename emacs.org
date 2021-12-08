@@ -1975,6 +1975,28 @@ minibuffer.
 
 * Files
 
+** File functions
+Define file related helper functions.
+
+#+BEGIN_SRC emacs-lisp
+  (defun koek-file/lockp (file-name)
+    "Return whether FILE-NAME is a lock file."
+    (string-prefix-p ".#" (file-name-nondirectory file-name)))
+
+  (defun koek-file/get-child-dirs (file-name &optional full)
+    "Return child directories in directory FILE-NAME.
+  When optional FULL is truthy, return absolute file names, else,
+  return relative file names."
+    (thread-last (directory-files-and-attributes file-name full)
+      (seq-filter (pcase-lambda (`(,file-name ,type))
+                    (let ((name (file-name-nondirectory file-name)))
+                      (and (eq type t)  ; Directory
+                           (string-match-p directory-files-no-dot-files-regexp
+                                           name)))))
+      (mapcar (lambda (spec)
+                (file-name-as-directory (car spec))))))
+#+END_SRC
+
 ** dired - File manager
 #+BEGIN_SRC emacs-lisp
   (use-package dired
@@ -8593,32 +8615,17 @@ directories of ~koek/projects-dir~, are agenda files. Configure agendas.
   (use-package org
     :defer t
     :preface
-    (defun koek/lock-file-p (file-name)
-      "Return whether FILE-NAME is a lock file."
-      (string-prefix-p ".#" (file-name-nondirectory file-name)))
-
-    (defun koek/get-child-dirs (file-name)
-      "Return child directories in directory FILE-NAME."
-      (thread-last (directory-files-and-attributes file-name 'full)
-        (seq-filter (pcase-lambda (`(,file-name ,type))
-                      (let ((name (file-name-nondirectory file-name)))
-                        (and (eq type t)  ; Directory
-                             (string-match-p directory-files-no-dot-files-regexp
-                                             name)))))
-        (mapcar (lambda (spec)
-                  (file-name-as-directory (car spec))))))
-
     (defun koek/get-agenda-dirs ()
       "Return agenda directories."
       (append (list koek/documents-dir koek/calendars-dir)
-              (koek/get-child-dirs koek/projects-dir)))
+              (koek-file/get-child-dirs koek/projects-dir 'full)))
 
     (defun koek/get-agenda-files ()
       "Return agenda files."
       (thread-last (koek/get-agenda-dirs)
         (seq-mapcat (lambda (file-name)
                       (directory-files file-name 'full (rx ".org" line-end))))
-        (seq-remove #'koek/lock-file-p)
+        (seq-remove #'koek-file/lockp)
         seq-uniq))
 
     (define-advice org-agenda-files
