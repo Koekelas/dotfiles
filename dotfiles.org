@@ -223,7 +223,8 @@ Launch [[*xsettingsd][xsettingsd]].
       && xsettingsd -c "$xsettingsd_config_file" &
 #+END_SRC
 
-Set SSH agent.
+Set SSH agent socket. The SSH agent, GNOME Keyring Daemon, is launched
+by GDM.
 
 #+BEGIN_SRC sh
   eval $(gnome-keyring-daemon -s)
