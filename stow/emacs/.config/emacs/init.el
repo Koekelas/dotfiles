@@ -4862,18 +4862,12 @@ TYPE is a symbol, the type of the variant, see
                        (ediff-get-state-of-diff ediff-current-difference
                                                 type))))
                 (pcase diff
-                  ("prefer-A"
-                   "=B")
-                  ("prefer-B"
-                   "=A")
-                  ("=diff(A)"
-                   "=A")
-                  ("=diff(B)"
-                   "=B")
-                  ("=diff(C)"
-                   "=C")
-                  ("=diff(A+B)"
-                   "=A+B"))))
+                  ("prefer-A"   "=B")
+                  ("prefer-B"   "=A")
+                  ("=diff(A)"   "=A")
+                  ("=diff(B)"   "=B")
+                  ("=diff(C)"   "=C")
+                  ("=diff(A+B)" "=A+B"))))
              (merge (when (eq type 'C)
                       (ediff-get-state-of-merge ediff-current-difference)))
              (ancestor
