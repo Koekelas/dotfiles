@@ -397,8 +397,10 @@ Keybinding is a string, see `edmacro-mode'.")
   (defun koek-wm/make-firefox-record ()
     (let* ((page (koek-wm/get-firefox-page))
            (url (or (plist-get page :url) (user-error "Not visiting a URL")))
-           (title (plist-get page :title)))
-      (koek-bmrk/generic-url-record url title)))
+           (title (plist-get page :title))
+           (normalized (when title
+                         (koek-subr/normalize-title title))))
+      (koek-bmrk/generic-url-record url normalized)))
 
   (defun koek-wm/setup-current ()
     (cond
@@ -2786,8 +2788,10 @@ Output is between `compilation-filter-start' and point."
   (defun koek-eww/make-record ()
     (let* ((page (koek-eww/get-page))
            (url (or (plist-get page :url) (user-error "Not visiting a URL")))
-           (title (plist-get page :title)))
-      (koek-bmrk/generic-url-record url title)))
+           (title (plist-get page :title))
+           (normalized (when title
+                         (koek-subr/normalize-title title))))
+      (koek-bmrk/generic-url-record url normalized)))
 
   (defun koek-eww/setup-current ()
     (setq-local bookmark-make-record-function #'koek-eww/make-record))
