@@ -920,10 +920,10 @@ value determined during calibration, run:
 #+END_SRC
 
 * Org protocol :setup:
-Define org protocol scheme handler. Must invoke a shell to expand
-environment variables. For desktop entry or scheme handler format, see
-[[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] respectively [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME
-Info Specification (freedesktop)]].
+Define org protocol scheme handler. Environment variables are expanded
+by launching a shell. For desktop entry or scheme handler format,
+respectively see [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] or [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared
+MIME Info Specification (freedesktop)]].
 
 #+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/org-protocol.desktop
   [Desktop Entry]
