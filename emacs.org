@@ -7473,14 +7473,14 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
     :mode (rx (or ".desktop" "/cross.txt") string-end)
     :preface
     (defvar koek-conf/mode-names
-      '((conf-colon-mode . "Conf:")
-        (conf-desktop-mode . "Desktop")
-        (conf-javaprop-mode . "Properties")
-        (conf-ppd-mode . "PPD")
-        (conf-space-mode . "Conf\N{MIDDLE DOT}")
-        (conf-toml-mode . "TOML")
-        (conf-unix-mode . "Unix")
-        (conf-windows-mode . "INI")
+      '((conf-colon-mode     . "Conf:")
+        (conf-desktop-mode   . "Desktop")
+        (conf-javaprop-mode  . "Properties")
+        (conf-ppd-mode       . "PPD")
+        (conf-space-mode     . "Conf\N{MIDDLE DOT}")
+        (conf-toml-mode      . "TOML")
+        (conf-unix-mode      . "Unix")
+        (conf-windows-mode   . "INI")
         (conf-xdefaults-mode . "Xdefaults"))
       "Alist of Conf mode symbol to Conf mode name pairs.")
 
@@ -8627,10 +8627,10 @@ windows and continues in the mode line.
     (defvar koek-ml/flymake-levels '(:error :warning :note))
 
     (defvar koek-ml/checker-names
-      '((eglot-flymake-backend . "LSP")
+      '((eglot-flymake-backend      . "LSP")
         (elisp-flymake-byte-compile . "El")
-        (elisp-flymake-checkdoc . "CDoc")
-        (flymake-kondor-backend . "Kondo"))
+        (elisp-flymake-checkdoc     . "CDoc")
+        (flymake-kondor-backend     . "Kondo"))
       "Alist of checker symbol to checker name pairs.")
 
     (defun koek-ml/get-flymake-state ()
