@@ -2108,6 +2108,15 @@ When wgrep is enabled, disable lin, else, enable lin."
  ([remap upcase-word]     . upcase-dwim)
  ([remap capitalize-word] . capitalize-dwim))
 
+(defun koek-word/title-case-region (begin end)
+  (interactive "r")
+  (save-excursion
+    (let ((title (buffer-substring-no-properties begin end)))
+      (delete-region begin end)
+      (insert (koek-subr/title-case title)))))
+
+(bind-key "C-c e t" #'koek-word/title-case-region)
+
 (use-package subword
   :hook
   ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
