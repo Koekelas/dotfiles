@@ -260,7 +260,7 @@ Launch Emacs.
 Ignore system configuration.
 
 #+BEGIN_SRC conf
-  # Intentionally empty
+  # Deliberately empty
 #+END_SRC
 
 ** xsettingsd :setup:
