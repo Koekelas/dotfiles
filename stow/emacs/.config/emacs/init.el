@@ -3279,7 +3279,7 @@ playing track, else, enqueue after last track."
 
   (defun koek-bngo/play-pause ()
     "Pause or resume playback.
-When playback is stopped, play from beginning."
+When playback is stopped, play from beginning of playlist."
     (interactive)
     (if (bongo-playing-p)
         (bongo-pause/resume)
