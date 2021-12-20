@@ -5102,7 +5102,7 @@ NAME is a string, the name of the user directory."
                          "\n")
            :empty-lines 1)
           ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
-           "- [[%:link][%(replace-regexp-in-string (rx (one-or-more \"\\n\")) \" \" \"%i\")]]%?")))
+           "- [[%:link][%(koek-subr/normalize-title \"%i\")]]%?")))
   (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
 
 (use-package org-roam-capture
