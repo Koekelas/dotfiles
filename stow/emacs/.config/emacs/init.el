@@ -2422,7 +2422,7 @@ earlier directories shadow later ones.")
                 (unless (zerop result)
                   (error "%s returned %d"
                          (pcase build-system
-                           ('lein "Leiningen")
+                           ('lein   "Leiningen")
                            ('shadow "shadow-cljs"))
                          result)))
               (buffer-substring (point-min) (point-max))))
