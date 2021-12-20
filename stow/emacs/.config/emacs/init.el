@@ -3233,7 +3233,7 @@ INTERACTIVE is used internally."
   (defun koek-bngo/reconfigure-for-wdired ()
     "Reconfigure bongo-dired-library for use with wdired.
 When wdired is enabled, disable bongo-dired-library, else, enable
-it."
+bongo-dired-library."
     (bongo-dired-library-mode (if wdired-mode 0 1)))
 
   (defun koek-bngo/enqueue (file-names &optional next)
