@@ -4663,7 +4663,7 @@ A dummy prevents a package from modifying the mode line.")
     (mapcar (lambda (workspace)
               (let ((n (nth 0 workspace))
                     (name (let ((name (nth 2 workspace)))
-                            (unless (string-equal name "")
+                            (unless (string-empty-p name)
                               name))))
                 (list :n n
                       :label (concat (or (koek-subr/arabic-to-roman n) "N")
