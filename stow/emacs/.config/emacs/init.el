@@ -4840,7 +4840,7 @@ STATE is a symbol, a flymake state."
                (n-diffs ediff-number-of-differences))
            (cond
             ((< diff-n 1)
-             (format "Start -/%d" n-diffs))
+             (format "Begin -/%d" n-diffs))
             ((> diff-n n-diffs)
              (format "End -/%d" n-diffs))
             (t
