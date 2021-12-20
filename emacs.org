@@ -3128,11 +3128,11 @@ Upgrade case commands.
 #+END_SRC
 
 *** Word motion commands
-Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
-~koek-mtn/previous-word~ recognize [[*subword - Recognize words in camel case words][subwords]].
+Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-word/next-word~ and
+~koek-word/previous-word~ recognize [[*subword - Recognize words in camel case words][subwords]].
 
 #+BEGIN_SRC emacs-lisp
-  (defun koek-mtn/next-word (&optional arg)
+  (defun koek-word/next (&optional arg)
     "Move point to beginning of next word, repeat ARG times.
   Optional ARG is an integer and defaults to one.  When ARG is
   negative, move point to ending of previous word."
@@ -3149,18 +3149,18 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-mtn/next-word~ and
         (when (forward-word step)
           (backward-word step)))))
 
-  (defun koek-mtn/previous-word (&optional arg)
+  (defun koek-word/previous (&optional arg)
     "Move point to ending of previous word, repeat ARG times.
   Optional ARG is an integer and defaults to one.  When ARG is
   negative, move point to beginning of next word."
     (interactive "p")
     (unless arg
       (setq arg 1))
-    (koek-mtn/next-word (- arg)))
+    (koek-word/next (- arg)))
 
   (bind-keys
-   ("M-n" . koek-mtn/next-word)
-   ("M-p" . koek-mtn/previous-word))
+   ("M-n" . koek-word/next)
+   ("M-p" . koek-word/previous))
 #+END_SRC
 
 ** Lines

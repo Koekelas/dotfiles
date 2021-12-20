@@ -2123,7 +2123,7 @@ When wgrep is enabled, disable lin, else, enable lin."
    subword-mode)
   :delight)
 
-(defun koek-mtn/next-word (&optional arg)
+(defun koek-word/next (&optional arg)
   "Move point to beginning of next word, repeat ARG times.
 Optional ARG is an integer and defaults to one.  When ARG is
 negative, move point to ending of previous word."
@@ -2140,18 +2140,18 @@ negative, move point to ending of previous word."
       (when (forward-word step)
         (backward-word step)))))
 
-(defun koek-mtn/previous-word (&optional arg)
+(defun koek-word/previous (&optional arg)
   "Move point to ending of previous word, repeat ARG times.
 Optional ARG is an integer and defaults to one.  When ARG is
 negative, move point to beginning of next word."
   (interactive "p")
   (unless arg
     (setq arg 1))
-  (koek-mtn/next-word (- arg)))
+  (koek-word/next (- arg)))
 
 (bind-keys
- ("M-n" . koek-mtn/next-word)
- ("M-p" . koek-mtn/previous-word))
+ ("M-n" . koek-word/next)
+ ("M-p" . koek-word/previous))
 
 (delight 'visual-line-mode nil 'simple)
 
