@@ -290,7 +290,7 @@ Disable blink cursor.
 #+END_SRC
 
 *** Themes
-Configure a light and a dark theme. For theme names, see [[file:/usr/share/themes][theme
+Configure a light and a dark theme. For theme names, see [[file:/usr/share/themes/][theme
 directory]].
 
 #+BEGIN_SRC conf :noweb-ref xsettingsd-light-theme
@@ -495,7 +495,7 @@ create it, run:
 
 #+BEGIN_SRC sh
   mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
-  chmod 700 "${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+  chmod 700 "${XDG_DATA_HOME:-$HOME/.local/share}/gnupg/"
 #+END_SRC
 
 Move data directory out of the way.
@@ -940,7 +940,7 @@ Info Specification (freedesktop)]].
 To register the scheme handler, run:
 
 #+BEGIN_SRC sh
-  update-desktop-database "${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+  update-desktop-database "${XDG_DATA_HOME:-$HOME/.local/share}/applications/"
 #+END_SRC
 
 * Jupyter Notebook
