@@ -275,17 +275,96 @@ Keybinding is a string, see `edmacro-mode'.")
 (use-package exwm-workspace
   :defer t
   :preface
+  (defun koek-wm/get-class (&optional buffer)
+    (when (featurep 'exwm-core)
+      (buffer-local-value
+       'exwm-class-name (get-buffer (or buffer (current-buffer))))))
+
+  (defun koek-wm/like-class-p (a b)
+    (pcase-let* ((args (list a b))
+                 (`(,class ,ref-class)
+                  (if (> (length a) (length b)) (reverse args) args)))
+      (let ((case-fold-search t))       ; Dynamic variable
+        (string-match (regexp-quote class) ref-class))))
+
   (defun koek-wm/classp (class &optional buffer)
     ;; `exwm-class-name' is the name of the application while
     ;; `exwm-instance-name' is the name of the instance of the
     ;; application, see
     ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
-    (when (boundp 'exwm-class-name)
-      (when-let ((cl
-                  (buffer-local-value
-                   'exwm-class-name (get-buffer (or buffer (current-buffer))))))
-        (let ((case-fold-search t))     ; Dynamic variable
-          (string-match-p (regexp-quote class) cl)))))
+    (when-let ((ref-class (koek-wm/get-class buffer)))
+      (koek-wm/like-class-p class ref-class)))
+
+  (defvar koek-wm/app-names
+    '(("ardour"                  . ("Ardour"))
+      ("blender"                 . ("Blender"))
+      ("blueman"                 . ("Bluetooth Manager"))
+      ("boxes"                   . ("Boxes"))
+      ("displaycal"              . ("DisplayCAL"))
+      ("displaycal-3dlut-maker"  . ("3D LUT Maker"))
+      ("displaycal-curve-viewer" . ("Curve Viewer"))
+      ("displaycal-profile-info" . ("ICC Profile Info"))
+      ("displaycal-scripting-client" . ("Scripting Client"))
+      ("displaycal-synthprofile" . ("Synthetic ICC"))
+      ("displaycal-testchart-editor" . ("Testchart Editor"))
+      ("displaycal-vrml-to-x3d-converter" . ("VRML to X3D"))
+      ("eid-viewer"              . ("eID Viewer"))
+      ("electrum"                . ("Electrum Bitcoin Wallet"))
+      ("eog"                     . ("Image Viewer"))
+      ("epiphany"                . ("Web"))
+      ("evince"                  . ("Document Viewer" "Doc"))
+      ("file-roller"             . ("Archive Manager"))
+      ("firefox"                 . ("Firefox" "FF"))
+      ("fontforge"               . ("FontForge"))
+      ("freecad"                 . ("FreeCAD"))
+      ("gimp"                    . ("GNU Image Manipulation Program" "GIMP"))
+      ("gnome-calculator"        . ("Calculator"))
+      ("gnome-connections"       . ("Connections"))
+      ("gnome-disks"             . ("Disks"))
+      ("gnome-logs"              . ("Logs"))
+      ("gnome-screenshot"        . ("Screenshot"))
+      ("gnome-system-monitor"    . ("System Monitor"))
+      ("gnome-terminal"          . ("Terminal"))
+      ("gnome.clocks"            . ("Clocks"))
+      ("gnome.maps"              . ("Maps"))
+      ("gnome.weather"           . ("Weather"))
+      ("gromit-mpx"              . ("Gromit-MPX"))
+      ("inkscape"                . ("Inkscape"))
+      ("jami"                    . ("Jami"))
+      ("keepassxc"               . ("KeePassXC"))
+      ("libreoffice-base"        . ("LibreOffice Base" "Base"))
+      ("libreoffice-calc"        . ("LibreOffice Calc" "Calc"))
+      ("libreoffice-draw"        . ("LibreOffice Draw" "Draw"))
+      ("libreoffice-impress"     . ("LibreOffice Impress" "Impress"))
+      ("libreoffice-math"        . ("LibreOffice Math" "Math"))
+      ("libreoffice-startcenter" . ("LibreOffice"))
+      ("libreoffice-writer"      . ("LibreOffice Writer" "Writer"))
+      ("lollypop"                . ("Lollypop"))
+      ("mpv"                     . ("mpv Media Player" "mpv"))
+      ("nautilus"                . ("Files"))
+      ("nm-connection-editor"    . ("Advanced Network Configuration"))
+      ("obs"                     . ("OBS Studio"))
+      ("octave"                  . ("GNU Octave" "Octave"))
+      ("openscad"                . ("OpenSCAD"))
+      ("pavucontrol"             . ("PulseAudio Volume Control"))
+      ("picard"                  . ("MusicBrainz Picard" "Picard"))
+      ("pitivi"                  . ("Pitivi"))
+      ("processing"              . ("Arduino IDE"))
+      ("qtox"                    . ("qTox"))
+      ("scribus"                 . ("Scribus"))
+      ("seahorse"                . ("Passwords and Keys"))
+      ("simple-scan"             . ("Document Scanner"))
+      ("soffice"                 . ("LibreOffice"))
+      ("steam"                   . ("Steam"))
+      ("vlc"                     . ("VLC Media Player" "VLC"))
+      ("wireshark"               . ("Wireshark"))))
+
+  (defun koek-wm/get-app-name (&optional buffer nick)
+    (when-let*
+        ((class (koek-wm/get-class buffer))
+         (names
+          (alist-get class koek-wm/app-names nil nil #'koek-wm/like-class-p)))
+      (or (and nick (cadr names)) (car names))))
 
   (defun koek-wm/get-firefox-page ()
     (string-match
@@ -328,62 +407,42 @@ Keybinding is a string, see `edmacro-mode'.")
                   #'koek-wm/make-firefox-record))))
 
   (defun koek-wm/update-current ()
-    (cond
-     ;; Creative
-     ((koek-wm/classp "gimp")
-      (exwm-workspace-rename-buffer "*GIMP*"))
-     ;; Internet
-     ((koek-wm/classp "epiphany")
-      (exwm-workspace-rename-buffer
-       (concat "*Web: " exwm-title "*")))
-     ((koek-wm/classp "firefox")
-      (let* ((page (koek-wm/get-firefox-page))
-             (title (plist-get page :title))
-             (url (plist-get page :url))
-             (parsed (url-generic-parse-url url))
-             (scheme (url-type parsed))
-             (id (if (member scheme '("about" "chrome"))
-                     title
-                   (or title url))))
+    (let ((name
+           (or (koek-wm/get-app-name nil 'nick) exwm-class-name "Unnamed")))
+      (cond
+       ;; ---------- Epiphany/Web ----------
+       ((koek-wm/classp "epiphany")
         (exwm-workspace-rename-buffer
-         (concat "*FF"
-                 (when id
-                   (concat ": " id))
-                 "*"))
-        ;; ibuffer, marginalia
-        (setq list-buffers-directory url)))
-     ((koek-wm/classp "microsoft teams")
-      (exwm-workspace-rename-buffer "*Teams*"))
-     ;; Leisure
-     ((koek-wm/classp "vlc")
-      (exwm-workspace-rename-buffer "*VLC*"))
-     ;; System
-     ((koek-wm/classp "blueman")
-      (exwm-workspace-rename-buffer "*Bluetooth Manager*"))
-     ((koek-wm/classp "nm-connection")
-      (exwm-workspace-rename-buffer "*Network Configuration*"))
-     ((koek-wm/classp "seahorse")
-      (exwm-workspace-rename-buffer "*Passwords*"))
-     ((koek-wm/classp "pavucontrol")
-      (exwm-workspace-rename-buffer "*PulseAudio Volume Control*"))
-     ;; Utilities
-     ((koek-wm/classp "evince")
-      (let ((title (replace-regexp-in-string
-                    (rx " \N{EM DASH} " (one-or-more not-newline) line-end) ""
-                    exwm-title)))
+         (koek-subr/construct-earmuffed-name name exwm-title)))
+       ;; ---------- Evince/Document Viewer ----------
+       ((koek-wm/classp "evince")
+        (let ((title (string-trim-right
+                      exwm-title
+                      (rx " \N{EM DASH} " (one-or-more not-newline)))))
+          (exwm-workspace-rename-buffer
+           (koek-subr/construct-earmuffed-name name title))))
+       ;; ---------- Firefox ----------
+       ((koek-wm/classp "firefox")
+        (let* ((page (koek-wm/get-firefox-page))
+               (title (plist-get page :title))
+               (url (plist-get page :url))
+               (parsed (url-generic-parse-url url))
+               (scheme (url-type parsed))
+               (id (if (member scheme '("about" "chrome"))
+                       title
+                     (or title url))))
+          (exwm-workspace-rename-buffer
+           (koek-subr/construct-earmuffed-name name id))
+          ;; ibuffer, marginalia
+          (setq list-buffers-directory url)))
+       ;; ---------- Nautilus/Files ----------
+       ((koek-wm/classp "nautilus")
         (exwm-workspace-rename-buffer
-         (concat "*Doc View: " title "*"))))
-     ((koek-wm/classp "nautilus")
-      (exwm-workspace-rename-buffer
-       (concat "*Files: " exwm-title "/*")))
-     ((koek-wm/classp "gnome-screenshot")
-      (exwm-workspace-rename-buffer "*Screenshot*"))
-     ;; Work
-     ((koek-wm/classp "gnome-connections")
-      (exwm-workspace-rename-buffer "*Connections*"))
-     ;; Default
-     (t
-      (exwm-workspace-rename-buffer (format "*%s*" exwm-class-name)))))
+         (koek-subr/construct-earmuffed-name name (concat exwm-title "/"))))
+       ;; ---------- Default ----------
+       (t
+        (exwm-workspace-rename-buffer
+         (koek-subr/construct-earmuffed-name name))))))
 
   (defvar koek-wm/previous-workspace-n nil
     "Previously selected workspace number.")
@@ -451,12 +510,7 @@ N is an integer, a workspace number."
   :config
   (let ((defaults '(floating-mode-line nil)))
     (setq exwm-manage-configurations
-          `(;; Creative
-            ((koek-wm/classp "gimp")
-             char-mode t ,@defaults)
-            ((koek-wm/classp "inkscape")
-             char-mode t ,@defaults)
-            ;; Internet
+          `(;; ---------- Epiphany/Web ----------
             ((koek-wm/classp "epiphany")
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
@@ -466,6 +520,7 @@ N is an integer, a workspace number."
                                 ("M-k" . "C-w"))
                               koek-wm/base-simulation-keys))
              ,@defaults)
+            ;; ---------- Firefox ----------
             ((koek-wm/classp "firefox")
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
@@ -475,16 +530,19 @@ N is an integer, a workspace number."
                                 ("M-k" . "C-w"))
                               koek-wm/base-simulation-keys))
              ,@defaults)
-            ;; Utilities
+            ;; ---------- Nautilus/Files ----------
             ((koek-wm/classp "nautilus")
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
                         (cons (kbd from) (kbd to)))
                       (cons '("M-k" . "C-w") koek-wm/base-simulation-keys))
              ,@defaults)
-            ;; Default
+            ;; ---------- mpv ----------
+            ((koek-wm/classp "mpv")
+             ,@defaults)
+            ;; ---------- Default ----------
             (t
-             ,@defaults)))))
+             char-mode t ,@defaults)))))
 
 (use-package server
   :config

@@ -189,6 +189,17 @@ odd."
           (setq n-rem (1- n-rem))
           (setq rem (cdr rem)))))))
 
+;;; Buffer subroutines
+
+(defun koek-subr/construct-earmuffed-name (&rest parts)
+  (let* ((names (thread-last parts
+                  (remq nil)
+                  (mapcar (apply-partially #'format "%s"))
+                  (remove "")))
+         (main (car names))
+         (subs (cdr names)))
+    (concat "*" main (when subs (concat ": " (string-join subs " "))) "*")))
+
 ;;; File name subroutines
 
 (defun koek-subr/lock-file-p (file-name)
