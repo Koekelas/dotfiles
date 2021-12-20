@@ -1033,6 +1033,45 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
           (unless (string-empty-p host)
             host)))))
 
+  (defun koek-ibuf/determine-sourcehut-github-gitlab-repo (url)
+    (pcase-let* ((parsed (url-generic-parse-url url))
+                 (host (url-host parsed))
+                 (`(,group ,repo)
+                  (split-string (url-filename parsed) "/" 'omit-nulls)))
+      (when (and host group repo
+                 (string-match
+                  (rx word-boundary (or "sr" "github" "gitlab") word-boundary)
+                  host))
+        (format "%s - %s/%s" repo host group))))
+
+  (defun koek-ibuf/determine-bitbucket-repo (url)
+    (pcase-let* ((parsed (url-generic-parse-url url))
+                 (host (url-host parsed))
+                 (`(,group-marker ,group ,repo-marker ,repo)
+                  (split-string (url-filename parsed) "/" 'omit-nulls)))
+      (when (and host group-marker group repo-marker repo
+                 (string-match
+                  (rx word-boundary "bitbucket" word-boundary) host)
+                 (string-equal group-marker "projects")
+                 (string-equal repo-marker "repos"))
+        (format "%s - %s/%s" repo host group))))
+
+  (defvar koek-ibuf/determine-repo-fs
+    '(koek-ibuf/determine-sourcehut-github-gitlab-repo
+      koek-ibuf/determine-bitbucket-repo))
+
+  (defun koek-ibuf/get-repo (&optional buffer)
+    (let ((url
+           (buffer-local-value
+            'list-buffers-directory (get-buffer (or buffer (current-buffer))))))
+      (when (koek-subr/urip url)
+        (seq-some (lambda (f)
+                    (funcall f url))
+                  koek-ibuf/determine-repo-fs))))
+
+  (defun koek-ibuf/part-app-p (name)
+    (string-equal (koek-wm/get-app-name) name))
+
   (defun koek-ibuf/part-project-p (file-name)
     "Return whether current displays a file part of project FILE-NAME.
 FILE-NAME is a string, the root of the project to compare with."
@@ -1042,6 +1081,22 @@ FILE-NAME is a string, the root of the project to compare with."
     "Return whether current displays a webpage part of HOST.
 HOST is a string, the host to compare with."
     (string-equal (koek-ibuf/get-host) host))
+
+  (defun koek-ibuf/part-repo-p (name)
+    (string-equal (koek-ibuf/get-repo) name))
+
+  (defun koek-ibuf/group-app ()
+    (interactive)
+    (let ((names (thread-last (buffer-list)
+                   (mapcar #'koek-wm/get-app-name)
+                   (remq nil)
+                   seq-uniq
+                   (seq-sort #'string-lessp))))
+      (setq ibuffer-filter-groups
+            (mapcar (lambda (name)
+                      `(,name . ((predicate . (koek-ibuf/part-app-p ,name)))))
+                    names)))
+    (ibuffer-update nil 'silent))
 
   (defun koek-ibuf/group-project ()
     "Group buffers by project."
@@ -1072,6 +1127,19 @@ HOST is a string, the host to compare with."
                     hosts))
       (ibuffer-update nil 'silent)))
 
+  (defun koek-ibuf/group-repo ()
+    (interactive)
+    (let ((names (thread-last (buffer-list)
+                   (mapcar #'koek-ibuf/get-repo)
+                   (remq nil)
+                   seq-uniq
+                   (seq-sort #'string-lessp))))
+      (setq ibuffer-filter-groups
+            (mapcar (lambda (name)
+                      `(,name . ((predicate . (koek-ibuf/part-repo-p ,name)))))
+                    names))
+      (ibuffer-update nil 'silent)))
+
   (defun koek-ibuf/clear-filters (&optional what)
     "Clear filters and filter groups.
 WHAT is a symbol, the filter to clear, either filter (only
@@ -1096,8 +1164,10 @@ filters), group (only groups) or all (filters and groups)."
   :config
   (bind-keys
    :map ibuffer-mode-map
+   ("\\ a" . koek-ibuf/group-app)
    ("\\ p" . koek-ibuf/group-project)
    ("\\ h" . koek-ibuf/group-host)
+   ("\\ r" . koek-ibuf/group-repo)
    ("/ /" . koek-ibuf/clear-filters))
 
   (setq ibuffer-saved-filters
