@@ -639,11 +639,6 @@ Create a new profile. Change:
 
 Keep defaults.
 
-** Video Downloader Professional
-[[https://addons.mozilla.org/en-US/firefox/addon/video-downloader-profession/][Video Downloader Professional (Firefox Add-ons)]]
-
-Keep defaults.
-
 * E-mail
 
 ** isync :not_exp_env:
