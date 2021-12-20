@@ -107,6 +107,9 @@ keywords.  For more information, see
           (concat "EMACS=" invocation-directory invocation-name))
    :build (:not autoloads info)))
 
+(koek-pkg/register koek-subr)
+(require 'koek-subr)
+
 (use-package gcmh
   :straight t
   :hook (after-init . gcmh-mode)
@@ -414,7 +417,7 @@ Keybinding is a string, see `edmacro-mode'.")
   (defun koek-wm/n-to-label (n)
     "Convert workspace number N to a workspace label.
 N is an integer, a workspace number."
-    (or (koek-ml/arabic-to-roman n) "N"))
+    (or (koek-subr/arabic-to-roman n) "N"))
   :config
   ;; Only when package is loaded
   (bind-keys
@@ -960,17 +963,11 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
 (use-package ibuf-ext
   :after ibuffer
   :preface
-  (defun koek-ibuf/urip (s)
-    "Return whether S is a URI.
-S is a string, the string to interrogate."
-    (when s
-      (string-match-p (rx line-start (one-or-more (any alnum "+-.")) ":") s)))
-
   (defun koek-ibuf/get-host (&optional buffer)
     (let ((url
            (buffer-local-value
             'list-buffers-directory (get-buffer (or buffer (current-buffer))))))
-      (when (koek-ibuf/urip url)
+      (when (koek-subr/urip url)
         (let* ((parsed (url-generic-parse-url url))
                (host (url-host parsed)))
           (unless (string-empty-p host)
@@ -1368,23 +1365,6 @@ the builtin annotator except it aligns the annotation."
   (push '(email . (koek-mgnl/builtin-annotator builtin none))
         marginalia-annotator-registry)
   (marginalia-mode))
-
-(defun koek-file/lockp (file-name)
-  "Return whether FILE-NAME is a lock file."
-  (string-prefix-p ".#" (file-name-nondirectory file-name)))
-
-(defun koek-file/get-child-dirs (file-name &optional full)
-  "Return child directories in directory FILE-NAME.
-When optional FULL is truthy, return absolute file names, else,
-return relative file names."
-  (thread-last (directory-files-and-attributes file-name full)
-    (seq-filter (pcase-lambda (`(,file-name ,type))
-                  (let ((name (file-name-nondirectory file-name)))
-                    (and (eq type t)  ; Directory
-                         (string-match-p directory-files-no-dot-files-regexp
-                                         name)))))
-    (mapcar (lambda (spec)
-              (file-name-as-directory (car spec))))))
 
 (use-package dired
   :hook (dired-mode . dired-hide-details-mode)
@@ -4508,25 +4488,6 @@ A dummy prevents a package from modifying the mode line.")
             koek-ml/separator))))
     "Recursive edit depth mode line construct.")
 
-  (defvar koek-ml/roman-numerals
-    '((9 . "IX")
-      (5 . "V")
-      (4 . "IV")
-      (1 . "I"))
-    "Alist of sorted Arabic numeral to Roman numeral pairs.")
-
-  (defun koek-ml/arabic-to-roman (n &optional roman-numerals)
-    "Convert Arabic number N to a Roman number.
-N is an integer greater than zero.  ROMAN-NUMERALS is used
-internally."
-    (unless roman-numerals
-      (setq roman-numerals koek-ml/roman-numerals))
-    (when (> n 0)
-      (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
-        (if (>= n arabic)
-            (concat roman (koek-ml/arabic-to-roman (- n arabic) roman-numerals))
-          (koek-ml/arabic-to-roman n (cdr roman-numerals))))))
-
   (defun koek-ml/get-exwm-workspaces ()
     "Return workspaces of selected monitor."
     (thread-last (number-sequence 0 (1- (length exwm-workspace--workareas)))
@@ -4536,7 +4497,7 @@ internally."
       (seq-find (lambda (ns)
                   (memq exwm-workspace-current-index ns)))
       (mapcar (lambda (n)
-                (list :n n :label (or (koek-ml/arabic-to-roman n) "N"))))))
+                (list :n n :label (or (koek-subr/arabic-to-roman n) "N"))))))
 
   (defconst koek-ml/exwm-workspaces
     '(:eval
@@ -4564,7 +4525,7 @@ internally."
                             (unless (string-equal name "")
                               name))))
                 (list :n n
-                      :label (concat (or (koek-ml/arabic-to-roman n) "N")
+                      :label (concat (or (koek-subr/arabic-to-roman n) "N")
                                      (when name
                                        (concat ":" name))))))
             (eyebrowse--get 'window-configs)))
@@ -4587,20 +4548,14 @@ internally."
               koek-ml/separator)))))
     "Eyebrowse mode line construct.")
 
-  (defun koek-ml/truncate (s length)
-    "Truncate string S to LENGTH.
-S is a string, the string to truncate.  LENGTH is an integer, the
-maximum length of S."
-    (truncate-string-to-width s length nil nil t))
-
   (defconst koek-ml/id
     '(:eval
       (moody-tab
        (concat
         (when (derived-mode-p 'prog-mode 'conf-mode)
           (when-let ((name (koek-proj/get-name)))
-            (concat (koek-ml/truncate name 16) "/")))
-        (propertize (koek-ml/truncate (buffer-name) 32)
+            (concat (koek-subr/elide name 16) "/")))
+        (propertize (koek-subr/elide (buffer-name) 32)
                     'face 'mode-line-buffer-id))))
     "Id mode line construct.")
 
@@ -4942,14 +4897,14 @@ NAME is a string, the name of the user directory."
   (defun koek/get-agenda-dirs ()
     "Return agenda directories."
     (append (list koek/documents-dir koek/calendars-dir)
-            (koek-file/get-child-dirs koek/projects-dir 'full)))
+            (koek-subr/get-child-dirs koek/projects-dir 'full)))
 
   (defun koek/get-agenda-files ()
     "Return agenda files."
     (thread-last (koek/get-agenda-dirs)
       (seq-mapcat (lambda (file-name)
                     (directory-files file-name 'full (rx ".org" line-end))))
-      (seq-remove #'koek-file/lockp)
+      (seq-remove #'koek-subr/lock-file-p)
       seq-uniq))
 
   (define-advice org-agenda-files
