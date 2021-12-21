@@ -4693,7 +4693,8 @@ A dummy prevents a package from modifying the mode line.")
     '(:eval
       (moody-tab
        (concat
-        (when (derived-mode-p 'prog-mode 'conf-mode)
+        (when (and (fboundp 'project-current)
+                   (derived-mode-p 'prog-mode 'conf-mode))
           (when-let ((name (koek-proj/get-name)))
             (concat (koek-subr/elide name 16) "/")))
         (propertize (koek-subr/elide (buffer-name) 32)
