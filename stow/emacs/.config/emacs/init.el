@@ -4586,12 +4586,12 @@ variable pitch optionally a relative height.")
     "Mode line left right separator.")
 
   (defconst koek-ml/dummies '((eldoc-mode-line-string nil))
-    "Dummies mode line construct.
+    "Mode line construct for dummies.
 A dummy prevents a package from modifying the mode line.")
 
   (defconst koek-ml/eldoc
     '(eldoc-mode-line-string ("" eldoc-mode-line-string koek-ml/separator))
-    "Eldoc mode line construct.")
+    "Mode line construct for eldoc.")
 
   (defun koek-ml/get-window-label ()
     "Return window label of selected window."
@@ -4604,7 +4604,7 @@ A dummy prevents a package from modifying the mode line.")
         (when-let ((label (koek-ml/get-window-label)))
           `(,(moody-ribbon (propertize label 'face 'aw-mode-line-face) nil 'up)
             koek-ml/separator))))
-    "Ace mode line construct.")
+    "Mode line construct for ace.")
 
   (defvar-local koek-ml/variant nil
     "Ediff variant.")
@@ -4619,7 +4619,7 @@ A dummy prevents a package from modifying the mode line.")
                       (concat " " state)))
             nil 'up)
           koek-ml/separator)))
-    "Ediff mode line construct.")
+    "Mode line construct for ediff.")
 
   (defconst koek-ml/depth
     '(:eval
@@ -4627,7 +4627,7 @@ A dummy prevents a package from modifying the mode line.")
         (when (and (> depth 0) (moody-window-active-p))
           `(,(moody-ribbon (format "[%d]" depth) nil 'up)
             koek-ml/separator))))
-    "Recursive edit depth mode line construct.")
+    "Mode line construct for recursive edit depth.")
 
   (defun koek-ml/get-exwm-workspaces ()
     "Return workspaces of selected monitor."
@@ -4656,7 +4656,7 @@ A dummy prevents a package from modifying the mode line.")
                  workspaces " ")
                 nil 'up)
               koek-ml/separator)))))
-    "Exwm workspaces mode line construct.")
+    "Mode line construct for exwm workspaces.")
 
   (defun koek-ml/get-eyebrowse-workspaces ()
     "Return workspaces of selected frame."
@@ -4687,7 +4687,7 @@ A dummy prevents a package from modifying the mode line.")
                  workspaces " ")
                 nil 'up)
               koek-ml/separator)))))
-    "Eyebrowse mode line construct.")
+    "Mode line construct for eyebrowse.")
 
   (defconst koek-ml/id
     '(:eval
@@ -4698,16 +4698,16 @@ A dummy prevents a package from modifying the mode line.")
             (concat (koek-subr/elide name 16) "/")))
         (propertize (koek-subr/elide (buffer-name) 32)
                     'face 'mode-line-buffer-id))))
-    "Id mode line construct.")
+    "Mode line construct for id.")
 
   (defconst koek-ml/state '(" " "%*%+")
-    "State mode line construct.")
+    "Mode line construct for state.")
 
   (defconst koek-ml/keycast
     '(:eval
       (when (bound-and-true-p keycast-mode)
         mode-line-keycast))
-    "Keycast mode line construct.")
+    "Mode line construct for keycast.")
 
   (defconst koek-ml/position
     '(:eval
@@ -4716,7 +4716,7 @@ A dummy prevents a package from modifying the mode line.")
           ,(when (buffer-narrowed-p)
              (list (moody-ribbon "Narrowed" nil 'up) " "))
           "%p" " " "%l,%c")))
-    "Position mode line construct.")
+    "Mode line construct for position.")
 
   (defconst koek-ml/pdf
     '(:eval
@@ -4724,7 +4724,7 @@ A dummy prevents a package from modifying the mode line.")
         `("" koek-ml/large-separator
           ,(format "%d/%d"
                    (pdf-view-current-page) (pdf-cache-number-of-pages)))))
-    "PDF-tools mode line construct.")
+    "Mode line construct for pdf-tools.")
 
   (defconst koek-ml/exwm-input
     '(:eval
@@ -4732,14 +4732,14 @@ A dummy prevents a package from modifying the mode line.")
                  (moody-window-active-p))
         `("" koek-ml/separator
           ,(moody-ribbon "Char" nil 'up))))
-    "Exwm input mode line construct.")
+    "Mode line construct for exwm input.")
 
   (defconst koek-ml/input
     '(:eval
       (when (and current-input-method (moody-window-active-p))
         `("" koek-ml/separator
           ,(moody-ribbon current-input-method-title nil 'up))))
-    "Input mode line construct.")
+    "Mode line construct for input.")
 
   (defvar koek-ml/flymake-levels '(:error :warning :note))
 
@@ -4804,7 +4804,7 @@ STATE is a symbol, a flymake state."
                  koek-ml/flymake-levels ";")))
              (state
               (koek-ml/state-to-description state))))))
-    "Flymake mode line construct.")
+    "Mode line construct for flymake.")
 
   (defconst koek-ml/vc
     '(:eval
@@ -4818,7 +4818,7 @@ STATE is a symbol, a flymake state."
            state)
           `("" koek-ml/separator
             ,(format "%s %s" (match-string 1 state) (match-string 2 state))))))
-    "Version control mode line construct.")
+    "Mode line construct for version control.")
 
   (defconst koek-ml/task
     '(:eval
@@ -4826,11 +4826,11 @@ STATE is a symbol, a flymake state."
                  (moody-window-active-p))
         `("" koek-ml/separator
           ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
-    "Task mode line construct.")
+    "Mode line construct for task.")
 
   (defconst koek-ml/modes
     '("" koek-ml/separator "(" mode-name mode-line-process minor-mode-alist ")")
-    "Modes mode line construct.")
+    "Mode line construct for modes.")
 
   ;; ediff
   (defconst koek-ml/diff
@@ -4845,7 +4845,7 @@ STATE is a symbol, a flymake state."
              (format "End -/%d" n-diffs))
             (t
              (format "%d/%d" diff-n n-diffs))))))
-    "Ediff diff mode line construct.")
+    "Mode line construct for ediff diff.")
 
   (defvar koek-ml/variant-types '(A B C Ancestor)
     "List of variant types.")
