@@ -4587,38 +4587,38 @@ NAME is a string, the name of the user directory."
   (when-let ((file-name (getenv name)))
     (file-name-as-directory file-name)))
 
-(defconst koek/home-dir "~/"
+(defvar koek/home-dir "~/"
   "File name to home directory.")
 
-(defconst koek/documents-dir
+(defvar koek/documents-dir
   (or (koek/get-user-dir "XDG_DOCUMENTS_DIR") koek/home-dir)
   "File name to documents directory.")
 
-(defconst koek/download-dir
+(defvar koek/download-dir
   (or (koek/get-user-dir "XDG_DOWNLOAD_DIR") koek/home-dir)
   "File name to download directory.")
 
-(defconst koek/music-dir
+(defvar koek/music-dir
   (or (koek/get-user-dir "XDG_MUSIC_DIR") koek/home-dir)
   "File name to music directory.")
 
-(defconst koek/calendars-dir
+(defvar koek/calendars-dir
   (or (koek/get-user-dir "KOEK_CALENDARS_DIR") koek/documents-dir)
   "File name to calendars directory.")
 
-(defconst koek/contacts-dir
+(defvar koek/contacts-dir
   (or (koek/get-user-dir "KOEK_CONTACTS_DIR") koek/documents-dir)
   "File name to contacts directory.")
 
-(defconst koek/news-dir
+(defvar koek/news-dir
   (or (koek/get-user-dir "KOEK_NEWS_DIR") koek/documents-dir)
   "File name to news directory.")
 
-(defconst koek/notes-dir
+(defvar koek/notes-dir
   (or (koek/get-user-dir "KOEK_NOTES_DIR") koek/documents-dir)
   "File name to notes directory.")
 
-(defconst koek/projects-dir
+(defvar koek/projects-dir
   (or (koek/get-user-dir "KOEK_PROJECTS_DIR") koek/home-dir)
   "File name to projects directory.")
 
