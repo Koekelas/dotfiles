@@ -3490,7 +3490,8 @@ produce noisy diffs.
                                                (one-or-more (or alnum punct))
                                                ".jar" line-end))))
             car)))
-      (let ((paths (parse-colon-path (getenv "CLASSPATH"))))
+      (let ((paths (when-let ((path (getenv "CLASSPATH")))
+                     (split-string path path-separator))))
         (unless (member file-name paths)
           (setenv "CLASSPATH"
                   (string-join (cons file-name paths) path-separator)))))
