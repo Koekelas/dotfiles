@@ -214,6 +214,11 @@ odd."
          (subs (cdr names)))
     (concat "*" main (when subs (concat ": " (string-join subs " "))) "*")))
 
+;; project
+(defun koek-subr/reset-default-directory ()
+  (unless (buffer-file-name)
+    (setq default-directory "~/")))
+
 ;;; File name subroutines
 
 (defun koek-subr/lock-file-p (file-name)

@@ -422,6 +422,11 @@ For org configuration, see [[*Org][Org]].
            (subs (cdr names)))
       (concat "*" main (when subs (concat ": " (string-join subs " "))) "*")))
 
+  ;; project
+  (defun koek-subr/reset-default-directory ()
+    (unless (buffer-file-name)
+      (setq default-directory "~/")))
+
   ;;; File name subroutines
 
   (defun koek-subr/lock-file-p (file-name)
@@ -568,6 +573,11 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
      ("C-c z z" . koek-wm/suspend))
 
     (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
+
+  (use-package exwm-core
+    :defer t
+    :config
+    (add-hook 'exwm-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package exwm-input
     :defer t
@@ -1815,7 +1825,8 @@ Bury unneeded buffers, computers have more than enough memory.
              " " (size 8 8 :right :elide)
              " " (mode 16 16 :left :elide)
              " " filename-and-process)))
-    (setq ibuffer-eliding-string truncate-string-ellipsis))
+    (setq ibuffer-eliding-string truncate-string-ellipsis)
+    (add-hook 'ibuffer-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package ibuf-ext
     :after ibuffer
@@ -2449,7 +2460,8 @@ minibuffer.
     :config
     (setq bookmark-default-file
           (no-littering-expand-etc-file-name "bookmark-default.el"))
-    (setq bookmark-bmenu-file-column 42)) ; padding
+    (setq bookmark-bmenu-file-column 42)  ; padding
+    (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** recentf - Recent files
@@ -2785,6 +2797,11 @@ VC is a placeholder.
         (outline-show-all)))
     :config
     (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
+
+  (use-package ediff-mult
+    :defer t
+    :config
+    (add-hook 'ediff-meta-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package ediff-util
     :defer t
@@ -5691,7 +5708,9 @@ Inherit Clojure snippets.
     (use-package link-hint
       :bind
       (:map help-mode-map
-       ("j" . link-hint-open-link))))
+       ("j" . link-hint-open-link)))
+
+    (add-hook 'help-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package help-fns
     :bind
@@ -5718,7 +5737,8 @@ Inherit Clojure snippets.
       (:map helpful-mode-map
        ("j" . link-hint-open-link)))
 
-    (setq helpful-max-buffers nil))
+    (setq helpful-max-buffers nil)
+    (add-hook 'helpful-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 *** elisp-demos - Code examples
@@ -5741,7 +5761,9 @@ Inherit Clojure snippets.
     (use-package link-hint
       :bind
       (:map Info-mode-map
-       ("j" . link-hint-open-link))))
+       ("j" . link-hint-open-link)))
+
+    (add-hook 'Info-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** man - Manual viewer
@@ -5761,7 +5783,8 @@ Inherit Clojure snippets.
       (:map Man-mode-map
        ("j" . link-hint-open-link)))
 
-    (setq Man-notify-method 'koek/pop-to-buffer))
+    (setq Man-notify-method 'koek/pop-to-buffer)
+    (add-hook 'Man-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** apropos - Search Emacs environment
@@ -5773,7 +5796,9 @@ Inherit Clojure snippets.
     (use-package link-hint
       :bind
       (:map apropos-mode-map
-       ("j" . link-hint-open-link))))
+       ("j" . link-hint-open-link)))
+
+    (add-hook 'apropos-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** devdocs - DevDocs viewer
@@ -5872,7 +5897,8 @@ Inherit Clojure snippets.
        ("j" . link-hint-open-link)))
 
     (setq devdocs-window-select t)
-    (setq devdocs-separator " > "))       ; Mirror info
+    (setq devdocs-separator " > ")        ; Mirror info
+    (add-hook 'devdocs-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** eldoc - Show docstring
@@ -5943,7 +5969,9 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 #+BEGIN_SRC emacs-lisp
   (use-package proced
     :bind
-    ("C-c x p" . proced))
+    ("C-c x p" . proced)
+    :config
+    (add-hook 'proced-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** compile - Run asynchronous processes
@@ -6058,6 +6086,7 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 
     (bind-key "m" #'koek-eww/redirect eww-mode-map)
 
+    (add-hook 'eww-mode-hook #'koek-subr/reset-default-directory)
     (add-hook 'eww-mode-hook #'koek-eww/setup-current)
     (add-hook 'eww-after-render-hook #'koek-eww/update-current))
 #+END_SRC
@@ -6087,7 +6116,9 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
     (use-package link-hint
       :bind
       (:map elpher-mode-map
-       ("j" . link-hint-open-link))))
+       ("j" . link-hint-open-link)))
+
+    (add-hook 'elpher-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
 
 ** mu4e - E-mail client
@@ -6177,7 +6208,9 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
                    (mu4e-headers-thread-blank-prefix         . "  "))))
       (dolist (spec specs)
         (pcase-let ((`(,symbol . ,segment) spec))
-          (set symbol (cons segment segment))))))
+          (set symbol (cons segment segment)))))
+
+    (add-hook 'mu4e-headers-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package mu4e-mark
     :defer t
@@ -6500,7 +6533,8 @@ Configure elfeed afterwards.
      ("e" . koek-feed/enqueue-dwim)
      ("E" . koek-feed/enqueue-next-dwim))
 
-    (setq elfeed-search-filter (concat elfeed-search-filter " ")))
+    (setq elfeed-search-filter (concat elfeed-search-filter " "))
+    (add-hook 'elfeed-search-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package elfeed-show
     :defer t
@@ -6719,7 +6753,8 @@ To show holidays as agenda entries, see [[info:org#Weekly/daily agenda][Calendar
     ("C-c x q" . calendar)                ; [Q]alendar [sic]
     :hook (calendar-today-visible . calendar-mark-today)
     :config
-    (setq calendar-mark-holidays-flag t))
+    (setq calendar-mark-holidays-flag t)
+    (add-hook 'calendar-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package holidays
     :bind
@@ -7824,7 +7859,8 @@ templates]].
     ("C-c o a" . org-agenda)
     :config
     (setq org-agenda-sticky t)
-    (setq org-agenda-time-leading-zero t))
+    (setq org-agenda-time-leading-zero t)
+    (add-hook 'org-agenda-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package org-capture
     :bind

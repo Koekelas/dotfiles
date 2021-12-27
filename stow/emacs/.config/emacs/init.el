@@ -197,6 +197,11 @@ system."
 
   (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
 
+(use-package exwm-core
+  :defer t
+  :config
+  (add-hook 'exwm-mode-hook #'koek-subr/reset-default-directory))
+
 (use-package exwm-input
   :defer t
   :preface
@@ -996,7 +1001,8 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
            " " (size 8 8 :right :elide)
            " " (mode 16 16 :left :elide)
            " " filename-and-process)))
-  (setq ibuffer-eliding-string truncate-string-ellipsis))
+  (setq ibuffer-eliding-string truncate-string-ellipsis)
+  (add-hook 'ibuffer-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package ibuf-ext
   :after ibuffer
@@ -1575,7 +1581,8 @@ the builtin annotator except it aligns the annotation."
   :config
   (setq bookmark-default-file
         (no-littering-expand-etc-file-name "bookmark-default.el"))
-  (setq bookmark-bmenu-file-column 42)) ; padding
+  (setq bookmark-bmenu-file-column 42)  ; padding
+  (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package recentf
   :config
@@ -1865,6 +1872,11 @@ When FORCE is truthy, unconditionally continue commit."
       (outline-show-all)))
   :config
   (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
+
+(use-package ediff-mult
+  :defer t
+  :config
+  (add-hook 'ediff-meta-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package ediff-util
   :defer t
@@ -2596,7 +2608,9 @@ see `company-backends'."
   (use-package link-hint
     :bind
     (:map help-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (add-hook 'help-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package help-fns
   :bind
@@ -2618,7 +2632,8 @@ see `company-backends'."
     (:map helpful-mode-map
      ("j" . link-hint-open-link)))
 
-  (setq helpful-max-buffers nil))
+  (setq helpful-max-buffers nil)
+  (add-hook 'helpful-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package elisp-demos
   :straight t
@@ -2633,7 +2648,9 @@ see `company-backends'."
   (use-package link-hint
     :bind
     (:map Info-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (add-hook 'Info-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package man
   :bind
@@ -2650,7 +2667,8 @@ see `company-backends'."
     (:map Man-mode-map
      ("j" . link-hint-open-link)))
 
-  (setq Man-notify-method 'koek/pop-to-buffer))
+  (setq Man-notify-method 'koek/pop-to-buffer)
+  (add-hook 'Man-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package apropos
   :bind
@@ -2659,7 +2677,9 @@ see `company-backends'."
   (use-package link-hint
     :bind
     (:map apropos-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (add-hook 'apropos-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package devdocs
   :straight t
@@ -2753,7 +2773,8 @@ see `company-backends'."
      ("j" . link-hint-open-link)))
 
   (setq devdocs-window-select t)
-  (setq devdocs-separator " > "))       ; Mirror info
+  (setq devdocs-separator " > ")        ; Mirror info
+  (add-hook 'devdocs-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package eldoc
   :straight t
@@ -2800,7 +2821,9 @@ see `company-backends'."
 
 (use-package proced
   :bind
-  ("C-c x p" . proced))
+  ("C-c x p" . proced)
+  :config
+  (add-hook 'proced-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package compile
   :bind
@@ -2909,6 +2932,7 @@ none return a URL, nil.  For rewrite functions, see
 
   (bind-key "m" #'koek-eww/redirect eww-mode-map)
 
+  (add-hook 'eww-mode-hook #'koek-subr/reset-default-directory)
   (add-hook 'eww-mode-hook #'koek-eww/setup-current)
   (add-hook 'eww-after-render-hook #'koek-eww/update-current))
 
@@ -2928,7 +2952,9 @@ none return a URL, nil.  For rewrite functions, see
   (use-package link-hint
     :bind
     (:map elpher-mode-map
-     ("j" . link-hint-open-link))))
+     ("j" . link-hint-open-link)))
+
+  (add-hook 'elpher-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package mu4e
   :bind
@@ -3011,7 +3037,9 @@ none return a URL, nil.  For rewrite functions, see
                  (mu4e-headers-thread-blank-prefix         . "  "))))
     (dolist (spec specs)
       (pcase-let ((`(,symbol . ,segment) spec))
-        (set symbol (cons segment segment))))))
+        (set symbol (cons segment segment)))))
+
+  (add-hook 'mu4e-headers-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package mu4e-mark
   :defer t
@@ -3412,7 +3440,8 @@ playing track, else, enqueue after last track."
    ("e" . koek-feed/enqueue-dwim)
    ("E" . koek-feed/enqueue-next-dwim))
 
-  (setq elfeed-search-filter (concat elfeed-search-filter " ")))
+  (setq elfeed-search-filter (concat elfeed-search-filter " "))
+  (add-hook 'elfeed-search-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package elfeed-show
   :defer t
@@ -3605,7 +3634,8 @@ INTERACTIVE is used internally."
   ("C-c x q" . calendar)                ; [Q]alendar [sic]
   :hook (calendar-today-visible . calendar-mark-today)
   :config
-  (setq calendar-mark-holidays-flag t))
+  (setq calendar-mark-holidays-flag t)
+  (add-hook 'calendar-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package holidays
   :bind
@@ -4085,7 +4115,8 @@ Modes are confident about being derived from text-mode.")
   ("C-c o a" . org-agenda)
   :config
   (setq org-agenda-sticky t)
-  (setq org-agenda-time-leading-zero t))
+  (setq org-agenda-time-leading-zero t)
+  (add-hook 'org-agenda-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package org-capture
   :bind
