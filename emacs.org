@@ -612,6 +612,10 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
         ("M-/" . "C-y"))
       "Alist of Emacs keybinding to non Emacs keybinding pairs.
   Keybinding is a string, see `edmacro-mode'.")
+
+    (defun koek-wm/rehto-window (&optional arg)
+      (interactive "p")
+      (other-window (- (or arg 1))))
     :config
     ;; Keybindings in exwm and non exwm buffers, even in char mode,
     ;; i.e., keybindings mustn't conflict with non Emacs keybindings
@@ -633,7 +637,12 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
                     ("s-8" . koek-wm/switch-workspace-8)
                     ("s-9" . koek-wm/switch-workspace-9)
                     ("s-w" . koek-wm/switch-previous-workspace)
+                    ("s-<tab>" . other-window)
+                    ("s-S-<iso-lefttab>" . koek-wm/rehto-window)
                     ("<f11>" . exwm-layout-toggle-fullscreen)
+                    ("s-b" . switch-to-buffer)
+                    ("s-<backspace>" . previous-buffer)
+                    ("s-<delete>" . next-buffer)
                     ("s-q" . bury-buffer)
                     ("s-d" . kill-current-buffer)
                     ("s-x" . koek-xde/launch-app)
