@@ -2934,14 +2934,9 @@ Output is between `compilation-filter-start' and point."
   (defun koek-eww/update-current ()
     (let* ((page (koek-eww/get-page))
            (title (plist-get page :title))
-           (url (plist-get page :url))
-           (id (or title url)))
+           (url (plist-get page :url)))
       (rename-buffer
-       (concat "*eww"
-               (when id
-                (concat ": " id))
-               "*")
-       'unique)))
+       (koek-subr/construct-earmuffed-name "eww" (or title url)) 'unique)))
 
   (defun koek-eww/rewrite-reddit (url)
     "Rewrite Reddit to Reddit mobile.
@@ -3438,14 +3433,15 @@ line."
   (defun koek-feed/visit (entries)
     "Visit ENTRIES in eww."
     (thread-last entries
-      (mapcar (lambda (entry)
-                (let ((buffer
-                       (generate-new-buffer
-                        (format "*eww: %s*" (elfeed-entry-title entry)))))
-                  (with-current-buffer buffer
-                    (eww-mode)
-                    (eww (elfeed-entry-link entry)))
-                  buffer)))
+      (mapcar
+       (lambda (entry)
+         (let* ((title (elfeed-entry-title entry))
+                (buffer (generate-new-buffer
+                         (koek-subr/construct-earmuffed-name "eww" title))))
+           (with-current-buffer buffer
+             (eww-mode)
+             (eww (elfeed-entry-link entry)))
+           buffer)))
       (mapc #'pop-to-buffer-same-window)))
 
   (defun koek-feed/visit-dwim ()
@@ -4216,7 +4212,7 @@ Candidates are collected from agenda files."
   :preface
   (define-advice org-src--construct-edit-buffer-name
       (:override (org-buffer-name _lang) koek-org/construct-edit-buffer-name)
-    (format "*org-src: %s*" org-buffer-name)) ; Mirror helpful
+    (koek-subr/construct-earmuffed-name "org-src" org-buffer-name))
   :config
   (setq org-src-window-setup 'plain)
   (setq org-src-ask-before-returning-to-edit-buffer nil)
