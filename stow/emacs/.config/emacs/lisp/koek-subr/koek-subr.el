@@ -51,6 +51,14 @@
   "Alist of Arabic numeral to Roman numeral pairs.
 Pairs are sorted from largest to smallest.")
 
+(defvar koek-subr/chevrons
+  (rx (any "<" ">" "\N{LEFT ANGLE BRACKET}" "\N{RIGHT ANGLE BRACKET}"
+           "\N{SINGLE LEFT-POINTING ANGLE QUOTATION MARK}"
+           "\N{SINGLE RIGHT-POINTING ANGLE QUOTATION MARK}"
+           "\N{LEFT-POINTING DOUBLE ANGLE QUOTATION MARK}"
+           "\N{RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK}"))
+  "Regular expression matching chevrons.")
+
 (defvar koek-subr/down-words
   (rx word-start
       (or "a" "an" "and" "as" "at" "but" "by" "en" "for" "if" "in" "nor" "of"
@@ -73,6 +81,12 @@ internally."
         (koek-subr/arabic-to-roman n (cdr roman-numerals))))))
 
 ;;; String subroutines
+
+(defun koek-subr/strip-chevrons (s)
+  "Strip chevrons from beginning and ending of string S.
+S is a string, the string to strip chevrons from."
+  (let ((chevrons (rx (one-or-more (regexp koek-subr/chevrons)))))
+    (string-trim s chevrons chevrons)))
 
 ;; The algorithm is from https://github.com/gouch/to-title-case
 (defun koek-subr/title-case (title)

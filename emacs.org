@@ -259,6 +259,14 @@ For org configuration, see [[*Org][Org]].
     "Alist of Arabic numeral to Roman numeral pairs.
   Pairs are sorted from largest to smallest.")
 
+  (defvar koek-subr/chevrons
+    (rx (any "<" ">" "\N{LEFT ANGLE BRACKET}" "\N{RIGHT ANGLE BRACKET}"
+             "\N{SINGLE LEFT-POINTING ANGLE QUOTATION MARK}"
+             "\N{SINGLE RIGHT-POINTING ANGLE QUOTATION MARK}"
+             "\N{LEFT-POINTING DOUBLE ANGLE QUOTATION MARK}"
+             "\N{RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK}"))
+    "Regular expression matching chevrons.")
+
   (defvar koek-subr/down-words
     (rx word-start
         (or "a" "an" "and" "as" "at" "but" "by" "en" "for" "if" "in" "nor" "of"
@@ -281,6 +289,12 @@ For org configuration, see [[*Org][Org]].
           (koek-subr/arabic-to-roman n (cdr roman-numerals))))))
 
   ;;; String subroutines
+
+  (defun koek-subr/strip-chevrons (s)
+    "Strip chevrons from beginning and ending of string S.
+  S is a string, the string to strip chevrons from."
+    (let ((chevrons (rx (one-or-more (regexp koek-subr/chevrons)))))
+      (string-trim s chevrons chevrons)))
 
   ;; The algorithm is from https://github.com/gouch/to-title-case
   (defun koek-subr/title-case (title)
@@ -6088,7 +6102,7 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
     :preface
     (defun koek-mu4e/compose-message (email)
       (interactive (list (koek-bbdb/read-email "To: ")))
-      (compose-mail email))
+      (compose-mail (koek-subr/strip-chevrons email)))
     :init
     (bind-key "C-c x C-m" #'compose-mail)
 
@@ -6125,13 +6139,14 @@ For e-mail accounts, see [[*E-mail accounts][E-mail accounts]].
 
     (defun koek-mu4e/display-messages-to (email)
       (interactive (list (koek-bbdb/read-email "To: ")))
-      (mu4e-headers-search (mapconcat (lambda (field)
-                                        (concat field ":" email))
-                                      '("to" "cc" "bcc") " or ")))
+      (let ((normalized (koek-subr/strip-chevrons email)))
+        (mu4e-headers-search (mapconcat (lambda (field)
+                                          (concat field ":" normalized))
+                                        '("to" "cc" "bcc") " or "))))
 
     (defun koek-mu4e/display-messages-from (email)
       (interactive (list (koek-bbdb/read-email "From: ")))
-      (mu4e-headers-search (concat "from:" email)))
+      (mu4e-headers-search (concat "from:" (koek-subr/strip-chevrons email))))
     :config
     (use-package mu4e-utils
       :bind
@@ -6288,7 +6303,8 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
     (defun koek-bbdb/display-email (email)
       (interactive (list (koek-bbdb/read-email "E-mail: ")))
-      (bbdb-search-mail (rx line-start (literal email) line-end)))
+      (bbdb-search-mail
+       (rx line-start (literal (koek-subr/strip-chevrons email)) line-end)))
     :config
     (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
           bbdb-address-format-list)

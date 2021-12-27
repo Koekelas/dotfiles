@@ -2936,7 +2936,7 @@ none return a URL, nil.  For rewrite functions, see
   :preface
   (defun koek-mu4e/compose-message (email)
     (interactive (list (koek-bbdb/read-email "To: ")))
-    (compose-mail email))
+    (compose-mail (koek-subr/strip-chevrons email)))
   :init
   (bind-key "C-c x C-m" #'compose-mail)
 
@@ -2973,13 +2973,14 @@ none return a URL, nil.  For rewrite functions, see
 
   (defun koek-mu4e/display-messages-to (email)
     (interactive (list (koek-bbdb/read-email "To: ")))
-    (mu4e-headers-search (mapconcat (lambda (field)
-                                      (concat field ":" email))
-                                    '("to" "cc" "bcc") " or ")))
+    (let ((normalized (koek-subr/strip-chevrons email)))
+      (mu4e-headers-search (mapconcat (lambda (field)
+                                        (concat field ":" normalized))
+                                      '("to" "cc" "bcc") " or "))))
 
   (defun koek-mu4e/display-messages-from (email)
     (interactive (list (koek-bbdb/read-email "From: ")))
-    (mu4e-headers-search (concat "from:" email)))
+    (mu4e-headers-search (concat "from:" (koek-subr/strip-chevrons email))))
   :config
   (use-package mu4e-utils
     :bind
@@ -3128,7 +3129,8 @@ none return a URL, nil.  For rewrite functions, see
 
   (defun koek-bbdb/display-email (email)
     (interactive (list (koek-bbdb/read-email "E-mail: ")))
-    (bbdb-search-mail (rx line-start (literal email) line-end)))
+    (bbdb-search-mail
+     (rx line-start (literal (koek-subr/strip-chevrons email)) line-end)))
   :config
   (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
         bbdb-address-format-list)
