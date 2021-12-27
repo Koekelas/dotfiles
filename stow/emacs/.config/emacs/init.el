@@ -3442,7 +3442,7 @@ line."
              (eww-mode)
              (eww (elfeed-entry-link entry)))
            buffer)))
-      (mapc #'pop-to-buffer-same-window)))
+      (mapc #'pop-to-buffer)))
 
   (defun koek-feed/visit-dwim ()
     "Visit selected entries in eww."
