@@ -2281,6 +2281,25 @@ minibuffer.
     :straight t
     :bind
     ("C-&" . embark-act)
+    :preface
+    (defun koek-mbrk/visit-with-app (uri id)
+      (interactive
+       (let* ((uri (read-string "URI: "))
+              (id (koek-xde/read-id (format "Visit `%s' with: " uri))))
+         (list uri id)))
+      (koek-xde/launch id uri))
+
+    (defun koek-mbrk/visit-with-file-manager (uri)
+      (interactive "DDirectory: ")
+      (unless (file-directory-p uri)
+        (user-error "Not a directory"))
+      (koek-xde/launch koek-xde/file-manager-id uri))
+
+    (defun koek-mbrk/visit-with-browser (uri)
+      (interactive "sURI: ")
+      (unless (koek-subr/urip uri)
+        (user-error "Not a URI"))
+      (koek-xde/launch koek-xde/browser-id uri))
     :config
     (use-package helpful
       :bind
@@ -2290,6 +2309,16 @@ minibuffer.
        ("s" . helpful-symbol)
        ("v" . helpful-variable)
        ("f" . helpful-function)))
+
+    (bind-keys
+     :map embark-file-map
+     ([remap koek-xde/launch-app] . koek-mbrk/visit-with-app)
+     ([remap koek-xde/launch-file-manager] . koek-mbrk/visit-with-file-manager))
+
+    (bind-keys
+     :map embark-url-map
+     ([remap koek-xde/launch-app] . koek-mbrk/visit-with-app)
+     ([remap koek-xde/launch-browser] . koek-mbrk/visit-with-browser))
 
     (bind-keys
      :map embark-email-map
