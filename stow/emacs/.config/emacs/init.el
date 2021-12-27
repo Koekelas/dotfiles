@@ -4571,13 +4571,10 @@ operandi or vivendi."
       (enable-theme new)
       (modus-themes-with-colors
         (custom-set-faces
-         `(koek-wm/selected-workspace ((,class :inherit bold)))
-         `(eyebrowse-mode-line-active ((,class :foreground unspecified)))
-         `(dired-directory            ((,class :inherit bold)))
-         `(koek-diff/variant          ((,class :inherit bold)))
-         `(pdf-links-read-link        ((,class
-                                        :foreground unspecified :background unspecified
-                                        :inherit (modus-themes-intense-magenta bold)))))))
+         `(dired-directory     ((,class :inherit bold)))
+         `(pdf-links-read-link ((,class
+                                 :foreground unspecified :background unspecified
+                                 :inherit (modus-themes-intense-magenta bold)))))))
     ;; After user theme
     (run-hooks 'koek-thm/enable-hook))
 
@@ -4603,7 +4600,6 @@ operandi or vivendi."
   (setq modus-themes-diffs 'deuteranopia)
   (setq modus-themes-org-blocks 'gray-background)
   :config
-  (setq face-near-same-color-threshold 70000)
   (koek-mt/load 'vivendi))
 
 (defvar koek-font/pairs
