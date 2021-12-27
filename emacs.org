@@ -2995,6 +2995,11 @@ When popping mark, skip consecutive identical marks. The idea is from
   (put 'narrow-to-region 'disabled nil)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (define-advice narrow-to-region (:after (&rest _args) koek-nrrw/deactivate-mark)
+    (deactivate-mark))
+#+END_SRC
+
 ** sort - Sort occurrences
 #+BEGIN_SRC emacs-lisp
   (use-package sort

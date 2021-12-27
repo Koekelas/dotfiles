@@ -2043,6 +2043,9 @@ dictionary links before LIMIT."
 
 (put 'narrow-to-region 'disabled nil)
 
+(define-advice narrow-to-region (:after (&rest _args) koek-nrrw/deactivate-mark)
+  (deactivate-mark))
+
 (use-package sort
   :bind
   (("C-c e s" . sort-lines)
