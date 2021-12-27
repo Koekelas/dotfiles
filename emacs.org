@@ -576,7 +576,24 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
 
   (use-package exwm-core
     :defer t
+    :preface
+    ;; minor mode
+    (defun koek-wm/visit-eww (url)
+      (interactive
+       (let* ((page (if (koek-wm/classp "firefox")
+                        (koek-wm/get-firefox-page)
+                      (user-error "Not in a Firefox buffer")))
+              (url (or (plist-get page :url) (user-error "Not visiting a URL"))))
+         (list url)))
+      (let ((buffer (generate-new-buffer
+                     (koek-subr/construct-earmuffed-name "eww" url))))
+        (with-current-buffer buffer
+          (eww-mode)
+          (eww url))
+        (pop-to-buffer buffer)))
     :config
+    (bind-key "s-e" #'koek-wm/visit-eww exwm-mode-map)
+
     (add-hook 'exwm-mode-hook #'koek-subr/reset-default-directory))
 
   (use-package exwm-input
