@@ -141,7 +141,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   # Install jdtls from AUR
 
   ## JavaScript
-  pacman -S nodejs npm python2
+  pacman -S nodejs npm
   npm i -g indium
   # Install typescript-language-server from AUR
 
