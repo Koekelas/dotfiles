@@ -8472,7 +8472,7 @@ current theme.
     :init
     (bind-key "C-c z t" #'koek-mt/toggle-variant)
 
-    (setq modus-themes-success-deuteranopia t)
+    (setq modus-themes-deuteranopia t)
     (setq modus-themes-mixed-fonts t)
     (setq modus-themes-bold-constructs t)
     (setq modus-themes-italic-constructs t)
@@ -8480,10 +8480,12 @@ current theme.
     (setq modus-themes-hl-line '(accented underline))
     (setq modus-themes-subtle-line-numbers t)
     (setq modus-themes-mode-line '(moody accented))
-    (setq modus-themes-headings '((t . (background overline))))
-    (setq modus-themes-variable-pitch-headings t)
-    (setq modus-themes-scale-headings t)
-    (setq modus-themes-diffs 'deuteranopia)
+    (let ((defaults '(background overline variable-pitch)))
+      (setq modus-themes-headings
+            `((1 . (1.3 ,@defaults))
+              (2 . (1.2 ,@defaults))
+              (3 . (1.1 ,@defaults))
+              (t . ,defaults))))
     (setq modus-themes-org-blocks 'gray-background)
     :config
     (koek-mt/load 'vivendi))
