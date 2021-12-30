@@ -4752,7 +4752,7 @@ NAME is a string, the name of the user directory."
   :config
   (setq org-directory koek/documents-dir))
 
-(koek-pkg/register belgian-holidays)    ; Optional dependency
+(koek-pkg/register belgian-holidays)
 
 (use-package holidays
   :defer t

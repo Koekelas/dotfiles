@@ -9268,7 +9268,7 @@ directories of ~koek/projects-dir~, are agenda files. Configure agendas.
 Configure holidays.
 
 #+BEGIN_SRC emacs-lisp
-  (koek-pkg/register belgian-holidays)    ; Optional dependency
+  (koek-pkg/register belgian-holidays)
 
   (use-package holidays
     :defer t
