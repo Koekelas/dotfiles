@@ -1,6 +1,6 @@
 ;;; koek-ml --- Custom mode line -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021 Nicolas De Jaeghere
+;; Copyright (C) 2021-2022 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: frames

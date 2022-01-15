@@ -1,6 +1,6 @@
 ;;; prepcast.el --- Prepare for screencasting -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2021 Nicolas De Jaeghere
+;; Copyright (C) 2020-2022 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: faces

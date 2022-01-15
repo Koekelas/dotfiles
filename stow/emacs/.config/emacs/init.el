@@ -1,6 +1,6 @@
 ;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2021 Nicolas De Jaeghere
+;; Copyright (C) 2017-2022 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; URL: https://github.com/Koekelas/dotfiles
