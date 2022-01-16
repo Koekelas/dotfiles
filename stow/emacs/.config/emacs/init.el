@@ -4758,15 +4758,15 @@ NAME is a string, the name of the user directory."
     (setq exar-monitors
           `(:laptop (:edid "0x06af3d13000000002617" :name "Laptop"
                      :color ,(expand-file-name "laptop.icc" icc-dir))
-            :home (:edid "0x35491800000000000013" :name "Home"
-                   :color ,(expand-file-name "home.icc" icc-dir))))
+            :desk   (:edid "0x35491800000000000013" :name "Desk"
+                     :color ,(expand-file-name "desk.icc" icc-dir))))
     (setq exar-layouts
-          '((:name "Home (primary) and laptop"
+          '((:name "Desk (primary) and laptop (left)"
              :monitors
-             (:home (:top 0 :left 1920 :width 1920 :height 1080)
+             (:desk (:top 0 :left 1920 :width 1920 :height 1080)
               :laptop (:top 0 :left 0 :width 1920 :height 1080 :workspaces (1 6))))
-            (:name "Home"
-             :monitors (:home (:top 0 :left 0 :width 1920 :height 1080)))
+            (:name "Desk"
+             :monitors (:desk (:top 0 :left 0 :width 1920 :height 1080)))
             (:name "Laptop"
              :monitors (:laptop (:top 0 :left 0 :width 1920 :height 1080))))))
   (exar-enable)
