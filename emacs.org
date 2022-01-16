@@ -3234,8 +3234,8 @@ Upgrade case commands.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
-     subword-mode)
+    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+     . subword-mode)
     :delight)
 #+END_SRC
 
@@ -3318,8 +3318,8 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-word/next-word~ and
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
-      smartparens-mode)
+    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+      . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (defun koek-sp/separate-sexp (open-delimiter action _context)
@@ -3418,9 +3418,9 @@ Run:
   (use-package paren-face
     :straight t
     :hook
-    ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode
-      emacs-lisp-mode lisp-interaction-mode scheme-mode geiser-repl-mode) .
-     paren-face-mode)
+    ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode emacs-lisp-mode
+      lisp-interaction-mode scheme-mode geiser-repl-mode)
+     . paren-face-mode)
     :config
     (setq paren-face-regexp (rx (any "()[]{}"))))
 #+END_SRC

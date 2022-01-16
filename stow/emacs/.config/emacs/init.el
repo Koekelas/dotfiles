@@ -2205,8 +2205,8 @@ When wgrep is enabled, disable lin, else, enable lin."
 
 (use-package subword
   :hook
-  ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
-   subword-mode)
+  ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+   . subword-mode)
   :delight)
 
 (defun koek-word/next (&optional arg)
@@ -2268,8 +2268,8 @@ negative, move point to beginning of next word."
    ("C-M-w" . sp-copy-sexp)
    ("C-M-k" . sp-kill-sexp))
   :hook
-  (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode) .
-    smartparens-mode)
+  (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
+    . smartparens-mode)
    (smartparens-mode . show-smartparens-mode))
   :preface
   (defun koek-sp/separate-sexp (open-delimiter action _context)
@@ -2354,9 +2354,9 @@ install handler for."
 (use-package paren-face
   :straight t
   :hook
-  ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode
-    emacs-lisp-mode lisp-interaction-mode scheme-mode geiser-repl-mode) .
-   paren-face-mode)
+  ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode emacs-lisp-mode
+    lisp-interaction-mode scheme-mode geiser-repl-mode)
+   . paren-face-mode)
   :config
   (setq paren-face-regexp (rx (any "()[]{}"))))
 
