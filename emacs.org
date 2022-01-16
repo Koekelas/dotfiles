@@ -2285,6 +2285,13 @@ Bury unneeded buffers, computers have more than enough memory.
             (?n "News" elfeed-show-bookmark-handler))))
 #+END_SRC
 
+*** consult-dir - Insert file names
+[[https://github.com/karthink/consult-dir][consult-dir (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'consult-dir)
+#+END_SRC
+
 ** embark - Actions
 [[https://github.com/oantolin/embark][embark (GitHub)]]
 
@@ -2362,6 +2369,11 @@ minibuffer.
   (use-package vertico
     :straight (vertico :files (:defaults "extensions/*.el"))
     :config
+    (use-package consult-dir
+      :bind
+      (:map vertico-map
+       ("C-c r" . consult-dir)))
+
     (use-package vertico-quick
       :bind
       (:map vertico-map

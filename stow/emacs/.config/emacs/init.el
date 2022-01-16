@@ -1442,6 +1442,8 @@ are recognized:
           (?g "Gopher and Gemini" elpher-bookmark-jump)
           (?n "News" elfeed-show-bookmark-handler))))
 
+(straight-use-package 'consult-dir)
+
 (use-package embark
   :straight t
   :bind
@@ -1504,6 +1506,11 @@ are recognized:
 (use-package vertico
   :straight (vertico :files (:defaults "extensions/*.el"))
   :config
+  (use-package consult-dir
+    :bind
+    (:map vertico-map
+     ("C-c r" . consult-dir)))
+
   (use-package vertico-quick
     :bind
     (:map vertico-map
