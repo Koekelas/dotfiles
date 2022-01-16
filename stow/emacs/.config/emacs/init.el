@@ -525,10 +525,25 @@ N is an integer, a workspace number."
 
 (use-package exwm-manage
   :defer t
+  :preface
+  (defvar koek-wm/file-dialog-titles
+    (rx line-start (or "File" "Open" "Select" "Save" "Export"))
+    "Regular expression matching titles of file dialog buffers.")
   :config
-  (let ((defaults '(floating-mode-line nil)))
+  (pcase-let
+      ((`(,width ,height) (thread-last (display-monitor-attributes-list)
+                            car                   ; Primary monitor
+                            (alist-get 'geometry) ; Arrangement/resolution
+                            cddr))                ; Resolution
+       (defaults '(floating-mode-line nil)))
     (setq exwm-manage-configurations
-          `(;; ---------- Epiphany/Web ----------
+          `(;; ---------- File dialogs ----------
+            ((and exwm-title
+                  (string-match koek-wm/file-dialog-titles exwm-title))
+             x ,(/ width 4) y ,(/ height 6)
+             width ,(* (/ width 4) 2) height ,(* (/ height 6) 4)
+             char-mode t ,@defaults)
+            ;; ---------- Epiphany/Web ----------
             ((koek-wm/classp "epiphany")
              simulation-keys
              ,(mapcar (pcase-lambda (`(,from . ,to))
