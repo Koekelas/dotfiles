@@ -3448,7 +3448,7 @@ TITLE and URL are strings.  TAGS are zero or more symbols."
       (let ((args
              (pcase feed
                (`(,title reddit month ,id . ,tags)
-                `(,(concat title " (Reddit - Month)")
+                `(,(concat title " (Reddit Month)")
                   ,(format "https://www.reddit.com/r/%s/top.rss?t=month" id)
                   post ,@tags))
                (`(,title reddit ,id . ,tags)
