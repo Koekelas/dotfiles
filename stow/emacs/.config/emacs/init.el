@@ -3440,7 +3440,7 @@ When playback is stopped, play from beginning of playlist."
   (defun koek-feed/add-feed (title url &rest tags)
     "Add news feed to database.
 TITLE and URL are strings.  TAGS are zero or more symbols."
-    (setf (elfeed-feed-title (elfeed-db-get-feed url)) title)
+    (setf (elfeed-meta (elfeed-db-get-feed url) :title) title)
     (push (cons url tags) elfeed-feeds))
 
   (defun koek-feed/init-feeds ()
