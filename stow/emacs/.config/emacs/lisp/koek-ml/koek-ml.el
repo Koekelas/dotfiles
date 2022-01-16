@@ -420,6 +420,19 @@ STATE is a symbol, a flymake state."
     koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes))
 
+;;;; transient
+
+(defvar koek-ml/transient-format
+  '(" "
+    (:eval
+     (moody-tab
+      (propertize (koek-subr/construct-earmuffed-name
+                   "transient" mode-line-buffer-identification)
+                  'face 'mode-line-buffer-id)))
+    koek-ml/large-separator
+    koek-ml/modes))
+(put 'koek-ml/transient-format 'risky-local-variable t)
+
 ;;;; ediff
 
 (defvar koek-ml/variant-types '(A B C Ancestor)
