@@ -214,8 +214,42 @@ system."
         (eww-mode)
         (eww url))
       (pop-to-buffer buffer)))
+
+  (defun koek-wm/view-source (url &optional interactive)
+    (interactive
+     (let* ((page (if (koek-wm/classp "firefox")
+                      (koek-wm/get-firefox-page)
+                    (user-error "Not in a Firefox buffer")))
+            (url (or (plist-get page :url) (user-error "Not visiting a URL"))))
+       (list url 'interactive)))
+    (let ((callback
+           (lambda (status)
+             (when (alist-get :error status)
+               (error "Retrieve `%s' failed" url))
+             (let ((response (current-buffer))
+                   (start (progn
+                            (goto-char (point-min))
+                            (search-forward "\n\n")))
+                   (buffer
+                    (generate-new-buffer
+                     (koek-subr/construct-earmuffed-name "view-src" url))))
+               (with-current-buffer buffer
+                 (insert-buffer-substring response start)
+                 (restore-buffer-modified-p nil)
+                 (set-auto-mode)
+                 (goto-char (point-min)))
+               (kill-buffer response)
+               (pop-to-buffer buffer)
+               (when interactive
+                 (message "Retrieving `%s'...done" url))))))
+      (when interactive
+        (message "Retrieving `%s'..." url))
+      (url-retrieve url callback nil 'silent)))
   :config
-  (bind-key "s-e" #'koek-wm/visit-eww exwm-mode-map)
+  (bind-keys
+   :map exwm-mode-map
+   ("s-e" . koek-wm/visit-eww)
+   ("s-c" . koek-wm/view-source))       ; [C]ode
 
   (add-hook 'exwm-mode-hook #'koek-subr/reset-default-directory))
 
@@ -992,6 +1026,7 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
                     "*vterm*"
                     "*eshell*"
                     "*Proced*"
+                    "*view-src"
                     "*org-src"))
            . ((display-buffer-reuse-window display-buffer-same-window)))
           ;; Below selected
