@@ -768,7 +768,9 @@ VERTICAL is truthy, resize vertically, else, resize
 horizontally."
   (let* ((width (nth 2 (frame-monitor-geometry)))
          (step (/ width koek-wind/n-hor-steps))
-         (delta (if shrink (- step) step)))
+         (delta (if shrink
+                    (- step)
+                  step)))
     (window-resize nil delta (not vertical) nil 'pixelwise)))
 
 (defun koek-wind/grow (&optional arg)
@@ -4644,8 +4646,9 @@ VARIANT is a symbol, the variant of the Modus theme, either
 operandi or vivendi."
     (pcase-let* ((koek-thm/enable-hook nil) ; Dynamic variable
                  (themes '(modus-operandi modus-vivendi))
-                 (`(,new ,old)
-                  (if (eq variant 'operandi) themes (reverse themes))))
+                 (`(,new ,old) (if (eq variant 'operandi)
+                                   themes
+                                 (reverse themes))))
       (when (custom-theme-enabled-p old)
         (disable-theme old))
       (unless (custom-theme-p new)
