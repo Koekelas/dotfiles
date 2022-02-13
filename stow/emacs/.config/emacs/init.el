@@ -985,10 +985,10 @@ buffer."
         indium-repl-mode inferior-octave-mode inferior-python-mode
         geiser-repl-mode sql-interactive-mode))
 (setq koek-buff/shell-names
-      (rx line-start "*" (zero-or-one (one-or-more (not "*")) "-")
+      (rx line-start
           ;; When new buffer, major mode is set after calling
           ;; `display-buffer'
-          (or "vterm*" "eshell*")))
+          (or "*vterm" "*eshell")))
 
 ;; Web buffers
 (setq koek-buff/web-modes '(eww-mode elpher-mode))
@@ -1835,6 +1835,11 @@ the secondary ones."
     (if (bound-and-true-p recentf-mode)
         (recentf-include-p (project-root project))
       t))
+
+  (define-advice project-prefixed-buffer-name
+      (:override (mode) koek-proj/construct-project-buffer-name)
+    (koek-subr/construct-earmuffed-name
+     mode (koek-proj/determine-name default-directory)))
 
   (defun koek-proj/magit-status ()
     "Launch magit in current project.
