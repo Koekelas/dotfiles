@@ -2278,9 +2278,7 @@ negative, move point to ending of previous word."
 Optional ARG is an integer and defaults to one.  When ARG is
 negative, move point to beginning of next word."
   (interactive "p")
-  (unless arg
-    (setq arg 1))
-  (koek-word/next (- arg)))
+  (koek-word/next (- (or arg 1))))
 
 (bind-keys
  ("M-n" . koek-word/next)
