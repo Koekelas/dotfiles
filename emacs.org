@@ -6902,6 +6902,10 @@ To show holidays as agenda entries, see [[info:org#Weekly/daily agenda][Calendar
 #+END_SRC
 
 *** belgian-holidays - Belgian holidays
+#+BEGIN_SRC emacs-lisp
+  (koek-pkg/register belgian-holidays)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/belgian-holidays/belgian-holidays.el
   ;;; belgian-holidays --- Belgian holidays -*- lexical-binding: t; -*-
 
@@ -9365,8 +9369,6 @@ directories of ~koek/projects-dir~, are agenda files. Configure agendas.
 Configure holidays.
 
 #+BEGIN_SRC emacs-lisp
-  (koek-pkg/register belgian-holidays)
-
   (use-package holidays
     :defer t
     :config

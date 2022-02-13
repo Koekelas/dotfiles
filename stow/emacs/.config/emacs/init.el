@@ -3774,6 +3774,8 @@ INTERACTIVE is used internally."
   :bind
   ("C-c x C-q" . list-holidays))
 
+(koek-pkg/register belgian-holidays)
+
 (use-package prepcast
   :koek t
   :defer t
@@ -4830,8 +4832,6 @@ NAME is a string, the name of the user directory."
     (setq org-agenda-files (koek/get-agenda-files)))
   :config
   (setq org-directory koek/documents-dir))
-
-(koek-pkg/register belgian-holidays)
 
 (use-package holidays
   :defer t
