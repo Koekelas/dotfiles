@@ -3612,22 +3612,18 @@ playing track, else, enqueue after last track."
 INTERACTIVE is used internally."
     (interactive (list 'interactive))
     (require 'pdf-tools)
-    (let* (buffer
-           (callback
-            (lambda (file-name)
-              (setq pdf-info-epdfinfo-program file-name)
-              (when (and file-name buffer)
-                (kill-buffer buffer))
-              (when interactive
-                (if file-name
-                    (message "Recompiling epdf...done")
-                  (message "Recompile epdf failed"))))))
+    (let ((callback (lambda (file-name)
+                      (setq pdf-info-epdfinfo-program file-name)
+                      (when file-name
+                        (kill-buffer))  ; Compile buffer is current
+                      (when interactive
+                        (if file-name
+                            (message "Recompiling epdf...done")
+                          (message "Recompile epdf failed")))))) ; error, hook
       (when interactive
         (message "Recompiling epdf..."))
-      (setq buffer
-            (pdf-tools-build-server pdf-tools-directory
-                                    'no-install-deps nil
-                                    callback)))))
+      (pdf-tools-build-server
+       pdf-tools-directory 'no-install-deps nil callback))))
 
 (use-package pdf-loader
   :config
