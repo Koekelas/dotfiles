@@ -3029,10 +3029,10 @@ Output is between `compilation-filter-start' and point."
     "Rewrite Reddit to Reddit mobile.
 URL is a string, the URL to rewrite."
     (let ((parsed (url-generic-parse-url url)))
-      (when (string-match-p (rx line-start
-                                (zero-or-one (or "www" "old") ".") "reddit.com"
-                                line-end)
-                            (url-host parsed))
+      (when (string-match (rx line-start
+                              (zero-or-one (or "www" "old") ".") "reddit.com"
+                              line-end)
+                          (url-host parsed))
         (setf (url-host parsed) "i.reddit.com")
         (url-recreate-url parsed))))
 
