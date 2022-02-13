@@ -88,7 +88,7 @@ preparation, nil."
         (setq prepcast--unprep-fs
               (thread-last prepcast-prep-fs
                 (mapcar #'funcall)
-                (seq-filter #'identity))))
+                (seq-remove #'null))))
     (mapc #'funcall prepcast--unprep-fs)
     (setq prepcast--unprep-fs nil)))
 
