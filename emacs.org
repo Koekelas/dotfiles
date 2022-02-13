@@ -6617,19 +6617,15 @@ Configure elfeed afterwards.
           (list elfeed-show-entry)
         (elfeed-search-selected)))
 
-    (defun koek-feed/visit (entries)
-      "Visit ENTRIES in eww."
-      (thread-last entries
-        (mapcar
-         (lambda (entry)
-           (let* ((title (elfeed-entry-title entry))
-                  (buffer (generate-new-buffer
-                           (koek-subr/construct-earmuffed-name "eww" title))))
-             (with-current-buffer buffer
-               (eww-mode)
-               (eww (elfeed-entry-link entry)))
-             buffer)))
-        (mapc #'pop-to-buffer)))
+    (defun koek-feed/visit (entry)
+      "Visit ENTRY in eww."
+      (let* ((title (elfeed-entry-title entry))
+             (buffer (generate-new-buffer
+                      (koek-subr/construct-earmuffed-name "eww" title))))
+        (with-current-buffer buffer
+          (eww-mode)
+          (eww (elfeed-entry-link entry)))
+        (pop-to-buffer buffer)))
 
     (defun koek-feed/visit-dwim ()
       "Visit selected entries in eww."
@@ -6640,7 +6636,7 @@ Configure elfeed afterwards.
           (mapc #'elfeed-search-update-entry entries)
           (unless (or elfeed-search-remain-on-entry (use-region-p))
             (forward-line)))
-        (koek-feed/visit entries)))
+        (mapc #'koek-feed/visit entries)))
 
     (defun koek-feed/enqueue (entries &optional next)
       "Enqueue ENTRIES in bongo.
