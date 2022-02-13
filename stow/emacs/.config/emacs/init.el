@@ -3721,8 +3721,7 @@ INTERACTIVE is used internally."
             (list name (face-attribute 'pdf-links-read-link name nil 'default)))
           '(:family :width :weight :slant))))
     (setq pdf-links-read-link-convert-commands
-          `("-density"    "96"
-            "-family"     ,(plist-get spec :family)
+          `("-family"     ,(plist-get spec :family)
             "-stretch"    ,(thread-last (plist-get spec :width)
                              symbol-name
                              capitalize
