@@ -62,7 +62,7 @@ preparation, nil."
 
 (defun prepcast-prep-moody ()
   "Prepare moody for screencasting."
-  (when (boundp 'moody-mode-line-height)
+  (when (featurep 'moody)
     (let ((height moody-mode-line-height))
       (setq moody-mode-line-height (round (* height prepcast-scale)))
       (lambda ()
@@ -73,7 +73,7 @@ preparation, nil."
 
 (defun prepcast-prep-keycast ()
   "Prepare keycast for screencasting."
-  (when (fboundp 'keycast-mode)
+  (when (featurep'keycast)
     (unless keycast-mode
       (keycast-mode 1)
       (lambda ()

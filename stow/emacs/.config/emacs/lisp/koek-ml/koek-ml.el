@@ -153,7 +153,7 @@ Intended as advice around `ace-window-display-mode'."
 
 (defvar koek-ml/exwm-workspaces
   '(:eval
-    (when (and (boundp 'exwm-workspace-current-index) (moody-window-active-p))
+    (when (and (featurep 'exwm-workspace) (moody-window-active-p))
       (let ((workspaces (koek-ml/get-exwm-workspaces)))
         (when (> (length workspaces) 1)
           `(,(moody-ribbon
@@ -210,7 +210,7 @@ Intended as advice around `ace-window-display-mode'."
 
 (defvar koek-ml/id
   '(:eval
-    (let ((prefix (when (and (fboundp 'project-current)
+    (let ((prefix (when (and (featurep 'project)
                              (derived-mode-p 'prog-mode 'conf-mode))
                     (koek-proj/get-name))))
       (moody-tab
@@ -276,7 +276,7 @@ Intended as advice around `exwm-input--update-mode-line'."
 
 (defvar koek-ml/exwm-input
   '(:eval
-    (when (and (boundp 'exwm--input-mode) (eq exwm--input-mode 'char-mode)
+    (when (and (featurep 'exwm-core) (eq exwm--input-mode 'char-mode)
                (moody-window-active-p))
       `("" koek-ml/separator
         ,(moody-ribbon "Char" nil 'up))))
@@ -394,8 +394,7 @@ STATE is a symbol, a flymake state."
 
 (defvar koek-ml/task
   '(:eval
-    (when (and (fboundp 'org-clock-is-active) (org-clock-is-active)
-               (moody-window-active-p))
+    (when (and (featurep 'org) (org-clocking-buffer) (moody-window-active-p))
       `("" koek-ml/separator
         ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
   "Mode line construct for task.")
