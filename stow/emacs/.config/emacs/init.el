@@ -233,7 +233,8 @@ Keybinding is a string, see `edmacro-mode'.")
   (setq exwm-input-global-keys
         (mapcar (pcase-lambda (`(,key . ,command))
                   (cons (kbd key) command))
-                '(("s-0" . koek-wm/switch-workspace-0)
+                '(("s-z" . repeat)
+                  ("s-0" . koek-wm/switch-workspace-0)
                   ("s-1" . koek-wm/switch-workspace-1)
                   ("s-2" . koek-wm/switch-workspace-2)
                   ("s-3" . koek-wm/switch-workspace-3)
@@ -257,8 +258,7 @@ Keybinding is a string, see `edmacro-mode'.")
                   (cons (kbd from) (kbd to)))
                 koek-wm/base-simulation-keys))
 
-  ;; Grab repeat and ivy-resume in line mode
-  (push ?\C-z exwm-input-prefix-keys)
+  ;; Grab ivy-resume in line mode
   (push ?\C-r exwm-input-prefix-keys))
 
 (use-package exwm-workspace
