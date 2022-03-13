@@ -1725,6 +1725,8 @@ the builtin annotator except it aligns the annotation."
   :config
   (save-place-mode))
 
+(setq view-read-only t)
+
 (use-package so-long
   :init
   (global-so-long-mode))

@@ -2616,6 +2616,11 @@ minibuffer.
     (save-place-mode))
 #+END_SRC
 
+** view - Read only files
+#+BEGIN_SRC emacs-lisp
+  (setq view-read-only t)
+#+END_SRC
+
 ** so-long - Problematic files
 #+BEGIN_SRC emacs-lisp
   (use-package so-long
