@@ -59,7 +59,6 @@
 (defmacro koek-pkg/register (package)
   "Register embedded package.
 PACKAGE is a symbol, the name of the package."
-  (declare (indent 1))
   (let ((package-name (symbol-name package)))
     `(progn
        ;; Emacs loads packages during compilation to warn about
