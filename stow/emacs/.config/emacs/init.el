@@ -667,20 +667,6 @@ earlier directories shadow entries in later ones.")
       (remhash id entries))
     entries))
 
-(defun koek-xde/make-completion-table (candidates)
-  (let ((annotate (lambda (candidate)
-                    (when-let ((comment (thread-last candidates
-                                          (gethash candidate)
-                                          (gethash "Comment"))))
-                      (concat " " comment)))))
-    (lambda (input pred action)
-      (pcase action
-        ('metadata
-         `(metadata . ((category . xdg-desktop-entry)
-                       (annotation-function . ,annotate))))
-        (_action
-         (complete-with-action action candidates input pred))))))
-
 (defvar koek-xde/entry-history nil
   "History of entry names read.")
 
@@ -695,10 +681,17 @@ earlier directories shadow entries in later ones.")
           (seq-reduce (pcase-lambda (candidates `(,name . ,id))
                         (puthash name (gethash id entries) candidates)
                         candidates)
-                      ids (make-hash-table :test #'equal))))
+                      ids (make-hash-table :test #'equal)))
+         (table (koek-subr/enrich candidates
+                  category 'xdg-desktop-entry
+                  annotation-function
+                  (lambda (candidate)
+                    (when-let ((comment (thread-last candidates
+                                          (gethash candidate)
+                                          (gethash "Comment"))))
+                      (concat " " comment))))))
     (thread-first
-        (completing-read prompt (koek-xde/make-completion-table candidates)
-                         nil t nil 'koek-xde/entry-history)
+        (completing-read prompt table nil t nil 'koek-xde/entry-history)
       (assoc ids)
       cdr)))
 
@@ -1683,19 +1676,13 @@ the builtin annotator except it aligns the annotation."
   (defun koek-bmrk/read-generic-url (prompt)
     (require 'bookmark)
     (bookmark-maybe-load-default-file)
-    (let ((candidates (seq-filter (lambda (bookmark)
-                                    (eq (bookmark-get-handler bookmark)
-                                        'koek-bmrk/handle-generic-url))
-                                  bookmark-alist)))
-      (completing-read
-       prompt
-       (lambda (input pred action)
-         (pcase action
-           ('metadata
-            '(metadata . ((category . bookmark))))
-           (_action
-            (complete-with-action action candidates input pred))))
-       nil t nil 'koek-bmrk/generic-url-history)))
+    (let* ((candidates (seq-filter (lambda (bookmark)
+                                     (eq (bookmark-get-handler bookmark)
+                                         'koek-bmrk/handle-generic-url))
+                                   bookmark-alist))
+           (table (koek-subr/enrich candidates
+                    category 'bookmark)))
+      (completing-read prompt table nil t nil 'koek-bmrk/generic-url-history)))
   :config
   (setq bookmark-default-file
         (no-littering-expand-etc-file-name "bookmark-default.el"))
@@ -3273,29 +3260,22 @@ none return a URL, nil.  For rewrite functions, see
   (defvar koek-bbdb/email-history nil
     "History of e-mail addresses read.")
 
-  (defun koek-bbdb/make-completion-table (candidates)
-    (let ((annotate (lambda (candidate)
+  (defun koek-bbdb/read-email (prompt)
+    (let* ((candidates (seq-mapcat (lambda (record)
+                                     (mapcar (lambda (email)
+                                               (cons email record))
+                                             (bbdb-record-mail record)))
+                                   (bbdb-records)))
+           (table (koek-subr/enrich candidates
+                    category 'email
+                    annotation-function
+                    (lambda (candidate)
                       (when-let ((name (thread-first candidate
                                          (assoc candidates)
                                          cdr
                                          bbdb-record-name)))
-                        (concat " " name)))))
-      (lambda (input pred action)
-        (pcase action
-          ('metadata
-           `(metadata . ((category . email)
-                         (annotation-function . ,annotate))))
-          (_action
-           (complete-with-action action candidates input pred))))))
-
-  (defun koek-bbdb/read-email (prompt)
-    (let ((candidates (seq-mapcat (lambda (record)
-                                    (mapcar (lambda (email)
-                                              (cons email record))
-                                            (bbdb-record-mail record)))
-                                  (bbdb-records))))
-      (completing-read prompt (koek-bbdb/make-completion-table candidates)
-                       nil t nil 'koek-bbdb/email-history)))
+                        (concat " " name))))))
+      (completing-read prompt table nil t nil 'koek-bbdb/email-history)))
 
   (defun koek-bbdb/display-email (email)
     (interactive (list (koek-bbdb/read-email "E-mail: ")))

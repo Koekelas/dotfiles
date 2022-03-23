@@ -247,6 +247,25 @@ S is a string, the string to interrogate."
     (string-match
      (rx line-start alpha (zero-or-more (any alnum "+-.")) ":") s)))
 
+;;; Completion subroutines
+
+(defmacro koek-subr/enrich (candidates &rest metadata-pairs)
+  "Enrich CANDIDATES with metadata."
+  (declare (indent 1))
+  (let ((candidates-sym (gensym))
+        (metadata-sym (gensym)))
+    `(let ((,candidates-sym ,candidates)
+           (,metadata-sym
+            (cons 'metadata
+                  (list ,@(mapcar (pcase-lambda (`(,key ,value))
+                                    `(cons ',key ,value))
+                                  (seq-partition metadata-pairs 2))))))
+       (lambda (input pred action)
+         (pcase action
+           ('metadata ,metadata-sym)
+           (_action
+            (complete-with-action action ,candidates-sym input pred)))))))
+
 (provide 'koek-subr)
 
 ;;; koek-subr.el ends here
