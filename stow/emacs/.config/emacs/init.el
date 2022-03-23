@@ -2092,7 +2092,7 @@ dictionary links before LIMIT."
     (get-text-property (point) 'link))
 
   (defun koek-lh/dictionary-mode-p ()
-    "Return whether current major mode is derived from dictionary-mode."
+    "Return whether current major mode is derived from `dictionary-mode'."
     (derived-mode-p 'dictionary-mode))
 
   (defun koek-lh/open-dictionary-link ()
