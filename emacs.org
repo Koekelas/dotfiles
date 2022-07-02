@@ -68,7 +68,7 @@ Tighten network security.
 #+END_SRC
 
 ** straight - Package manager
-[[https://github.com/raxod502/straight.el][straight (GitHub)]]
+[[https://github.com/radian-software/straight.el][straight (GitHub)]]
 
 Disable builtin package manager.
 
