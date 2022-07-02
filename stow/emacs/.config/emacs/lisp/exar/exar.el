@@ -266,13 +266,21 @@
                        (cons (car output) (1+ i)))
                      sorted)))
 
-(defun exar--load-color (display-n file-name)
-  (when (fboundp 'exar--load-color-dispwin)
-    (exar--load-color-dispwin display-n file-name)))
+(defun exar--load-color-dispwin (display-n file-name)
+  (call-process "dispwin" nil 0 nil (number-to-string display-n) file-name))
 
-(when (executable-find "dispwin")
-  (defun exar--load-color-dispwin (display-n file-name)
-    (call-process "dispwin" nil 0 nil (number-to-string display-n) file-name)))
+(defun exar--load-color-none (_display-n _file-name)
+  nil)
+
+(defvar exar--load-color-f
+  (cond
+   ((executable-find "dispwin")
+    #'exar--load-color-dispwin)
+   (t
+    #'exar--load-color-none)))
+
+(defun exar--load-color (display-n file-name)
+  (funcall exar--load-color-f display-n file-name))
 
 (defun exar--load-colors (display-ns monitor-layout)
   (dolist (monitor monitor-layout)
