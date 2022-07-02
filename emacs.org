@@ -526,9 +526,9 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
       (when-let ((args (alist-get 'args (process-attributes id))))
         (let ((normalized
                (thread-last args
-                 (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
+                 (string-replace "\\ " "\N{NO-BREAK SPACE}")
                  (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
-                 (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
+                 (string-replace "\N{NO-BREAK SPACE}" " "))))
           (split-string normalized "\N{NULL}"))))
 
     (defun koek-wm/get-process-ids (name)
@@ -3754,8 +3754,8 @@ For the major mode, see [[*YASnippet][YASnippet]].
                          (substring 1 2))))
         (thread-last (file-relative-name file-name root)
           file-name-sans-extension
-          (replace-regexp-in-string (regexp-quote separator) ".")
-          (replace-regexp-in-string "_" "-"))))
+          (string-replace separator ".")
+          (string-replace "_" "-"))))
 
     ;; Org and Markdown
     (defvar koek-ys/languages
@@ -6838,7 +6838,7 @@ Gnus is a placeholder.
               "-stretch"    ,(thread-last (plist-get spec :width)
                                symbol-name
                                capitalize
-                               (replace-regexp-in-string "-" ""))
+                               (string-replace "-" ""))
               "-weight"     ,(pcase (plist-get spec :weight)
                                ('ultra-light "Thin")
                                ('extra-light "ExtraLight")

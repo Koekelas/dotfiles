@@ -130,9 +130,9 @@ ID is an integer, the process id of the process."
     (when-let ((args (alist-get 'args (process-attributes id))))
       (let ((normalized
              (thread-last args
-               (replace-regexp-in-string (rx "\\ ") "\N{NO-BREAK SPACE}")
+               (string-replace "\\ " "\N{NO-BREAK SPACE}")
                (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
-               (replace-regexp-in-string "\N{NO-BREAK SPACE}" " "))))
+               (string-replace "\N{NO-BREAK SPACE}" " "))))
         (split-string normalized "\N{NULL}"))))
 
   (defun koek-wm/get-process-ids (name)
@@ -2593,8 +2593,8 @@ Assumes source path is the root of the project."
                        (substring 1 2))))
       (thread-last (file-relative-name file-name root)
         file-name-sans-extension
-        (replace-regexp-in-string (regexp-quote separator) ".")
-        (replace-regexp-in-string "_" "-"))))
+        (string-replace separator ".")
+        (string-replace "_" "-"))))
 
   ;; Org and Markdown
   (defvar koek-ys/languages
@@ -3706,7 +3706,7 @@ INTERACTIVE is used internally."
             "-stretch"    ,(thread-last (plist-get spec :width)
                              symbol-name
                              capitalize
-                             (replace-regexp-in-string "-" ""))
+                             (string-replace "-" ""))
             "-weight"     ,(pcase (plist-get spec :weight)
                              ('ultra-light "Thin")
                              ('extra-light "ExtraLight")
