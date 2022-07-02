@@ -491,7 +491,7 @@ during initialization. Reduces startup time.
   (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
 #+END_SRC
 
-Once initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
+When initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
 
 *** gcmh - Collect garbage when idle
 [[https://gitlab.com/koral/gcmh][gcmh (GitLab)]]
