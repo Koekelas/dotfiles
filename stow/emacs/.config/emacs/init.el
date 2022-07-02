@@ -148,22 +148,21 @@ NAME is a string, the name of the process."
                       (string-equal nm name))))
      (list-system-processes)))
 
-  (defun koek-wm/set-xsettingsd-preset ()
-    "Set xsettingsd configuration preset.
-When current theme is a dark theme, set configuration preset to
-dark, else, set it to light."
+  (defun koek-wm/set-xsettingsd-preset (file-name)
     (when-let ((id (car (koek-wm/get-process-ids "xsettingsd"))))
-      (let* ((preset (if (koek-thm/darkp) "dark" "light"))
-             (preset-file
-              (thread-last (xdg-data-home)
-                (expand-file-name "xsettingsd/presets/")
-                (expand-file-name preset)))
-             (config-file
-              (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
+      (let ((config-file
+             (expand-file-name "xsettingsd/xsettingsd" (xdg-config-home))))
         ;; Third argument truthy overwrites existing link, docstring
         ;; only mentions not signaling an error
-        (make-symbolic-link preset-file config-file 'overwrite)
+        (make-symbolic-link file-name config-file 'overwrite)
         (signal-process id 'SIGHUP))))
+
+  (defun koek-wm/update-xsettingsd-preset ()
+    (let* ((preset (if (koek-thm/darkp) "dark" "light"))
+           (file-name (thread-last (xdg-data-home)
+                        (expand-file-name "xsettingsd/presets/")
+                        (expand-file-name preset))))
+      (koek-wm/set-xsettingsd-preset file-name)))
 
   (defun koek-wm/power-off ()
     "Power off system."
@@ -194,7 +193,7 @@ system."
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend))
 
-  (add-hook 'koek-thm/enable-hook #'koek-wm/set-xsettingsd-preset))
+  (add-hook 'koek-thm/enable-hook #'koek-wm/update-xsettingsd-preset))
 
 (use-package exwm-core
   :defer t
