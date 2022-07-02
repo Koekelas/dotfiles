@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: calendar
-;; URL: https://github.com/Koekelas/dotfiles
+;; URL: <https://github.com/Koekelas/dotfiles>
 
 ;; This file is not part of GNU Emacs.
 

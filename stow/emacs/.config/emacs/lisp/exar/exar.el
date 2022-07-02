@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: unix
-;; URL: https://github.com/Koekelas/dotfiles
+;; URL: <https://github.com/Koekelas/dotfiles>
 
 ;; This file is not part of GNU Emacs.
 
@@ -25,8 +25,8 @@
 
 ;; Emacs, X Window System and RandR
 
-;; https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt
-;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
+;; <https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt>
+;; <http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf>
 
 ;;; Code:
 

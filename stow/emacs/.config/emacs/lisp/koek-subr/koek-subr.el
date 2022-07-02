@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: lisp
-;; URL: https://github.com/Koekelas/dotfiles
+;; URL: <https://github.com/Koekelas/dotfiles>
 
 ;; This file is not part of GNU Emacs.
 
@@ -88,7 +88,7 @@ S is a string, the string to strip chevrons from."
   (let ((chevrons (rx (one-or-more (regexp koek-subr/chevrons)))))
     (string-trim s chevrons chevrons)))
 
-;; The algorithm is from https://github.com/gouch/to-title-case
+;; The algorithm is from <https://github.com/gouch/to-title-case>
 (defun koek-subr/title-case (title)
   "Title case TITLE.
 TITLE is a string, the title to title case."

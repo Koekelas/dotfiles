@@ -9,7 +9,7 @@
 
 ;; Author: ${5:`user-full-name`} <${6:`user-mail-address`}>
 ;; Keywords: ${7:keyword-1, keyword-2, keyword-n}
-;; URL: ${8:URL}
+;; URL: <${8:URL}>
 
 ;; This file is not part of GNU Emacs.
 

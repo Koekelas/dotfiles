@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017-2022 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
-;; URL: https://github.com/Koekelas/dotfiles
+;; URL: <https://github.com/Koekelas/dotfiles>
 
 ;; This file is not part of GNU Emacs.
 
@@ -349,7 +349,7 @@ Keybinding is a string, see `edmacro-mode'.")
     ;; `exwm-class-name' is the name of the application while
     ;; `exwm-instance-name' is the name of the instance of the
     ;; application, see
-    ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+    ;; <https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property>.
     (when-let ((ref-class (koek-wm/get-class buffer)))
       (koek-wm/like-class-p class ref-class)))
 

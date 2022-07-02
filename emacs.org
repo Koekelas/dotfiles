@@ -13,7 +13,7 @@ Enable lexical binding.
   ;; Copyright (C) 2017-2022 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
@@ -211,7 +211,7 @@ For org configuration, see [[*Org][Org]].
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: lisp
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
@@ -295,7 +295,7 @@ For org configuration, see [[*Org][Org]].
     (let ((chevrons (rx (one-or-more (regexp koek-subr/chevrons)))))
       (string-trim s chevrons chevrons)))
 
-  ;; The algorithm is from https://github.com/gouch/to-title-case
+  ;; The algorithm is from <https://github.com/gouch/to-title-case>
   (defun koek-subr/title-case (title)
     "Title case TITLE.
   TITLE is a string, the title to title case."
@@ -745,7 +745,7 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
       ;; `exwm-class-name' is the name of the application while
       ;; `exwm-instance-name' is the name of the instance of the
       ;; application, see
-      ;; https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property.
+      ;; <https://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html#wm_class_property>.
       (when-let ((ref-class (koek-wm/get-class buffer)))
         (koek-wm/like-class-p class ref-class)))
 
@@ -1022,7 +1022,7 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: unix
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
@@ -1043,8 +1043,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
 
   ;; Emacs, X Window System and RandR
 
-  ;; https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt
-  ;; http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf
+  ;; <https://cgit.freedesktop.org/xorg/proto/randrproto/plain/randrproto.txt>
+  ;; <http://read.pudn.com/downloads110/ebook/456020/E-EDID%20Standard.pdf>
 
   ;;; Code:
 
@@ -3894,7 +3894,7 @@ Inherit Clojure snippets.
 
   ;; Author: ${5:`user-full-name`} <${6:`user-mail-address`}>
   ;; Keywords: ${7:keyword-1, keyword-2, keyword-n}
-  ;; URL: ${8:URL}
+  ;; URL: <${8:URL}>
 
   ;; This file is not part of GNU Emacs.
 
@@ -6916,7 +6916,7 @@ To show holidays as agenda entries, see [[info:org#Weekly/daily agenda][Calendar
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: calendar
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
@@ -7131,7 +7131,7 @@ Stavrou)]].
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: faces
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
@@ -8648,7 +8648,7 @@ can load moody.
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: frames
-  ;; URL: https://github.com/Koekelas/dotfiles
+  ;; URL: <https://github.com/Koekelas/dotfiles>
 
   ;; This file is not part of GNU Emacs.
 
