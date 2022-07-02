@@ -560,6 +560,16 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
                           (expand-file-name preset))))
         (koek-wm/set-xsettingsd-preset file-name)))
 
+    (defun koek-wm/set-gsetting (schema key value)
+      (call-process "gsettings" nil 0 nil "set" schema key value))
+
+    (defun koek-wm/set-gtk-theme-preference (dark)
+      (koek-wm/set-gsetting "org.gnome.desktop.interface" "color-scheme"
+                            (if dark "prefer-dark" "default")))
+
+    (defun koek-wm/update-gtk-theme-preference ()
+      (koek-wm/set-gtk-theme-preference (koek-thm/darkp)))
+
     (defun koek-wm/power-off ()
       "Power off system."
       (call-process "systemctl" nil 0 nil "poweroff"))
@@ -589,7 +599,8 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
      ("C-c z p" . koek-wm/kill-power-off)
      ("C-c z z" . koek-wm/suspend))
 
-    (add-hook 'koek-thm/enable-hook #'koek-wm/update-xsettingsd-preset))
+    (add-hook 'koek-thm/enable-hook #'koek-wm/update-xsettingsd-preset)
+    (add-hook 'koek-thm/enable-hook #'koek-wm/update-gtk-theme-preference))
 
   (use-package exwm-core
     :defer t
