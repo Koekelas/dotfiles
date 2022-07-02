@@ -1,4 +1,4 @@
-;;; koek-subr-autoloads.el --- automatically extracted autoloads
+;;; koek-subr-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -6,7 +6,7 @@
 ;;;### (autoloads nil "koek-subr" "koek-subr.el" (0 0 0 0))
 ;;; Generated autoloads from koek-subr.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "koek-subr" '("koek-subr/")))
+(register-definition-prefixes "koek-subr" '("koek-subr/"))
 
 ;;;***
 

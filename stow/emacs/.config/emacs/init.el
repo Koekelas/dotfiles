@@ -1709,7 +1709,7 @@ the builtin annotator except it aligns the annotation."
   :config
   (setq bookmark-default-file
         (no-littering-expand-etc-file-name "bookmark-default.el"))
-  (setq bookmark-bmenu-file-column 42)  ; padding
+  (setq bookmark-bmenu-file-column 40)
   (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package recentf
@@ -2103,34 +2103,7 @@ When FORCE is truthy, unconditionally continue commit."
   :straight t
   :bind
   (("C-c j l" . link-hint-open-link)
-   ("C-c j C-l" . link-hint-copy-link))
-  :preface
-  (defun koek-lh/next-dictionary-link (limit)
-    "Return position of next dictionary link.
-LIMIT is a position, a search limit limiting dictionary links to
-dictionary links before LIMIT."
-    (link-hint--next-property 'link limit))
-
-  (defun koek-lh/point-at-dictionary-link-p ()
-    "Return whether point is at a dictionary link."
-    (get-text-property (point) 'link))
-
-  (defun koek-lh/dictionary-mode-p ()
-    "Return whether current major mode is derived from `dictionary-mode'."
-    (derived-mode-p 'dictionary-mode))
-
-  (defun koek-lh/open-dictionary-link ()
-    "Open dictionary link at point."
-    (link-selected))
-  :config
-  (link-hint-define-type 'dictionary-link
-    :next #'koek-lh/next-dictionary-link
-    :at-point-p #'koek-lh/point-at-dictionary-link-p
-    ;; `dictionary-mode' isn't a proper mode, it doesn't define the
-    ;; variable dictionary-mode
-    :predicates '(koek-lh/dictionary-mode-p)
-    :open #'koek-lh/open-dictionary-link)
-  (push 'link-hint-dictionary-link link-hint-types))
+   ("C-c j C-l" . link-hint-copy-link)))
 
 (define-advice pop-to-mark-command (:around (f) koek-mark/ensure-move)
   (let ((start (point))
@@ -3735,7 +3708,6 @@ INTERACTIVE is used internally."
   :after pdf-view)
 
 (use-package dictionary
-  :straight t
   :bind
   ("C-c x d" . dictionary-search)
   :config
@@ -3744,7 +3716,7 @@ INTERACTIVE is used internally."
     (:map dictionary-mode-map
      ("j" . link-hint-open-link)))
 
-  (bind-key "DEL" #'scroll-down 'dictionary-mode-map)
+  (bind-key "DEL" #'scroll-down-command 'dictionary-mode-map)
 
   (setq dictionary-create-buttons nil))
 
@@ -4350,18 +4322,17 @@ nil, delete empty line at end of file."
   (defun koek-org/gen-autoloads ()
     "Generate autoloads for Emacs Lisp packages."
     (when (derived-mode-p 'emacs-lisp-mode)
-      (require 'autoload)
       (let* ((file-name (buffer-file-name))
              (package-dir (file-name-directory file-name))
              (package-name (thread-first package-dir
                              directory-file-name
-                             file-name-base)))
+                             file-name-base))
+             (autoload-file
+              (expand-file-name (concat package-name "-autoloads.el")
+                                package-dir)))
         (when (string-equal (file-name-base file-name) package-name)
-          (let ((generated-autoload-file ; Dynamic variable
-                 (expand-file-name (concat package-name "-autoloads.el")
-                                   package-dir)))
-            (update-directory-autoloads package-dir)
-            (kill-buffer (find-buffer-visiting generated-autoload-file)))))))
+          (make-directory-autoloads package-dir autoload-file)
+          (kill-buffer (find-buffer-visiting autoload-file))))))
 
   (defun koek-org/compile-emacs-lisp ()
     "Compile Emacs Lisp files."

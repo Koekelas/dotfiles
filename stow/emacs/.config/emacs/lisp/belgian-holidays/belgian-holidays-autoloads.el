@@ -1,4 +1,4 @@
-;;; belgian-holidays-autoloads.el --- automatically extracted autoloads
+;;; belgian-holidays-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -7,7 +7,7 @@
 ;;;;;;  0 0 0))
 ;;; Generated autoloads from belgian-holidays.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "belgian-holidays" '("holiday-belgian-")))
+(register-definition-prefixes "belgian-holidays" '("holiday-belgian-"))
 
 ;;;***
 

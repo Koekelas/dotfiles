@@ -1,4 +1,4 @@
-;;; exar-autoloads.el --- automatically extracted autoloads
+;;; exar-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -8,7 +8,7 @@
 
 (autoload 'exar-enable "exar" nil nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "exar" '("exar-")))
+(register-definition-prefixes "exar" '("exar-"))
 
 ;;;***
 
