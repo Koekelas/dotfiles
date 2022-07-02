@@ -978,8 +978,8 @@ buffer."
 
 ;; Help and documentation buffers
 (setq koek-buff/doc-modes
-      '(help-mode helpful-mode Info-mode Man-mode apropos-mode devdocs-mode
-        cider-docview-mode sly-apropos-mode geiser-doc-mode))
+      '(help-mode helpful-mode shortdoc-mode Info-mode Man-mode apropos-mode
+        devdocs-mode cider-docview-mode sly-apropos-mode geiser-doc-mode))
 (setq koek-buff/doc-names
       (rx line-start
           (or "*eldoc*"
@@ -987,6 +987,7 @@ buffer."
               "*sly-description*"
               ;; When new buffer, major mode is set after calling
               ;; `display-buffer'
+              "*Shortdoc"
               "*info*"
               "*Man"
               ;; When no matches, major mode is `fundamental-mode'
