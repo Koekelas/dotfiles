@@ -785,9 +785,7 @@ VERTICAL is truthy, resize vertically, else, resize
 horizontally."
   (let* ((width (nth 2 (frame-monitor-geometry)))
          (step (/ width koek-wind/n-hor-steps))
-         (delta (if shrink
-                    (- step)
-                  step)))
+         (delta (if shrink (- step) step)))
     (window-resize nil delta (not vertical) nil 'pixelwise)))
 
 (defun koek-wind/grow (&optional arg)
