@@ -518,9 +518,19 @@ Keybinding is a string, see `edmacro-mode'.")
     "Previously selected workspace number.")
 
   (define-advice exwm-workspace-switch
-      (:before (index &optional _force) koek-wm/update-previous-workspace-n)
-    (unless (eq index exwm-workspace-current-index)
-      (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
+      (:around (f frame-or-index &optional force) koek-wm/update-previous-workspace-n)
+    (let ((prev-workspace-n exwm-workspace-current-index))
+      (funcall f frame-or-index force)
+      (let ((action (if (framep frame-or-index) 'delete 'switch)))
+        (cond
+         ((and (eq action 'switch)
+               (/= exwm-workspace-current-index prev-workspace-n))
+          (setq koek-wm/previous-workspace-n prev-workspace-n))
+         ((and (eq action 'delete)
+               koek-wm/previous-workspace-n
+               (> koek-wm/previous-workspace-n exwm-workspace-current-index))
+          (setq koek-wm/previous-workspace-n
+                (1- koek-wm/previous-workspace-n)))))))
 
   (dolist (n (number-sequence 0 9))
     (defalias (koek-subr/intern "koek-wm/switch-workspace-" n)
@@ -532,8 +542,13 @@ Keybinding is a string, see `edmacro-mode'.")
   (defun koek-wm/switch-previous-workspace ()
     "Switch to previously selected workspace."
     (interactive)
-    (when koek-wm/previous-workspace-n
-      (exwm-workspace-switch-create koek-wm/previous-workspace-n)))
+    (cond
+     ((null koek-wm/previous-workspace-n)
+      (user-error "No previous workspace"))
+     ((= koek-wm/previous-workspace-n exwm-workspace-current-index)
+      (user-error "On previous workspace, previous became current after delete"))
+     (t
+      (exwm-workspace-switch-create koek-wm/previous-workspace-n))))
 
   (defun koek-wm/n-to-label (n)
     "Convert workspace number N to a workspace label.
