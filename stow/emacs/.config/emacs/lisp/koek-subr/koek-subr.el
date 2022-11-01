@@ -203,6 +203,12 @@ odd."
           (setq n-rem (1- n-rem))
           (setq rem (cdr rem)))))))
 
+;;; Macro subroutines
+
+(defun koek-subr/intern (&rest parts)
+  (let ((names (mapcar (apply-partially #'format "%s") parts)))
+    (intern (apply #'concat names))))
+
 ;;; Buffer subroutines
 
 (defun koek-subr/construct-earmuffed-name (&rest parts)

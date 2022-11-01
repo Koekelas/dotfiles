@@ -523,7 +523,7 @@ Keybinding is a string, see `edmacro-mode'.")
       (setq koek-wm/previous-workspace-n exwm-workspace-current-index)))
 
   (dolist (n (number-sequence 0 9))
-    (defalias (intern (format "koek-wm/switch-workspace-%d" n))
+    (defalias (koek-subr/intern "koek-wm/switch-workspace-" n)
       (lambda ()
         (interactive)
         (exwm-workspace-switch-create n))
@@ -877,11 +877,11 @@ clockwise, else, rotate counterclockwise."
   (let* ((prefix (replace-regexp-in-string
                   (rx (zero-or-one "-") "p" line-end) "" (symbol-name name)))
          (category (car (last (split-string prefix (rx (any "-/"))))))
-         (modes-sym (intern (concat prefix "-modes")))
-         (names-sym (intern (concat prefix "-names")))
-         (fs-sym (intern (concat prefix "-fs")))
-         (mode-pred-sym (intern (concat prefix "-mode-p")))
-         (name-pred-sym (intern (concat prefix "-name-p"))))
+         (modes-sym (koek-subr/intern prefix "-modes"))
+         (names-sym (koek-subr/intern prefix "-names"))
+         (fs-sym (koek-subr/intern prefix "-fs"))
+         (mode-pred-sym (koek-subr/intern prefix "-mode-p"))
+         (name-pred-sym (koek-subr/intern prefix "-name-p")))
     `(progn
        (defvar ,modes-sym nil
          ,(format "List of %s major mode symbols." category))
@@ -2700,11 +2700,11 @@ see `company-backends'."
             (lambda (mode)
               (let* ((prefix "koek-cpny/")
                      (mode-name (symbol-name mode))
-                     (backends-sym
-                      (intern (concat prefix mode-name "-backends")))
-                     (f-sym
-                      (intern (concat prefix "setup-" mode-name "-backends")))
-                     (hook-sym (intern (concat mode-name "-hook"))))
+                     (backends-sym (koek-subr/intern
+                                    prefix mode-name "-backends"))
+                     (f-sym (koek-subr/intern
+                             prefix "setup-" mode-name "-backends"))
+                     (hook-sym (koek-subr/intern mode-name "-hook")))
                 `((defvar ,backends-sym (copy-tree ,value-sym)
                     ,(format "List of backends in `%s'." mode))
 
@@ -2866,9 +2866,10 @@ see `company-backends'."
             (lambda (mode)
               (let* ((prefix "koek-devd/")
                      (mode-name (symbol-name mode))
-                     (docs-sym (intern (concat prefix mode-name "-docs")))
-                     (f-sym (intern (concat prefix "setup-" mode-name "-docs")))
-                     (hook-sym (intern (concat mode-name "-hook"))))
+                     (docs-sym (koek-subr/intern prefix mode-name "-docs"))
+                     (f-sym (koek-subr/intern
+                             prefix "setup-" mode-name "-docs"))
+                     (hook-sym (koek-subr/intern mode-name "-hook")))
                 `((defvar ,docs-sym (copy-sequence ,value-sym)
                     ,(format "List of docs in `%s'." mode))
 
