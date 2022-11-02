@@ -7079,14 +7079,28 @@ Stavrou)]].
 
     (defun koek-bngo/play-pause ()
       "Pause or resume playback.
-  When playback is stopped, play from beginning of playlist."
+  When playback is stopped, play first unplayed track after last
+  played track, first unplayed track or first track."
       (interactive)
-      (if (bongo-playing-p)
-          (bongo-pause/resume)
-        (with-bongo-playlist-buffer
-          (save-excursion
-            (goto-char (point-min))
-            (bongo-play)))))
+      (with-bongo-playlist-buffer
+        (let* ((current (bongo-point-at-first-line-satisfying
+                         #'bongo-current-track-line-p))
+               (next (or (and current
+                              (bongo-point-at-first-line-satisfying
+                               #'bongo-unplayed-track-line-p current))
+                         (bongo-point-at-first-line-satisfying
+                          #'bongo-unplayed-track-line-p)
+                         (bongo-point-at-first-line-satisfying
+                          #'bongo-track-line-p))))
+          (cond
+           ((bongo-playing-p)
+            (bongo-pause/resume))
+           (next
+            (save-excursion
+              (goto-char next)
+              (bongo-play)))
+           (t
+            (user-error "Nothing to play"))))))
     :config
     (bind-keys
      ("C-c k k" . koek-bngo/play-pause)
