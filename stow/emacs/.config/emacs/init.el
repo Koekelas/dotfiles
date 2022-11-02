@@ -4495,7 +4495,7 @@ age of the person."
   :defer t
   :preface
   (define-advice geiser-company--setup-company
-      (:around (f &rest args) koek-gsr/disable-setup-backends)
+      (:around (f &rest args) koek-gsr/prevent-setup-backends)
     (let ((backends company-backends))
       (apply f args)
       (setq company-backends backends))))
