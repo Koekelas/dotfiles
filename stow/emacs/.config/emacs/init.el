@@ -2484,7 +2484,7 @@ install handler for."
   :after tree-sitter)
 
 (use-package tree-sitter-hl
-  :hook ((c-mode c++-mode java-mode js-mode) . tree-sitter-hl-mode))
+  :hook ((c-mode c++-mode java-mode js-mode python-mode) . tree-sitter-hl-mode))
 
 (use-package xref
   :straight t
