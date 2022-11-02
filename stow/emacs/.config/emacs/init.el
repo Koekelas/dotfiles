@@ -3109,31 +3109,34 @@ none return a URL, nil.  For rewrite functions, see
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-hide-index-messages t))
 
+(use-package mu4e-search
+  :defer t
+  :preface
+  (autoload #'mu4e-search "mu4e-search")
+
+  (defun koek-mu4e/display-messages-to (email)
+    (interactive (list (koek-bbdb/read-email "To: ")))
+    (let ((normalized (koek-subr/strip-chevrons email)))
+      (mu4e-search (mapconcat (lambda (field)
+                                (concat field ":" normalized))
+                              '("to" "cc" "bcc") " or "))))
+
+  (defun koek-mu4e/display-messages-from (email)
+    (interactive (list (koek-bbdb/read-email "From: ")))
+    (mu4e-search (concat "from:" (koek-subr/strip-chevrons email)))))
+
 (use-package mu4e-main
   :defer t
   :config
-  (use-package mu4e-utils
+  (use-package mu4e-update
     :bind
     (:map mu4e-main-mode-map
      ("G" . mu4e-update-mail-and-index)))) ; Mirror elfeed
 
 (use-package mu4e-headers
   :defer t
-  :preface
-  (autoload #'mu4e-headers-search "mu4e-headers")
-
-  (defun koek-mu4e/display-messages-to (email)
-    (interactive (list (koek-bbdb/read-email "To: ")))
-    (let ((normalized (koek-subr/strip-chevrons email)))
-      (mu4e-headers-search (mapconcat (lambda (field)
-                                        (concat field ":" normalized))
-                                      '("to" "cc" "bcc") " or "))))
-
-  (defun koek-mu4e/display-messages-from (email)
-    (interactive (list (koek-bbdb/read-email "From: ")))
-    (mu4e-headers-search (concat "from:" (koek-subr/strip-chevrons email))))
   :config
-  (use-package mu4e-utils
+  (use-package mu4e-update
     :bind
     (:map mu4e-headers-mode-map
      ("G" . mu4e-update-mail-and-index)))
@@ -3177,9 +3180,8 @@ none return a URL, nil.  For rewrite functions, see
                     (plist-put (alist-get 'trash mu4e-marks)
                                :action
                                (lambda (docid _msg target)
-                                 (mu4e~proc-move docid
-                                                 (mu4e~mark-check-target target)
-                                                 "-N"))))
+                                 (mu4e--server-move
+                                  docid (mu4e--mark-check-target target) "-N"))))
               (assq-delete-all 'trash mu4e-marks)))
 
   ;; Style marker characters
@@ -3195,7 +3197,7 @@ none return a URL, nil.  For rewrite functions, see
 (use-package mu4e-view
   :defer t
   :config
-  (use-package mu4e-utils
+  (use-package mu4e-update
     :bind
     (:map mu4e-view-mode-map
      ("G" . mu4e-update-mail-and-index)))
@@ -3212,14 +3214,7 @@ none return a URL, nil.  For rewrite functions, see
   :preface
   (defun koek-msg/check-spelling ()
     "Check spelling of e-mail."
-    (let ((ispell-skip-region-alist     ; Dynamic variable
-           (let ((citation-line
-                  (list
-                   (rx line-start (one-or-more not-newline) "writes:" line-end)
-                   #'forward-line))
-                 (citation (list mu4e-cited-regexp #'forward-line)))
-             (append (list citation-line citation) ispell-skip-region-alist)))
-          (tick (buffer-chars-modified-tick)))
+    (let ((tick (buffer-chars-modified-tick)))
       (ispell-message)
       (unless (or (= (buffer-chars-modified-tick) tick)
                   (y-or-n-p "Spelling checked.  Send? "))
@@ -4908,7 +4903,7 @@ NAME is a string, the name of the user directory."
                  (mu4e-trash-folder      . "/Personal/Trash")
                  (mu4e-compose-signature . ,user-full-name))))))
 
-(use-package mu4e-vars
+(use-package mu4e-bookmarks
   :defer t
   :config
   (setq mu4e-bookmarks
