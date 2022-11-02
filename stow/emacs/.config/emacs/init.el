@@ -2201,6 +2201,8 @@ dictionary links before LIMIT."
     "Setup indicator in current."
     (setq display-fill-column-indicator-column koek-fi/column))
   :init
+  ;; Setup then enable. `add-hook' adds to the front. The reverse has
+  ;; no effect.
   (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
   (add-hook 'prog-mode-hook #'koek-fi/setup-indicator)
   (add-hook 'conf-mode-hook #'display-fill-column-indicator-mode)
@@ -4389,6 +4391,7 @@ nil, delete empty line at end of file."
     (when (derived-mode-p 'emacs-lisp-mode)
       (byte-recompile-file (buffer-file-name) nil 0)))
   :config
+  ;; Generate autoloads then compile. `add-hook' adds to the front.
   (add-hook 'org-babel-post-tangle-hook #'koek-org/compile-emacs-lisp)
   (add-hook 'org-babel-post-tangle-hook #'koek-org/gen-autoloads)
   (add-hook 'org-babel-post-tangle-hook #'koek-org/process-file-end)
