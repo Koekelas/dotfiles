@@ -4422,7 +4422,7 @@ age of the person."
   :defer t
   :config
   (setq org-latex-pdf-process '("latexmk -pdf %f"))
-  (setq org-latex-listings t)
+  (setq org-latex-src-block-backend 'listings)
 
   ;; Setup hyperref
   (let ((options
