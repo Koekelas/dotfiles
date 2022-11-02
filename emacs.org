@@ -3167,6 +3167,8 @@ When popping mark, skip consecutive identical marks. The idea is from
      ("M-/" . undo-tree-redo))
     :init
     (global-undo-tree-mode)
+    :config
+    (setq undo-tree-auto-save-history nil)
     :delight)
 #+END_SRC
 

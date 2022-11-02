@@ -2163,6 +2163,8 @@ dictionary links before LIMIT."
    ("M-/" . undo-tree-redo))
   :init
   (global-undo-tree-mode)
+  :config
+  (setq undo-tree-auto-save-history nil)
   :delight)
 
 (use-package ispell
