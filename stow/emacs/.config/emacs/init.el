@@ -1937,7 +1937,8 @@ for one."
 
 (use-package magit-mode
   :straight magit
-  :defer t
+  :bind
+  ("C-c f C-m" . magit-dispatch)
   :config
   (setq magit-buffer-name-format "*%M%V: %t*")
   (setq magit-display-buffer-function #'display-buffer)
