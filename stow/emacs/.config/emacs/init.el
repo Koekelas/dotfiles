@@ -4275,6 +4275,7 @@ Candidates are collected from agenda files."
   (setq org-refile-use-outline-path 'buffer-name))
 
 (use-package org-src
+  :defer t
   :preface
   (define-advice org-src--construct-edit-buffer-name
       (:override (org-buffer-name _lang) koek-org/construct-edit-buffer-name)
