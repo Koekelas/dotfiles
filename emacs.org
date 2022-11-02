@@ -8522,29 +8522,37 @@ Match frame theme variant, the window decoration theme variant, with
 current theme.
 
 #+BEGIN_SRC emacs-lisp
-  (defun koek-thm/set-frame-theme-variant (frame)
-    "Set theme variant of FRAME.
-  When current theme is a dark theme, set theme variant to dark,
-  else, clear it."
-    (when (fboundp 'koek-thm/set-frame-theme-variant-xprop)
-      (koek-thm/set-frame-theme-variant-xprop frame)))
+  (defun koek-thm/set-frame-theme-variant-xprop (frame dark)
+    (call-process "xprop" nil 0 nil
+                  "-id" (frame-parameter frame 'outer-window-id)
+                  "-f" "_GTK_THEME_VARIANT" "8u"
+                  "-set" "_GTK_THEME_VARIANT" (if dark "dark" "")))
 
-  (when (executable-find "xprop")
-    (defun koek-thm/set-frame-theme-variant-xprop (frame)
-      "Set theme variant of FRAME.
-  Mustn't be called directly, see
-  `koek-thm/set-frame-theme-variant'."
-      (call-process "xprop" nil 0 nil
-                    "-id" (frame-parameter frame 'outer-window-id)
-                    "-f" "_GTK_THEME_VARIANT" "8u"
-                    "-set" "_GTK_THEME_VARIANT" (if (koek-thm/darkp) "dark" ""))))
+  (defun koek-thm/set-frame-theme-variant-none (_frame _dark)
+    nil)
 
-  (defun koek-thm/update-frame-theme-variant ()
+  (defvar koek-thm/set-frame-theme-variant-f
+    (cond
+     ((executable-find "xprop")
+      #'koek-thm/set-frame-theme-variant-xprop)
+     (t
+      #'koek-thm/set-frame-theme-variant-none)))
+
+  (defun koek-thm/set-frame-theme-variant (frame dark)
+    (funcall koek-thm/set-frame-theme-variant-f frame dark))
+
+  (defun koek-thm/update-frame-theme-variant (frame)
+    (koek-thm/set-frame-theme-variant frame (koek-thm/darkp)))
+
+  (defun koek-thm/update-frame-theme-variant-all ()
     "Update theme variant of all frames."
-    (mapc #'koek-thm/set-frame-theme-variant (frame-list)))
+    (let ((dark (koek-thm/darkp)))
+      (mapc (lambda (frame)
+              (koek-thm/set-frame-theme-variant frame dark))
+            (frame-list))))
 
-  (add-hook 'after-make-frame-functions #'koek-thm/set-frame-theme-variant)
-  (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant)
+  (add-hook 'after-make-frame-functions #'koek-thm/update-frame-theme-variant)
+  (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant-all)
 #+END_SRC
 
 ** modus-themes - Accessible light and dark theme
