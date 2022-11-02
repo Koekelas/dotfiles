@@ -3953,9 +3953,9 @@ Modes are confident about being derived from text-mode.")
           '(:eval
             ;; When mode-name is evaluated during mode line update,
             ;; inhibit-mode-name-delight is unbound or false
-            (if (not (bound-and-true-p inhibit-mode-name-delight))
-                (alist-get major-mode koek-conf/mode-names)
-              "Conf")))))
+            (or (and (not (bound-and-true-p inhibit-mode-name-delight))
+                     (alist-get major-mode koek-conf/mode-names))
+                "Conf")))))
 
 (use-package elisp-mode
   :mode ((rx ".el" string-end) . emacs-lisp-mode)
