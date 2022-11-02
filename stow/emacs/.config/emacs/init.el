@@ -3773,10 +3773,10 @@ INTERACTIVE is used internally."
   :straight t
   :defer t
   :config
-  (setq keycast-window-predicate #'moody-window-active-p)
-  (setq keycast-insert-after 'keycast-marker)
+  (setq keycast-mode-line-window-predicate #'moody-window-active-p)
+  (setq keycast-mode-line-insert-after 'keycast-marker)
   (setq keycast-separator-width 3)
-  (setq keycast-remove-tail-elements nil))
+  (setq keycast-mode-line-remove-tail-elements nil))
 
 (use-package text-mode
   :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
