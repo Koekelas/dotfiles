@@ -3163,7 +3163,7 @@ When popping mark, skip consecutive identical marks. The idea is from
   (use-package undo-tree
     :straight t
     :bind
-    (:map undo-tree-map
+    (:map undo-tree-mode-map
      ("M-/" . undo-tree-redo))
     :init
     (global-undo-tree-mode)

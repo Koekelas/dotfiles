@@ -2159,7 +2159,7 @@ dictionary links before LIMIT."
 (use-package undo-tree
   :straight t
   :bind
-  (:map undo-tree-map
+  (:map undo-tree-mode-map
    ("M-/" . undo-tree-redo))
   :init
   (global-undo-tree-mode)
