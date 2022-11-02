@@ -1949,7 +1949,7 @@ for one."
 
 (use-package magit-files
   :bind
-  ("C-c f C-m" . magit-file-dispatch))
+  ("C-c f M-m" . magit-file-dispatch))
 
 (use-package magit-diff
   :defer t
