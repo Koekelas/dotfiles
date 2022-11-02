@@ -4677,6 +4677,7 @@ operandi or vivendi."
             (2 . (1.2 ,@defaults))
             (3 . (1.1 ,@defaults))
             (t . ,defaults))))
+  (setq modus-themes-box-buttons '(flat variable-pitch))
   (setq modus-themes-org-blocks 'gray-background)
   :config
   (koek-mt/load 'vivendi))
