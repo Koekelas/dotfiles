@@ -2024,12 +2024,16 @@ When FORCE is truthy, unconditionally continue commit."
 (use-package ediff-init
   :defer t
   :preface
-  (defun koek-diff/unfold-outline ()
-    "Unfold outline in outline and derived modes."
-    (when (derived-mode-p 'outline-mode) ; org-mode derives from outline-mode
-      (outline-show-all)))
+  (defun koek-diff/unnarrow-unfold ()
+    "Unnarrow and unfold current."
+    (widen)
+    (cond
+     ((derived-mode-p 'org-mode)
+      (org-fold-show-all))
+     ((bound-and-true-p outline-minor-mode)
+      (outline-show-all))))
   :config
-  (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unfold-outline))
+  (add-hook 'ediff-prepare-buffer-hook #'koek-diff/unnarrow-unfold))
 
 (use-package ediff-mult
   :defer t
