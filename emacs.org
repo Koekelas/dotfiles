@@ -2628,6 +2628,7 @@ minibuffer.
     :config
     (setq bookmark-default-file
           (no-littering-expand-etc-file-name "bookmark-default.el"))
+    (setq bookmark-menu-confirm-deletion t)
     (setq bookmark-bmenu-file-column 40)
     (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
 #+END_SRC
