@@ -3599,13 +3599,6 @@ produce noisy diffs.
     :hook
     ((c-mode c++-mode erlang-mode java-mode js-mode python-mode) . eglot-ensure)
     :preface
-    (defvar koek-eglt/jdtls-dirs
-      (mapcar (apply-partially #'expand-file-name "java/jdtls/")
-              (cons (xdg-data-home) (xdg-data-dirs)))
-      "List of directories where to look for JDT LS.
-  Directories are sorted from highest to lowest priority, i.e.,
-  earlier directories shadow later ones.")
-
     (defun koek-eglt/init-clangd (root db)
       (interactive
        (let* ((root (or (koek-proj/locate-root) (user-error "Not in a project")))
@@ -3622,25 +3615,6 @@ produce noisy diffs.
                           (expand-file-name "compile_commands.json" root)
                           'overwrite))
     :config
-    ;; JDT LS lacks an executable. Eglot expects to find the JDT LS
-    ;; launcher on the CLASSPATH environment variable.
-    (when-let
-        ((file-name
-          (thread-last koek-eglt/jdtls-dirs
-            (mapcar (apply-partially #'expand-file-name "plugins/"))
-            (seq-filter #'file-exists-p)
-            (seq-mapcat (lambda (file-name)
-                          (directory-files file-name 'full
-                                           (rx "org.eclipse.equinox.launcher_"
-                                               (one-or-more (or alnum punct))
-                                               ".jar" line-end))))
-            car)))
-      (let ((paths (when-let ((path (getenv "CLASSPATH")))
-                     (split-string path path-separator))))
-        (unless (member file-name paths)
-          (setenv "CLASSPATH"
-                  (string-join (cons file-name paths) path-separator)))))
-
     (push 'company-backends eglot-stay-out-of))
 #+END_SRC
 
