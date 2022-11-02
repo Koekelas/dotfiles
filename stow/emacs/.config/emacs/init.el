@@ -3822,7 +3822,7 @@ Modes are confident about being derived from text-mode.")
   :defer t
   :preface
   (define-advice c-update-modeline
-      (:around (f) koek-cc/disable-update-mode-name)
+      (:around (f) koek-cc/prevent-update-mode-name)
     (let ((name mode-name))
       (funcall f)
       (setq mode-name name)

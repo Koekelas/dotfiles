@@ -7292,7 +7292,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
     :defer t
     :preface
     (define-advice c-update-modeline
-        (:around (f) koek-cc/disable-update-mode-name)
+        (:around (f) koek-cc/prevent-update-mode-name)
       (let ((name mode-name))
         (funcall f)
         (setq mode-name name)
