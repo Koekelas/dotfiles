@@ -3,7 +3,7 @@
 ;; Copyright (C) 2020-2022 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
-;; Keywords: faces
+;; Keywords: frames
 ;; URL: <https://github.com/Koekelas/dotfiles>
 
 ;; This file is not part of GNU Emacs.
@@ -36,7 +36,7 @@
 
 (defgroup prepcast nil
   "Prepare for screencasting."
-  :group 'faces)
+  :group 'frames)
 
 (defcustom prepcast-scale 1.25
   "Scale of elements."
