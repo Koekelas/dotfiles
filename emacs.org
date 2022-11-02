@@ -8556,7 +8556,7 @@ current theme.
 #+END_SRC
 
 ** modus-themes - Accessible light and dark theme
-[[https://gitlab.com/protesilaos/modus-themes][modus-themes (GitLab)]]
+[[https://git.sr.ht/~protesilaos/modus-themes][modus-themes (sourcehut)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
