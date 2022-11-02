@@ -3641,6 +3641,8 @@ INTERACTIVE is used internally."
   (use-package consult
     :bind
     (:map pdf-view-mode-map
+     ("C-c j h" . consult-imenu)
+     ("h" . consult-imenu)
      ("d" . consult-imenu)))
 
   (bind-keys
@@ -4115,12 +4117,12 @@ Modes are confident about being derived from text-mode.")
   :bind
   (:map org-mode-map
    ("C-c o k" . org-clone-subtree-with-time-shift) ; [K]lone [sic]
-   ("C-M-f" . org-forward-heading-same-level)
-   ("C-M-b" . org-backward-heading-same-level)
-   ("C-M-n" . org-next-visible-heading)
-   ("C-M-p" . org-previous-visible-heading)
-   ("C-M-a" . org-previous-block)
-   ("C-M-e" . org-next-block))
+   ("C-c h f" . org-forward-heading-same-level)
+   ("C-c h b" . org-backward-heading-same-level)
+   ("C-c h n" . org-next-visible-heading)
+   ("C-c h p" . org-previous-visible-heading)
+   ("C-c h a" . org-previous-block)
+   ("C-c h e" . org-next-block))
   :hook
   ((window-setup . org-clock-persistence-insinuate) ; After initial buffer
    (org-mode . org-cdlatex-mode)
@@ -4129,11 +4131,12 @@ Modes are confident about being derived from text-mode.")
   (use-package avy
     :bind
     (:map org-mode-map
-     ("C-c j h" . avy-org-goto-heading-timer)))
+     ("C-c j M-h" . avy-org-goto-heading-timer)))
 
   (use-package consult
     :bind
     (:map org-mode-map
+     ("C-c j h" . consult-org-heading)
      ([remap consult-imenu] . consult-org-heading)))
 
   (use-package org-clock
@@ -4154,7 +4157,7 @@ Modes are confident about being derived from text-mode.")
   (use-package outline
     :bind
     (:map org-mode-map
-     ("C-M-u" . outline-up-heading)))
+     ("C-c h u" . outline-up-heading)))
 
   ;; General
   (push 'org-protocol org-modules)
