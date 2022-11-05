@@ -2039,7 +2039,7 @@ When FORCE is truthy, unconditionally continue commit."
   :preface
   ;; `ediff-before-setup-hook' is too early, the control buffer isn't
   ;; yet created. `ediff-startup-hook' is too late, the window
-  ;; configuration was already modified.
+  ;; configuration was already altered.
   (define-advice ediff-setup
       (:around (f &rest args) koek-diff/setup-restore-window-config)
     (let ((config (current-window-configuration))
