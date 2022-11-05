@@ -4937,6 +4937,9 @@ NAME is a string, the name of the user directory."
           (:name "Applied Artificial Intelligence"
            :query "maildir:/Personal/Opleidingen/AAI"
            :key ?a)
+          (:name "Verbouwing"
+           :query "maildir:/Personal/Verbouwing"
+           :key ?v)
           (:name "Unread"
            :query "flag:unread"
            :key ?u))))
