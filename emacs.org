@@ -8354,10 +8354,10 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
     (define-advice sql-highlight-product (:after () koek-sql/update-mode-name)
       (setq mode-name
             '(:eval
-              (if (or (bound-and-true-p inhibit-mode-name-delight)
-                      (eq sql-product 'ansi))
-                  "SQL"
-                (sql-get-product-feature sql-product :name)))))
+              (or (and (not (bound-and-true-p inhibit-mode-name-delight))
+                       (not (eq sql-product 'ansi))
+                       (sql-get-product-feature sql-product :name))
+                  "SQL"))))
     :config
     (autoload #'find-library-name "find-func")
     (autoload #'define-abbrev "abbrev")
