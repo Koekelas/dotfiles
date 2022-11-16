@@ -420,7 +420,6 @@ To apply configuration, run:
   org.gnome.eog.desktop
   org.keepassxc.KeePassXC.desktop
   simple-scan.desktop
-  syncthing-gtk.desktop
 #+END_SRC
 
 ** Work
