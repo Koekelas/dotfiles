@@ -2,6 +2,11 @@
 
 [[https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory][Dotfiles]], configuration worth saving.
 
+* The work-in-progress branch
+Development occurs on the =wip= branch. As additions mature, they're
+added to the =master= branch. =wip= is *force pushed* to and ordinarily far
+ahead of =master=.
+
 * For the curious
 Take a look at [[file:dotfiles.org][dotfiles.org]] and [[file:emacs.org][emacs.org]]. Everything else is the
 result of [[info:org#Extracting source code][tangling]].
