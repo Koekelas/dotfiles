@@ -7,5 +7,5 @@ org.gnome.Maps.desktop
 org.gnome.Weather.desktop
 org.gnome.clocks.desktop
 org.octave.Octave.desktop
-wireshark.desktop
+org.wireshark.Wireshark.desktop
 wolfram-mathematica11.desktop
