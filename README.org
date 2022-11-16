@@ -139,9 +139,8 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   # Install jdtls from AUR
 
   ## JavaScript
-  pacman -S nodejs npm
+  pacman -S nodejs npm typescript-language-server
   npm i -g indium
-  # Install typescript-language-server from AUR
 
   ## Octave and MATLAB
   pacman -S octave
