@@ -394,12 +394,12 @@ To apply configuration, run:
 #+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/System.category
   blueman-manager.desktop
   ca.desrt.dconf-editor.desktop
-  gnome-control-center.desktop
   gnome-system-monitor.desktop
   nm-connection-editor.desktop
   org.gnome.DiskUtility.desktop
   org.gnome.Extensions.desktop
   org.gnome.Logs.desktop
+  org.gnome.Settings.desktop
   org.gnome.Terminal.desktop
   org.gnome.font-viewer.desktop
   org.gnome.seahorse.Application.desktop
