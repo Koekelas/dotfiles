@@ -47,7 +47,7 @@ Git is mandatory, everything else is optional.
   - [[https://www.argyllcms.com/][ArgyllCMS]] (dispwin, load color profile)
   - [[https://github.com/linuxwacom/xf86-input-wacom][xf86-input-wacom]] (xsetwacom, setup tablet)
 - Terminal emulator: [[https://cmake.org/][CMake]], [[https://www.gnu.org/software/libtool/][libtool]] and [[https://github.com/neovim/libvterm][libvterm]]
-- E-mail client: [[https://www.djcbsoftware.nl/code/mu/][mu]] and [[http://isync.sourceforge.net/][isync]]
+- E-mail client: [[http://isync.sourceforge.net/][isync]] and [[https://www.djcbsoftware.nl/code/mu/][mu]]
 - Address book: [[https://github.com/pimutils/vdirsyncer][vdirsyncer]]
 - News reader: [[https://curl.haxx.se/][curl]]
 - PDF viewer: [[https://poppler.freedesktop.org/][poppler]], [[http://www.libpng.org/][libpng]], [[https://www.zlib.net/][zlib]] and [[https://imagemagick.org/][ImageMagick]]
