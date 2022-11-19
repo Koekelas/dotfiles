@@ -4275,7 +4275,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Octave plot code block
   # key: smplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-mkdir-result "path"))) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook (list (koek-ys/make-mkdir-result "path"))) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC octave :var path="images/plot-${1:name}.png" :results file :exports results
     fig = figure('visible', 'off');
@@ -4326,7 +4326,7 @@ Inherit Clojure snippets.
   # -*- mode: snippet; -*-
   # name: Python plot code block
   # key: spyplot
-  # expand-env: ((yas-after-exit-snippet-hook `(,(koek-ys/make-mkdir-result "path"))) (yas-indent-line 'fixed))
+  # expand-env: ((yas-after-exit-snippet-hook (list (koek-ys/make-mkdir-result "path"))) (yas-indent-line 'fixed))
   # --
   ,#+BEGIN_SRC python :var path="images/plot-${1:name}.png" :results file :exports results
     from numpy import pi, linspace, sin, cos
