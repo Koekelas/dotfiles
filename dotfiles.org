@@ -332,7 +332,7 @@ To apply configuration, run:
 
 ** Creative
 #+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Creative.category
-  ardour6.desktop
+  ardour7.desktop
   blender.desktop
   calf.desktop
   freecad.desktop
