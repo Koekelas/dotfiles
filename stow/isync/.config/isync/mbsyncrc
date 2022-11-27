@@ -2,7 +2,7 @@ SyncState *
 
 MaildirStore personal_local
 Path "~/Documenten/E-mail/Personal/"
-Inbox "~/Documenten/E-mail/Personal/INBOX/"
+Inbox "~/Documenten/E-mail/Personal/INBOX"
 SubFolders Verbatim
 
 IMAPStore personal_remote
@@ -12,8 +12,8 @@ User nicolas@dejaeghe.re
 PassCmd "secret-tool lookup host \"imap.fastmail.com\" port \"993\" user \"nicolas@dejaeghe.re\""
 
 Channel personal
-Master :personal_remote:
-Slave :personal_local:
+Far :personal_remote:
+Near :personal_local:
 Patterns *
 Sync All
 Create Both

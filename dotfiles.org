@@ -744,12 +744,12 @@ To create the maildir directory, run:
 #+END_SRC
 
 Define local personal store. Only tilde is expanded, not environment
-variables.
+variables. =Inbox= is a directory file name, i.e., no trailing /.
 
 #+BEGIN_SRC conf
   MaildirStore personal_local
   Path "~/Documenten/E-mail/Personal/"
-  Inbox "~/Documenten/E-mail/Personal/INBOX/"
+  Inbox "~/Documenten/E-mail/Personal/INBOX"
   SubFolders Verbatim
 #+END_SRC
 
@@ -777,8 +777,8 @@ Define personal channel.
 
 #+BEGIN_SRC conf
   Channel personal
-  Master :personal_remote:
-  Slave :personal_local:
+  Far :personal_remote:
+  Near :personal_local:
   Patterns *
   Sync All
   Create Both
