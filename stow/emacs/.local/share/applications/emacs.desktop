@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Emacs
+Icon=emacs
+TryExec=emacs
+NotShowIn=EXWM;
+Exec=emacs %F
+Terminal=false
+StartupNotify=true
+StartupWMClass=Emacs
+MimeType=text/plain;

@@ -101,6 +101,11 @@ Hide superfluous applications.
   Name=Manage Printing
 #+END_SRC
 
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/emacsclient.desktop :noweb yes
+  <<desktop-nodisplay>>
+  Name=Emacs (Client)
+#+END_SRC
+
 #+BEGIN_SRC conf :tangle stow/hwloc/.local/share/applications/lstopo.desktop :noweb yes
   <<desktop-nodisplay>>
   Name=Hardware Locality lstopo
@@ -435,6 +440,79 @@ To apply configuration, run:
   org.octave.Octave.desktop
   org.wireshark.Wireshark.desktop
   wolfram-mathematica11.desktop
+#+END_SRC
+
+* Emacs :setup:
+To register the mime types, run:
+
+#+BEGIN_SRC sh
+  update-desktop-database "${XDG_DATA_HOME:-$HOME/.local/share}/applications/"
+#+END_SRC
+
+For desktop entry or scheme handler format, respectively see [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop
+Entry Specification (freedesktop)]] or [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared MIME Info Specification
+(freedesktop)]].
+
+** Desktop entry
+Hide Emacs in EXWM sessions.
+
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/emacs.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Emacs
+  Icon=emacs
+  TryExec=emacs
+  NotShowIn=EXWM;
+  Exec=emacs %F
+  Terminal=false
+  StartupNotify=true
+  StartupWMClass=Emacs
+  MimeType=text/plain;
+#+END_SRC
+
+** With handler
+Define handler for visiting files with Emacs.
+
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/with.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=With Emacsclient
+  Icon=emacs
+  TryExec=emacsclient
+  Exec=emacsclient %F
+  Terminal=false
+  MimeType=application/pdf;
+  NoDisplay=true
+#+END_SRC
+
+** mailto handler
+Define mailto scheme handler.
+
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/mailto.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Emacsclient mailto
+  Icon=emacs
+  TryExec=emacsclient
+  Exec=emacsclient -e "(message-mailto \\"%u\\")"
+  Terminal=false
+  MimeType=x-scheme-handler/mailto;
+  NoDisplay=true
+#+END_SRC
+
+** org-protocol handler
+Define org protocol scheme handler.
+
+#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/org-protocol.desktop
+  [Desktop Entry]
+  Type=Application
+  Name=Emacsclient org-protocol
+  Icon=emacs
+  TryExec=emacsclient
+  Exec=emacsclient %u
+  Terminal=false
+  MimeType=x-scheme-handler/org-protocol;
+  NoDisplay=true
 #+END_SRC
 
 * Bash :setup:wip:
@@ -915,30 +993,6 @@ value determined during calibration, run:
   xsetwacom set "$stylus" Button 2 pan
   xsetwacom set "$stylus" Button 3 "button +3"
   xsetwacom set "$stylus" PanScrollThreshold 250
-#+END_SRC
-
-* Org protocol :setup:
-Define org protocol scheme handler. Environment variables are expanded
-by launching a shell. For desktop entry or scheme handler format,
-respectively see [[https://freedesktop.org/wiki/Specifications/desktop-entry-spec/][Desktop Entry Specification (freedesktop)]] or [[https://freedesktop.org/wiki/Specifications/shared-mime-info-spec/][Shared
-MIME Info Specification (freedesktop)]].
-
-#+BEGIN_SRC conf :tangle stow/emacs/.local/share/applications/org-protocol.desktop
-  [Desktop Entry]
-  Type=Application
-  Name=org-protocol
-  Icon=emacs
-  TryExec=emacsclient
-  Exec=sh -c "emacsclient -s \"\\$XDG_RUNTIME_DIR/emacs/server\" %u"
-  Terminal=false
-  MimeType=x-scheme-handler/org-protocol;
-  NoDisplay=true
-#+END_SRC
-
-To register the scheme handler, run:
-
-#+BEGIN_SRC sh
-  update-desktop-database "${XDG_DATA_HOME:-$HOME/.local/share}/applications/"
 #+END_SRC
 
 * Jupyter Notebook

@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Emacsclient org-protocol
+Name=With Emacsclient
 Icon=emacs
 TryExec=emacsclient
-Exec=emacsclient %u
+Exec=emacsclient %F
 Terminal=false
-MimeType=x-scheme-handler/org-protocol;
+MimeType=application/pdf;
 NoDisplay=true

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Emacsclient mailto
+Icon=emacs
+TryExec=emacsclient
+Exec=emacsclient -e "(message-mailto \\"%u\\")"
+Terminal=false
+MimeType=x-scheme-handler/mailto;
+NoDisplay=true
