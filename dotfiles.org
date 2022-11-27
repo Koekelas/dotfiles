@@ -545,7 +545,7 @@ Sign commits.
 #+END_SRC
 
 ** Global ignore
-Ignore common artifacts. For pattern format, see ~man 5 gitignore~.
+Ignore common artifacts. For pattern format, see =man 5 gitignore=.
 
 #+BEGIN_SRC fundamental :tangle stow/git/.config/git/ignore
   # C family

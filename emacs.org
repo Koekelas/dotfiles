@@ -3176,7 +3176,7 @@ stored in =/usr/share/hunspell/=. Add:
   WORDCHARS '’
 #+END_SRC
 
-For more information, see ~man 5 hunspell~.
+For more information, see =man 5 hunspell=.
 
 ** display-line-numbers - Show line numbers
 #+BEGIN_SRC emacs-lisp
