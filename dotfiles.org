@@ -253,13 +253,9 @@ Launch Emacs.
 #+END_SRC
 
 ** picom
-:PROPERTIES:
-:header-args:conf: :tangle stow/picom/.config/picom/picom.conf
-:END:
-
 Ignore system configuration.
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle stow/picom/.config/picom/picom.conf
   # Deliberately empty
 #+END_SRC
 
@@ -279,13 +275,9 @@ To create the configuration directory, run:
 #+END_SRC
 
 *** Common
-:PROPERTIES:
-:header-args:conf: :noweb-ref xsettingsd-common
-:END:
-
 Disable blink cursor.
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :noweb-ref xsettingsd-common
   Net/CursorBlink 0
 #+END_SRC
 
@@ -536,13 +528,9 @@ To stow all stores, run:
 #+END_SRC
 
 * Git
-:PROPERTIES:
-:header-args:conf: :tangle stow/git/.config/git/config
-:END:
-
 Set identity.
 
-#+BEGIN_SRC conf :noweb yes
+#+BEGIN_SRC conf :tangle stow/git/.config/git/config :noweb yes
   [user]
   name = <<name>>
   email = <<email>>
@@ -551,7 +539,7 @@ Set identity.
 
 Sign commits.
 
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle stow/git/.config/git/config
   [commit]
   gpgsign = true
 #+END_SRC
