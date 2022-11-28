@@ -419,6 +419,7 @@ To apply configuration, run:
   org.gnome.font-viewer.desktop
   org.gnome.seahorse.Application.desktop
   pavucontrol.desktop
+  qt5ct.desktop
   yelp.desktop
 #+END_SRC
 
@@ -1008,6 +1009,38 @@ value determined during calibration, run:
 * Fontconfig
 For a guide on determining the subpixel layout of a monitor, see
 [[http://www.lagom.nl/lcd-test/subpixel.php][Subpixel Layout (Lagom)]].
+
+* Qt
+Enable qt5ct.
+
+#+BEGIN_SRC conf :tangle stow/qt/.config/environment.d/50-qt.conf
+  QT_QPA_PLATFORMTHEME=qt5ct
+#+END_SRC
+
+Enable GTK file dialogs.
+
+#+BEGIN_SRC conf :tangle stow/qt/.config/qt5ct/qt5ct.conf
+  [Appearance]
+  standard_dialogs=gtk3
+#+END_SRC
+
+Set fonts. Font values are serialized.
+
+- =general= (variable pitch): Sans Serif, 9 points
+- =fixed= (fixed pitch): Monospace, 9 points
+
+#+BEGIN_SRC conf :tangle stow/qt/.config/qt5ct/qt5ct.conf
+  [Fonts]
+  general=@Variant(\0\0\0@\0\0\0\x14\0S\0\x61\0n\0s\0 \0S\0\x65\0r\0i\0\x66@\"\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)
+  fixed=@Variant(\0\0\0@\0\0\0\x12\0M\0o\0n\0o\0s\0p\0\x61\0\x63\0\x65@\"\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)
+#+END_SRC
+
+Disable blink cursor.
+
+#+BEGIN_SRC conf :tangle stow/qt/.config/qt5ct/qt5ct.conf
+  [Interface]
+  cursor_flash_time=0
+#+END_SRC
 
 * Jupyter Notebook
 Move configuration directory out of the way.

@@ -10,4 +10,5 @@ org.gnome.Terminal.desktop
 org.gnome.font-viewer.desktop
 org.gnome.seahorse.Application.desktop
 pavucontrol.desktop
+qt5ct.desktop
 yelp.desktop
