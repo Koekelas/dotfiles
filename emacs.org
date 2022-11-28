@@ -181,6 +181,8 @@ keyword, i.e., it accepts as argument =t=, =nil= or nothing.
 #+END_SRC
 
 ** Latest org
+For org configuration, see [[*Org][Org]].
+
 Installing latest org after loading builtin org breaks org. Install
 latest org and its documentation before loading org.
 
@@ -193,8 +195,6 @@ latest org and its documentation before loading org.
             (concat "EMACS=" invocation-directory invocation-name))
      :build (:not autoloads info)))
 #+END_SRC
-
-For org configuration, see [[*Org][Org]].
 
 * Common
 
