@@ -995,6 +995,10 @@ value determined during calibration, run:
   xsetwacom set "$stylus" PanScrollThreshold 250
 #+END_SRC
 
+* Fontconfig
+For a guide on determining the subpixel layout of a monitor, see
+[[http://www.lagom.nl/lcd-test/subpixel.php][Subpixel Layout (Lagom)]].
+
 * Jupyter Notebook
 Move configuration directory out of the way.
 

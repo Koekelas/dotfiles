@@ -1,7 +1,7 @@
 packages := avahi bash blueman calf catgen cmake cuda cups emacs env firefox \
-            fonts freecad git gnupg gromit hwloc icc isync java jupyter keras \
-            leiningen mu nltk picom qt qtox ssh steam tex vdirsyncer wacom xdg \
-            xsettingsd
+            fontconfig fonts freecad git gnupg gromit hwloc icc isync java \
+            jupyter keras leiningen mu nltk picom qt qtox ssh steam tex \
+            vdirsyncer wacom xdg xsettingsd
 
 .PHONY: install uninstall
 install:
