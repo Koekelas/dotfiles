@@ -1,10 +1,10 @@
 {
-    "CodeCell": {
+    "MarkdownCell": {
         "cm_config": {
             "cursorBlinkRate": 0
         }
     },
-    "MarkdownCell": {
+    "CodeCell": {
         "cm_config": {
             "cursorBlinkRate": 0
         }

@@ -1052,14 +1052,16 @@ Move configuration directory out of the way.
 Documentation on configuring the frontend is [[https://jupyter-notebook.readthedocs.io/en/stable/frontend_config.html#persisting-configuration-settings][limited]]. For settings,
 see [[https://codemirror.net/doc/manual.html#config][User manual and reference guide - Configuration (CodeMirror)]].
 
+Disable blink cursor in Markdown and code cells.
+
 #+BEGIN_SRC json :tangle stow/jupyter/.config/jupyter/nbconfig/notebook.json
   {
-      "CodeCell": {
+      "MarkdownCell": {
           "cm_config": {
               "cursorBlinkRate": 0
           }
       },
-      "MarkdownCell": {
+      "CodeCell": {
           "cm_config": {
               "cursorBlinkRate": 0
           }
