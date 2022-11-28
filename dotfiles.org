@@ -864,7 +864,7 @@ To create the collections, run:
 #+END_SRC
 
 * FreeCAD
-Ensure FreeCAD's packages are found.
+Add FreeCAD to search path.
 
 #+BEGIN_SRC conf :tangle stow/freecad/.config/environment.d/50-freecad.conf
   PYTHONPATH="/usr/lib/freecad/lib"${PYTHONPATH:+:$PYTHONPATH}
