@@ -132,7 +132,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
   ## Erlang
   pacman -S erlang-nox
-  # Install rebar3 from AUR and Erlang LS from source
+  # Install rebar3 and erlang_ls from AUR
 
   ## Java
   pacman -S jdk-openjdk maven
