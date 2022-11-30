@@ -315,6 +315,16 @@ Set light and dark theme. For theme names, see [[file:/usr/share/themes/][theme 
   Net/ThemeName "Adwaita-dark"
 #+END_SRC
 
+*** Fonts
+For consistency, configuration must match [[*Fontconfig][Fontconfig]] configuration.
+
+#+BEGIN_SRC conf :noweb-ref xsettingsd-common
+  Xft/Antialias 1
+  Xft/Hinting 1
+  Xft/Hintstyle "hintslight"
+  Xft/RGBA "bgr"
+#+END_SRC
+
 *** Presets
 Combine common and theme configuration into light and dark presets.
 
