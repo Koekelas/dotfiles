@@ -4667,10 +4667,10 @@ operandi or vivendi."
   (setq modus-themes-mixed-fonts t)
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-italic-constructs t)
-  (setq modus-themes-region '(bg-only))
-  (setq modus-themes-hl-line '(accented underline))
   (setq modus-themes-subtle-line-numbers t)
   (setq modus-themes-mode-line '(moody accented))
+  (setq modus-themes-region '(bg-only))
+  (setq modus-themes-hl-line '(accented underline))
   (let ((defaults '(background overline variable-pitch)))
     (setq modus-themes-headings
           `((1 . (1.3 ,@defaults))
