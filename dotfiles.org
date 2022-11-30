@@ -287,6 +287,12 @@ window) in title bar.
   Gtk/DecorationLayout ""
 #+END_SRC
 
+Enable client side buttons in file dialog title bar.
+
+#+BEGIN_SRC conf :noweb-ref xsettingsd-common
+  Gtk/DialogsUseHeader 1
+#+END_SRC
+
 Disable blink cursor.
 
 #+BEGIN_SRC conf :noweb-ref xsettingsd-common

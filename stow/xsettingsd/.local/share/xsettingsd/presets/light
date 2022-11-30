@@ -1,3 +1,4 @@
 Gtk/DecorationLayout ""
+Gtk/DialogsUseHeader 1
 Net/CursorBlink 0
 Net/ThemeName "Adwaita"
