@@ -4667,6 +4667,7 @@ operandi or vivendi."
   (setq modus-themes-mixed-fonts t)
   (setq modus-themes-bold-constructs t)
   (setq modus-themes-italic-constructs t)
+  (setq modus-themes-fringes nil)
   (setq modus-themes-subtle-line-numbers t)
   (setq modus-themes-mode-line '(moody accented))
   (setq modus-themes-region '(bg-only))
