@@ -953,7 +953,7 @@ Show Steam with native runtime as Steam.
 * DisplayCAL :setup:
 Calibration settings:
 - Whitepoint: 6500 K
-- White level: 120 cd/m^2
+- White level: 120 cd/m^{2}
 - Tone curve: Gamma 2.2
 
 To set the brightness of AU Optronics Corp. AUO B140HAN01.3 to the
