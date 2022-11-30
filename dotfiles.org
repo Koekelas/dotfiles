@@ -300,8 +300,7 @@ Disable blink cursor.
 #+END_SRC
 
 *** Themes
-Configure a light and a dark theme. For theme names, see [[file:/usr/share/themes/][theme
-directory]].
+Set light and dark theme. For theme names, see [[file:/usr/share/themes/][theme directory]].
 
 #+BEGIN_SRC conf :noweb-ref xsettingsd-light-theme
   Net/ThemeName "Adwaita"
@@ -312,7 +311,7 @@ directory]].
 #+END_SRC
 
 *** Presets
-Combine common and theme configuration into a light and a dark preset.
+Combine common and theme configuration into light and dark presets.
 
 #+BEGIN_SRC conf :tangle stow/xsettingsd/.local/share/xsettingsd/presets/light :noweb no-export
   <<xsettingsd-common>>
