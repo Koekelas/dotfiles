@@ -265,9 +265,9 @@ Ignore system configuration.
 #+END_SRC
 
 ** xsettingsd :setup:
-For settings, see [[https://www.freedesktop.org/wiki/Specifications/XSettingsRegistry/][XSETTINGS registry (freedesktop)]]. To dump the
-settings of the running XSETTINGS daemon (e.g. GNOME Settings Daemon),
-run:
+For settings, see [[https://www.freedesktop.org/wiki/Specifications/XSettingsRegistry/][XSETTINGS registry (freedesktop)]] and [[https://docs.gtk.org/gtk4/class.Settings.html#properties][Gtk.Settings
+(GTK Documentation)]]. To dump the settings of the running XSETTINGS
+daemon (e.g. GNOME Settings Daemon), run:
 
 #+BEGIN_SRC sh
   dump_xsettings
@@ -279,7 +279,14 @@ To create the configuration directory, run:
   mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/xsettingsd"
 #+END_SRC
 
-*** Common
+*** Window settings
+Disable window manager buttons (e.g. maximize, minimize and close
+window) in title bar.
+
+#+BEGIN_SRC conf :noweb-ref xsettingsd-common
+  Gtk/DecorationLayout ""
+#+END_SRC
+
 Disable blink cursor.
 
 #+BEGIN_SRC conf :noweb-ref xsettingsd-common
