@@ -820,6 +820,7 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
         ("picard"                  . ("MusicBrainz Picard" "Picard"))
         ("pitivi"                  . ("Pitivi"))
         ("processing"              . ("Arduino IDE"))
+        ("qt5ct"                   . ("Qt5 Settings"))
         ("qtox"                    . ("qTox"))
         ("scribus"                 . ("Scribus"))
         ("seahorse"                . ("Passwords and Keys"))
