@@ -6560,15 +6560,12 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
 For news feeds, see [[file:secrets.org::*News feeds][News feeds]].
 
-The [[*bongo - Media player][bongo]] integration uses bongo's macros, i.e., bongo must be on the
-load path before compiling the bongo integration. Configure bongo
-first.
+The elfeed configuration depends on bongo. Insert [[*bongo - Media player][bongo]] configuration
+here so the compiler can load bongo and expand its macros.
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
   <<bongo-config>>
 #+END_SRC
-
-Configure elfeed afterwards.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
