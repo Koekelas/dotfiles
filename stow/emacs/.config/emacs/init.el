@@ -4027,7 +4027,7 @@ Modes are confident about being derived from text-mode.")
   :straight t
   :bind
   (:map emmet-mode-keymap
-   ("C-<tab>" . emmet-expand-line))     ; Why does <tab> work but TAB not?
+   ("M-<iso-lefttab>" . emmet-expand-line))
   :hook (mhtml-mode css-mode)
   :config
   (setq emmet-self-closing-tag-style " /")
