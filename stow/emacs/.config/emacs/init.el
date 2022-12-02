@@ -1070,8 +1070,7 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
                     "*BBDB*"
                     "*Dictionary*"
                     "*Holidays*"
-                    "*Pp"
-                    "*org-roam*"))
+                    "*Pp"))
            . (display-buffer-in-side-window . ((side . left) ,@default-vert-actions)))
           (,(rx line-start "*Messages*")
            . (display-buffer-in-side-window . ((side . left) (slot . 1) ,@default-vert-actions)))
@@ -4149,16 +4148,6 @@ Modes are confident about being derived from text-mode.")
     (:map org-mode-map
      ("C-c o i" . org-clock-in)))
 
-  (use-package org-roam-node
-    :bind
-    (:map org-mode-map
-     ("C-c o n" . org-roam-node-insert)))
-
-  (use-package org-roam-mode
-    :bind
-    (:map org-mode-map
-     ("C-c o b" . org-roam-buffer-toggle)))
-
   (use-package outline
     :bind
     (:map org-mode-map
@@ -4417,18 +4406,6 @@ age of the person."
           (concat "\\hypersetup{\n "
                   (string-join (append options '("hidelinks")) ",\n ")
                   "\n}\n"))))
-
-;; Prevent org-roam from nagging about org-roam 2
-(setq org-roam-v2-ack t)
-
-(straight-use-package 'org-roam)
-
-(use-package org-roam-node
-  :bind
-  ("C-c f n" . org-roam-node-file))
-
-(use-package org-roam-protocol
-  :after org-protocol)
 
 (use-package org-caldav
   :straight t
@@ -4897,12 +4874,6 @@ NAME is a string, the name of the user directory."
         "https://caldav.fastmail.com/dav/calendars/user/nicolas@dejaeghe.re")
   (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
 
-(use-package org-roam
-  :after org
-  :config
-  (setq org-roam-directory (file-truename koek/notes-dir))
-  (org-roam-db-autosync-mode))
-
 (use-package org-capture
   :defer t
   :config
@@ -4929,19 +4900,6 @@ NAME is a string, the name of the user directory."
           ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
            "- [[%:link][%(koek-subr/normalize-title \"%i\")]]%?")))
   (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
-
-(use-package org-roam-capture
-  :defer t
-  :config
-  (setq org-roam-capture-templates
-        `(("n" "Note" plain "%?"
-           :if-new
-           (file+head "%<%s>-${slug}.org"
-            ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
-                            "#+TITLE: ${title}"
-                            ""
-                            "")
-                          "\n"))))))
 
 (use-package eww
   :defer t

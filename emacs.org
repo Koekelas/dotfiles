@@ -1925,8 +1925,7 @@ Bury unneeded buffers, computers have more than enough memory.
                       "*BBDB*"
                       "*Dictionary*"
                       "*Holidays*"
-                      "*Pp"
-                      "*org-roam*"))
+                      "*Pp"))
              . (display-buffer-in-side-window . ((side . left) ,@default-vert-actions)))
             (,(rx line-start "*Messages*")
              . (display-buffer-in-side-window . ((side . left) (slot . 1) ,@default-vert-actions)))
@@ -7936,16 +7935,6 @@ templates]].
       (:map org-mode-map
        ("C-c o i" . org-clock-in)))
 
-    (use-package org-roam-node
-      :bind
-      (:map org-mode-map
-       ("C-c o n" . org-roam-node-insert)))
-
-    (use-package org-roam-mode
-      :bind
-      (:map org-mode-map
-       ("C-c o b" . org-roam-buffer-toggle)))
-
     (use-package outline
       :bind
       (:map org-mode-map
@@ -8220,23 +8209,6 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
             (concat "\\hypersetup{\n "
                     (string-join (append options '("hidelinks")) ",\n ")
                     "\n}\n"))))
-#+END_SRC
-
-*** org-roam - Slip box
-[[https://github.com/org-roam/org-roam][org-roam (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  ;; Prevent org-roam from nagging about org-roam 2
-  (setq org-roam-v2-ack t)
-
-  (straight-use-package 'org-roam)
-
-  (use-package org-roam-node
-    :bind
-    ("C-c f n" . org-roam-node-file))
-
-  (use-package org-roam-protocol
-    :after org-protocol)
 #+END_SRC
 
 *** org-caldav - Sync calendars
@@ -9487,17 +9459,6 @@ Configure calendars. For calendar details, login to [[https://www.fastmail.com/]
     (setq org-caldav-calendar-id "260b63a1-58cd-4cf2-bf6a-a2e5acfcf995"))
 #+END_SRC
 
-** Notes
-Configure notes.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :after org
-    :config
-    (setq org-roam-directory (file-truename koek/notes-dir))
-    (org-roam-db-autosync-mode))
-#+END_SRC
-
 ** Capture templates :setup:
 #+BEGIN_SRC js :exports none
   ((args) => {
@@ -9511,12 +9472,7 @@ Configure notes.
   })({protocol: "capture", template: "t", url: location.href, title: document.title, body: window.getSelection()});
 #+END_SRC
 
-To capture /Note/ and /Book/ from the browser, create two [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklets]]:
-
-#+CAPTION: Notitie (note)
-#+BEGIN_SRC js
-  javascript:((args) => {"use strict"; const toQuery = (args) => Object.entries(args).map(([key, value]) => `${key}=${value}`).join("&"); const {protocol, ...rest} = Object.keys(args).reduce((acc, key) => {acc[key] = encodeURIComponent(args[key]); return acc;}, {}); location.href = `org-protocol://${protocol}?${toQuery(rest)}`;})({protocol: "roam-ref", template: "w", ref: location.href, title: document.title});
-#+END_SRC
+To capture /Book/ from the browser, create a [[https://en.wikipedia.org/wiki/Bookmarklet][bookmarklet]]:
 
 #+CAPTION: Boek (book)
 #+BEGIN_SRC js
@@ -9562,23 +9518,6 @@ Configure org capture templates.
             ("b" "Book" item (file+olp "Inbox.org" "Media tips" "Boeken")
              "- [[%:link][%(koek-subr/normalize-title \"%i\")]]%?")))
     (setq org-capture-templates-contexts '(("r" ((in-mode . "mu4e-view-mode"))))))
-#+END_SRC
-
-Configure roam capture templates.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-roam-capture
-    :defer t
-    :config
-    (setq org-roam-capture-templates
-          `(("n" "Note" plain "%?"
-             :if-new
-             (file+head "%<%s>-${slug}.org"
-              ,(string-join '("# -*- ispell-local-dictionary: \"nl_BE\"; -*-"
-                              "#+TITLE: ${title}"
-                              ""
-                              "")
-                            "\n"))))))
 #+END_SRC
 
 ** Downloads
