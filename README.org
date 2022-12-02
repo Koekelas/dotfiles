@@ -11,6 +11,10 @@ ahead of =master=.
 Take a look at [[file:dotfiles.org][dotfiles.org]] and [[file:emacs.org][emacs.org]]. Everything else is the
 result of [[info:org#Extracting source code][tangling]].
 
+** The secrets directory
+The =secrets= directory contains files not suitable for publishing (e.g.
+keys, bookmarks and news feeds). It isn't version controlled.
+
 * For the masochist
 To get started, run:
 
