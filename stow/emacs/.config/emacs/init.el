@@ -286,7 +286,7 @@ system."
       ("M-d" . "C-<delete>")
       ("M-<backspace>" . "C-<backspace>")
       ("C-k" . "S-<end> <backspace>")
-      ("M-@" . "S-C-<right>")
+      ("M-@" . "C-S-<right>")
       ("M-h" . "C-a")
       ("M-w" . "C-c")
       ("C-w" . "C-x")
@@ -606,7 +606,7 @@ N is an integer, a workspace number."
             ((koek-wm/classp "epiphany")
              simulation-keys
              ,(let ((keys (append '(("M-o" . "C-n")
-                                    ("M-p" . "S-C-p")
+                                    ("M-p" . "C-S-p")
                                     ("M-k" . "C-w"))
                                   koek-wm/base-simulation-keys)))
                 (mapcar (pcase-lambda (`(,from . ,to))
@@ -617,7 +617,7 @@ N is an integer, a workspace number."
             ((koek-wm/classp "firefox")
              simulation-keys
              ,(let ((keys (append '(("M-o" . "C-n")
-                                    ("M-p" . "S-C-p")
+                                    ("M-p" . "C-S-p")
                                     ("M-k" . "C-w"))
                                   koek-wm/base-simulation-keys)))
                 (mapcar (pcase-lambda (`(,from . ,to))
