@@ -4943,9 +4943,15 @@ NAME is a string, the name of the user directory."
           (:name "Verbouwing"
            :query "maildir:/Personal/Verbouwing"
            :key ?v)
+          (:name "emacs-devel"
+           :query "maildir:\"/Personal/Mailing Lists/emacs-devel\""
+           :key ?e)
           (:name "Unread"
            :query "flag:unread not maildir:\"/Personal/Mailing Lists/\" not maildir:/Personal/Spam"
-           :key ?u))))
+           :key ?u)
+          (:name "All unread"
+           :query "flag:unread"
+           :key ?U))))
 
 (use-package bbdb-vcard
   :defer t

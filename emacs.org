@@ -9572,9 +9572,15 @@ the instructions on storing passwords.
             (:name "Verbouwing"
              :query "maildir:/Personal/Verbouwing"
              :key ?v)
+            (:name "emacs-devel"
+             :query "maildir:\"/Personal/Mailing Lists/emacs-devel\""
+             :key ?e)
             (:name "Unread"
              :query "flag:unread not maildir:\"/Personal/Mailing Lists/\" not maildir:/Personal/Spam"
-             :key ?u))))
+             :key ?u)
+            (:name "All unread"
+             :query "flag:unread"
+             :key ?U))))
 #+END_SRC
 
 ** Contacts
