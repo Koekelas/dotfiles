@@ -9573,7 +9573,7 @@ the instructions on storing passwords.
              :query "maildir:/Personal/Verbouwing"
              :key ?v)
             (:name "Unread"
-             :query "flag:unread"
+             :query "flag:unread not maildir:\"/Personal/Mailing Lists/\" not maildir:/Personal/Spam"
              :key ?u))))
 #+END_SRC
 

@@ -4944,7 +4944,7 @@ NAME is a string, the name of the user directory."
            :query "maildir:/Personal/Verbouwing"
            :key ?v)
           (:name "Unread"
-           :query "flag:unread"
+           :query "flag:unread not maildir:\"/Personal/Mailing Lists/\" not maildir:/Personal/Spam"
            :key ?u))))
 
 (use-package bbdb-vcard
