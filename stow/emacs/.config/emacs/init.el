@@ -848,32 +848,6 @@ clockwise, else, rotate counterclockwise."
    ("C-c w f" . koek-tf/flip)
    ("C-c w c" . koek-tf/rotate)))
 
-(use-package eyebrowse
-  :straight t
-  :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
-  :bind
-  (("C-c w 0" . eyebrowse-switch-to-window-config-0)
-   ("C-c w 1" . eyebrowse-switch-to-window-config-1)
-   ("C-c w 2" . eyebrowse-switch-to-window-config-2)
-   ("C-c w 3" . eyebrowse-switch-to-window-config-3)
-   ("C-c w 4" . eyebrowse-switch-to-window-config-4)
-   ("C-c w 5" . eyebrowse-switch-to-window-config-5)
-   ("C-c w 6" . eyebrowse-switch-to-window-config-6)
-   ("C-c w 7" . eyebrowse-switch-to-window-config-7)
-   ("C-c w 8" . eyebrowse-switch-to-window-config-8)
-   ("C-c w 9" . eyebrowse-switch-to-window-config-9)
-   ("C-c w w" . eyebrowse-last-window-config)
-   ("C-c w k" . eyebrowse-close-window-config))
-  :init
-  (setq eyebrowse-keymap-prefix (kbd "C-c w"))
-  :config
-  ;; Resolve keybinding conflict with transpose-frame
-  (unbind-key "C-c w c" eyebrowse-mode-map)
-
-  (setq eyebrowse-default-workspace-slot 0)
-  (setq eyebrowse-mode-line-style 'hide)
-  (eyebrowse-mode))
-
 (use-package winner
   :bind
   (("C-c w l" . winner-undo)

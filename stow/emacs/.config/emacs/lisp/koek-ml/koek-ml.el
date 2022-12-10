@@ -170,42 +170,6 @@ Intended as advice around `ace-window-display-mode'."
   "Mode line construct for exwm workspaces.")
 (put 'koek-ml/exwm-workspaces 'risky-local-variable t)
 
-;;;; eyebrowse
-
-(declare-function eyebrowse--get "ext:eyebrowse")
-
-(defun koek-ml/get-eyebrowse-workspaces ()
-  "Return workspaces of selected frame."
-  (mapcar (lambda (workspace)
-            (let ((n (nth 0 workspace))
-                  (name (let ((name (nth 2 workspace)))
-                          (unless (string-empty-p name)
-                            name))))
-              (list :n n
-                    :label (concat (or (koek-subr/arabic-to-roman n) "N")
-                                   (when name ":")
-                                   name))))
-          (eyebrowse--get 'window-configs)))
-
-(defvar koek-ml/eyebrowse
-  '(:eval
-    (when (and (bound-and-true-p eyebrowse-mode) (moody-window-active-p))
-      (let ((workspaces (koek-ml/get-eyebrowse-workspaces))
-            (selected-n (eyebrowse--get 'current-slot)))
-        (when (or (> (length workspaces) 1) (/= selected-n 0))
-          `(,(moody-ribbon
-              (mapconcat
-               (lambda (workspace)
-                 (let ((face (if (= (plist-get workspace :n) selected-n)
-                                 'koek-ml/selected-workspace
-                               'koek-ml/unselected-workspace)))
-                   (propertize (plist-get workspace :label) 'face face)))
-               workspaces " ")
-              nil 'up)
-            koek-ml/separator)))))
-  "Mode line construct for eyebrowse.")
-(put 'koek-ml/eyebrowse 'risky-local-variable t)
-
 ;;;; Identification
 
 (defvar koek-ml/id
@@ -414,7 +378,7 @@ STATE is a symbol, a flymake state."
 (defvar koek-ml/mode-line-format
   `(,@koek-ml/dummies " "
     koek-ml/eldoc koek-ml/ace koek-ml/ediff
-    koek-ml/depth koek-ml/exwm-workspaces koek-ml/eyebrowse
+    koek-ml/depth koek-ml/exwm-workspaces
     koek-ml/id koek-ml/state keycast-marker
     koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes))
@@ -486,8 +450,8 @@ TYPE is a symbol, the type of the variant, see
 Intended as advice overriding `ediff-refresh-mode-lines'."
   (setq mode-line-format
         `(,@koek-ml/dummies " "
-          koek-ml/eldoc koek-ml/ace koek-ml/depth
-          koek-ml/exwm-workspaces koek-ml/eyebrowse
+          koek-ml/eldoc koek-ml/ace
+          koek-ml/depth koek-ml/exwm-workspaces
           koek-ml/id koek-ml/keycast
           koek-ml/diff koek-ml/task koek-ml/modes))
   (force-mode-line-update)
@@ -521,8 +485,8 @@ Intended as advice overriding `calendar-set-mode-line'."
   (let ((normalized (koek-ml/strip-percent-constructs description)))
     (setq mode-line-format
           `(,@koek-ml/dummies " "
-            koek-ml/eldoc koek-ml/ace koek-ml/depth
-            koek-ml/exwm-workspaces koek-ml/eyebrowse
+            koek-ml/eldoc koek-ml/ace
+            koek-ml/depth koek-ml/exwm-workspaces
             koek-ml/id koek-ml/keycast
             ("" koek-ml/large-separator ,normalized)
             koek-ml/task koek-ml/modes)))

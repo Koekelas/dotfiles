@@ -1671,37 +1671,6 @@ steps.
      ("C-c w c" . koek-tf/rotate)))
 #+END_SRC
 
-** eyebrowse - Workspaces
-[[https://depp.brause.cc/eyebrowse/][eyebrowse]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package eyebrowse
-    :straight t
-    :unless (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
-    :bind
-    (("C-c w 0" . eyebrowse-switch-to-window-config-0)
-     ("C-c w 1" . eyebrowse-switch-to-window-config-1)
-     ("C-c w 2" . eyebrowse-switch-to-window-config-2)
-     ("C-c w 3" . eyebrowse-switch-to-window-config-3)
-     ("C-c w 4" . eyebrowse-switch-to-window-config-4)
-     ("C-c w 5" . eyebrowse-switch-to-window-config-5)
-     ("C-c w 6" . eyebrowse-switch-to-window-config-6)
-     ("C-c w 7" . eyebrowse-switch-to-window-config-7)
-     ("C-c w 8" . eyebrowse-switch-to-window-config-8)
-     ("C-c w 9" . eyebrowse-switch-to-window-config-9)
-     ("C-c w w" . eyebrowse-last-window-config)
-     ("C-c w k" . eyebrowse-close-window-config))
-    :init
-    (setq eyebrowse-keymap-prefix (kbd "C-c w"))
-    :config
-    ;; Resolve keybinding conflict with transpose-frame
-    (unbind-key "C-c w c" eyebrowse-mode-map)
-
-    (setq eyebrowse-default-workspace-slot 0)
-    (setq eyebrowse-mode-line-style 'hide)
-    (eyebrowse-mode))
-#+END_SRC
-
 ** winner - Undo and redo window layout changes
 #+BEGIN_SRC emacs-lisp
   (use-package winner
@@ -8862,42 +8831,6 @@ can load moody.
     "Mode line construct for exwm workspaces.")
   (put 'koek-ml/exwm-workspaces 'risky-local-variable t)
 
-  ;;;; eyebrowse
-
-  (declare-function eyebrowse--get "ext:eyebrowse")
-
-  (defun koek-ml/get-eyebrowse-workspaces ()
-    "Return workspaces of selected frame."
-    (mapcar (lambda (workspace)
-              (let ((n (nth 0 workspace))
-                    (name (let ((name (nth 2 workspace)))
-                            (unless (string-empty-p name)
-                              name))))
-                (list :n n
-                      :label (concat (or (koek-subr/arabic-to-roman n) "N")
-                                     (when name ":")
-                                     name))))
-            (eyebrowse--get 'window-configs)))
-
-  (defvar koek-ml/eyebrowse
-    '(:eval
-      (when (and (bound-and-true-p eyebrowse-mode) (moody-window-active-p))
-        (let ((workspaces (koek-ml/get-eyebrowse-workspaces))
-              (selected-n (eyebrowse--get 'current-slot)))
-          (when (or (> (length workspaces) 1) (/= selected-n 0))
-            `(,(moody-ribbon
-                (mapconcat
-                 (lambda (workspace)
-                   (let ((face (if (= (plist-get workspace :n) selected-n)
-                                   'koek-ml/selected-workspace
-                                 'koek-ml/unselected-workspace)))
-                     (propertize (plist-get workspace :label) 'face face)))
-                 workspaces " ")
-                nil 'up)
-              koek-ml/separator)))))
-    "Mode line construct for eyebrowse.")
-  (put 'koek-ml/eyebrowse 'risky-local-variable t)
-
   ;;;; Identification
 
   (defvar koek-ml/id
@@ -9106,7 +9039,7 @@ can load moody.
   (defvar koek-ml/mode-line-format
     `(,@koek-ml/dummies " "
       koek-ml/eldoc koek-ml/ace koek-ml/ediff
-      koek-ml/depth koek-ml/exwm-workspaces koek-ml/eyebrowse
+      koek-ml/depth koek-ml/exwm-workspaces
       koek-ml/id koek-ml/state keycast-marker
       koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
       koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes))
@@ -9178,8 +9111,8 @@ can load moody.
   Intended as advice overriding `ediff-refresh-mode-lines'."
     (setq mode-line-format
           `(,@koek-ml/dummies " "
-            koek-ml/eldoc koek-ml/ace koek-ml/depth
-            koek-ml/exwm-workspaces koek-ml/eyebrowse
+            koek-ml/eldoc koek-ml/ace
+            koek-ml/depth koek-ml/exwm-workspaces
             koek-ml/id koek-ml/keycast
             koek-ml/diff koek-ml/task koek-ml/modes))
     (force-mode-line-update)
@@ -9213,8 +9146,8 @@ can load moody.
     (let ((normalized (koek-ml/strip-percent-constructs description)))
       (setq mode-line-format
             `(,@koek-ml/dummies " "
-              koek-ml/eldoc koek-ml/ace koek-ml/depth
-              koek-ml/exwm-workspaces koek-ml/eyebrowse
+              koek-ml/eldoc koek-ml/ace
+              koek-ml/depth koek-ml/exwm-workspaces
               koek-ml/id koek-ml/keycast
               ("" koek-ml/large-separator ,normalized)
               koek-ml/task koek-ml/modes)))
