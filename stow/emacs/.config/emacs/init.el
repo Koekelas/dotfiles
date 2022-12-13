@@ -122,10 +122,29 @@ keywords.  For more information, see
 ;; installation
 (setq exwm-replace nil)
 
+;; One session type mustn't pollute (e.g. bind keys) other session
+;; types. use-package loads the package under configuration during
+;; compilation, i.e., when Emacs evaluated a use-package statement for
+;; the package, it executes the statement (reality is more nuanced but
+;; the nuances aren't relevant to the discussion). When (i) in a non
+;; EXWM session, (ii) Emacs loaded this configuration and (iii) Emacs
+;; is compiling this configuration, the :when keyword prevents the
+;; exwm statements from polluting the non EXWM session. Deferring is
+;; insufficient.
+
 (use-package exwm
   :straight t
-  :when (string-equal (getenv "XDG_CURRENT_DESKTOP") "EXWM")
+  :when (koek-wm/exwm-session-p)
+  :defer t
   :preface
+  (defvar koek-wm/session
+    (split-string (getenv "XDG_CURRENT_DESKTOP") path-separator 'omit-nulls)
+    "List of names for current session.")
+
+  (defun koek-wm/exwm-session-p ()
+    "Return whether current session is an EXWM session."
+    (and (length= koek-wm/session 1) (member "EXWM" koek-wm/session)))
+
   (defun koek-wm/get-process-args (id)
     "Return arguments of process id ID.
 ID is an integer, the process id of the process."
@@ -199,16 +218,16 @@ system."
     "Suspend system."
     (interactive)
     (call-process "systemctl" nil 0 nil "suspend"))
-  :config
-  ;; Only when package is loaded
+  :init
   (bind-keys
    ("C-c z p" . koek-wm/kill-power-off)
    ("C-c z z" . koek-wm/suspend))
-
+  :config
   (add-hook 'koek-thm/enable-hook #'koek-wm/update-xsettingsd-preset)
   (add-hook 'koek-thm/enable-hook #'koek-wm/update-gtk-theme-preference))
 
 (use-package exwm-core
+  :when (koek-wm/exwm-session-p)
   :defer t
   :preface
   ;; minor mode
@@ -265,6 +284,7 @@ system."
   (add-hook 'exwm-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package exwm-input
+  :when (koek-wm/exwm-session-p)
   :defer t
   :preface
   ;; The S modifier isn't recognized on the left. DEL isn't recognized
@@ -343,7 +363,10 @@ Keybinding is a string, see `edmacro-mode'.")
                 koek-wm/base-simulation-keys)))
 
 (use-package exwm-workspace
-  :defer t
+  :when (koek-wm/exwm-session-p)
+  :bind
+  (("C-c w e" . exwm-workspace-swap)
+   ("C-c w k" . exwm-workspace-delete))
   :preface
   (defun koek-wm/get-class (&optional buffer)
     (when (featurep 'exwm-core)
@@ -557,8 +580,7 @@ Keybinding is a string, see `edmacro-mode'.")
     "Convert workspace number N to a workspace label.
 N is an integer, a workspace number."
     (or (koek-subr/arabic-to-roman n) "N"))
-  :config
-  ;; Only when package is loaded
+  :init
   (bind-keys
    ("C-c w 0" . koek-wm/switch-workspace-0)
    ("C-c w 1" . koek-wm/switch-workspace-1)
@@ -570,10 +592,8 @@ N is an integer, a workspace number."
    ("C-c w 7" . koek-wm/switch-workspace-7)
    ("C-c w 8" . koek-wm/switch-workspace-8)
    ("C-c w 9" . koek-wm/switch-workspace-9)
-   ("C-c w w" . koek-wm/switch-previous-workspace)
-   ("C-c w e" . exwm-workspace-swap)
-   ("C-c w k" . exwm-workspace-delete))
-
+   ("C-c w w" . koek-wm/switch-previous-workspace))
+  :config
   (setq exwm-workspace-number 2)
   (setq exwm-workspace-show-all-buffers t)
   (setq exwm-workspace-index-map #'koek-wm/n-to-label)
@@ -581,11 +601,13 @@ N is an integer, a workspace number."
   (add-hook 'exwm-update-title-hook #'koek-wm/update-current))
 
 (use-package exwm-layout
+  :when (koek-wm/exwm-session-p)
   :defer t
   :config
   (setq exwm-layout-show-all-buffers t))
 
 (use-package exwm-manage
+  :when (koek-wm/exwm-session-p)
   :defer t
   :preface
   (defvar koek-wm/file-dialog-titles
@@ -4786,7 +4808,7 @@ NAME is a string, the name of the user directory."
 
 (use-package exar
   :koek t
-  :after exwm
+  :when (koek-wm/exwm-session-p)
   :config
   (let ((icc-dir (expand-file-name "icc/" (xdg-data-home))))
     (setq exar-monitors
