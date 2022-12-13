@@ -122,8 +122,10 @@ or the [[*use-package - Package configuration macro][use-package]] keyword ~:koe
   PACKAGE is a symbol, the name of the package."
     (let ((package-name (symbol-name package)))
       `(progn
-         ;; Emacs loads packages during compilation to warn about
-         ;; undefined symbols and to expand macros
+         ;; Add the package to the load path during compilation so the
+         ;; compiler can load the package (the compiler executes top
+         ;; level require statements), expand its macros and warn about
+         ;; undefined symbols
          (eval-and-compile
            (add-to-list 'load-path
                         ,(thread-last user-emacs-directory
