@@ -2020,7 +2020,8 @@ When FORCE is truthy, unconditionally continue commit."
 (use-package ediff
   :bind
   (("C-c f e" . ediff-files)
-   ("C-c f C-e" . ediff-current-file)))
+   ("C-c f C-e" . ediff-current-file)
+   ("C-c f M-e" . ediff-buffers)))
 
 (use-package ediff-init
   :defer t
