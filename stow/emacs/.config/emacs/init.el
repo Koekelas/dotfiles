@@ -3292,7 +3292,8 @@ none return a URL, nil.  For rewrite functions, see
 
   (defun koek-bbdb/import-dir (file-name &optional interactive)
     "Import vCards from directory FILE-NAME and its subdirectories.
-INTERACTIVE is used internally."
+Treats every vCard as a distinct contact.  INTERACTIVE is used
+internally."
     (interactive
      (progn
        (require 'bbdb-vcard)
@@ -3303,7 +3304,11 @@ INTERACTIVE is used internally."
                (expand-file-name
                 (read-directory-name "vCard directory: " root nil t) root)))
          (list file-name 'interactive))))
-    (let* ((file-names
+    ;; `bbdb-allow-duplicates' and `bbdb-vcard-try-merge' are dynamic
+    ;; variables
+    (let* ((bbdb-allow-duplicates t)  ; Distinct contacts can have the same name
+           (bbdb-vcard-try-merge nil) ; Distinct contacts can have the same landline telephone number
+           (file-names
             (directory-files-recursively file-name (rx ".vcf" line-end) nil t))
            (vcards (with-temp-buffer
                      (dolist (file-name file-names)
@@ -3316,10 +3321,7 @@ INTERACTIVE is used internally."
            (n-records (length records)))
       (when interactive
         (message "%d %s imported"
-                 n-records (if (= n-records 1) "vCard" "vCards")))))
-  :config
-  ;; Contacts sharing a landline telephone aren't duplicates
-  (setq bbdb-vcard-try-merge nil))
+                 n-records (if (= n-records 1) "vCard" "vCards"))))))
 
 (use-package bongo
   :straight t
