@@ -76,7 +76,7 @@ Disable builtin package manager.
   (setq package-enable-at-startup nil)
 #+END_SRC
 
-Straight can install any commit of any Git repository, it's not
+Straight can install any commit from any Git repository, it isn't
 limited to what's available in a package archive. Configure straight.
 
 #+BEGIN_SRC emacs-lisp
