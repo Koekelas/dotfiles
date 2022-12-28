@@ -1831,7 +1831,7 @@ the secondary ones."
            (secondary (file-expand-wildcards (thread-last root
                                                (expand-file-name "*/")
                                                (expand-file-name name)))))
-      (if (and (null primary) (> (length secondary) 1) prompt)
+      (if (and (null primary) (length> secondary 1) prompt)
           (let* ((candidates (mapcar (lambda (file-name)
                                        (cons (file-relative-name file-name root)
                                              file-name))
@@ -3367,7 +3367,7 @@ playing track, else, enqueue after last track."
     (interactive "P")
     (let* ((file-names (dired-get-marked-files))
            (mark-active
-            (or (> (length file-names) 1)
+            (or (length> file-names 1)
                 (eq (car (dired-get-marked-files nil nil nil 'distinguish))
                     t))))
       (koek-bngo/enqueue file-names arg)

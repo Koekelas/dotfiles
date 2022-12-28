@@ -155,7 +155,7 @@ Intended as advice around `ace-window-display-mode'."
   '(:eval
     (when (and (featurep 'exwm-workspace) (moody-window-active-p))
       (let ((workspaces (koek-ml/get-exwm-workspaces)))
-        (when (> (length workspaces) 1)
+        (when (length> workspaces 1)
           `(,(moody-ribbon
               (mapconcat
                (lambda (workspace)
