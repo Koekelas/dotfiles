@@ -1554,6 +1554,10 @@ are recognized:
    :map embark-bookmark-map
    ("e" . koek-eww/jump-bookmark))
 
+  (bind-keys
+   :map embark-region-map
+   ("q" . koek-web/query-region))
+
   (setq embark-help-key (kbd "?")))
 
 (straight-use-package 'embark-consult)
@@ -2896,6 +2900,20 @@ see `company-backends'."
   :config
   (setq eldoc-echo-area-use-multiline-p nil)
   :delight)
+
+(defun koek-web/construct-duckduckgo-url (query)
+  (concat "https://duckduckgo.com/?q="
+          (mapconcat #'url-hexify-string (split-string query) "+")))
+
+(defun koek-web/query (query)
+  (interactive "sQuery: ")
+  (browse-url (koek-web/construct-duckduckgo-url query)))
+
+(defun koek-web/query-region (begin end)
+  (interactive "r")
+  (let ((query (buffer-substring-no-properties begin end)))
+    (deactivate-mark)
+    (koek-web/query query)))
 
 (use-package vterm
   :straight t
