@@ -4511,7 +4511,7 @@ age of the person."
             (buffer-substring
              (re-search-forward (rx (one-or-more (not "\""))))
              (re-search-forward (rx (one-or-more (not  ")"))))))
-          (rx (any " \n")) 'omit-nulls "\"")))
+          nil 'omit-nulls "\"")))
     (dolist (keyword keywords)
       (define-abbrev sql-mode-abbrev-table keyword (upcase keyword)
                      nil :enable-function #'koek-bbrv/in-code-p :system t)))
