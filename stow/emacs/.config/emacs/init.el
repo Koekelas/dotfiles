@@ -4413,7 +4413,8 @@ age of the person."
   ;; Setup hyperref
   (let ((options
          (let ((normalized (replace-regexp-in-string
-                            (rx (any " \n")) "" org-latex-hyperref-template)))
+                            (rx (one-or-more (any " \n"))) ""
+                            org-latex-hyperref-template)))
            (string-match
             (rx "{" (group-n 1 (one-or-more (any alpha "={}%,"))) "}")
             normalized)
