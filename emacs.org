@@ -6669,6 +6669,11 @@ here so the compiler can load bongo and expand its macros.
       (interactive)
       (koek-feed/enqueue-dwim t)))
 
+  (use-package elfeed-curl
+    :defer t
+    :config
+    (setq elfeed-curl-timeout (* elfeed-curl-timeout 2)))
+
   (use-package elfeed-search
     :defer t
     :config

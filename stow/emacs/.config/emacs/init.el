@@ -3551,6 +3551,11 @@ playing track, else, enqueue after last track."
     (interactive)
     (koek-feed/enqueue-dwim t)))
 
+(use-package elfeed-curl
+  :defer t
+  :config
+  (setq elfeed-curl-timeout (* elfeed-curl-timeout 2)))
+
 (use-package elfeed-search
   :defer t
   :config
