@@ -34,6 +34,6 @@
 
 $0
 
-(provide '${1:$(replace-regexp-in-string (rx "." (zero-or-more (not ".")) line-end) "" yas-text)})
+(provide '${1:$(string-trim-right yas-text (rx "." (zero-or-more (not "."))))})
 
 ;;; $1 ends here

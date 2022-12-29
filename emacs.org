@@ -1720,8 +1720,8 @@ name. Define functionality to make buffer categories.
 #+BEGIN_SRC emacs-lisp
   (defmacro koek-buff/def-category-pred (name)
     "Define buffer category predicate NAME."
-    (let* ((prefix (replace-regexp-in-string
-                    (rx (zero-or-one "-") "p" line-end) "" (symbol-name name)))
+    (let* ((prefix (string-trim-right (symbol-name name)
+                                      (rx (zero-or-one "-") "p")))
            (category (car (last (split-string prefix (rx (any "-/"))))))
            (modes-sym (koek-subr/intern prefix "-modes"))
            (names-sym (koek-subr/intern prefix "-names"))
@@ -3912,7 +3912,7 @@ Inherit Clojure snippets.
 
   $0
 
-  (provide '${1:$(replace-regexp-in-string (rx "." (zero-or-more (not ".")) line-end) "" yas-text)})
+  (provide '${1:$(string-trim-right yas-text (rx "." (zero-or-more (not "."))))})
 
   ;;; $1 ends here
 #+END_SRC
@@ -8084,9 +8084,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
          (lambda (value)
            (let ((parts (split-string value "=")))
              (cons (car parts)
-                   (replace-regexp-in-string
-                    (rx (or (seq line-start "\"") (seq "\"" line-end))) ""
-                    (string-join (cdr parts) "="))))))
+                   (string-trim (string-join (cdr parts) "=") "\"" "\"")))))
         (seq-find (pcase-lambda (`(,nm))
                     (string-equal nm name)))
         cdr))

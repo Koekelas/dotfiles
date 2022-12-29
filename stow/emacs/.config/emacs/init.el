@@ -885,8 +885,8 @@ clockwise, else, rotate counterclockwise."
 
 (defmacro koek-buff/def-category-pred (name)
   "Define buffer category predicate NAME."
-  (let* ((prefix (replace-regexp-in-string
-                  (rx (zero-or-one "-") "p" line-end) "" (symbol-name name)))
+  (let* ((prefix (string-trim-right (symbol-name name)
+                                    (rx (zero-or-one "-") "p")))
          (category (car (last (split-string prefix (rx (any "-/"))))))
          (modes-sym (koek-subr/intern prefix "-modes"))
          (names-sym (koek-subr/intern prefix "-names"))
@@ -4289,9 +4289,7 @@ NAME is a string, the name of the variable."
        (lambda (value)
          (let ((parts (split-string value "=")))
            (cons (car parts)
-                 (replace-regexp-in-string
-                  (rx (or (seq line-start "\"") (seq "\"" line-end))) ""
-                  (string-join (cdr parts) "="))))))
+                 (string-trim (string-join (cdr parts) "=") "\"" "\"")))))
       (seq-find (pcase-lambda (`(,nm))
                   (string-equal nm name)))
       cdr))
