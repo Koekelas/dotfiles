@@ -10,7 +10,7 @@ Enable lexical binding.
 #+BEGIN_SRC emacs-lisp
   ;;; init.el --- Nicolas' Emacs configuration -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2017-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2017-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; URL: <https://github.com/Koekelas/dotfiles>
@@ -209,7 +209,7 @@ latest org and its documentation before loading org.
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/koek-subr/koek-subr.el
   ;;; koek-subr.el --- Common subroutines -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2021-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: lisp
@@ -1074,7 +1074,7 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/exar/exar.el
   ;;; exar.el --- Emacs, X Window System and RandR -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2020-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2020-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: unix
@@ -6916,7 +6916,7 @@ To show holidays as agenda entries, see [[info:org#Weekly/daily agenda][Calendar
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/belgian-holidays/belgian-holidays.el
   ;;; belgian-holidays --- Belgian holidays -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2020-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2020-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: calendar
@@ -7145,7 +7145,7 @@ Stavrou)]].
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/prepcast/prepcast.el
   ;;; prepcast.el --- Prepare for screencasting -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2020-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2020-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: frames
@@ -8712,7 +8712,7 @@ can load moody.
 #+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/lisp/koek-ml/koek-ml.el
   ;;; koek-ml --- Custom mode line -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021-2022 Nicolas De Jaeghere
+  ;; Copyright (C) 2021-2023 Nicolas De Jaeghere
 
   ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
   ;; Keywords: frames

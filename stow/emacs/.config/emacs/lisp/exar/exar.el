@@ -1,6 +1,6 @@
 ;;; exar.el --- Emacs, X Window System and RandR -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2022 Nicolas De Jaeghere
+;; Copyright (C) 2020-2023 Nicolas De Jaeghere
 
 ;; Author: Nicolas De Jaeghere <nicolas@dejaeghe.re>
 ;; Keywords: unix
