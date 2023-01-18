@@ -8078,22 +8078,30 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
   (use-package ob-core
     :defer t
     :preface
-    (defun koek-org/get-code-block-var-value (name)
-      "Return value of variable NAME for current code block.
-  NAME is a string, the name of the variable."
+    (defun koek-org/get-code-block-vars ()
+      "Return variables for current code block."
       (thread-last (org-babel-get-src-block-info 'light)
         (nth 2)                           ; Header arguments
         (seq-filter (pcase-lambda (`(,type))
                       (eq type :var)))
         (mapcar #'cdr)
         (mapcar
-         (lambda (value)
-           (let ((parts (split-string value "=")))
-             (cons (car parts)
-                   (string-trim (string-join (cdr parts) "=") "\"" "\"")))))
-        (seq-find (pcase-lambda (`(,nm))
-                    (string-equal nm name)))
-        cdr))
+         (lambda (var)
+           (string-match
+            (rx (group-n 1 (one-or-more (not "="))) "="
+                (group-n 3 (zero-or-one "\"")) (group-n 2 (zero-or-more not-newline)) (backref 3))
+            var)
+           (let ((name (match-string 1 var))
+                 (value (match-string 2 var)))
+             (cons name (unless (string-empty-p value) value)))))))
+
+    (defun koek-org/get-code-block-var-value (name)
+      "Return value of variable NAME for current code block.
+  NAME is a string, the name of the variable."
+      (when-let ((var (seq-find (pcase-lambda (`(,nm))
+                                  (string-equal nm name))
+                                (koek-org/get-code-block-vars))))
+        (cdr var)))
     :config
     ;; Evaluate code blocks in buffer after confirmation
     (let ((whitelist nil))
