@@ -154,13 +154,14 @@ Install use-package.
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'delight)         ; Optional dependency
   (straight-use-package 'use-package)
-  (require 'use-package)
 #+END_SRC
 
 The keyword ~:koek~ registers [[*Embedded packages][embedded packages]]. It's a predicate
 keyword, i.e., it accepts as argument =t=, =nil= or nothing.
 
 #+BEGIN_SRC emacs-lisp
+  (require 'use-package)
+
   (defun koek-up/process-koek (package _keyword arg rem state)
     "Process :koek keyword.
   PACKAGE is a symbol, the name of the package.  ARG is a symbol,

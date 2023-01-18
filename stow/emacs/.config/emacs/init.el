@@ -78,6 +78,7 @@ PACKAGE is a symbol, the name of the package."
 
 (straight-use-package 'delight)         ; Optional dependency
 (straight-use-package 'use-package)
+
 (require 'use-package)
 
 (defun koek-up/process-koek (package _keyword arg rem state)
