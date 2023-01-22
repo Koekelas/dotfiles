@@ -2067,6 +2067,13 @@ When FORCE is truthy, unconditionally continue commit."
   (setq ediff-window-setup-function #'ediff-setup-windows-plain)
   (setq ediff-split-window-function #'split-window-right))
 
+(use-package isearch
+  :defer t
+  :config
+  (setq isearch-wrap-pause nil)
+  (setq isearch-repeat-on-direction-change t)
+  (setq isearch-lazy-count t))
+
 (use-package wgrep
   :straight t
   :after grep

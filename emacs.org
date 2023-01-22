@@ -3032,6 +3032,16 @@ VC is a placeholder.
 
 * Editor
 
+** isearch - Search for occurrences
+#+BEGIN_SRC emacs-lisp
+  (use-package isearch
+    :defer t
+    :config
+    (setq isearch-wrap-pause nil)
+    (setq isearch-repeat-on-direction-change t)
+    (setq isearch-lazy-count t))
+#+END_SRC
+
 ** wgrep - Writable grep buffers
 [[https://github.com/mhayashi1120/Emacs-wgrep][wgrep (GitHub)]]
 
