@@ -2074,6 +2074,12 @@ When FORCE is truthy, unconditionally continue commit."
   (setq isearch-repeat-on-direction-change t)
   (setq isearch-lazy-count t))
 
+(use-package isearch-mb
+  :straight t
+  :after isearch
+  :config
+  (isearch-mb-mode))
+
 (use-package wgrep
   :straight t
   :after grep

@@ -3042,6 +3042,17 @@ VC is a placeholder.
     (setq isearch-lazy-count t))
 #+END_SRC
 
+*** isearch-mb - Alternative UI
+[[https://github.com/astoff/isearch-mb][isearch-mb (GitHub)]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package isearch-mb
+    :straight t
+    :after isearch
+    :config
+    (isearch-mb-mode))
+#+END_SRC
+
 ** wgrep - Writable grep buffers
 [[https://github.com/mhayashi1120/Emacs-wgrep][wgrep (GitHub)]]
 
