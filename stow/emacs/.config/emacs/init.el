@@ -3819,7 +3819,7 @@ Modes are confident about being derived from text-mode.")
 (use-package cc-mode
   :mode
   (((rx ".c" string-end) . c-mode)
-   ((rx ".cpp" string-end) . c++-mode)
+   ((rx (or ".cpp" ".cxx") string-end) . c++-mode)
    ((rx ".java" string-end) . java-mode))
   :config
   (bind-keys
