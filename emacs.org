@@ -9084,7 +9084,7 @@ can load moody.
           ;; For format, see `vc-default-mode-line-string'
           (string-match
            (rx (group-n 1 (one-or-more (not (any "-:@!?")))) (any "-:@!?")
-               (zero-or-one (not ":") ":")
+               (zero-or-one (one-or-more (not ":")) ":")
                (group-n 2 (one-or-more not-newline)))
            state)
           `("" koek-ml/separator
