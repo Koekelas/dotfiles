@@ -6150,7 +6150,7 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 
 *** Aliases
 #+BEGIN_SRC fundamental :tangle stow/emacs/.config/emacs/etc/eshell/aliases
-  alias ls ls -lAh $*
+  alias ll ls -lAh $*
   alias nb jupyter notebook $*
 #+END_SRC
 

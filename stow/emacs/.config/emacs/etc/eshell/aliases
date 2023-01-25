@@ -1,2 +1,2 @@
-alias ls ls -lAh $*
+alias ll ls -lAh $*
 alias nb jupyter notebook $*

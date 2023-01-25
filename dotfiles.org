@@ -562,7 +562,7 @@ Non login
 #+END_SRC
 
 #+BEGIN_SRC sh
-  alias ls='ls -lAh --group-directories-first --color=auto'
+  alias ll='ls -lAh --group-directories-first --color=auto'
 #+END_SRC
 
 #+BEGIN_SRC sh
