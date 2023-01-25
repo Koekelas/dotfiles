@@ -4139,7 +4139,7 @@ Inherit Clojure snippets.
 #+BEGIN_SRC snippet :tangle stow/emacs/.config/emacs/etc/yasnippet/snippets/org-mode/slisp
   # -*- mode: snippet; -*-
   # name: Common Lisp code block
-  # key: sc
+  # key: slisp
   # --
   ,#+BEGIN_SRC lisp
   $0
