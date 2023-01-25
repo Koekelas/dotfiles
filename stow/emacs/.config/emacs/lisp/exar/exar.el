@@ -75,8 +75,8 @@
   (let ((base (expt 2 8)))
     (thread-last bytes
       exar--reverse-endian
-      (seq-map-indexed (lambda (byte i)
-                         (* byte (expt base i))))
+      (seq-map-indexed (lambda (byte n)
+                         (* byte (expt base n))))
       (apply #'+))))
 
 (defun exar--decode-string (bytes)
@@ -263,8 +263,8 @@
                        (seq-filter (lambda (output)
                                      (/= (car output) (car primary)))
                                    outputs))))
-    (seq-map-indexed (lambda (output i)
-                       (cons (car output) (1+ i)))
+    (seq-map-indexed (lambda (output n)
+                       (cons (car output) (1+ n)))
                      sorted)))
 
 (defun exar--load-color-dispwin (display-n file-name)

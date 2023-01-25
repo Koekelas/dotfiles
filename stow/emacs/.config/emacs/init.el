@@ -95,11 +95,11 @@ keywords.  For more information, see
 (defalias 'use-package-normalize/:koek #'use-package-normalize-predicate)
 (defalias 'use-package-handler/:koek #'koek-up/process-koek)
 
-(let ((i (seq-position use-package-keywords :load-path)))
+(let ((n (seq-position use-package-keywords :load-path)))
   (setq use-package-keywords
-        (append (seq-subseq use-package-keywords 0 i)
+        (append (seq-subseq use-package-keywords 0 n)
                 '(:koek)
-                (seq-subseq use-package-keywords i))))
+                (seq-subseq use-package-keywords n))))
 
 (straight-use-package
  `(org

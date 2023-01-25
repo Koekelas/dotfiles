@@ -176,11 +176,11 @@ keyword, i.e., it accepts as argument =t=, =nil= or nothing.
   (defalias 'use-package-normalize/:koek #'use-package-normalize-predicate)
   (defalias 'use-package-handler/:koek #'koek-up/process-koek)
 
-  (let ((i (seq-position use-package-keywords :load-path)))
+  (let ((n (seq-position use-package-keywords :load-path)))
     (setq use-package-keywords
-          (append (seq-subseq use-package-keywords 0 i)
+          (append (seq-subseq use-package-keywords 0 n)
                   '(:koek)
-                  (seq-subseq use-package-keywords i))))
+                  (seq-subseq use-package-keywords n))))
 #+END_SRC
 
 ** Latest org
@@ -1150,8 +1150,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
     (let ((base (expt 2 8)))
       (thread-last bytes
         exar--reverse-endian
-        (seq-map-indexed (lambda (byte i)
-                           (* byte (expt base i))))
+        (seq-map-indexed (lambda (byte n)
+                           (* byte (expt base n))))
         (apply #'+))))
 
   (defun exar--decode-string (bytes)
@@ -1338,8 +1338,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                          (seq-filter (lambda (output)
                                        (/= (car output) (car primary)))
                                      outputs))))
-      (seq-map-indexed (lambda (output i)
-                         (cons (car output) (1+ i)))
+      (seq-map-indexed (lambda (output n)
+                         (cons (car output) (1+ n)))
                        sorted)))
 
   (defun exar--load-color-dispwin (display-n file-name)
