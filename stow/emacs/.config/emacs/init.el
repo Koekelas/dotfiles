@@ -4288,6 +4288,11 @@ Candidates are collected from agenda files."
   (setq org-clock-persist 'clock)
   (org-clock-load))
 
+(use-package org-faces
+  :defer t
+  :config
+  (setq org-fontify-quote-and-verse-blocks t))
+
 (use-package org-list
   :bind
   ("C-c o t" . org-cycle-list-bullet))  ; List [t]ype
