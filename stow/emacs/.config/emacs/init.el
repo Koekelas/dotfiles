@@ -1089,6 +1089,18 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
   :bind
   ([remap list-buffers] . ibuffer)
   :config
+  (use-package ibuf-ext
+    :bind
+    (:map ibuffer-mode-map
+     ("C-c h n" . ibuffer-forward-filter-group)
+     ("C-M-n" . ibuffer-forward-filter-group)
+     ("C-c h p" . ibuffer-backward-filter-group)
+     ("C-M-p" . ibuffer-backward-filter-group))
+    :config
+    ;; Disorienting
+    (unbind-key "M-n" ibuffer-mode-map)
+    (unbind-key "M-p" ibuffer-mode-map))
+
   (setq ibuffer-movement-cycle nil)
   (setq ibuffer-jump-offer-only-visible-buffers t)
   (setq ibuffer-formats
@@ -1618,9 +1630,16 @@ the builtin annotator except it aligns the annotation."
   (marginalia-mode))
 
 (use-package dired
+  :bind
+  ("C-c h n" . dired-next-subdir)
   :hook (dired-mode . dired-hide-details-mode)
   :config
   (autoload #'dired-dwim-target-next-visible "dired-aux")
+
+  (use-package dired-aux
+    :bind
+    (:map dired-mode-map
+     ("C-c h p" . dired-prev-subdir)))
 
   (use-package gnus-dired
     :bind
