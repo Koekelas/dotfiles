@@ -2545,6 +2545,8 @@ minibuffer.
           marginalia-annotator-registry)
     (push '(email . (koek-mgnl/builtin-annotator builtin none))
           marginalia-annotator-registry)
+    (push '(theme . (koek-mgnl/builtin-annotator builtin none))
+          marginalia-annotator-registry)
     (marginalia-mode))
 #+END_SRC
 
@@ -8639,7 +8641,8 @@ Define theme infrastructure.
   (define-advice enable-theme (:after (&rest _args) koek-thm/run-enable-hook)
     (run-hooks 'koek-thm/enable-hook))
 
-  (defvar koek-thm/dark-themes '(modus-vivendi)
+  (defvar koek-thm/dark-themes
+    '(modus-vivendi modus-vivendi-deuteranopia modus-vivendi-tinted)
     "List of theme symbols.
   Themes are dark themes.")
 
@@ -8687,63 +8690,163 @@ current theme.
   (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant-all)
 #+END_SRC
 
-** modus-themes - Accessible light and dark theme
+** modus-themes - Accessible light and dark themes
 [[https://git.sr.ht/~protesilaos/modus-themes][modus-themes (sourcehut)]]
 
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
     :straight t
     :preface
-    (defun koek-mt/load (variant)
-      "Load and enable Modus theme variant VARIANT.
-  VARIANT is a symbol, the variant of the Modus theme, either
-  operandi or vivendi."
-      (pcase-let* ((koek-thm/enable-hook nil) ; Dynamic variable
-                   (themes '(modus-operandi modus-vivendi))
-                   (`(,new ,old) (if (eq variant 'operandi)
-                                     themes
-                                   (reverse themes))))
-        (when (custom-theme-enabled-p old)
-          (disable-theme old))
-        (unless (custom-theme-p new)
-          (load-theme new 'no-confirm 'no-enable))
-        (enable-theme new)
+    (defvar koek-mt/variants
+      '(modus-operandi
+        modus-operandi-deuteranopia
+        modus-operandi-tinted
+        modus-vivendi
+        modus-vivendi-deuteranopia
+        modus-vivendi-tinted))
+
+    (defun koek-mt/enable (variant)
+      (let ((koek-thm/enable-hook nil))   ; Dynamic variable
+        (thread-last
+          koek-mt/variants
+          (remq variant)
+          (seq-filter #'custom-theme-enabled-p)
+          (mapc #'disable-theme))
+        (unless (custom-theme-p variant)
+          (load-theme variant 'no-confirm 'no-enable))
+        (enable-theme variant)
         (modus-themes-with-colors
           (custom-set-faces
-           `(dired-directory     ((,class :inherit bold)))
-           `(pdf-links-read-link ((,class
-                                   :foreground unspecified :background unspecified
-                                   :inherit (modus-themes-intense-magenta bold)))))))
+           `(mode-line           ((,c
+                                   :box unspecified
+                                   :overline ,border-mode-line-active
+                                   :underline ,border-mode-line-active)))
+           `(mode-line-inactive  ((,c
+                                   :box unspecified
+                                   :overline ,border-mode-line-inactive
+                                   :underline ,border-mode-line-inactive)))
+           `(dired-directory     ((,c :inherit bold)))
+           `(pdf-links-read-link ((,c
+                                   :foreground ,fg-main
+                                   :background ,bg-char-0))))))
       ;; After user theme
       (run-hooks 'koek-thm/enable-hook))
 
-    (defun koek-mt/toggle-variant ()
-      "Toggle Modus theme variant."
-      (interactive)
-      (koek-mt/load
-       (if (eq (car custom-enabled-themes) 'modus-operandi) 'vivendi 'operandi)))
-    :init
-    (bind-key "C-c z t" #'koek-mt/toggle-variant)
+    (defvar koek-mt/variant-history nil)
 
-    (setq modus-themes-deuteranopia t)
-    (setq modus-themes-mixed-fonts t)
-    (setq modus-themes-bold-constructs t)
-    (setq modus-themes-italic-constructs t)
-    (setq modus-themes-fringes nil)
-    (setq modus-themes-subtle-line-numbers t)
-    (setq modus-themes-mode-line '(moody accented))
-    (setq modus-themes-region '(bg-only))
-    (setq modus-themes-hl-line '(accented underline))
-    (let ((defaults '(background overline variable-pitch)))
-      (setq modus-themes-headings
-            `((1 . (1.3 ,@defaults))
-              (2 . (1.2 ,@defaults))
-              (3 . (1.1 ,@defaults))
-              (t . ,defaults))))
-    (setq modus-themes-box-buttons '(flat variable-pitch))
-    (setq modus-themes-org-blocks 'gray-background)
+    (defun koek-mt/read-variant (prompt)
+      (let* ((candidates (mapcar (lambda (variant)
+                                   (cons (capitalize
+                                          (replace-regexp-in-string
+                                           "-" " " (symbol-name variant)))
+                                         variant))
+                                 koek-mt/variants))
+             (table (koek-subr/enrich candidates
+                      category 'theme
+                      annotation-function
+                      (lambda (candidate)
+                        (let ((theme (cdr (assoc candidate candidates))))
+                          (format " %s theme"
+                                  (if (koek-thm/darkp theme) "Dark" "Light")))))))
+        (thread-first
+          (completing-read prompt table nil t nil 'koek-mt/variant-history)
+          (assoc candidates)
+          cdr)))
+
+    (defvar koek-mt/complements
+      (let ((pairs '((modus-operandi              . modus-vivendi)
+                     (modus-operandi-deuteranopia . modus-vivendi-deuteranopia)
+                     (modus-operandi-tinted       . modus-vivendi-tinted))))
+        (append pairs
+                (mapcar (pcase-lambda (`(,a . ,b))
+                          (cons b a))
+                        pairs))))
+
+    (defun koek-mt/get-complement (variant)
+      (alist-get variant koek-mt/complements))
+
+    (defun koek-mt/toggle (&optional arg)
+      (interactive "P")
+      (let* ((current (seq-find (lambda (theme)
+                                  (memq theme koek-mt/variants))
+                                custom-enabled-themes))
+             (variant (cond
+                       (arg
+                        (koek-mt/read-variant "Variant: "))
+                       (current
+                        (koek-mt/get-complement current))
+                       (t
+                        (error "No Modus theme enabled")))))
+        (koek-mt/enable variant)))
+    :init
+    (bind-key "C-c z t" #'koek-mt/toggle)
     :config
-    (koek-mt/load 'vivendi))
+    (let ((overrides nil))
+      ;; Font
+      (setq modus-themes-mixed-fonts t)
+      (setq modus-themes-bold-constructs t)
+      (setq modus-themes-italic-constructs t)
+
+      ;; Fringe
+      (setq overrides (append '((fringe unspecified)) overrides))
+
+      ;; Region
+      (setq overrides
+            (append '((fg-region unspecified)
+                      (bg-region bg-ochre))
+                    overrides))
+
+      ;; Headings
+      (setq modus-themes-headings
+            '((0 . (1.3 variable-pitch))
+              (1 . (1.3 variable-pitch))
+              (2 . (1.2 variable-pitch))
+              (3 . (1.1 variable-pitch))
+              (4 . (variable-pitch))
+              (5 . (variable-pitch))
+              (6 . (variable-pitch))
+              (7 . (variable-pitch))
+              (8 . (variable-pitch))
+              (agenda-structure . (1.1 variable-pitch))
+              (agenda-date      . (1.1))))
+      (setq overrides
+            (append '((fg-heading-1       fg-main)
+                      (bg-heading-1       bg-blue-nuanced)
+                      (overline-heading-1 border)
+                      (fg-heading-2       fg-main)
+                      (bg-heading-2       bg-red-nuanced)
+                      (overline-heading-2 border)
+                      (fg-heading-3       fg-main)
+                      (bg-heading-3       bg-cyan-nuanced)
+                      (overline-heading-3 border)
+                      (fg-heading-4       fg-main)
+                      (bg-heading-4       bg-blue-nuanced)
+                      (overline-heading-4 border)
+                      (fg-heading-5       fg-main)
+                      (bg-heading-5       bg-red-nuanced)
+                      (overline-heading-5 border)
+                      (fg-heading-6       fg-main)
+                      (bg-heading-6       bg-cyan-nuanced)
+                      (overline-heading-6 border)
+                      (fg-heading-7       fg-main)
+                      (bg-heading-7       bg-blue-nuanced)
+                      (overline-heading-7 border)
+                      (fg-heading-8       fg-main)
+                      (bg-heading-8       bg-red-nuanced)
+                      (overline-heading-8 border))
+                    overrides))
+
+      ;; display-line-numbers-mode
+      (setq overrides
+            (append '((bg-line-number-active   bg-hl-line)
+                      (bg-line-number-inactive unspecified))
+                    overrides))
+
+      ;; org-mode
+      (setq modus-themes-org-blocks 'gray-background)
+
+      (setq modus-themes-common-palette-overrides overrides))
+    (koek-mt/enable 'modus-vivendi-deuteranopia))
 #+END_SRC
 
 ** Fonts
