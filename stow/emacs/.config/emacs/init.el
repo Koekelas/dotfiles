@@ -4715,7 +4715,7 @@ Themes are dark themes.")
 (defun koek-thm/darkp (&optional theme)
   "Return whether THEME is a dark theme.
 Optional THEME is a symbol, the theme to interrogate and defaults
-to the current theme."
+to the last enabled theme."
   (memq (or theme (car custom-enabled-themes)) koek-thm/dark-themes))
 
 (defun koek-thm/set-frame-theme-variant-xprop (frame dark)
