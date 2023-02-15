@@ -2788,6 +2788,14 @@ see `company-backends'."
   :bind
   ("C-c d c" . describe-char))
 
+(use-package shortdoc
+  :defer t
+  :config
+  (use-package link-hint
+    :bind
+    (:map shortdoc-mode-map
+     ("j" . link-hint-open-link))))
+
 (use-package helpful
   :straight t
   :bind
