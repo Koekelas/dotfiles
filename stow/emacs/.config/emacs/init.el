@@ -67,7 +67,8 @@ PACKAGE is a symbol, the name of the package."
        ;; undefined symbols
        (eval-and-compile
          (add-to-list 'load-path
-                      ,(thread-last user-emacs-directory
+                      ,(thread-last
+                         user-emacs-directory
                          (expand-file-name "lisp/")
                          (expand-file-name package-name))))
        (load ,(concat package-name "-autoloads.el")
@@ -151,7 +152,8 @@ keywords.  For more information, see
 ID is an integer, the process id of the process."
     (when-let ((args (alist-get 'args (process-attributes id))))
       (let ((normalized
-             (thread-last args
+             (thread-last
+               args
                (string-replace "\\ " "\N{NO-BREAK SPACE}")
                (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
                (string-replace "\N{NO-BREAK SPACE}" " "))))
@@ -162,7 +164,8 @@ ID is an integer, the process id of the process."
 NAME is a string, the name of the process."
     (seq-filter (lambda (id)
                   (when-let ((args (koek-wm/get-process-args id)))
-                    (let ((nm (thread-first args
+                    (let ((nm (thread-first
+                                args
                                 car
                                 (split-string "/")
                                 last
@@ -181,7 +184,8 @@ NAME is a string, the name of the process."
 
   (defun koek-wm/update-xsettingsd-preset ()
     (let* ((preset (if (koek-thm/darkp) "dark" "light"))
-           (file-name (thread-last (xdg-data-home)
+           (file-name (thread-last
+                        (xdg-data-home)
                         (expand-file-name "xsettingsd/presets/")
                         (expand-file-name preset))))
       (koek-wm/set-xsettingsd-preset file-name)))
@@ -616,7 +620,8 @@ N is an integer, a workspace number."
     "Regular expression matching titles of file dialog buffers.")
   :config
   (pcase-let
-      ((`(,width ,height) (thread-last (display-monitor-attributes-list)
+      ((`(,width ,height) (thread-last
+                            (display-monitor-attributes-list)
                             car                   ; Primary monitor
                             (alist-get 'geometry) ; Arrangement/resolution
                             cddr))                ; Resolution
@@ -683,7 +688,8 @@ earlier directories shadow entries in later ones.")
 
 (defun koek-xde/read-entries ()
   (let ((file-names
-         (thread-last koek-xde/entries-dirs
+         (thread-last
+           koek-xde/entries-dirs
            (seq-filter #'file-accessible-directory-p)
            (seq-mapcat
             (lambda (file-name)
@@ -736,12 +742,13 @@ earlier directories shadow entries in later ones.")
                   category 'xdg-desktop-entry
                   annotation-function
                   (lambda (candidate)
-                    (when-let ((comment (thread-last candidates
+                    (when-let ((comment (thread-last
+                                          candidates
                                           (gethash candidate)
                                           (gethash "Comment"))))
                       (concat " " comment))))))
     (thread-first
-        (completing-read prompt table nil t nil 'koek-xde/entry-history)
+      (completing-read prompt table nil t nil 'koek-xde/entry-history)
       (assoc ids)
       cdr)))
 
@@ -1180,7 +1187,8 @@ HOST is a string, the host to compare with."
 
   (defun koek-ibuf/group-app ()
     (interactive)
-    (let ((names (thread-last (buffer-list)
+    (let ((names (thread-last
+                   (buffer-list)
                    (mapcar #'koek-wm/get-app-name)
                    (remq nil)
                    seq-uniq
@@ -1194,7 +1202,8 @@ HOST is a string, the host to compare with."
   (defun koek-ibuf/group-project ()
     "Group buffers by project."
     (interactive)
-    (let ((file-names (thread-last (buffer-list)
+    (let ((file-names (thread-last
+                        (buffer-list)
                         (mapcar #'koek-proj/locate-root)
                         (remq nil)
                         seq-uniq
@@ -1209,7 +1218,8 @@ HOST is a string, the host to compare with."
   (defun koek-ibuf/group-host ()
     "Group buffers by host."
     (interactive)
-    (let ((hosts (thread-last (buffer-list)
+    (let ((hosts (thread-last
+                   (buffer-list)
                    (mapcar #'koek-ibuf/get-host)
                    (remq nil)
                    seq-uniq
@@ -1222,7 +1232,8 @@ HOST is a string, the host to compare with."
 
   (defun koek-ibuf/group-repo ()
     (interactive)
-    (let ((names (thread-last (buffer-list)
+    (let ((names (thread-last
+                   (buffer-list)
                    (mapcar #'koek-ibuf/get-repo)
                    (remq nil)
                    seq-uniq
@@ -1442,7 +1453,8 @@ are recognized:
   (defvar koek-cslt/dir-buffer-source
     `(:category buffer
       :items ,(lambda ()
-                (thread-last (buffer-list)
+                (thread-last
+                  (buffer-list)
                   (seq-filter #'koek-buff/dirp)
                   (mapcar #'buffer-name)))
       :history buffer-name-history
@@ -1455,7 +1467,8 @@ are recognized:
   (defvar koek-cslt/doc-buffer-source
     `(:category buffer
       :items ,(lambda ()
-                (thread-last (buffer-list)
+                (thread-last
+                  (buffer-list)
                   (seq-filter #'koek-buff/docp)
                   (mapcar #'buffer-name)))
       :history buffer-name-history
@@ -1468,7 +1481,8 @@ are recognized:
   (defvar koek-cslt/shell-buffer-source
     `(:category buffer
       :items ,(lambda ()
-                (thread-last (buffer-list)
+                (thread-last
+                  (buffer-list)
                   (seq-filter #'koek-buff/shellp)
                   (mapcar #'buffer-name)))
       :history buffer-name-history
@@ -1481,7 +1495,8 @@ are recognized:
   (defvar koek-cslt/web-buffer-source
     `(:category buffer
       :items ,(lambda ()
-                (thread-last (buffer-list)
+                (thread-last
+                  (buffer-list)
                   (seq-filter #'koek-buff/webp)
                   (mapcar #'buffer-name)))
       :history buffer-name-history
@@ -1848,7 +1863,8 @@ the secondary ones."
            (primary (let ((file-name (expand-file-name name root)))
                       (when (file-exists-p file-name)
                         (list file-name))))
-           (secondary (file-expand-wildcards (thread-last root
+           (secondary (file-expand-wildcards (thread-last
+                                               root
                                                (expand-file-name "*/")
                                                (expand-file-name name)))))
       (if (and (null primary) (length> secondary 1) prompt)
@@ -1857,8 +1873,8 @@ the secondary ones."
                                              file-name))
                                      secondary))
                  (file-name (thread-first
-                                (completing-read "Project configuration: "
-                                                 candidates nil t)
+                              (completing-read "Project configuration: "
+                                               candidates nil t)
                               (assoc candidates)
                               cdr)))
             (cons file-name (remove file-name secondary)))
@@ -2604,10 +2620,12 @@ CANDIDATES is an alist of pretty candidate to candidate pairs."
 Assumes source path is the root of the project."
     (let ((root (or (koek-proj/locate-root) default-directory))
           (file-name (or (buffer-file-name) (buffer-name)))
-          (separator (thread-first (expand-file-name "a" "b")
+          (separator (thread-first
+                       (expand-file-name "a" "b")
                        file-relative-name
                        (substring 1 2))))
-      (thread-last (file-relative-name file-name root)
+      (thread-last
+        (file-relative-name file-name root)
         file-name-sans-extension
         (string-replace separator ".")
         (string-replace "_" "-"))))
@@ -3289,7 +3307,8 @@ none return a URL, nil.  For rewrite functions, see
                     category 'email
                     annotation-function
                     (lambda (candidate)
-                      (when-let ((name (thread-first candidate
+                      (when-let ((name (thread-first
+                                         candidate
                                          (assoc candidates)
                                          cdr
                                          bbdb-record-name)))
@@ -3745,7 +3764,8 @@ INTERACTIVE is used internally."
           '(:family :width :weight :slant))))
     (setq pdf-links-read-link-convert-commands
           `("-family"     ,(plist-get spec :family)
-            "-stretch"    ,(thread-last (plist-get spec :width)
+            "-stretch"    ,(thread-last
+                             (plist-get spec :width)
                              symbol-name
                              capitalize
                              (string-replace "-" ""))
@@ -4047,7 +4067,8 @@ Modes are confident about being derived from text-mode.")
          (exec-path (append file-names exec-path)))
     (when-let ((file-name (executable-find "erlc")))
       (setq erlang-root-dir
-            (thread-first file-name
+            (thread-first
+              file-name
               file-truename
               (locate-dominating-file "bin")))))
   :delight (erlang-mode "Erl" :major))
@@ -4244,7 +4265,8 @@ Modes are confident about being derived from text-mode.")
 
   ;; Appearance - Images
   (setq org-startup-with-inline-images t)
-  (let ((width (thread-last (display-monitor-attributes-list)
+  (let ((width (thread-last
+                 (display-monitor-attributes-list)
                  car                    ; Primary monitor
                  (alist-get 'geometry)  ; Arrangement/resolution
                  (nth 2))))             ; Width
@@ -4322,7 +4344,8 @@ Candidates are collected from agenda files."
   :preface
   (defun koek-org/get-code-block-vars ()
     "Return variables for current code block."
-    (thread-last (org-babel-get-src-block-info 'light)
+    (thread-last
+      (org-babel-get-src-block-info 'light)
       (nth 2)                           ; Header arguments
       (seq-filter (pcase-lambda (`(,type))
                     (eq type :var)))
@@ -4390,7 +4413,8 @@ nil, delete empty line at end of file."
     (when (derived-mode-p 'emacs-lisp-mode)
       (let* ((file-name (buffer-file-name))
              (package-dir (file-name-directory file-name))
-             (package-name (thread-first package-dir
+             (package-name (thread-first
+                             package-dir
                              directory-file-name
                              file-name-base))
              (autoload-file
@@ -4908,7 +4932,8 @@ NAME is a string, the name of the user directory."
 
   (defun koek/get-agenda-files ()
     "Return agenda files."
-    (thread-last (koek/get-agenda-dirs)
+    (thread-last
+      (koek/get-agenda-dirs)
       (seq-mapcat (lambda (file-name)
                     (directory-files file-name 'full (rx ".org" line-end))))
       (seq-remove #'koek-subr/lock-file-p)

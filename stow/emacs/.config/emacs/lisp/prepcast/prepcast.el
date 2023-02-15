@@ -86,7 +86,8 @@ preparation, nil."
   (if prepcast-mode
       (unless prepcast--unprep-fs
         (setq prepcast--unprep-fs
-              (thread-last prepcast-prep-fs
+              (thread-last
+                prepcast-prep-fs
                 (mapcar #'funcall)
                 (seq-remove #'null))))
     (mapc #'funcall prepcast--unprep-fs)

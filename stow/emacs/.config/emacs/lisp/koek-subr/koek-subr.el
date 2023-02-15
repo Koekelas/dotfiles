@@ -212,7 +212,8 @@ odd."
 ;;; Buffer subroutines
 
 (defun koek-subr/construct-earmuffed-name (&rest parts)
-  (let* ((names (thread-last parts
+  (let* ((names (thread-last
+                  parts
                   (remq nil)
                   (mapcar (apply-partially #'format "%s"))
                   (remove "")))
@@ -235,7 +236,8 @@ odd."
   "Return child directories in directory FILE-NAME.
 When optional FULL is truthy, return absolute file names, else,
 return relative file names."
-  (thread-last (directory-files-and-attributes file-name full)
+  (thread-last
+    (directory-files-and-attributes file-name full)
     (seq-filter (pcase-lambda (`(,file-name ,type))
                   (let ((name (file-name-nondirectory file-name)))
                     (and (eq type t)    ; Directory

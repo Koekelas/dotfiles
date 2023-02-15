@@ -63,7 +63,8 @@
 (defun koek-ml/strip-percent-constructs (s)
   "Strip percent constructs from string S.
 S is a string, the string to strip percent constructs from."
-  (thread-last s
+  (thread-last
+    s
     (replace-regexp-in-string (rx "%" (not "%")) "" s)
     (string-replace "%%" "%")))
 
@@ -142,7 +143,8 @@ Intended as advice around `ace-window-display-mode'."
 
 (defun koek-ml/get-exwm-workspaces ()
   "Return workspaces of selected monitor."
-  (thread-last (number-sequence 0 (1- (length exwm-workspace--workareas)))
+  (thread-last
+    (number-sequence 0 (1- (length exwm-workspace--workareas)))
     (seq-group-by (lambda (n)
                     (nth n exwm-workspace--workareas)))
     (mapcar #'cdr)
@@ -303,7 +305,8 @@ STATE is a symbol, a flymake state."
 
 (defun koek-ml/get-flymake-n-diags ()
   "Return number of diagnoses per level."
-  (thread-last (flymake-diagnostics)
+  (thread-last
+    (flymake-diagnostics)
     (seq-group-by #'flymake-diagnostic-type)
     (mapcar (pcase-lambda (`(,level . ,diags))
               (cons level (length diags))))))

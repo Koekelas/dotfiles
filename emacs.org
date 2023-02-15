@@ -128,7 +128,8 @@ or the [[*use-package - Package configuration macro][use-package]] keyword ~:koe
          ;; undefined symbols
          (eval-and-compile
            (add-to-list 'load-path
-                        ,(thread-last user-emacs-directory
+                        ,(thread-last
+                           user-emacs-directory
                            (expand-file-name "lisp/")
                            (expand-file-name package-name))))
          (load ,(concat package-name "-autoloads.el")
@@ -422,7 +423,8 @@ latest org and its documentation before loading org.
   ;;; Buffer subroutines
 
   (defun koek-subr/construct-earmuffed-name (&rest parts)
-    (let* ((names (thread-last parts
+    (let* ((names (thread-last
+                    parts
                     (remq nil)
                     (mapcar (apply-partially #'format "%s"))
                     (remove "")))
@@ -445,7 +447,8 @@ latest org and its documentation before loading org.
     "Return child directories in directory FILE-NAME.
   When optional FULL is truthy, return absolute file names, else,
   return relative file names."
-    (thread-last (directory-files-and-attributes file-name full)
+    (thread-last
+      (directory-files-and-attributes file-name full)
       (seq-filter (pcase-lambda (`(,file-name ,type))
                     (let ((name (file-name-nondirectory file-name)))
                       (and (eq type t)    ; Directory
@@ -553,7 +556,8 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
   ID is an integer, the process id of the process."
       (when-let ((args (alist-get 'args (process-attributes id))))
         (let ((normalized
-               (thread-last args
+               (thread-last
+                 args
                  (string-replace "\\ " "\N{NO-BREAK SPACE}")
                  (replace-regexp-in-string (rx (one-or-more " ")) "\N{NULL}")
                  (string-replace "\N{NO-BREAK SPACE}" " "))))
@@ -564,7 +568,8 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
   NAME is a string, the name of the process."
       (seq-filter (lambda (id)
                     (when-let ((args (koek-wm/get-process-args id)))
-                      (let ((nm (thread-first args
+                      (let ((nm (thread-first
+                                  args
                                   car
                                   (split-string "/")
                                   last
@@ -583,7 +588,8 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
 
     (defun koek-wm/update-xsettingsd-preset ()
       (let* ((preset (if (koek-thm/darkp) "dark" "light"))
-             (file-name (thread-last (xdg-data-home)
+             (file-name (thread-last
+                          (xdg-data-home)
                           (expand-file-name "xsettingsd/presets/")
                           (expand-file-name preset))))
         (koek-wm/set-xsettingsd-preset file-name)))
@@ -1018,7 +1024,8 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
       "Regular expression matching titles of file dialog buffers.")
     :config
     (pcase-let
-        ((`(,width ,height) (thread-last (display-monitor-attributes-list)
+        ((`(,width ,height) (thread-last
+                              (display-monitor-attributes-list)
                               car                   ; Primary monitor
                               (alist-get 'geometry) ; Arrangement/resolution
                               cddr))                ; Resolution
@@ -1148,7 +1155,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
   ;; Four byte ints, eight bit bytes, big endian
   (defun exar--decode-int (bytes)
     (let ((base (expt 2 8)))
-      (thread-last bytes
+      (thread-last
+        bytes
         exar--reverse-endian
         (seq-map-indexed (lambda (byte n)
                            (* byte (expt base n))))
@@ -1288,7 +1296,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                          ids)
                        outputs nil)))
       (mapcar (pcase-lambda (`(,id . ,props))
-                (let ((output (thread-first (plist-get props :edid)
+                (let ((output (thread-first
+                                (plist-get props :edid)
                                 (assoc output-ids)
                                 cdr
                                 (alist-get outputs))))
@@ -1387,7 +1396,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                        (manufacturer-name
                         (exar--get-in props :edid :vendor :manufacturer))
                        (monitor-names
-                        (thread-last (exar--get-in props :edid :detailed)
+                        (thread-last
+                          (exar--get-in props :edid :detailed)
                           (seq-filter (lambda (detailed)
                                         (let ((type (plist-get detailed :type)))
                                           (or (string-equal type "name")
@@ -1403,7 +1413,8 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                            (concat " connected to " output-name))
                    output)))
               (exar--get-connected-outputs (exar--get-outputs))))
-            (output (thread-first (completing-read "Monitor: " candidates nil t)
+            (output (thread-first
+                      (completing-read "Monitor: " candidates nil t)
                       (assoc candidates)
                       cdr)))
        (list output)))
@@ -1457,7 +1468,8 @@ something short.
 
   (defun koek-xde/read-entries ()
     (let ((file-names
-           (thread-last koek-xde/entries-dirs
+           (thread-last
+             koek-xde/entries-dirs
              (seq-filter #'file-accessible-directory-p)
              (seq-mapcat
               (lambda (file-name)
@@ -1510,12 +1522,13 @@ something short.
                     category 'xdg-desktop-entry
                     annotation-function
                     (lambda (candidate)
-                      (when-let ((comment (thread-last candidates
+                      (when-let ((comment (thread-last
+                                            candidates
                                             (gethash candidate)
                                             (gethash "Comment"))))
                         (concat " " comment))))))
       (thread-first
-          (completing-read prompt table nil t nil 'koek-xde/entry-history)
+        (completing-read prompt table nil t nil 'koek-xde/entry-history)
         (assoc ids)
         cdr)))
 
@@ -2033,7 +2046,8 @@ Bury unneeded buffers, computers have more than enough memory.
 
     (defun koek-ibuf/group-app ()
       (interactive)
-      (let ((names (thread-last (buffer-list)
+      (let ((names (thread-last
+                     (buffer-list)
                      (mapcar #'koek-wm/get-app-name)
                      (remq nil)
                      seq-uniq
@@ -2047,7 +2061,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defun koek-ibuf/group-project ()
       "Group buffers by project."
       (interactive)
-      (let ((file-names (thread-last (buffer-list)
+      (let ((file-names (thread-last
+                          (buffer-list)
                           (mapcar #'koek-proj/locate-root)
                           (remq nil)
                           seq-uniq
@@ -2062,7 +2077,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defun koek-ibuf/group-host ()
       "Group buffers by host."
       (interactive)
-      (let ((hosts (thread-last (buffer-list)
+      (let ((hosts (thread-last
+                     (buffer-list)
                      (mapcar #'koek-ibuf/get-host)
                      (remq nil)
                      seq-uniq
@@ -2075,7 +2091,8 @@ Bury unneeded buffers, computers have more than enough memory.
 
     (defun koek-ibuf/group-repo ()
       (interactive)
-      (let ((names (thread-last (buffer-list)
+      (let ((names (thread-last
+                     (buffer-list)
                      (mapcar #'koek-ibuf/get-repo)
                      (remq nil)
                      seq-uniq
@@ -2313,7 +2330,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defvar koek-cslt/dir-buffer-source
       `(:category buffer
         :items ,(lambda ()
-                  (thread-last (buffer-list)
+                  (thread-last
+                    (buffer-list)
                     (seq-filter #'koek-buff/dirp)
                     (mapcar #'buffer-name)))
         :history buffer-name-history
@@ -2326,7 +2344,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defvar koek-cslt/doc-buffer-source
       `(:category buffer
         :items ,(lambda ()
-                  (thread-last (buffer-list)
+                  (thread-last
+                    (buffer-list)
                     (seq-filter #'koek-buff/docp)
                     (mapcar #'buffer-name)))
         :history buffer-name-history
@@ -2339,7 +2358,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defvar koek-cslt/shell-buffer-source
       `(:category buffer
         :items ,(lambda ()
-                  (thread-last (buffer-list)
+                  (thread-last
+                    (buffer-list)
                     (seq-filter #'koek-buff/shellp)
                     (mapcar #'buffer-name)))
         :history buffer-name-history
@@ -2352,7 +2372,8 @@ Bury unneeded buffers, computers have more than enough memory.
     (defvar koek-cslt/web-buffer-source
       `(:category buffer
         :items ,(lambda ()
-                  (thread-last (buffer-list)
+                  (thread-last
+                    (buffer-list)
                     (seq-filter #'koek-buff/webp)
                     (mapcar #'buffer-name)))
         :history buffer-name-history
@@ -2789,7 +2810,8 @@ Move deleted files to trash.
              (primary (let ((file-name (expand-file-name name root)))
                         (when (file-exists-p file-name)
                           (list file-name))))
-             (secondary (file-expand-wildcards (thread-last root
+             (secondary (file-expand-wildcards (thread-last
+                                                 root
                                                  (expand-file-name "*/")
                                                  (expand-file-name name)))))
         (if (and (null primary) (length> secondary 1) prompt)
@@ -2798,8 +2820,8 @@ Move deleted files to trash.
                                                file-name))
                                        secondary))
                    (file-name (thread-first
-                                  (completing-read "Project configuration: "
-                                                   candidates nil t)
+                                (completing-read "Project configuration: "
+                                                 candidates nil t)
                                 (assoc candidates)
                                 cdr)))
               (cons file-name (remove file-name secondary)))
@@ -3783,10 +3805,12 @@ For the major mode, see [[*YASnippet][YASnippet]].
   Assumes source path is the root of the project."
       (let ((root (or (koek-proj/locate-root) default-directory))
             (file-name (or (buffer-file-name) (buffer-name)))
-            (separator (thread-first (expand-file-name "a" "b")
+            (separator (thread-first
+                         (expand-file-name "a" "b")
                          file-relative-name
                          (substring 1 2))))
-        (thread-last (file-relative-name file-name root)
+        (thread-last
+          (file-relative-name file-name root)
           file-name-sans-extension
           (string-replace separator ".")
           (string-replace "_" "-"))))
@@ -6518,7 +6542,8 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
                       category 'email
                       annotation-function
                       (lambda (candidate)
-                        (when-let ((name (thread-first candidate
+                        (when-let ((name (thread-first
+                                           candidate
                                            (assoc candidates)
                                            cdr
                                            bbdb-record-name)))
@@ -6881,7 +6906,8 @@ Gnus is a placeholder.
             '(:family :width :weight :slant))))
       (setq pdf-links-read-link-convert-commands
             `("-family"     ,(plist-get spec :family)
-              "-stretch"    ,(thread-last (plist-get spec :width)
+              "-stretch"    ,(thread-last
+                               (plist-get spec :width)
                                symbol-name
                                capitalize
                                (string-replace "-" ""))
@@ -7272,7 +7298,8 @@ Stavrou)]].
     (if prepcast-mode
         (unless prepcast--unprep-fs
           (setq prepcast--unprep-fs
-                (thread-last prepcast-prep-fs
+                (thread-last
+                  prepcast-prep-fs
                   (mapcar #'funcall)
                   (seq-remove #'null))))
       (mapc #'funcall prepcast--unprep-fs)
@@ -7790,7 +7817,8 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
            (exec-path (append file-names exec-path)))
       (when-let ((file-name (executable-find "erlc")))
         (setq erlang-root-dir
-              (thread-first file-name
+              (thread-first
+                file-name
                 file-truename
                 (locate-dominating-file "bin")))))
     :delight (erlang-mode "Erl" :major))
@@ -8037,7 +8065,8 @@ templates]].
 
     ;; Appearance - Images
     (setq org-startup-with-inline-images t)
-    (let ((width (thread-last (display-monitor-attributes-list)
+    (let ((width (thread-last
+                   (display-monitor-attributes-list)
                    car                    ; Primary monitor
                    (alist-get 'geometry)  ; Arrangement/resolution
                    (nth 2))))             ; Width
@@ -8125,7 +8154,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
     :preface
     (defun koek-org/get-code-block-vars ()
       "Return variables for current code block."
-      (thread-last (org-babel-get-src-block-info 'light)
+      (thread-last
+        (org-babel-get-src-block-info 'light)
         (nth 2)                           ; Header arguments
         (seq-filter (pcase-lambda (`(,type))
                       (eq type :var)))
@@ -8193,7 +8223,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
       (when (derived-mode-p 'emacs-lisp-mode)
         (let* ((file-name (buffer-file-name))
                (package-dir (file-name-directory file-name))
-               (package-name (thread-first package-dir
+               (package-name (thread-first
+                               package-dir
                                directory-file-name
                                file-name-base))
                (autoload-file
@@ -8829,7 +8860,8 @@ can load moody.
   (defun koek-ml/strip-percent-constructs (s)
     "Strip percent constructs from string S.
   S is a string, the string to strip percent constructs from."
-    (thread-last s
+    (thread-last
+      s
       (replace-regexp-in-string (rx "%" (not "%")) "" s)
       (string-replace "%%" "%")))
 
@@ -8908,7 +8940,8 @@ can load moody.
 
   (defun koek-ml/get-exwm-workspaces ()
     "Return workspaces of selected monitor."
-    (thread-last (number-sequence 0 (1- (length exwm-workspace--workareas)))
+    (thread-last
+      (number-sequence 0 (1- (length exwm-workspace--workareas)))
       (seq-group-by (lambda (n)
                       (nth n exwm-workspace--workareas)))
       (mapcar #'cdr)
@@ -9069,7 +9102,8 @@ can load moody.
 
   (defun koek-ml/get-flymake-n-diags ()
     "Return number of diagnoses per level."
-    (thread-last (flymake-diagnostics)
+    (thread-last
+      (flymake-diagnostics)
       (seq-group-by #'flymake-diagnostic-type)
       (mapcar (pcase-lambda (`(,level . ,diags))
                 (cons level (length diags))))))
@@ -9440,7 +9474,8 @@ directories of ~koek/projects-dir~, are agenda files. Configure agendas.
 
     (defun koek/get-agenda-files ()
       "Return agenda files."
-      (thread-last (koek/get-agenda-dirs)
+      (thread-last
+        (koek/get-agenda-dirs)
         (seq-mapcat (lambda (file-name)
                       (directory-files file-name 'full (rx ".org" line-end))))
         (seq-remove #'koek-subr/lock-file-p)

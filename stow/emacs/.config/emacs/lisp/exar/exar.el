@@ -73,7 +73,8 @@
 ;; Four byte ints, eight bit bytes, big endian
 (defun exar--decode-int (bytes)
   (let ((base (expt 2 8)))
-    (thread-last bytes
+    (thread-last
+      bytes
       exar--reverse-endian
       (seq-map-indexed (lambda (byte n)
                          (* byte (expt base n))))
@@ -213,7 +214,8 @@
                        ids)
                      outputs nil)))
     (mapcar (pcase-lambda (`(,id . ,props))
-              (let ((output (thread-first (plist-get props :edid)
+              (let ((output (thread-first
+                              (plist-get props :edid)
                               (assoc output-ids)
                               cdr
                               (alist-get outputs))))
@@ -312,7 +314,8 @@
                      (manufacturer-name
                       (exar--get-in props :edid :vendor :manufacturer))
                      (monitor-names
-                      (thread-last (exar--get-in props :edid :detailed)
+                      (thread-last
+                        (exar--get-in props :edid :detailed)
                         (seq-filter (lambda (detailed)
                                       (let ((type (plist-get detailed :type)))
                                         (or (string-equal type "name")
@@ -328,7 +331,8 @@
                          (concat " connected to " output-name))
                  output)))
             (exar--get-connected-outputs (exar--get-outputs))))
-          (output (thread-first (completing-read "Monitor: " candidates nil t)
+          (output (thread-first
+                    (completing-read "Monitor: " candidates nil t)
                     (assoc candidates)
                     cdr)))
      (list output)))
