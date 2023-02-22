@@ -1751,6 +1751,10 @@ the builtin annotator except it aligns the annotation."
   :config
   (setq bookmark-default-file
         (no-littering-expand-etc-file-name "bookmark-default.el"))
+  ;; Disable bookmark indicator in fringe. When jumping to a bookmark
+  ;; whose handler is `koek-bmrk/handle-browse-url', indicator is set
+  ;; in calling buffer.
+  (setq bookmark-set-fringe-mark nil)
   (setq bookmark-menu-confirm-deletion t)
   (setq bookmark-bmenu-file-column 40)
   (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
