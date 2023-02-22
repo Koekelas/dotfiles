@@ -3802,6 +3802,13 @@ For the major mode, see [[*YASnippet][YASnippet]].
   CANDIDATES is an alist of pretty candidate to candidate pairs."
       (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
+    (defun koek-ys/determine-title ()
+      (thread-last
+        (or (buffer-file-name) (buffer-name))
+        file-name-base
+        (replace-regexp-in-string (rx (one-or-more (any "-_ "))) " ")
+        koek-subr/title-case))
+
     (defvar koek-ys/languages
       '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
         (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
@@ -3999,7 +4006,7 @@ Inherit Clojure snippets.
   <html lang="en">
     <head>
       <meta charset="utf-8" />
-      <title>${1:`(thread-first (or (buffer-file-name) (buffer-name)) file-name-base capitalize)`}</title>
+      <title>${1:`(koek-ys/determine-title)`}</title>
       <link rel="icon" href="favicon.png" />
       <link rel="stylesheet" href="assets/common.css" />
     </head>
@@ -4052,7 +4059,7 @@ Inherit Clojure snippets.
   # --
   <!-- -*- ispell-local-dictionary: "${2:$(koek-ys/ietf-to-other yas-text :hun)}"; -*- -->
   ---
-  title: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
+  title: ${1:`(koek-ys/determine-title)`}
   lang: ${2:en-US$(koek-ys/complete-ietf)}
   ...
 
@@ -4068,7 +4075,7 @@ Inherit Clojure snippets.
   # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
   # --
   # -*- ispell-local-dictionary: "${2:$(koek-ys/org-to-other yas-text :hun)}"; -*-
-  ,#+TITLE: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
+  ,#+TITLE: ${1:`(koek-ys/determine-title)`}
   ,#+LANGUAGE: ${2:`(koek-ys/ietf-to-other "en-US" :org)`$(koek-ys/complete-org)}
   ,#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
   ,#+LATEX_HEADER: \usepackage[${2:$(koek-ys/org-to-other yas-text :tex)}]{babel}

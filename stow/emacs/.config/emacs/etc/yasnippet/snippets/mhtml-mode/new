@@ -7,7 +7,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>${1:`(thread-first (or (buffer-file-name) (buffer-name)) file-name-base capitalize)`}</title>
+    <title>${1:`(koek-ys/determine-title)`}</title>
     <link rel="icon" href="favicon.png" />
     <link rel="stylesheet" href="assets/common.css" />
   </head>

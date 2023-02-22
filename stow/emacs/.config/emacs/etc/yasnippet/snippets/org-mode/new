@@ -4,7 +4,7 @@
 # expand-env: ((yas-after-exit-snippet-hook '(hack-local-variables)))
 # --
 # -*- ispell-local-dictionary: "${2:$(koek-ys/org-to-other yas-text :hun)}"; -*-
-#+TITLE: ${1:`(file-name-base (or (buffer-file-name) (buffer-name)))`}
+#+TITLE: ${1:`(koek-ys/determine-title)`}
 #+LANGUAGE: ${2:`(koek-ys/ietf-to-other "en-US" :org)`$(koek-ys/complete-org)}
 #+LATEX_CLASS_OPTIONS: [a4paper,11pt]
 #+LATEX_HEADER: \usepackage[${2:$(koek-ys/org-to-other yas-text :tex)}]{babel}

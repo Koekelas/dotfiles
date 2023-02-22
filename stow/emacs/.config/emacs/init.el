@@ -2617,6 +2617,13 @@ install handler for."
 CANDIDATES is an alist of pretty candidate to candidate pairs."
     (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
+  (defun koek-ys/determine-title ()
+    (thread-last
+      (or (buffer-file-name) (buffer-name))
+      file-name-base
+      (replace-regexp-in-string (rx (one-or-more (any "-_ "))) " ")
+      koek-subr/title-case))
+
   (defvar koek-ys/languages
     '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
       (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
