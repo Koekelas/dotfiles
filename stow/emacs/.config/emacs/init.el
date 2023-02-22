@@ -2612,34 +2612,11 @@ install handler for."
   :straight t
   :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
   :preface
-  ;; General
-  (defun koek-ys/indent-snippet ()
-    "Indent last expanded snippet.
-Snippet is between `yas-snippet-beg' and `yas-snippet-end'."
-    (indent-region yas-snippet-beg yas-snippet-end))
-
   (defun koek-ys/complete-field (candidates)
     "Complete field from CANDIDATES.
 CANDIDATES is an alist of pretty candidate to candidate pairs."
     (cdr (assoc (yas-choose-value (mapcar #'car candidates)) candidates)))
 
-  ;; Clojure and ClojureScript
-  (defun koek-ys/determine-ns-name ()
-    "Determine Clojure namespace name for current.
-Assumes source path is the root of the project."
-    (let ((root (or (koek-proj/locate-root) default-directory))
-          (file-name (or (buffer-file-name) (buffer-name)))
-          (separator (thread-first
-                       (expand-file-name "a" "b")
-                       file-relative-name
-                       (substring 1 2))))
-      (thread-last
-        (file-relative-name file-name root)
-        file-name-sans-extension
-        (string-replace separator ".")
-        (string-replace "_" "-"))))
-
-  ;; Org and Markdown
   (defvar koek-ys/languages
     '((:ietf "de-DE" :org "de-de" :tex "ngerman"  :hun "de_DE")
       (:ietf "en-US" :org "en-us" :tex "american" :hun "en_US")
@@ -2650,6 +2627,19 @@ A language specification is a plist with keys :ietf, :org, :tex
 and :hun.  :ietf is a string, an IETF language code.  :org, :tex
 and :hun are strings, the Org, LaTeX and Hunspell language
 code.")
+
+  (defun koek-ys/complete-ietf ()
+    "Complete IETF language code."
+    (yas-choose-value (mapcar (lambda (spec)
+                                (plist-get spec :ietf))
+                              koek-ys/languages)))
+
+  (defun koek-ys/complete-org ()
+    "Complete Org language code from IETF codes."
+    (koek-ys/complete-field (mapcar (lambda (spec)
+                                      (cons (plist-get spec :ietf)
+                                            (plist-get spec :org)))
+                                    koek-ys/languages)))
 
   (defun koek-ys/lang-to-other (lang from to)
     "Translate language code LANG from scheme FROM to TO.
@@ -2673,18 +2663,25 @@ TO is a symbol, the language scheme to, see
 `koek-ys/lang-to-other'."
     (koek-ys/lang-to-other lang :org to))
 
-  (defun koek-ys/complete-ietf ()
-    "Complete IETF language code."
-    (yas-choose-value (mapcar (lambda (spec)
-                                (plist-get spec :ietf))
-                              koek-ys/languages)))
+  (defun koek-ys/determine-ns-name ()
+    "Determine Clojure namespace name for current.
+Assumes source path is the root of the project."
+    (let ((root (or (koek-proj/locate-root) default-directory))
+          (file-name (or (buffer-file-name) (buffer-name)))
+          (separator (thread-first
+                       (expand-file-name "a" "b")
+                       file-relative-name
+                       (substring 1 2))))
+      (thread-last
+        (file-relative-name file-name root)
+        file-name-sans-extension
+        (string-replace separator ".")
+        (string-replace "_" "-"))))
 
-  (defun koek-ys/complete-org ()
-    "Complete Org language code from IETF codes."
-    (koek-ys/complete-field (mapcar (lambda (spec)
-                                      (cons (plist-get spec :ietf)
-                                            (plist-get spec :org)))
-                                    koek-ys/languages)))
+  (defun koek-ys/indent-snippet ()
+    "Indent last expanded snippet.
+Snippet is between `yas-snippet-beg' and `yas-snippet-end'."
+    (indent-region yas-snippet-beg yas-snippet-end))
 
   (defun koek-ys/make-mkdir-result (name)
     "Return function to make result directory of current code block.
