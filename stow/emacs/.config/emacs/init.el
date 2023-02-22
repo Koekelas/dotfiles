@@ -229,7 +229,10 @@ system."
    ("C-c z z" . koek-wm/suspend))
   :config
   (add-hook 'koek-thm/enable-hook #'koek-wm/update-xsettingsd-preset)
-  (add-hook 'koek-thm/enable-hook #'koek-wm/update-gtk-theme-preference))
+  (add-hook 'koek-thm/enable-hook #'koek-wm/update-gtk-theme-preference)
+  ;; When exwm loads, theme is already enabled
+  (koek-wm/update-xsettingsd-preset)
+  (koek-wm/update-gtk-theme-preference))
 
 (use-package exwm-core
   :when (koek-wm/exwm-session-p)
