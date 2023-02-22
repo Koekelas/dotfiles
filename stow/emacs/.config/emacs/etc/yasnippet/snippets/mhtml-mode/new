@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <title>${1:`(koek-ys/determine-title)`}</title>
     <link rel="icon" href="favicon.png" />
-    <link rel="stylesheet" href="assets/common.css" />
+    <link rel="stylesheet" href="asset/common.css" />
   </head>
   <body>
     $0
