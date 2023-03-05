@@ -39,22 +39,72 @@
 
 (setq network-security-level 'high)
 
-(defvar bootstrap-version)              ; Must be a dynamic variable
+(require 'package)
 
-(setq straight-check-for-modifications '(check-on-save find-when-checking))
+(defun koek-pkg/get-installed-from-archive ()
+  (unless package-alist
+    (package-load-all-descriptors))
+  package-alist)
 
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el"
-                         user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'no-message))
+(defun koek-pkg/get-available-from-archive ()
+  (cond
+   (package-archive-contents)           ; skip
+   ((not (thread-last
+           package-archives
+           (mapcar (pcase-lambda (`(,name))
+                     (thread-last
+                       package-user-dir
+                       (expand-file-name "archives")
+                       (expand-file-name name)
+                       (expand-file-name "archive-contents"))))
+           (seq-every-p #'file-exists-p)))
+    (package-refresh-contents))
+   (t
+    (package-read-all-archive-contents)))
+  package-archive-contents)
+
+(defun koek-pkg/installed-from-archive-p (package)
+  (when-let ((desc
+              (car (alist-get package (koek-pkg/get-installed-from-archive)))))
+    (let ((dir (package-desc-dir desc)))
+      (and (stringp dir) (file-exists-p dir)))))
+
+(defun koek-pkg/available-from-archive-p (package)
+  (alist-get package (koek-pkg/get-available-from-archive)))
+
+(defun koek-pkg/get-builtin-version (package)
+  (or (alist-get package package--builtin-versions)
+      (progn
+        (require 'finder nil 'no-error)
+        (when-let ((desc (alist-get package package--builtins)))
+          (package--bi-desc-version desc)))
+      '(0)))
+
+(defun koek-pkg/get-archive-version (package)
+  (if-let ((desc
+            (car (alist-get package (koek-pkg/get-available-from-archive)))))
+      (package-desc-version desc)
+    '(0)))
+
+(define-advice package-installed-p
+    (:around (f package &optional min-version) koek-pkg/prefer-archive)
+  (if (and (not (package-desc-p package))
+           (package-built-in-p package)
+           (not (koek-pkg/installed-from-archive-p package))
+           (koek-pkg/available-from-archive-p package))
+      (let ((builtin-version (koek-pkg/get-builtin-version package))
+            (archive-version (koek-pkg/get-archive-version package)))
+        (and (version-list-<= archive-version builtin-version)
+             (version-list-<= (or min-version '(0)) builtin-version)))
+    (funcall f package min-version)))
+
+(defun koek-pkg/ensure (package)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+(push '("melpa" . "https://melpa.org/packages/") package-archives)
+(setq package-archive-priorities '(("gnu" . 1) ("nongnu" . 1)))
+(add-hook 'package-menu-mode-hook #'koek-subr/reset-default-directory)
 
 (defmacro koek-pkg/register (package)
   "Register embedded package.
@@ -74,11 +124,11 @@ PACKAGE is a symbol, the name of the package."
        (load ,(concat package-name "-autoloads.el")
              'no-error 'no-message 'no-suffix))))
 
-(straight-use-package 'no-littering)
+(koek-pkg/ensure 'no-littering)
 (require 'no-littering)
 
-(straight-use-package 'delight)         ; Optional dependency
-(straight-use-package 'use-package)
+(koek-pkg/ensure 'delight)              ; Optional dependency
+(koek-pkg/ensure 'use-package)
 
 (require 'use-package)
 
@@ -102,19 +152,13 @@ keywords.  For more information, see
                 '(:koek)
                 (seq-subseq use-package-keywords n))))
 
-(straight-use-package
- `(org
-   :pre-build
-   ,(list (if (eq system-type 'berkeley-unix) "gmake" "make")
-          "autoloads" "info"
-          (concat "EMACS=" invocation-directory invocation-name))
-   :build (:not autoloads info)))
+(koek-pkg/ensure 'org)
 
 (koek-pkg/register koek-subr)
 (require 'koek-subr)
 
 (use-package gcmh
-  :straight t
+  :ensure t
   :hook (after-init . gcmh-mode)
   :config
   (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
@@ -135,7 +179,7 @@ keywords.  For more information, see
 ;; insufficient.
 
 (use-package exwm
-  :straight t
+  :ensure t
   :when (koek-wm/exwm-session-p)
   :defer t
   :preface
@@ -842,7 +886,7 @@ vertically, else, shrink horizontally."
  ("C-c w s" . koek-wind/shrink))
 
 (use-package ace-window
-  :straight t
+  :ensure t
   :bind
   ("C-c j w" . ace-window)
   :config
@@ -856,7 +900,7 @@ vertically, else, shrink horizontally."
   :delight)
 
 (use-package transpose-frame
-  :straight t
+  :ensure t
   :bind
   ("C-c w t" . transpose-frame)
   :preface
@@ -1330,7 +1374,7 @@ filters), group (only groups) or all (filters and groups)."
           (cdr args))))
 
 (use-package orderless
-  :straight t
+  :ensure t
   :after minibuffer
   :preface
   (defun koek-rdls/dispatch (component _component-n _n-components)
@@ -1365,7 +1409,7 @@ are recognized:
   (savehist-mode))
 
 (use-package consult
-  :straight t
+  :ensure t
   :bind
   (([remap switch-to-buffer] . consult-buffer)
    ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
@@ -1528,10 +1572,10 @@ are recognized:
           (?g "Gopher and Gemini" elpher-bookmark-jump)
           (?n "News" elfeed-show-bookmark-handler))))
 
-(straight-use-package 'consult-dir)
+(koek-pkg/ensure 'consult-dir)
 
 (use-package embark
-  :straight t
+  :ensure t
   :bind
   ("C-&" . embark-act)
   :preface
@@ -1591,10 +1635,10 @@ are recognized:
 
   (setq embark-help-key (kbd "?")))
 
-(straight-use-package 'embark-consult)
+(koek-pkg/ensure 'embark-consult)
 
 (use-package vertico
-  :straight (vertico :files (:defaults "extensions/*.el"))
+  :ensure t
   :config
   (use-package consult-dir
     :bind
@@ -1625,7 +1669,7 @@ are recognized:
   (setq vertico-quick2 "m"))
 
 (use-package marginalia
-  :straight t
+  :ensure t
   ;; embark benefits from marginalia as it tries to guess the
   ;; completion category of completion tables missing one, see
   ;; `marginalia--completion-metadata-get'
@@ -1710,7 +1754,7 @@ the builtin annotator except it aligns the annotation."
   (koek-wdir/install-run-mode-hook wdired-abort-changes nil))
 
 (use-package diredfl
-  :straight t
+  :ensure t
   :after dired
   :config
   (diredfl-global-mode))
@@ -1798,7 +1842,7 @@ the builtin annotator except it aligns the annotation."
 (setq delete-by-moving-to-trash t)
 
 (use-package project
-  :straight t
+  :ensure t
   :defer t
   :preface
   (defvar-local koek-proj/cache nil
@@ -1977,14 +2021,14 @@ for one."
   (setq vc-follow-symlinks t))
 
 (use-package diff-hl
-  :straight t
+  :ensure t
   :bind
   ("C-c a c" . diff-hl-mode)            ; [C]hanges
   :config
   (setq diff-hl-draw-borders nil))
 
 (use-package magit-mode
-  :straight magit
+  :ensure magit
   :bind
   ("C-c f C-m" . magit-dispatch)
   :config
@@ -2119,13 +2163,13 @@ When FORCE is truthy, unconditionally continue commit."
   (setq isearch-lazy-count t))
 
 (use-package isearch-mb
-  :straight t
+  :ensure t
   :after isearch
   :config
   (isearch-mb-mode))
 
 (use-package wgrep
-  :straight t
+  :ensure t
   :after grep
   :preface
   ;; wgrep-mode isn't a proper mode, it doesn't define the variable
@@ -2147,7 +2191,7 @@ When FORCE is truthy, unconditionally continue commit."
   (setq wgrep-enable-key (kbd "C-x C-q")))
 
 (use-package avy
-  :straight t
+  :ensure t
   :bind
   (("C-c j j" . avy-goto-char-timer)
    ([remap goto-line] . avy-goto-line))
@@ -2166,7 +2210,7 @@ When FORCE is truthy, unconditionally continue commit."
           avy-lead-face-1)))
 
 (use-package link-hint
-  :straight t
+  :ensure t
   :bind
   (("C-c j l" . link-hint-open-link)
    ("C-c j C-l" . link-hint-copy-link)))
@@ -2196,7 +2240,7 @@ When FORCE is truthy, unconditionally continue commit."
   ("C-c e a" . align-regexp))
 
 (use-package undo-tree
-  :straight t
+  :ensure t
   :bind
   (:map undo-tree-map
    ("M-/" . undo-tree-redo))
@@ -2222,7 +2266,7 @@ When FORCE is truthy, unconditionally continue commit."
   :bind ("C-c a n" . display-line-numbers-mode)) ; Line [n]umbers
 
 (use-package olivetti
-  :straight t
+  :ensure t
   :bind
   ("C-c a m" . olivetti-mode)           ; [M]argins
   :config
@@ -2263,11 +2307,11 @@ When FORCE is truthy, unconditionally continue commit."
   :bind ("C-c a l" . hl-line-mode))     ; [L]ine
 
 (use-package lin
-  :straight t
+  :ensure t
   :hook
-  ((ibuffer-mode embark-collect-mode dired-mode bookmark-bmenu-mode
-    git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
-    elfeed-search-mode bongo-playlist-mode)
+  ((package-menu-mode ibuffer-mode embark-collect-mode dired-mode
+    bookmark-bmenu-mode git-rebase-mode occur-mode grep-mode proced-mode
+    mu4e-headers-mode elfeed-search-mode bongo-playlist-mode)
    . lin-mode)
   :preface
   (defun koek-lin/reconfigure-for-wdired ()
@@ -2285,7 +2329,7 @@ When wgrep is enabled, disable lin, else, enable lin."
   (add-hook 'wgrep-mode-hook #'koek-lin/reconfigure-for-wgrep))
 
 (use-package expand-region
-  :straight t
+  :ensure t
   :bind
   ("C-S-SPC" . er/expand-region)
   :config
@@ -2345,7 +2389,8 @@ negative, move point to beginning of next word."
 (delight 'auto-fill-function nil 'simple)
 
 (use-package smartparens
-  :straight t
+  :ensure t
+  :pin melpa
   :bind
   (:map smartparens-mode-map
    ("C-M-f" . sp-forward-sexp)
@@ -2452,7 +2497,7 @@ install handler for."
    ("C-M-}" . end-of-defun)))
 
 (use-package paren-face
-  :straight t
+  :ensure t
   :hook
   ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode emacs-lisp-mode
     lisp-interaction-mode scheme-mode geiser-repl-mode)
@@ -2474,7 +2519,7 @@ install handler for."
    ("C-c e TAB" . tabify)))
 
 (use-package ws-butler
-  :straight t
+  :ensure t
   :hook ((prog-mode conf-mode) . ws-butler-mode)
   :delight)
 
@@ -2487,7 +2532,7 @@ install handler for."
   :delight)
 
 (use-package eglot
-  :straight t
+  :ensure t
   :bind
   (:map eglot-mode-map
    ("C-c e x" . eglot-code-actions)
@@ -2514,19 +2559,19 @@ install handler for."
   (push 'company-backends eglot-stay-out-of))
 
 (use-package tree-sitter
-  :straight t
+  :ensure t
   :defer t
   :delight)
 
 (use-package tree-sitter-langs
-  :straight t
+  :ensure t
   :after tree-sitter)
 
 (use-package tree-sitter-hl
   :hook ((c-mode c++-mode java-mode js-mode python-mode) . tree-sitter-hl-mode))
 
 (use-package xref
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq xref-show-xrefs-function #'consult-xref)
@@ -2534,7 +2579,7 @@ install handler for."
   (add-to-list 'xref-prompt-for-identifier #'xref-find-references 'append))
 
 (use-package flymake
-  :straight t
+  :ensure t
   :bind
   (:map flymake-mode-map
    ("C-c e n" . flymake-goto-next-error)
@@ -2552,7 +2597,7 @@ install handler for."
   (remove-hook 'flymake-diagnostic-functions #'flymake-proc-legacy-flymake))
 
 (use-package flymake-kondor
-  :straight t
+  :ensure t
   :hook (clojure-mode . flymake-kondor-setup)
   :preface
   (defun koek-kndr/init (root &optional interactive)
@@ -2609,7 +2654,7 @@ install handler for."
   :delight)
 
 (use-package yasnippet
-  :straight t
+  :ensure t
   :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
   :preface
   (defun koek-ys/complete-field (candidates)
@@ -2713,7 +2758,8 @@ file name."
   :delight yas-minor-mode)
 
 (use-package company
-  :straight t
+  :ensure t
+  :pin melpa
   :bind
   (:map company-mode-map
    ;; TAB or C-i (terminal)
@@ -2773,7 +2819,7 @@ see `company-backends'."
   (setq company-dabbrev-downcase nil))   ; Case candidate, when inserted
 
 (use-package company-flx
-  :straight t
+  :ensure t
   :after company
   :config
   (company-flx-mode))
@@ -2810,7 +2856,7 @@ see `company-backends'."
      ("j" . link-hint-open-link))))
 
 (use-package helpful
-  :straight t
+  :ensure t
   :bind
   (([remap describe-variable] . helpful-variable)
    ([remap describe-function] . helpful-callable)
@@ -2825,7 +2871,7 @@ see `company-backends'."
   (add-hook 'helpful-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package elisp-demos
-  :straight t
+  :ensure t
   :after helpful
   :config
   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
@@ -2871,7 +2917,7 @@ see `company-backends'."
   (add-hook 'apropos-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package devdocs
-  :straight t
+  :ensure t
   :bind
   ("C-c d d" . devdocs-lookup)
   :autoload (devdocs--available-docs devdocs--installed-docs)
@@ -2967,7 +3013,7 @@ see `company-backends'."
   (add-hook 'devdocs-mode-hook #'koek-subr/reset-default-directory))
 
 (use-package eldoc
-  :straight t
+  :ensure t
   :bind
   ("C-c d e" . eldoc-doc-buffer)
   :config
@@ -2989,7 +3035,7 @@ see `company-backends'."
     (koek-web/query query)))
 
 (use-package vterm
-  :straight t
+  :ensure t
   :bind
   (("C-c x t" . vterm)
    :map vterm-mode-map
@@ -3136,7 +3182,7 @@ none return a URL, nil.  For rewrite functions, see
   (setq shr-image-animate nil))
 
 (use-package elpher
-  :straight t
+  :ensure t
   :defer t
   :init
   (put 'elpher-bookmark-jump 'bookmark-handler-type "Gopher and Gemini")
@@ -3312,7 +3358,7 @@ none return a URL, nil.  For rewrite functions, see
   (setq mu4e-org-link-query-in-headers-mode t))
 
 (use-package bbdb
-  :straight t
+  :ensure t
   :after mu4e
   :preface
   (defvar koek-bbdb/email-history nil
@@ -3357,7 +3403,7 @@ none return a URL, nil.  For rewrite functions, see
   ("C-c x a" . bbdb))
 
 (use-package bbdb-vcard
-  :straight t
+  :ensure t
   :after bbdb
   :preface
   (autoload #'bbdb-vcard-import-vcard "bbdb-vcard")
@@ -3397,7 +3443,7 @@ internally."
                  n-records (if (= n-records 1) "vCard" "vCards"))))))
 
 (use-package bongo
-  :straight t
+  :ensure t
   :bind
   (("C-c x k" . bongo)
    ("C-c k s" . bongo-seek)
@@ -3519,7 +3565,7 @@ played track, first unplayed track or first track."
   :delight bongo-dired-library-mode)
 
 (use-package elfeed
-  :straight t
+  :ensure t
   :bind
   ("C-c x n" . elfeed)
   :preface
@@ -3665,7 +3711,7 @@ playing track, else, enqueue after last track."
   (setq gnus-dired-mail-mode mail-user-agent))
 
 (use-package pdf-tools
-  :straight t
+  :ensure t
   :defer t
   :preface
   (defun koek-pdf/recompile (&optional interactive)
@@ -3809,7 +3855,7 @@ INTERACTIVE is used internally."
             "-draw"       "text %X,%Y '%c'"))))
 
 (use-package saveplace-pdf-view
-  :straight t
+  :ensure t
   :after pdf-view)
 
 (use-package dictionary
@@ -3847,7 +3893,7 @@ INTERACTIVE is used internally."
   :delight)
 
 (use-package keycast
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq keycast-mode-line-window-predicate #'moody-window-active-p)
@@ -3924,7 +3970,7 @@ Modes are confident about being derived from text-mode.")
   :commands gino-generate-project)
 
 (use-package clojure-mode
-  :straight t
+  :ensure t
   :mode
   (((rx ".clj" string-end) . clojure-mode)
    ((rx ".cljs" string-end) . clojurescript-mode)
@@ -3938,7 +3984,7 @@ Modes are confident about being derived from text-mode.")
   (clojurec-mode "Cljc" :major))
 
 (use-package cider
-  :straight t
+  :ensure t
   :after clojure-mode)
 
 (use-package cider-mode
@@ -3967,7 +4013,7 @@ Modes are confident about being derived from text-mode.")
   (setq cider-repl-use-pretty-printing t))
 
 (use-package cmake-mode
-  :straight t
+  :ensure t
   :mode ((rx (or ".cmake" "/CMakeLists.txt") string-end) . cmake-mode)
   :preface
   ;; source tree, relative
@@ -4005,8 +4051,7 @@ Modes are confident about being derived from text-mode.")
   (setq inferior-lisp-program "sbcl"))
 
 (use-package sly
-  :straight t
-  :load-path "straight/build/sly/contrib" ; Silence warnings
+  :ensure t
   :after lisp-mode)
 
 (use-package sly-mrepl
@@ -4083,7 +4128,7 @@ Modes are confident about being derived from text-mode.")
   (setq checkdoc-package-keywords-flag t))
 
 (use-package erlang
-  :straight t
+  :ensure t
   :mode ((rx ".erl" string-end) . erlang-mode)
   :config
   ;; Set Erlang home
@@ -4108,7 +4153,7 @@ Modes are confident about being derived from text-mode.")
   :mode (rx ".css" string-end))
 
 (use-package emmet-mode
-  :straight t
+  :ensure t
   :bind
   (:map emmet-mode-keymap
    ("M-<iso-lefttab>" . emmet-expand-line))
@@ -4131,7 +4176,7 @@ Modes are confident about being derived from text-mode.")
 (setq indium-chrome-data-dir nil)
 
 (use-package indium-interaction
-  :straight indium
+  :ensure indium
   :hook (js-mode . indium-interaction-mode)
   :config
   ;; Resolve keybinding conflict with documentation keymap
@@ -4152,7 +4197,7 @@ Modes are confident about being derived from text-mode.")
   (unbind-key "TAB" indium-repl-mode-map))
 
 (use-package json-mode
-  :straight t
+  :ensure t
   :mode (rx ".json" string-end))
 
 (use-package make-mode
@@ -4166,7 +4211,7 @@ Modes are confident about being derived from text-mode.")
   (makefile-makepp-mode "Make++" :major))
 
 (use-package markdown-mode
-  :straight t
+  :ensure t
   :mode (rx ".md" string-end)
   :config
   (setq markdown-command "pandoc -s -f markdown -t html5")
@@ -4175,7 +4220,7 @@ Modes are confident about being derived from text-mode.")
   :delight (markdown-mode "MD" :major))
 
 (use-package meson-mode
-  :straight t
+  :ensure t
   :mode (rx "/meson.build" string-end)
   :preface
   (defun koek-mson/init (root config &optional interactive)
@@ -4212,7 +4257,7 @@ Modes are confident about being derived from text-mode.")
   :delight (octave-mode "M" :major))
 
 (use-package scad-mode
-  :straight t
+  :ensure t
   :mode (rx ".scad" string-end)
   :config
   ;; Resolve smartparens' handlers not being called
@@ -4489,7 +4534,7 @@ age of the person."
   (setq org-bbdb-anniversary-format-alist
         '(("birthday" . koek-org/construct-birthday-entry-name))))
 
-(straight-use-package 'htmlize)         ; Optional dependency
+(koek-pkg/ensure 'htmlize)              ; Optional dependency
 
 (use-package ox
   :defer t
@@ -4527,7 +4572,7 @@ age of the person."
                   "\n}\n"))))
 
 (use-package org-caldav
-  :straight t
+  :ensure t
   :bind
   ("C-c o s" . org-caldav-sync))
 
@@ -4545,7 +4590,7 @@ age of the person."
   :delight (python-mode "Py" :major))
 
 (use-package pipenv
-  :straight t
+  :ensure t
   :hook (python-mode . pipenv-mode)
   :delight)
 
@@ -4559,10 +4604,10 @@ age of the person."
       "Scm"))
    :major))
 
-(straight-use-package 'geiser-guile)    ; Optional dependency
+(koek-pkg/ensure 'geiser-guile)         ; Optional dependency
 
 (use-package geiser
-  :straight t
+  :ensure t
   :after scheme)
 
 (use-package geiser-autodoc
@@ -4621,16 +4666,16 @@ age of the person."
   (setq sql-product 'postgres))
 
 (use-package sql-indent
-  :straight t
+  :ensure t
   :hook (sql-mode . sqlind-minor-mode)
   :delight sqlind-minor-mode)
 
 (use-package tex
-  :straight auctex
+  :ensure auctex
   :mode ((rx ".tex" string-end) . TeX-tex-mode))
 
 (use-package cdlatex
-  :straight t
+  :ensure t
   :hook (LaTeX-mode . cdlatex-mode)
   :delight)
 
@@ -4698,7 +4743,7 @@ age of the person."
   :delight outline-minor-mode)
 
 (use-package wolfram-mode
-  :straight t
+  :ensure t
   :mode (rx ".wl" string-end)
   :delight (wolfram-mode "WL" :major))
 
@@ -4771,7 +4816,7 @@ to the last enabled theme."
 (add-hook 'koek-thm/enable-hook #'koek-thm/update-frame-theme-variant-all)
 
 (use-package modus-themes
-  :straight t
+  :ensure t
   :preface
   (defvar koek-mt/variants
     '(modus-operandi
@@ -4956,7 +5001,7 @@ variable pitch optionally a relative height.")
 (window-divider-mode)
 
 (use-package moody
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq x-underline-at-descent-line t)

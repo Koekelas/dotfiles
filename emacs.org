@@ -49,9 +49,9 @@ Require libraries.
 * Bootstrap
 
 ** nsm - Network security manager
-On a fresh installation, nsm is needed to download [[*straight - Package manager][straight]], which is
-needed to install [[*no-littering - Normalize configuration and data file names][no-littering]]. Replicate no-littering configuration
-for nsm.
+On a fresh installation, nsm is needed to download the [[*package - Package manager][package
+archives]], which are needed to install [[*no-littering - Normalize configuration and data file names][no-littering]]. Replicate
+no-littering configuration for nsm.
 
 #+BEGIN_SRC emacs-lisp
   (require 'nsm)
@@ -67,35 +67,74 @@ Tighten network security.
   (setq network-security-level 'high)
 #+END_SRC
 
-** straight - Package manager
-[[https://github.com/radian-software/straight.el][straight (GitHub)]]
-
-Disable builtin package manager.
-
-#+BEGIN_SRC emacs-lisp :tangle stow/emacs/.config/emacs/early-init.el
-  (setq package-enable-at-startup nil)
-#+END_SRC
-
-Straight can install any commit from any Git repository, it isn't
-limited to what's available in a package archive. Configure straight.
-
+** package - Package manager
 #+BEGIN_SRC emacs-lisp
-  (defvar bootstrap-version)              ; Must be a dynamic variable
+  (require 'package)
 
-  (setq straight-check-for-modifications '(check-on-save find-when-checking))
+  (defun koek-pkg/get-installed-from-archive ()
+    (unless package-alist
+      (package-load-all-descriptors))
+    package-alist)
 
-  (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el"
-                           user-emacs-directory))
-        (bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'no-message))
+  (defun koek-pkg/get-available-from-archive ()
+    (cond
+     (package-archive-contents)           ; skip
+     ((not (thread-last
+             package-archives
+             (mapcar (pcase-lambda (`(,name))
+                       (thread-last
+                         package-user-dir
+                         (expand-file-name "archives")
+                         (expand-file-name name)
+                         (expand-file-name "archive-contents"))))
+             (seq-every-p #'file-exists-p)))
+      (package-refresh-contents))
+     (t
+      (package-read-all-archive-contents)))
+    package-archive-contents)
+
+  (defun koek-pkg/installed-from-archive-p (package)
+    (when-let ((desc
+                (car (alist-get package (koek-pkg/get-installed-from-archive)))))
+      (let ((dir (package-desc-dir desc)))
+        (and (stringp dir) (file-exists-p dir)))))
+
+  (defun koek-pkg/available-from-archive-p (package)
+    (alist-get package (koek-pkg/get-available-from-archive)))
+
+  (defun koek-pkg/get-builtin-version (package)
+    (or (alist-get package package--builtin-versions)
+        (progn
+          (require 'finder nil 'no-error)
+          (when-let ((desc (alist-get package package--builtins)))
+            (package--bi-desc-version desc)))
+        '(0)))
+
+  (defun koek-pkg/get-archive-version (package)
+    (if-let ((desc
+              (car (alist-get package (koek-pkg/get-available-from-archive)))))
+        (package-desc-version desc)
+      '(0)))
+
+  (define-advice package-installed-p
+      (:around (f package &optional min-version) koek-pkg/prefer-archive)
+    (if (and (not (package-desc-p package))
+             (package-built-in-p package)
+             (not (koek-pkg/installed-from-archive-p package))
+             (koek-pkg/available-from-archive-p package))
+        (let ((builtin-version (koek-pkg/get-builtin-version package))
+              (archive-version (koek-pkg/get-archive-version package)))
+          (and (version-list-<= archive-version builtin-version)
+               (version-list-<= (or min-version '(0)) builtin-version)))
+      (funcall f package min-version)))
+
+  (defun koek-pkg/ensure (package)
+    (unless (package-installed-p package)
+      (package-install package)))
+
+  (push '("melpa" . "https://melpa.org/packages/") package-archives)
+  (setq package-archive-priorities '(("gnu" . 1) ("nongnu" . 1)))
+  (add-hook 'package-menu-mode-hook #'koek-subr/reset-default-directory)
 #+END_SRC
 
 ** Embedded packages
@@ -143,7 +182,7 @@ directories in =stow/emacs/.config/emacs/lisp/=.
 [[https://github.com/emacscollective/no-littering][no-littering (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'no-littering)
+  (koek-pkg/ensure 'no-littering)
   (require 'no-littering)
 #+END_SRC
 
@@ -153,8 +192,8 @@ directories in =stow/emacs/.config/emacs/lisp/=.
 Install use-package.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'delight)         ; Optional dependency
-  (straight-use-package 'use-package)
+  (koek-pkg/ensure 'delight)              ; Optional dependency
+  (koek-pkg/ensure 'use-package)
 #+END_SRC
 
 The keyword ~:koek~ registers [[*Embedded packages][embedded packages]]. It's a predicate
@@ -188,16 +227,10 @@ keyword, i.e., it accepts as argument =t=, =nil= or nothing.
 For org configuration, see [[*Org][Org]].
 
 Installing latest org after loading builtin org breaks org. Install
-latest org and its documentation before loading org.
+latest org before loading org.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package
-   `(org
-     :pre-build
-     ,(list (if (eq system-type 'berkeley-unix) "gmake" "make")
-            "autoloads" "info"
-            (concat "EMACS=" invocation-directory invocation-name))
-     :build (:not autoloads info)))
+  (koek-pkg/ensure 'org)
 #+END_SRC
 
 * Common
@@ -510,7 +543,7 @@ When initialized, [[*gcmh - Collect garbage when idle][gcmh]] kicks in.
 
 #+BEGIN_SRC emacs-lisp
   (use-package gcmh
-    :straight t
+    :ensure t
     :hook (after-init . gcmh-mode)
     :config
     (setq gcmh-high-cons-threshold (* (expt 1024 2) 16)) ; In bytes
@@ -539,7 +572,7 @@ b3n (Reddit)]]. For the Firefox add-on, see [[file:dotfiles.org::*KeePass Helper
   ;; insufficient.
 
   (use-package exwm
-    :straight t
+    :ensure t
     :when (koek-wm/exwm-session-p)
     :defer t
     :preface
@@ -1665,7 +1698,7 @@ steps.
 
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
-    :straight t
+    :ensure t
     :bind
     ("C-c j w" . ace-window)
     :config
@@ -1684,7 +1717,7 @@ steps.
 
 #+BEGIN_SRC emacs-lisp
   (use-package transpose-frame
-    :straight t
+    :ensure t
     :bind
     ("C-c w t" . transpose-frame)
     :preface
@@ -2199,7 +2232,7 @@ Bury unneeded buffers, computers have more than enough memory.
 
 #+BEGIN_SRC emacs-lisp
   (use-package orderless
-    :straight t
+    :ensure t
     :after minibuffer
     :preface
     (defun koek-rdls/dispatch (component _component-n _n-components)
@@ -2242,7 +2275,7 @@ Bury unneeded buffers, computers have more than enough memory.
 
 #+BEGIN_SRC emacs-lisp
   (use-package consult
-    :straight t
+    :ensure t
     :bind
     (([remap switch-to-buffer] . consult-buffer)
      ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
@@ -2410,7 +2443,7 @@ Bury unneeded buffers, computers have more than enough memory.
 [[https://github.com/karthink/consult-dir][consult-dir (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'consult-dir)
+  (koek-pkg/ensure 'consult-dir)
 #+END_SRC
 
 ** embark - Actions
@@ -2421,7 +2454,7 @@ minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (use-package embark
-    :straight t
+    :ensure t
     :bind
     ("C-&" . embark-act)
     :preface
@@ -2484,7 +2517,7 @@ minibuffer.
 
 *** embark-consult - Consult integration
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'embark-consult)
+  (koek-pkg/ensure 'embark-consult)
 #+END_SRC
 
 ** vertico - Completion UI
@@ -2492,7 +2525,7 @@ minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (use-package vertico
-    :straight (vertico :files (:defaults "extensions/*.el"))
+    :ensure t
     :config
     (use-package consult-dir
       :bind
@@ -2528,7 +2561,7 @@ minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (use-package marginalia
-    :straight t
+    :ensure t
     ;; embark benefits from marginalia as it tries to guess the
     ;; completion category of completion tables missing one, see
     ;; `marginalia--completion-metadata-get'
@@ -2626,7 +2659,7 @@ minibuffer.
 
 #+BEGIN_SRC emacs-lisp
   (use-package diredfl
-    :straight t
+    :ensure t
     :after dired
     :config
     (diredfl-global-mode))
@@ -2745,7 +2778,7 @@ Move deleted files to trash.
 ** project - Projects
 #+BEGIN_SRC emacs-lisp
   (use-package project
-    :straight t
+    :ensure t
     :defer t
     :preface
     (defvar-local koek-proj/cache nil
@@ -2937,7 +2970,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package diff-hl
-    :straight t
+    :ensure t
     :bind
     ("C-c a c" . diff-hl-mode)            ; [C]hanges
     :config
@@ -2949,7 +2982,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit-mode
-    :straight magit
+    :ensure magit
     :bind
     ("C-c f C-m" . magit-dispatch)
     :config
@@ -3097,7 +3130,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package isearch-mb
-    :straight t
+    :ensure t
     :after isearch
     :config
     (isearch-mb-mode))
@@ -3108,7 +3141,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package wgrep
-    :straight t
+    :ensure t
     :after grep
     :preface
     ;; wgrep-mode isn't a proper mode, it doesn't define the variable
@@ -3135,7 +3168,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package avy
-    :straight t
+    :ensure t
     :bind
     (("C-c j j" . avy-goto-char-timer)
      ([remap goto-line] . avy-goto-line))
@@ -3159,7 +3192,7 @@ VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package link-hint
-    :straight t
+    :ensure t
     :bind
     (("C-c j l" . link-hint-open-link)
      ("C-c j C-l" . link-hint-copy-link)))
@@ -3209,7 +3242,7 @@ When popping mark, skip consecutive identical marks. The idea is from
 ** undo-tree - Undo and redo replacement
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
-    :straight t
+    :ensure t
     :bind
     (:map undo-tree-map
      ("M-/" . undo-tree-redo))
@@ -3258,7 +3291,7 @@ For more information, see =man 5 hunspell=.
 
 #+BEGIN_SRC emacs-lisp
   (use-package olivetti
-    :straight t
+    :ensure t
     :bind
     ("C-c a m" . olivetti-mode)           ; [M]argins
     :config
@@ -3319,11 +3352,11 @@ For more information, see =man 5 hunspell=.
 
 #+BEGIN_SRC emacs-lisp
   (use-package lin
-    :straight t
+    :ensure t
     :hook
-    ((ibuffer-mode embark-collect-mode dired-mode bookmark-bmenu-mode
-      git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
-      elfeed-search-mode bongo-playlist-mode)
+    ((package-menu-mode ibuffer-mode embark-collect-mode dired-mode
+      bookmark-bmenu-mode git-rebase-mode occur-mode grep-mode proced-mode
+      mu4e-headers-mode elfeed-search-mode bongo-playlist-mode)
      . lin-mode)
     :preface
     (defun koek-lin/reconfigure-for-wdired ()
@@ -3348,7 +3381,7 @@ For more information, see =man 5 hunspell=.
 
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
-    :straight t
+    :ensure t
     :bind
     ("C-S-SPC" . er/expand-region)
     :config
@@ -3441,7 +3474,8 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-word/next-word~ and
 
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-    :straight t
+    :ensure t
+    :pin melpa
     :bind
     (:map smartparens-mode-map
      ("C-M-f" . sp-forward-sexp)
@@ -3562,7 +3596,7 @@ Run:
 
 #+BEGIN_SRC emacs-lisp
   (use-package paren-face
-    :straight t
+    :ensure t
     :hook
     ((clojure-mode cider-repl-mode lisp-mode sly-mrepl-mode emacs-lisp-mode
       lisp-interaction-mode scheme-mode geiser-repl-mode)
@@ -3616,7 +3650,7 @@ produce noisy diffs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package ws-butler
-    :straight t
+    :ensure t
     :hook ((prog-mode conf-mode) . ws-butler-mode)
     :delight)
 #+END_SRC
@@ -3639,7 +3673,7 @@ produce noisy diffs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package eglot
-    :straight t
+    :ensure t
     :bind
     (:map eglot-mode-map
      ("C-c e x" . eglot-code-actions)
@@ -3671,12 +3705,12 @@ produce noisy diffs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package tree-sitter
-    :straight t
+    :ensure t
     :defer t
     :delight)
 
   (use-package tree-sitter-langs
-    :straight t
+    :ensure t
     :after tree-sitter)
 
   (use-package tree-sitter-hl
@@ -3686,7 +3720,7 @@ produce noisy diffs.
 ** xref - Jump to definition and references
 #+BEGIN_SRC emacs-lisp
   (use-package xref
-    :straight t
+    :ensure t
     :defer t
     :config
     (setq xref-show-xrefs-function #'consult-xref)
@@ -3697,7 +3731,7 @@ produce noisy diffs.
 ** flymake - Show syntax and style errors
 #+BEGIN_SRC emacs-lisp
   (use-package flymake
-    :straight t
+    :ensure t
     :bind
     (:map flymake-mode-map
      ("C-c e n" . flymake-goto-next-error)
@@ -3720,7 +3754,7 @@ produce noisy diffs.
 
 #+BEGIN_SRC emacs-lisp
   (use-package flymake-kondor
-    :straight t
+    :ensure t
     :hook (clojure-mode . flymake-kondor-setup)
     :preface
     (defun koek-kndr/init (root &optional interactive)
@@ -3794,7 +3828,7 @@ For the major mode, see [[*YASnippet][YASnippet]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :straight t
+    :ensure t
     :hook ((text-mode prog-mode conf-mode) . yas-minor-mode)
     :preface
     (defun koek-ys/complete-field (candidates)
@@ -5854,7 +5888,8 @@ Inherit Clojure snippets.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :straight t
+    :ensure t
+    :pin melpa
     :bind
     (:map company-mode-map
      ;; TAB or C-i (terminal)
@@ -5919,7 +5954,7 @@ Inherit Clojure snippets.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company-flx
-    :straight t
+    :ensure t
     :after company
     :config
     (company-flx-mode))
@@ -5971,7 +6006,7 @@ Inherit Clojure snippets.
 
 #+BEGIN_SRC emacs-lisp
   (use-package helpful
-    :straight t
+    :ensure t
     :bind
     (([remap describe-variable] . helpful-variable)
      ([remap describe-function] . helpful-callable)
@@ -5991,7 +6026,7 @@ Inherit Clojure snippets.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elisp-demos
-    :straight t
+    :ensure t
     :after helpful
     :config
     (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
@@ -6051,7 +6086,7 @@ Inherit Clojure snippets.
 
 #+BEGIN_SRC emacs-lisp
   (use-package devdocs
-    :straight t
+    :ensure t
     :bind
     ("C-c d d" . devdocs-lookup)
     :autoload (devdocs--available-docs devdocs--installed-docs)
@@ -6150,7 +6185,7 @@ Inherit Clojure snippets.
 ** eldoc - Show docstring
 #+BEGIN_SRC emacs-lisp
   (use-package eldoc
-    :straight t
+    :ensure t
     :bind
     ("C-c d e" . eldoc-doc-buffer)
     :config
@@ -6184,7 +6219,7 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package vterm
-    :straight t
+    :ensure t
     :bind
     (("C-c x t" . vterm)
      :map vterm-mode-map
@@ -6359,7 +6394,7 @@ Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfee
 
 #+BEGIN_SRC emacs-lisp
   (use-package elpher
-    :straight t
+    :ensure t
     :defer t
     :init
     (put 'elpher-bookmark-jump 'bookmark-handler-type "Gopher and Gemini")
@@ -6550,7 +6585,7 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
 #+BEGIN_SRC emacs-lisp
   (use-package bbdb
-    :straight t
+    :ensure t
     :after mu4e
     :preface
     (defvar koek-bbdb/email-history nil
@@ -6600,7 +6635,7 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
 
 #+BEGIN_SRC emacs-lisp
   (use-package bbdb-vcard
-    :straight t
+    :ensure t
     :after bbdb
     :preface
     (autoload #'bbdb-vcard-import-vcard "bbdb-vcard")
@@ -6654,7 +6689,7 @@ here so the compiler can load bongo and expand its macros.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
-    :straight t
+    :ensure t
     :bind
     ("C-c x n" . elfeed)
     :preface
@@ -6810,7 +6845,7 @@ Gnus configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
-    :straight t
+    :ensure t
     :defer t
     :preface
     (defun koek-pdf/recompile (&optional interactive)
@@ -6959,7 +6994,7 @@ Gnus configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package saveplace-pdf-view
-    :straight t
+    :ensure t
     :after pdf-view)
 #+END_SRC
 
@@ -7099,7 +7134,7 @@ Stavrou)]].
 
 #+BEGIN_SRC emacs-lisp :noweb-ref bongo-config :tangle no
   (use-package bongo
-    :straight t
+    :ensure t
     :bind
     (("C-c x k" . bongo)
      ("C-c k s" . bongo-seek)
@@ -7339,7 +7374,7 @@ Stavrou)]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package keycast
-    :straight t
+    :ensure t
     :defer t
     :config
     (setq keycast-mode-line-window-predicate #'moody-window-active-p)
@@ -7650,7 +7685,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
-    :straight t
+    :ensure t
     :mode
     (((rx ".clj" string-end) . clojure-mode)
      ((rx ".cljs" string-end) . clojurescript-mode)
@@ -7669,7 +7704,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package cider
-    :straight t
+    :ensure t
     :after clojure-mode)
 
   (use-package cider-mode
@@ -7703,7 +7738,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package cmake-mode
-    :straight t
+    :ensure t
     :mode ((rx (or ".cmake" "/CMakeLists.txt") string-end) . cmake-mode)
     :preface
     ;; source tree, relative
@@ -7749,8 +7784,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package sly
-    :straight t
-    :load-path "straight/build/sly/contrib" ; Silence warnings
+    :ensure t
     :after lisp-mode)
 
   (use-package sly-mrepl
@@ -7841,7 +7875,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package erlang
-    :straight t
+    :ensure t
     :mode ((rx ".erl" string-end) . erlang-mode)
     :config
     ;; Set Erlang home
@@ -7876,7 +7910,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
-    :straight t
+    :ensure t
     :bind
     (:map emmet-mode-keymap
      ("M-<iso-lefttab>" . emmet-expand-line))
@@ -7907,7 +7941,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
   (setq indium-chrome-data-dir nil)
 
   (use-package indium-interaction
-    :straight indium
+    :ensure indium
     :hook (js-mode . indium-interaction-mode)
     :config
     ;; Resolve keybinding conflict with documentation keymap
@@ -7933,7 +7967,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
-    :straight t
+    :ensure t
     :mode (rx ".json" string-end))
 #+END_SRC
 
@@ -7955,7 +7989,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
-    :straight t
+    :ensure t
     :mode (rx ".md" string-end)
     :config
     (setq markdown-command "pandoc -s -f markdown -t html5")
@@ -7969,7 +8003,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package meson-mode
-    :straight t
+    :ensure t
     :mode (rx "/meson.build" string-end)
     :preface
     (defun koek-mson/init (root config &optional interactive)
@@ -8014,7 +8048,7 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
 #+BEGIN_SRC emacs-lisp
   (use-package scad-mode
-    :straight t
+    :ensure t
     :mode (rx ".scad" string-end)
     :config
     ;; Resolve smartparens' handlers not being called
@@ -8313,7 +8347,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
 *** Export
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'htmlize)         ; Optional dependency
+  (koek-pkg/ensure 'htmlize)              ; Optional dependency
 
   (use-package ox
     :defer t
@@ -8356,7 +8390,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-caldav
-    :straight t
+    :ensure t
     :bind
     ("C-c o s" . org-caldav-sync))
 #+END_SRC
@@ -8382,7 +8416,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package pipenv
-    :straight t
+    :ensure t
     :hook (python-mode . pipenv-mode)
     :delight)
 #+END_SRC
@@ -8404,10 +8438,10 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 [[https://github.com/jaor/geiser][geiser (GitHub)]]
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'geiser-guile)    ; Optional dependency
+  (koek-pkg/ensure 'geiser-guile)         ; Optional dependency
 
   (use-package geiser
-    :straight t
+    :ensure t
     :after scheme)
 
   (use-package geiser-autodoc
@@ -8472,7 +8506,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 *** sql-indent - Indent code
 #+BEGIN_SRC emacs-lisp
   (use-package sql-indent
-    :straight t
+    :ensure t
     :hook (sql-mode . sqlind-minor-mode)
     :delight sqlind-minor-mode)
 #+END_SRC
@@ -8485,7 +8519,7 @@ requires AUCTeX.
 
 #+BEGIN_SRC emacs-lisp
   (use-package tex
-    :straight auctex
+    :ensure auctex
     :mode ((rx ".tex" string-end) . TeX-tex-mode))
 #+END_SRC
 
@@ -8494,7 +8528,7 @@ requires AUCTeX.
 
 #+BEGIN_SRC emacs-lisp
   (use-package cdlatex
-    :straight t
+    :ensure t
     :hook (LaTeX-mode . cdlatex-mode)
     :delight)
 #+END_SRC
@@ -8594,7 +8628,7 @@ requires AUCTeX.
 
 #+BEGIN_SRC emacs-lisp
   (use-package wolfram-mode
-    :straight t
+    :ensure t
     :mode (rx ".wl" string-end)
     :delight (wolfram-mode "WL" :major))
 #+END_SRC
@@ -8717,7 +8751,7 @@ current theme.
 
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
-    :straight t
+    :ensure t
     :preface
     (defvar koek-mt/variants
       '(modus-operandi
@@ -9478,7 +9512,7 @@ can load moody.
 
 #+BEGIN_SRC emacs-lisp :noweb-ref moody-config :tangle no
   (use-package moody
-    :straight t
+    :ensure t
     :defer t
     :config
     (setq x-underline-at-descent-line t)

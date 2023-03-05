@@ -33,7 +33,7 @@ all headings tagged =setup=. To apply changes, run =M-x= ~org-babel-tangle~
 from the changed file and restart the changed application or re-login.
 
 ** Installing dependencies
-Git is mandatory, everything else is optional.
+Everything is optional.
 
 - General:
   - [[https://git-scm.com/][Git]]

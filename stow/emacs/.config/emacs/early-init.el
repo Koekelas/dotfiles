@@ -1,5 +1,3 @@
-(setq package-enable-at-startup nil)
-
 (setq gc-cons-threshold (* (expt 1024 2) 128)) ; In bytes
 
 (push '(fullscreen . maximized) default-frame-alist)
