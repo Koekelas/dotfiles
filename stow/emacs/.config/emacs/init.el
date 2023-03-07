@@ -109,7 +109,7 @@
 (defmacro koek-pkg/register (package)
   "Register embedded package.
 PACKAGE is a symbol, the name of the package."
-  (let ((package-name (symbol-name package)))
+  (let ((name (symbol-name package)))
     `(progn
        ;; Add the package to the load path during compilation so the
        ;; compiler can load the package (the compiler executes top
@@ -120,9 +120,8 @@ PACKAGE is a symbol, the name of the package."
                       ,(thread-last
                          user-emacs-directory
                          (expand-file-name "lisp/")
-                         (expand-file-name package-name))))
-       (load ,(concat package-name "-autoloads.el")
-             'no-error 'no-message 'no-suffix))))
+                         (expand-file-name name))))
+       (load ,(concat name "-autoloads.el") 'no-error 'no-message 'no-suffix))))
 
 (koek-pkg/ensure 'no-littering)
 (require 'no-littering)

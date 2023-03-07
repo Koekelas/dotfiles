@@ -159,7 +159,7 @@ or the [[*use-package - Package configuration macro][use-package]] keyword ~:koe
   (defmacro koek-pkg/register (package)
     "Register embedded package.
   PACKAGE is a symbol, the name of the package."
-    (let ((package-name (symbol-name package)))
+    (let ((name (symbol-name package)))
       `(progn
          ;; Add the package to the load path during compilation so the
          ;; compiler can load the package (the compiler executes top
@@ -170,9 +170,8 @@ or the [[*use-package - Package configuration macro][use-package]] keyword ~:koe
                         ,(thread-last
                            user-emacs-directory
                            (expand-file-name "lisp/")
-                           (expand-file-name package-name))))
-         (load ,(concat package-name "-autoloads.el")
-               'no-error 'no-message 'no-suffix))))
+                           (expand-file-name name))))
+         (load ,(concat name "-autoloads.el") 'no-error 'no-message 'no-suffix))))
 #+END_SRC
 
 For examples, see [[*prepcast - Prepare for screencasting][prepcast]] and other code blocks which output to
