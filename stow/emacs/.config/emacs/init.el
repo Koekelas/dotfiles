@@ -1933,7 +1933,7 @@ the secondary ones."
         (append primary secondary))))
 
   (define-advice project-remember-project
-      (:before-while (project) koek-proj/exclude-uninteresting)
+      (:before-while (project) koek-proj/ignore-uninteresting)
     (if (bound-and-true-p recentf-mode)
         (recentf-include-p (project-root project))
       t))
