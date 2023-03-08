@@ -3855,6 +3855,12 @@ INTERACTIVE is used internally."
   (setq keycast-separator-width 3)
   (setq keycast-mode-line-remove-tail-elements nil))
 
+(use-package cus-edit
+  :defer t
+  :config
+  (setq custom-file (no-littering-expand-var-file-name "custom.el"))
+  (add-hook 'Custom-mode-hook #'koek-subr/reset-default-directory))
+
 (use-package text-mode
   :mode (rx (or ".txt" "/README" "/LICENSE") string-end)
   :preface

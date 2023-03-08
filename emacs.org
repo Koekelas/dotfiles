@@ -7348,6 +7348,17 @@ Stavrou)]].
     (setq keycast-mode-line-remove-tail-elements nil))
 #+END_SRC
 
+** cus-edit - Customizations
+Cus-edit configuration is a stub.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cus-edit
+    :defer t
+    :config
+    (setq custom-file (no-littering-expand-var-file-name "custom.el"))
+    (add-hook 'Custom-mode-hook #'koek-subr/reset-default-directory))
+#+END_SRC
+
 * Languages
 Several modes want the =txt= file extension. Insert [[*Text][text-mode]]
 configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow the catchall
