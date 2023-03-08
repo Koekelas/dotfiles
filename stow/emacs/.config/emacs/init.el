@@ -2198,7 +2198,7 @@ When FORCE is truthy, unconditionally continue commit."
 (use-package undo-tree
   :straight t
   :bind
-  (:map undo-tree-mode-map
+  (:map undo-tree-map
    ("M-/" . undo-tree-redo))
   :init
   (global-undo-tree-mode)
