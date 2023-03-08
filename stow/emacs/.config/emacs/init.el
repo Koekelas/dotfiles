@@ -2799,8 +2799,6 @@ see `company-backends'."
 
   (koek-cpny/set-backends (indium-repl-mode)
     '((company-indium-repl company-files :with company-yasnippet)))
-  (koek-cpny/set-backends (geiser-mode geiser-repl-mode)
-    '((geiser-company-backend company-files :with company-yasnippet)))
   (koek-cpny/set-backends (cmake-mode conf-mode makefile-mode scad-mode)
     '((company-dabbrev-code company-files :with company-yasnippet)))
   :config
@@ -4613,24 +4611,9 @@ age of the person."
   :defer t
   :delight)
 
-(use-package geiser-company
-  :defer t
-  :preface
-  (define-advice geiser-company--setup-company
-      (:around (f &rest args) koek-gsr/prevent-setup-backends)
-    (let ((backends company-backends))
-      (apply f args)
-      (setq company-backends backends))))
-
 (use-package geiser-mode
   :defer t
   :delight)
-
-(use-package geiser-repl
-  :defer t
-  :config
-  ;; Resolve keybinding conflict with company
-  (unbind-key "TAB" geiser-repl-mode-map))
 
 (use-package sql
   :mode ((rx ".sql" string-end) . sql-mode)
