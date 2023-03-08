@@ -4482,7 +4482,7 @@ nil, delete empty line at end of file."
     (when (derived-mode-p 'emacs-lisp-mode)
       (let* ((file-name (buffer-file-name))
              (package-dir (file-name-directory file-name))
-             (package-name (thread-first
+             (package-name (thread-last
                              package-dir
                              directory-file-name
                              file-name-base))
