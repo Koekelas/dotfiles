@@ -2923,7 +2923,7 @@ Move deleted files to trash.
 #+END_SRC
 
 ** vc - Version control
-VC is a placeholder.
+VC configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package vc-hooks
@@ -6796,7 +6796,7 @@ here so the compiler can load bongo and expand its macros.
 #+END_SRC
 
 ** gnus - News reader
-Gnus is a placeholder.
+Gnus configuration is a stub.
 
 #+BEGIN_SRC emacs-lisp
   (use-package gnus-dired
@@ -8467,8 +8467,8 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
 #+END_SRC
 
 ** TeX
-TeX configuration is a placeholder. [[*Org][Org]] optionally requires CDLaTeX
-which requires AUCTeX.
+TeX configuration is a stub. [[*Org][Org]] optionally requires CDLaTeX which
+requires AUCTeX.
 
 [[https://www.gnu.org/software/auctex/][auctex]]
 
