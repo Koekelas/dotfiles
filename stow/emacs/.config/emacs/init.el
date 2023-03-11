@@ -5052,9 +5052,9 @@ NAME is a string, the name of the user directory."
   (or (koek/get-user-dir "XDG_DOCUMENTS_DIR") koek/home-dir)
   "File name to documents directory.")
 
-(defvar koek/download-dir
+(defvar koek/downloads-dir
   (or (koek/get-user-dir "XDG_DOWNLOAD_DIR") koek/home-dir)
-  "File name to download directory.")
+  "File name to downloads directory.")
 
 (defvar koek/music-dir
   (or (koek/get-user-dir "XDG_MUSIC_DIR") koek/home-dir)
@@ -5177,7 +5177,7 @@ NAME is a string, the name of the user directory."
 (use-package eww
   :defer t
   :config
-  (setq eww-download-directory koek/download-dir))
+  (setq eww-download-directory koek/downloads-dir))
 
 (use-package mu4e-context
   :defer t
