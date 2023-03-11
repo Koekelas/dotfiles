@@ -769,34 +769,59 @@ earlier directories shadow entries in later ones.")
       (remhash id entries))
     entries))
 
+(defvar koek-xde/categories-dir
+  (expand-file-name "applications-categories/" (xdg-data-home)))
+
+(defun koek-xde/read-categories ()
+  (when (file-accessible-directory-p koek-xde/categories-dir)
+    (let ((file-names
+           (directory-files
+            koek-xde/categories-dir 'full (rx ".category" line-end) 'no-sort)))
+      (seq-reduce
+       (lambda (categories file-name)
+         (let ((category (file-name-base file-name)))
+           (with-temp-buffer
+             (insert-file-contents file-name)
+             (while (re-search-forward
+                     (rx line-start (one-or-more not-newline) ".desktop" line-end) nil t)
+               (puthash (file-name-base (match-string 0)) category categories))))
+         categories)
+       file-names (make-hash-table :test #'equal)))))
+
 (defvar koek-xde/entry-history nil
   "History of entry names read.")
 
 (defun koek-xde/read-id (prompt)
   (let* ((entries (koek-xde/get-entries))
-         (ids (let ((ids nil))
-                (maphash (lambda (id entry)
-                           (push (cons (gethash "Name" entry) id) ids))
-                         entries)
-                ids))
-         (candidates
-          (seq-reduce (pcase-lambda (candidates `(,name . ,id))
-                        (puthash name (gethash id entries) candidates)
-                        candidates)
-                      ids (make-hash-table :test #'equal)))
+         (categories (koek-xde/read-categories))
+         (candidates (let ((candidates (make-hash-table :test #'equal)))
+                       (maphash
+                        (lambda (id entry)
+                          (puthash (gethash "Name" entry)
+                                   (list :id id
+                                         :category (gethash id categories)
+                                         :description (gethash "Comment" entry))
+                                   candidates))
+                        entries)
+                       candidates))
          (table (koek-subr/enrich candidates
                   category 'xdg-desktop-entry
+                  group-function
+                  (lambda (candidate transform)
+                    (if transform
+                        candidate
+                      (or (plist-get (gethash candidate candidates) :category)
+                          "Uncategorized")))
                   annotation-function
                   (lambda (candidate)
-                    (when-let ((comment (thread-last
-                                          candidates
-                                          (gethash candidate)
-                                          (gethash "Comment"))))
-                      (concat " " comment))))))
+                    (when-let ((description
+                                (plist-get (gethash candidate candidates)
+                                           :description)))
+                      (concat " " description))))))
     (thread-first
       (completing-read prompt table nil t nil 'koek-xde/entry-history)
-      (assoc ids)
-      cdr)))
+      (gethash candidates)
+      (plist-get :id))))
 
 (defun koek-xde/launch (id &rest uris)
   ;; default-directory
