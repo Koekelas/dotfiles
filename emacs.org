@@ -1236,7 +1236,7 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                     week)
             :year (+ (car (seq-subseq vendor-block 9 10)) 1990)))
          :edid     ; Section 3.5, EDID structure version/revision
-         (list :version  (car edid-block) :revision (cadr edid-block))
+         (list :version (car edid-block) :revision (cadr edid-block))
          :basic    ; Section 3.6, Basic display parameters/features
          (let* ((horizontal (car (seq-subseq basic-block 1 2)))
                 (vertical   (car (seq-subseq basic-block 2 3)))
