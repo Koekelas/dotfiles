@@ -161,11 +161,12 @@ Intended as advice around `ace-window-display-mode'."
           `(,(moody-ribbon
               (mapconcat
                (lambda (workspace)
-                 (let ((face (if (= (plist-get workspace :n)
+                 (propertize (plist-get workspace :label)
+                             'face
+                             (if (= (plist-get workspace :n)
                                     exwm-workspace-current-index)
                                  'koek-ml/selected-workspace
                                'koek-ml/unselected-workspace)))
-                   (propertize (plist-get workspace :label) 'face face)))
                workspaces " ")
               nil 'up)
             koek-ml/separator)))))
