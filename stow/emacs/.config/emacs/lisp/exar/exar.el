@@ -215,7 +215,8 @@
                      outputs nil)))
     (mapcar (pcase-lambda (`(,id . ,props))
               (let ((output (thread-first
-                              (plist-get props :edid)
+                              props
+                              (plist-get :edid)
                               (assoc output-ids)
                               cdr
                               (alist-get outputs))))
