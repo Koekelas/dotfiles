@@ -1423,37 +1423,38 @@ For monitors and monitor layouts, see [[*Monitors][Monitors]].
                            monitor-layout)
         (setq exar--previous-layout layout))))
 
+  (defun exar-read-output (prompt)
+    (let* ((candidates
+            (mapcar
+             (lambda (output)
+               (let* ((props (cdr output))
+                      (manufacturer-name
+                       (exar--get-in props :edid :vendor :manufacturer))
+                      (monitor-names
+                       (thread-last
+                         (exar--get-in props :edid :detailed)
+                         (seq-filter (lambda (detailed)
+                                       (let ((type (plist-get detailed :type)))
+                                         (or (string-equal type "name")
+                                             (string-equal type "string")))))
+                         (mapcar (lambda (detailed)
+                                   (plist-get detailed :data)))))
+                      (output-name (plist-get props :name)))
+                 (cons
+                  (concat (or (cdr (assoc manufacturer-name exar-manufacturers))
+                              manufacturer-name)
+                          (when monitor-names
+                            (concat " " (string-join monitor-names " ")))
+                          (concat " connected to " output-name))
+                  output)))
+             (exar--get-connected-outputs (exar--get-outputs)))))
+      (thread-first
+        (completing-read prompt candidates nil t)
+        (assoc candidates)
+        cdr)))
+
   (defun exar-insert-edid (output)
-    (interactive
-     (let* ((candidates
-             (mapcar
-              (lambda (output)
-                (let* ((props (cdr output))
-                       (manufacturer-name
-                        (exar--get-in props :edid :vendor :manufacturer))
-                       (monitor-names
-                        (thread-last
-                          (exar--get-in props :edid :detailed)
-                          (seq-filter (lambda (detailed)
-                                        (let ((type (plist-get detailed :type)))
-                                          (or (string-equal type "name")
-                                              (string-equal type "string")))))
-                          (mapcar (lambda (detailed)
-                                    (plist-get detailed :data)))))
-                       (output-name (plist-get props :name)))
-                  (cons
-                   (concat (or (cdr (assoc manufacturer-name exar-manufacturers))
-                               manufacturer-name)
-                           (when monitor-names
-                             (concat " " (string-join monitor-names " ")))
-                           (concat " connected to " output-name))
-                   output)))
-              (exar--get-connected-outputs (exar--get-outputs))))
-            (output (thread-first
-                      (completing-read "Monitor: " candidates nil t)
-                      (assoc candidates)
-                      cdr)))
-       (list output)))
+    (interactive (list (exar-read-output "Monitor: ")))
     (insert (exar--get-in (cdr output) :edid :id)))
 
   ;;;###autoload
