@@ -2121,8 +2121,7 @@ When FORCE is truthy, unconditionally continue commit."
     (let ((tick (buffer-chars-modified-tick))
           (result (ispell-buffer)))
       (cond
-       (force
-        t)
+       (force)
        ;; When spell check was completed, result is truthy
        (result
         ;; When nothing was corrected, character tick counter is
