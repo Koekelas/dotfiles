@@ -2109,15 +2109,17 @@ for one."
 (use-package git-commit
   :defer t
   :preface
+  (defun koek-git/setup-ispell ()
+    (setq-local ispell-skip-region-alist
+                (append (list
+                         (list (rx line-start "#") #'forward-line)) ; Comment
+                        ispell-skip-region-alist)))
+
   (defun koek-git/check-spelling (force)
     "Check spelling of commit message.
 When FORCE is truthy, unconditionally continue commit."
     (let ((tick (buffer-chars-modified-tick))
-          (result
-           (let ((ispell-skip-region-alist ; Dynamic variable
-                  (cons (list (rx line-start "#") #'forward-line) ; Comment
-                        ispell-skip-region-alist)))
-             (ispell-buffer))))
+          (result (ispell-buffer)))
       (cond
        (force
         t)
@@ -2128,6 +2130,7 @@ When FORCE is truthy, unconditionally continue commit."
         (or (= (buffer-chars-modified-tick) tick)
             (y-or-n-p "Spelling checked.  Commit? "))))))
   :config
+  (add-hook 'git-commit-setup-hook #'koek-git/setup-ispell)
   (add-hook 'git-commit-finish-query-functions #'koek-git/check-spelling))
 
 (use-package ediff
