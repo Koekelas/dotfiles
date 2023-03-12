@@ -3349,6 +3349,18 @@ none return a URL, nil.  For rewrite functions, see
 (use-package message
   :defer t
   :preface
+  (defun koek-msg/setup-ispell ()
+    (setq-local
+     ispell-skip-region-alist
+     (append (list
+              ;; Citation line
+              (list (rx line-start (one-or-more not-newline) " writes:" line-end)
+                    #'forward-line)
+              ;; Citation
+              (list (rx line-start (regexp message-cite-prefix-regexp))
+                    #'forward-line))
+             ispell-skip-region-alist)))
+
   (defun koek-msg/check-spelling ()
     "Check spelling of e-mail."
     (let ((tick (buffer-chars-modified-tick)))
@@ -3359,6 +3371,7 @@ none return a URL, nil.  For rewrite functions, see
   :config
   (setq message-send-mail-function #'smtpmail-send-it)
   (setq message-beginning-of-line nil)
+  (add-hook 'message-mode-hook #'koek-msg/setup-ispell)
   (add-hook 'message-send-hook #'koek-msg/check-spelling))
 
 (use-package mu4e-compose
