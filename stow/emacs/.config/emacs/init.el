@@ -3094,7 +3094,7 @@ see `company-backends'."
 
 (use-package compile
   :bind
-  ("C-c x c" . compile)
+  ("C-c x c" . recompile)
   :preface
   (autoload #'ansi-color-apply-on-region "ansi-color")
 

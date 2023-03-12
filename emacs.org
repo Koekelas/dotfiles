@@ -6295,7 +6295,7 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 #+BEGIN_SRC emacs-lisp
   (use-package compile
     :bind
-    ("C-c x c" . compile)
+    ("C-c x c" . recompile)
     :preface
     (autoload #'ansi-color-apply-on-region "ansi-color")
 
