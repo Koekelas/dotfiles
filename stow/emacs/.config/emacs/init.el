@@ -2127,7 +2127,7 @@ When FORCE is truthy, unconditionally continue commit."
         ;; When nothing was corrected, character tick counter is
         ;; unchanged
         (or (= (buffer-chars-modified-tick) tick)
-            (y-or-n-p "Spelling checked.  Commit? "))))))
+            (y-or-n-p "Spelling checked.  Commit changes? "))))))
   :config
   (add-hook 'git-commit-setup-hook #'koek-git/setup-ispell)
   (add-hook 'git-commit-finish-query-functions #'koek-git/check-spelling))
@@ -3366,8 +3366,8 @@ none return a URL, nil.  For rewrite functions, see
     (let ((tick (buffer-chars-modified-tick)))
       (ispell-message)
       (unless (or (= (buffer-chars-modified-tick) tick)
-                  (y-or-n-p "Spelling checked.  Send? "))
-        (user-error "Send aborted"))))
+                  (y-or-n-p "Spelling checked.  Send message? "))
+        (user-error "Message send aborted")))) ; Mirror ispell-message
   :config
   (setq message-send-mail-function #'smtpmail-send-it)
   (setq message-beginning-of-line nil)
