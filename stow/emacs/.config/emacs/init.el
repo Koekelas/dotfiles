@@ -3041,6 +3041,7 @@ see `company-backends'."
   :bind
   ("C-c d e" . eldoc-doc-buffer)
   :config
+  (eldoc-add-command-completions "sp-")
   (setq eldoc-echo-area-use-multiline-p nil)
   :delight)
 
