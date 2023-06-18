@@ -3382,9 +3382,9 @@ For more information, see =man 5 hunspell=.
   (use-package lin
     :ensure t
     :hook
-    ((tabulated-list-mode ibuffer-mode dired-mode git-rebase-mode occur-mode
-      grep-mode proced-mode mu4e-headers-mode elfeed-search-mode
-      bongo-playlist-mode)
+    ((tabulated-list-mode ibuffer-mode dired-mode archive-mode tar-mode
+      git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
+      elfeed-search-mode bongo-playlist-mode)
      . lin-mode)
     :preface
     (defun koek-lin/reconfigure-for-wdired ()
