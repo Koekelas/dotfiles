@@ -119,7 +119,7 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
   pacman -S poppler-glib libpng zlib imagemagick
 
   ## Media player
-  pacman -S mpv youtube-dl
+  pacman -S mpv yt-dlp
 
   ## C family
   pacman -S gcc meson clang gdb arduino arduino-avr-core
