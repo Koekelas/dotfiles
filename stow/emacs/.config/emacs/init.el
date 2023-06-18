@@ -4796,7 +4796,10 @@ age of the person."
   (run-hooks 'koek-thm/enable-hook))
 
 (defvar koek-thm/dark-themes
-  '(modus-vivendi modus-vivendi-deuteranopia modus-vivendi-tinted)
+  '(modus-vivendi
+    modus-vivendi-deuteranopia
+    modus-vivendi-tritanopia
+    modus-vivendi-tinted)
   "List of theme symbols.
 Themes are dark themes.")
 
@@ -4844,9 +4847,11 @@ to the last enabled theme."
   (defvar koek-mt/variants
     '(modus-operandi
       modus-operandi-deuteranopia
+      modus-operandi-tritanopia
       modus-operandi-tinted
       modus-vivendi
       modus-vivendi-deuteranopia
+      modus-vivendi-tritanopia
       modus-vivendi-tinted))
 
   (defun koek-mt/enable (variant)
@@ -4900,6 +4905,7 @@ to the last enabled theme."
   (defvar koek-mt/complements
     (let ((pairs '((modus-operandi              . modus-vivendi)
                    (modus-operandi-deuteranopia . modus-vivendi-deuteranopia)
+                   (modus-operandi-tritanopia   . modus-vivendi-tritanopia)
                    (modus-operandi-tinted       . modus-vivendi-tinted))))
       (append pairs
               (mapcar (pcase-lambda (`(,a . ,b))
