@@ -317,13 +317,13 @@ latest org before loading org.
     "Convert Arabic number N to a Roman number.
   N is an integer greater than zero.  ROMAN-NUMERALS is used
   internally."
-    (unless roman-numerals
-      (setq roman-numerals koek-subr/roman-numerals))
-    (when (> n 0)
-      (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
-        (if (>= n arabic)
-            (concat roman (koek-subr/arabic-to-roman (- n arabic) roman-numerals))
-          (koek-subr/arabic-to-roman n (cdr roman-numerals))))))
+    (let ((roman-numerals (or roman-numerals koek-subr/roman-numerals)))
+      (when (> n 0)
+        (pcase-let ((`(,arabic . ,roman) (car roman-numerals)))
+          (if (>= n arabic)
+              (concat roman
+                      (koek-subr/arabic-to-roman (- n arabic) roman-numerals))
+            (koek-subr/arabic-to-roman n (cdr roman-numerals)))))))
 
   ;;; String subroutines
 
