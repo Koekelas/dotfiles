@@ -508,8 +508,7 @@ Keybinding is a string, see `edmacro-mode'.")
   (defun koek-wm/get-app-name (&optional buffer nick)
     (when-let*
         ((class (koek-wm/get-class buffer))
-         (names
-          (alist-get class koek-wm/app-names nil nil #'koek-wm/like-class-p)))
+         (names (cdr (assoc class koek-wm/app-names #'koek-wm/like-class-p))))
       (or (and nick (cadr names)) (car names))))
 
   (defun koek-wm/get-firefox-page ()
