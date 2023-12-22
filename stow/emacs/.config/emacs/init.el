@@ -125,6 +125,7 @@ PACKAGE is a symbol, the name of the package."
 
 (koek-pkg/ensure 'no-littering)
 (require 'no-littering)
+(no-littering-theme-backups)
 
 (koek-pkg/ensure 'delight)              ; Optional dependency
 (koek-pkg/ensure 'use-package)
@@ -1854,9 +1855,6 @@ the builtin annotator except it aligns the annotation."
 (use-package so-long
   :init
   (global-so-long-mode))
-
-(setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
 (use-package autorevert
   :config

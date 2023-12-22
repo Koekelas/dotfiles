@@ -183,6 +183,7 @@ directories in =stow/emacs/.config/emacs/lisp/=.
 #+BEGIN_SRC emacs-lisp
   (koek-pkg/ensure 'no-littering)
   (require 'no-littering)
+  (no-littering-theme-backups)
 #+END_SRC
 
 ** use-package - Package configuration macro
@@ -2776,14 +2777,6 @@ minibuffer.
   (use-package so-long
     :init
     (global-so-long-mode))
-#+END_SRC
-
-** Auto save files
-Save auto-save files in =~/.emacs.d/var/auto-save/=.
-
-#+BEGIN_SRC emacs-lisp
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+END_SRC
 
 ** autorevert - Revert file on external change
