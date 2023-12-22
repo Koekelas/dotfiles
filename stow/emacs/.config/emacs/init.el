@@ -792,37 +792,40 @@ earlier directories shadow entries in later ones.")
 (defvar koek-xde/entry-history nil
   "History of entry names read.")
 
-(defun koek-xde/read-id (prompt)
+(defun koek-xde/read-id
+    (prompt &optional predicate require-match initial-input def inherit-input-method)
   (let* ((entries (koek-xde/get-entries))
          (categories (koek-xde/read-categories))
          (candidates (let ((candidates (make-hash-table :test #'equal)))
-                       (maphash
-                        (lambda (id entry)
-                          (puthash (gethash "Name" entry)
-                                   (list :id id
-                                         :category (gethash id categories)
-                                         :description (gethash "Comment" entry))
-                                   candidates))
-                        entries)
+                       (maphash (lambda (id entry)
+                                  (puthash (gethash "Name" entry)
+                                           (list :id id
+                                                 :category (gethash id categories)
+                                                 :entry entry)
+                                           candidates))
+                                entries)
                        candidates))
-         (table (koek-subr/enrich candidates
-                  category 'xdg-desktop-entry
-                  group-function
-                  (lambda (candidate transform)
-                    (if transform
-                        candidate
-                      (or (plist-get (gethash candidate candidates) :category)
-                          "Uncategorized")))
-                  annotation-function
-                  (lambda (candidate)
-                    (when-let ((description
-                                (plist-get (gethash candidate candidates)
-                                           :description)))
-                      (concat " " description))))))
-    (thread-first
-      (completing-read prompt table nil t nil 'koek-xde/entry-history)
-      (gethash candidates)
-      (plist-get :id))))
+         (table
+          (koek-subr/enrich (koek-subr/attach-objects candidates)
+            category 'xdg-desktop-entry
+            group-function
+            (lambda (candidate transform)
+              (if transform
+                  candidate
+                (or (plist-get (koek-subr/detach-object candidate) :category)
+                    "*No category*")))
+            annotation-function
+            (lambda (candidate)
+              (when-let* ((entry (plist-get (koek-subr/detach-object candidate)
+                                            :entry))
+                          (description (gethash "Comment" entry)))
+                (concat " " description)))))
+         (key (completing-read
+               prompt table predicate require-match initial-input
+               'koek-xde/entry-history def inherit-input-method)))
+    (if-let ((value (gethash key candidates)))
+        (plist-get value :id)
+      key)))
 
 (defun koek-xde/launch (id &rest uris)
   ;; default-directory
@@ -837,7 +840,7 @@ earlier directories shadow entries in later ones.")
 (defvar koek-xde/browser-id "firefox")
 
 (defun koek-xde/launch-app (id)
-  (interactive (list (koek-xde/read-id "Launch: ")))
+  (interactive (list (koek-xde/read-id "Launch: " nil t)))
   (koek-xde/launch id))
 
 (defun koek-xde/launch-file-manager ()
@@ -1607,7 +1610,7 @@ are recognized:
   (defun koek-mbrk/visit-with-app (uri id)
     (interactive
      (let* ((uri (read-string "URI: "))
-            (id (koek-xde/read-id (format "Visit `%s' with: " uri))))
+            (id (koek-xde/read-id (format "Visit `%s' with: " uri) nil t)))
        (list uri id)))
     (koek-xde/launch id uri))
 
@@ -1807,7 +1810,8 @@ the builtin annotator except it aligns the annotation."
   (defvar koek-bmrk/generic-url-history nil
     "History of generic URL titles read.")
 
-  (defun koek-bmrk/read-generic-url (prompt)
+  (defun koek-bmrk/read-generic-url
+      (prompt &optional predicate require-match initial-input def inherit-input-method)
     (require 'bookmark)
     (bookmark-maybe-load-default-file)
     (let* ((candidates (seq-filter (lambda (bookmark)
@@ -1816,7 +1820,8 @@ the builtin annotator except it aligns the annotation."
                                    bookmark-alist))
            (table (koek-subr/enrich candidates
                     category 'bookmark)))
-      (completing-read prompt table nil t nil 'koek-bmrk/generic-url-history)))
+      (completing-read prompt table predicate require-match initial-input
+                       'koek-bmrk/generic-url-history def inherit-input-method)))
   :config
   (setq bookmark-default-file
         (no-littering-expand-etc-file-name "bookmark-default.el"))
@@ -3117,7 +3122,7 @@ Output is between `compilation-filter-start' and point."
       (eww (bookmark-get-filename bookmark))))
 
   (defun koek-eww/jump-bookmark (bookmark)
-    (interactive (list (koek-bmrk/read-generic-url "Bookmark: ")))
+    (interactive (list (koek-bmrk/read-generic-url "Bookmark: " nil t)))
     (let ((koek-bmrk/handle-generic-url-f ; Dynamic variable
            #'koek-eww/handle-eww))
       (bookmark-jump bookmark)))
@@ -3400,23 +3405,31 @@ none return a URL, nil.  For rewrite functions, see
   (defvar koek-bbdb/email-history nil
     "History of e-mail addresses read.")
 
-  (defun koek-bbdb/read-email (prompt)
-    (let* ((candidates (seq-mapcat (lambda (record)
-                                     (mapcar (lambda (email)
-                                               (cons email record))
-                                             (bbdb-record-mail record)))
-                                   (bbdb-records)))
-           (table (koek-subr/enrich candidates
-                    category 'email
-                    annotation-function
-                    (lambda (candidate)
-                      (when-let ((name (thread-first
-                                         candidate
-                                         (assoc candidates)
-                                         cdr
-                                         bbdb-record-name)))
-                        (concat " " name))))))
-      (completing-read prompt table nil t nil 'koek-bbdb/email-history)))
+  (defun koek-bbdb/read-email
+      (prompt &optional predicate require-match initial-input def inherit-input-method)
+    (let* ((deduplicate (koek-subr/make-labeler))
+           (candidates (seq-mapcat
+                        (lambda (record)
+                          (mapcar (lambda (email)
+                                    (cons (funcall deduplicate email)
+                                          (list :email email :record record)))
+                                  (bbdb-record-mail record)))
+                        (bbdb-records)))
+           (table
+            (koek-subr/enrich (koek-subr/attach-objects candidates)
+              category 'email
+              annotation-function
+              (lambda (candidate)
+                (when-let* ((record (plist-get (koek-subr/detach-object candidate)
+                                               :record))
+                            (name (bbdb-record-name record)))
+                  (concat " " name)))))
+           (key (completing-read
+                 prompt table predicate require-match initial-input
+                 'koek-bbdb/email-history def inherit-input-method)))
+      (if-let ((value (cdr (assoc key candidates))))
+          (plist-get value :email)
+        key)))
 
   (defun koek-bbdb/display-email (email)
     (interactive (list (koek-bbdb/read-email "E-mail: ")))

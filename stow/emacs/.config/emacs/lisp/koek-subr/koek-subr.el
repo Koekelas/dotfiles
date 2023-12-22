@@ -29,7 +29,8 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'subr-x))
+  (require 'subr-x)
+  (require 'cl-generic))
 (require 'seq)
 
 ;;; Configuration variables
@@ -256,6 +257,43 @@ S is a string, the string to interrogate."
      (rx line-start alpha (zero-or-more (any alnum "+-.")) ":") s)))
 
 ;;; Completion subroutines
+
+(defun koek-subr/construct-label (prefix occurrence)
+  (let ((n (1- occurrence)))
+    (if (= n 0)
+        prefix
+      (format "%s (%d)" prefix n))))
+
+(defun koek-subr/make-labeler (&optional construct-label)
+  (let ((construct-label (or construct-label #'koek-subr/construct-label))
+        (occurrences (make-hash-table :test #'equal)))
+    (lambda (prefix)
+      (let ((occurrence (1+ (gethash prefix occurrences 0))))
+        (puthash prefix occurrence occurrences)
+        (funcall construct-label prefix occurrence)))))
+
+(cl-defgeneric koek-subr/attach-objects (associations)
+  "Attach objects to names.
+ASSOCIATIONS is a collection of name to object pairs.  Name is a
+string.  Object is any object.  For detaching object from name,
+see `koek-subr/detach-object'.")
+
+(cl-defmethod koek-subr/attach-objects ((associations list))
+  (mapcar (pcase-lambda (`(,name . ,object))
+            (propertize name 'koek-object object))
+          associations))
+
+(cl-defmethod koek-subr/attach-objects ((associations hash-table))
+  (let ((names nil))
+    (maphash (lambda (name object)
+               (push (propertize name 'koek-object object) names))
+             associations)
+    (reverse names)))
+
+(defun koek-subr/detach-object (name)
+  "Detach object from NAME.
+NAME is a string, the name to detach object from."
+  (get-text-property 0 'koek-object name))
 
 (defmacro koek-subr/enrich (candidates &rest metadata-pairs)
   "Enrich CANDIDATES with metadata."
