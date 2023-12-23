@@ -2636,6 +2636,26 @@ minibuffer.
     ;; `marginalia--completion-metadata-get'
     :after (:any embark vertico)
     :preface
+    (defface koek-mgnl/description '((t . (:inherit completions-annotations)))
+      "Face for descriptions in minibuffer annotations."
+      :group 'marginalia-faces)
+
+    (defface koek-mgnl/command '((t . (:inherit font-lock-function-name-face)))
+      "Face for commands in minibuffer annotations."
+      :group 'marginalia-faces)
+
+    (defface koek-mgnl/address '((t . (:inherit font-lock-builtin-face)))
+      "Face for addresses in minibuffer annotations."
+      :group 'marginalia-faces)
+
+    (defface koek-mgnl/telephone-number '((t . (:inherit font-lock-number-face)))
+      "Face for telephone numbers in minibuffer annotations."
+      :group 'marginalia-faces)
+
+    (defface koek-mgnl/email '((t . (:inherit font-lock-keyword-face)))
+      "Face for e-mail in minibuffer annotations."
+      :group 'marginalia-faces)
+
     (defun koek-mgnl/builtin-annotator (candidate)
       "Annotator for types with a builtin annotator.
   CANDIDATE is a string, the candidate to annotate.  Identical to
@@ -2645,8 +2665,32 @@ minibuffer.
         (marginalia--fields
          ((string-trim annotation)
           :truncate 1.0 :face 'completions-annotations))))
+
+    (defun koek-mgnl/xdg-desktop-entry-annotator (candidate)
+      "Annotator for XDG desktop entries.
+  CANDIDATE is a string, the candidate to annotate."
+      (when-let ((entry (plist-get (koek-subr/detach-object candidate) :entry)))
+        (marginalia--fields
+         ((gethash "Comment" entry) :truncate 1.0 :face 'koek-mgnl/description)
+         ((gethash "Exec" entry) :truncate 0.5 :face 'koek-mgnl/command))))
+
+    (defun koek-mgnl/bbdb-record-annotator (candidate)
+      "Annotator for BBDB records.
+  CANDIDATE is a string, the candidate to annotate."
+      (when-let ((record (koek-subr/detach-object candidate)))
+        (marginalia--fields
+         ((when-let ((address (koek-bbdb/get-primary-address record)))
+            (koek-bbdb/format-address address 'single-line))
+          :truncate 0.5 :face 'koek-mgnl/address)
+         ((when-let ((phone (koek-bbdb/get-primary-telephone-number record)))
+            (bbdb-phone-string phone))
+          :truncate 0.2 :face 'koek-mgnl/telephone-number)
+         ((koek-bbdb/get-primary-email record)
+          :truncate 0.3 :face 'koek-mgnl/email))))
     :config
-    (push '(xdg-desktop-entry . (koek-mgnl/builtin-annotator builtin none))
+    (push '(xdg-desktop-entry . (koek-mgnl/xdg-desktop-entry-annotator builtin none))
+          marginalia-annotator-registry)
+    (push '(bbdb-record . (koek-mgnl/bbdb-record-annotator builtin none))
           marginalia-annotator-registry)
     (push '(email . (koek-mgnl/builtin-annotator builtin none))
           marginalia-annotator-registry)
@@ -6682,6 +6726,48 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     :ensure t
     :after mu4e
     :preface
+    (defvar koek-bbdb/pick-priorities
+      '(("cell" . 2)
+        ("home" . 1)
+        ("fax"  . -1)))
+
+    (defvar koek-bbdb/pick-professional-priorities
+      '(("work" . 2)
+        ("cell" . 1)))
+
+    (defun koek-bbdb/get-priority (type)
+      (or (cdr (assoc type koek-bbdb/pick-priorities)) 0))
+
+    (defun koek-bbdb/sort-by-type (entries get-type)
+      (seq-sort-by (lambda (entry)
+                     (koek-bbdb/get-priority (funcall get-type entry)))
+                   #'> entries))
+
+    (defun koek-bbdb/professionalp (record)
+      (bbdb-record-organization record))
+
+    (defun koek-bbdb/get-primary-address (record)
+      (let ((koek-bbdb/pick-priorities    ; Dynamic variable
+             (if (koek-bbdb/professionalp record)
+                 koek-bbdb/pick-professional-priorities
+               koek-bbdb/pick-priorities)))
+        (car
+         (koek-bbdb/sort-by-type (bbdb-record-address record) #'bbdb-address-label))))
+
+    (defun koek-bbdb/get-primary-telephone-number (record)
+      (let ((koek-bbdb/pick-priorities    ; Dynamic variable
+             (if (koek-bbdb/professionalp record)
+                 koek-bbdb/pick-professional-priorities
+               koek-bbdb/pick-priorities)))
+        (car
+         (koek-bbdb/sort-by-type (bbdb-record-phone record) #'bbdb-phone-label))))
+
+    (defun koek-bbdb/get-primary-email (record)
+      (car (bbdb-record-mail record)))
+
+    (defun koek-bbdb/format-address (address single-line)
+      (bbdb-format-address address (if single-line 3 2)))
+
     (defvar koek-bbdb/record-history nil
       "History of records read.")
 
@@ -8700,17 +8786,21 @@ current theme.
         (enable-theme variant)
         (modus-themes-with-colors
           (custom-set-faces
-           `(mode-line                ((,c . (:box unspecified
-                                              :overline ,border-mode-line-active
-                                              :underline ,border-mode-line-active))))
-           `(mode-line-inactive       ((,c . (:box unspecified
-                                              :overline ,border-mode-line-inactive
-                                              :underline ,border-mode-line-inactive))))
-           `(completions-annotations  ((,c . (:slant normal))))
-           `(marginalia-documentation ((,c . (:slant normal))))
-           `(dired-directory          ((,c . (:inherit bold))))
-           `(pdf-links-read-link      ((,c . (:foreground ,fg-main
-                                              :background ,bg-char-0)))))))
+           `(mode-line                  ((,c . (:box unspecified
+                                                :overline ,border-mode-line-active
+                                                :underline ,border-mode-line-active))))
+           `(mode-line-inactive         ((,c . (:box unspecified
+                                                :overline ,border-mode-line-inactive
+                                                :underline ,border-mode-line-inactive))))
+           `(completions-annotations    ((,c . (:slant normal))))
+           `(marginalia-documentation   ((,c . (:slant normal))))
+           `(koek-mgnl/command          ((,c . (:foreground ,fnname))))
+           `(koek-mgnl/address          ((,c . (:foreground ,builtin))))
+           `(koek-mgnl/telephone-number ((,c . (:foreground ,constant))))
+           `(koek-mgnl/email            ((,c . (:foreground ,accent-2))))
+           `(dired-directory            ((,c . (:inherit bold))))
+           `(pdf-links-read-link        ((,c . (:foreground ,fg-main
+                                                :background ,bg-char-0)))))))
       ;; After user theme
       (run-hooks 'koek-thm/enable-hook))
 
