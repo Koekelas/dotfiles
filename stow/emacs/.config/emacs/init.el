@@ -1058,8 +1058,8 @@ buffer."
 ;; Shell buffers
 (setq koek-buff/shell-modes
       '(vterm-mode eshell-mode cider-repl-mode sly-mrepl-mode erlang-shell-mode
-        indium-repl-mode inferior-octave-mode inferior-python-mode
-        geiser-repl-mode sql-interactive-mode))
+        inferior-octave-mode inferior-python-mode geiser-repl-mode
+        sql-interactive-mode))
 (setq koek-buff/shell-names
       (rx line-start
           ;; When new buffer, major mode is set after calling
@@ -2359,8 +2359,7 @@ When wgrep is enabled, disable lin, else, enable lin."
 
 (use-package subword
   :hook
-  ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-   . subword-mode)
+  ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode) . subword-mode)
   :delight)
 
 (defun koek-word/next (&optional arg)
@@ -2421,8 +2420,7 @@ negative, move point to beginning of next word."
    ("C-M-w" . sp-copy-sexp)
    ("C-M-k" . sp-kill-sexp))
   :hook
-  (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-    . smartparens-mode)
+  (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode) . smartparens-mode)
    (smartparens-mode . show-smartparens-mode))
   :preface
   (defun koek-sp/separate-sexp (open-delimiter action _context)
@@ -2806,8 +2804,6 @@ see `company-backends'."
                   (add-hook ',hook-sym #',f-sym))))
             modes))))
 
-  (koek-cpny/set-backends (indium-repl-mode)
-    '((company-indium-repl company-files :with company-yasnippet)))
   (koek-cpny/set-backends (cmake-mode conf-mode makefile-mode scad-mode)
     '((company-dabbrev-code company-files :with company-yasnippet)))
   :config
@@ -2997,7 +2993,7 @@ see `company-backends'."
     '(html))
   (koek-devd/set-docs (css-mode)
     '(css))
-  (koek-devd/set-docs (js-mode indium-repl-mode)
+  (koek-devd/set-docs (js-mode)
     '(javascript dom jquery lodash~4 node express))
   (koek-devd/set-docs (json-mode)
     '(npm))
@@ -4198,31 +4194,6 @@ Modes are confident about being derived from text-mode.")
 
   (setq js-enabled-frameworks '(javascript))
   :delight (js-mode "JS" :major))
-
-;; Prevent indium from creating Chrome profile directory during
-;; installation
-(setq indium-chrome-data-dir nil)
-
-(use-package indium-interaction
-  :ensure indium
-  :hook (js-mode . indium-interaction-mode)
-  :config
-  ;; Resolve keybinding conflict with documentation keymap
-  (unbind-key "C-c d" indium-interaction-mode-map)
-  :delight)
-
-(use-package indium-chrome
-  :defer t
-  :config
-  (setq indium-chrome-data-dir
-        (no-littering-expand-var-file-name "indium/chrome-profile/"))
-  (make-directory indium-chrome-data-dir 'parents))
-
-(use-package indium-repl
-  :defer t
-  :config
-  ;; Resolve keybinding conflict with company
-  (unbind-key "TAB" indium-repl-mode-map))
 
 (use-package json-mode
   :ensure t

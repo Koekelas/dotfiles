@@ -1935,8 +1935,8 @@ buffers.
   ;; Shell buffers
   (setq koek-buff/shell-modes
         '(vterm-mode eshell-mode cider-repl-mode sly-mrepl-mode erlang-shell-mode
-          indium-repl-mode inferior-octave-mode inferior-python-mode
-          geiser-repl-mode sql-interactive-mode))
+          inferior-octave-mode inferior-python-mode geiser-repl-mode
+          sql-interactive-mode))
   (setq koek-buff/shell-names
         (rx line-start
             ;; When new buffer, major mode is set after calling
@@ -3460,8 +3460,7 @@ Upgrade case commands.
 #+BEGIN_SRC emacs-lisp
   (use-package subword
     :hook
-    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-     . subword-mode)
+    ((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode) . subword-mode)
     :delight)
 #+END_SRC
 
@@ -3543,8 +3542,7 @@ Unlike ~forward-to-word~ and ~backward-to-word~, ~koek-word/next-word~ and
      ("C-M-w" . sp-copy-sexp)
      ("C-M-k" . sp-kill-sexp))
     :hook
-    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode indium-repl-mode)
-      . smartparens-mode)
+    (((prog-mode conf-mode eshell-mode comint-mode cider-repl-mode) . smartparens-mode)
      (smartparens-mode . show-smartparens-mode))
     :preface
     (defun koek-sp/separate-sexp (open-delimiter action _context)
@@ -5973,8 +5971,6 @@ Inherit Clojure snippets.
                     (add-hook ',hook-sym #',f-sym))))
               modes))))
 
-    (koek-cpny/set-backends (indium-repl-mode)
-      '((company-indium-repl company-files :with company-yasnippet)))
     (koek-cpny/set-backends (cmake-mode conf-mode makefile-mode scad-mode)
       '((company-dabbrev-code company-files :with company-yasnippet)))
     :config
@@ -6203,7 +6199,7 @@ Inherit Clojure snippets.
       '(html))
     (koek-devd/set-docs (css-mode)
       '(css))
-    (koek-devd/set-docs (js-mode indium-repl-mode)
+    (koek-devd/set-docs (js-mode)
       '(javascript dom jquery lodash~4 node express))
     (koek-devd/set-docs (json-mode)
       '(npm))
@@ -7995,36 +7991,6 @@ configuration here so [[*CMake][cmake-mode]] and [[*Conf][conf-mode]] can shadow
 
     (setq js-enabled-frameworks '(javascript))
     :delight (js-mode "JS" :major))
-#+END_SRC
-
-*** indium - Interact with process
-[[https://github.com/NicolasPetton/Indium][indium (GitHub)]]
-
-#+BEGIN_SRC emacs-lisp
-  ;; Prevent indium from creating Chrome profile directory during
-  ;; installation
-  (setq indium-chrome-data-dir nil)
-
-  (use-package indium-interaction
-    :ensure indium
-    :hook (js-mode . indium-interaction-mode)
-    :config
-    ;; Resolve keybinding conflict with documentation keymap
-    (unbind-key "C-c d" indium-interaction-mode-map)
-    :delight)
-
-  (use-package indium-chrome
-    :defer t
-    :config
-    (setq indium-chrome-data-dir
-          (no-littering-expand-var-file-name "indium/chrome-profile/"))
-    (make-directory indium-chrome-data-dir 'parents))
-
-  (use-package indium-repl
-    :defer t
-    :config
-    ;; Resolve keybinding conflict with company
-    (unbind-key "TAB" indium-repl-mode-map))
 #+END_SRC
 
 ** JSON

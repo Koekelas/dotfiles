@@ -77,7 +77,6 @@ Everything is optional.
 - JavaScript:
   - [[https://nodejs.org/][Node.js]]
   - [[https://github.com/theia-ide/typescript-language-server][TypeScript Language Server]]
-  - [[https://github.com/NicolasPetton/Indium][Indium]]
 - Octave and MATLAB: [[https://www.gnu.org/software/octave/][Octave]]
 - OpenSCAD: [[https://www.openscad.org/][OpenSCAD]]
 - Python:
@@ -144,7 +143,6 @@ To install dependencies on [[https://www.archlinux.org/][Arch Linux]], run:
 
   ## JavaScript
   pacman -S nodejs npm typescript-language-server
-  npm i -g indium
 
   ## Octave and MATLAB
   pacman -S octave
