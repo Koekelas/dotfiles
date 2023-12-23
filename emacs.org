@@ -2006,13 +2006,18 @@ Bury unneeded buffers, computers have more than enough memory.
             ;; Top
             (,(rx line-start
                   (or "*Occur*"
+                      "*Embark Export: consult-line"
                       "*grep*"
+                      "*Embark Export: consult-ripgrep"
+                      "*Embark Collect: xref-find-references"
                       "*Flymake"
                       "*PDF-Occur*"))
              . (display-buffer-in-side-window . ((side . top) ,@default-hor-actions)))
             ;; Left
             (,(rx line-start
                   (or "*Customize"
+                      "*Embark Export: helpful-variable"
+                      "*Embark Export: describe-face"
                       "*Network Security Manager*"
                       "*BBDB*"
                       "*Dictionary*"
