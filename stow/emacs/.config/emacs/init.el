@@ -1814,8 +1814,8 @@ the builtin annotator except it aligns the annotation."
 
   ;; Violates handler contract, a handler must set but not select
   ;; current
-  (defun koek-bmrk/handle-browse-url (bookmark)
-    (browse-url (bookmark-get-filename bookmark)))
+  (defun koek-bmrk/handle-browse-url (bookmark-or-name)
+    (browse-url (bookmark-get-filename bookmark-or-name)))
 
   (defvar koek-bmrk/handle-generic-url-f #'koek-bmrk/handle-browse-url)
 
@@ -3130,8 +3130,9 @@ Output is between `compilation-filter-start' and point."
   :bind
   ("C-c x b" . eww)
   :preface
-  (defun koek-eww/handle-eww (bookmark)
-    (let ((name (bookmark-name-from-full-record bookmark)))
+  (defun koek-eww/handle-eww (bookmark-or-name)
+    (let* ((bookmark (bookmark-get-bookmark bookmark-or-name))
+           (name (bookmark-name-from-full-record bookmark)))
       (set-buffer
        (generate-new-buffer (koek-subr/construct-earmuffed-name "eww" name)))
       (eww-mode)
