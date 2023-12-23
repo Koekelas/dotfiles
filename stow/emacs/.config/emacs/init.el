@@ -1109,11 +1109,12 @@ With `\\[universal-argument]' prefix argument ARG, kill current."
                     "*vterm*"
                     "*eshell*"
                     "*Proced*"
+                    "*mu4e-main*"
                     "*view-src"
                     "*org-src"))
            . ((display-buffer-reuse-window display-buffer-same-window)))
           ;; Below selected
-          (,(rx line-start (or " *transient*" "*Calendar*"))
+          (,(rx line-start (or " *transient*" " *mu4e-update*" "*Calendar*"))
            . (display-buffer-below-selected))
           ;; Top
           (,(rx line-start
