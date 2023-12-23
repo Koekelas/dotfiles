@@ -679,32 +679,12 @@ N is an integer, a workspace number."
              x ,(/ width 4) y ,(/ height 6)
              width ,(* (/ width 4) 2) height ,(* (/ height 6) 4)
              char-mode t ,@defaults)
-            ;; ---------- Epiphany/Web ----------
-            ((koek-wm/classp "epiphany")
-             simulation-keys
-             ,(let ((keys (append '(("M-o" . "C-n")
-                                    ("M-p" . "C-S-p")
-                                    ("M-k" . "C-w"))
-                                  koek-wm/base-simulation-keys)))
-                (mapcar (pcase-lambda (`(,from . ,to))
-                          (cons (kbd from) (kbd to)))
-                        keys))
-             ,@defaults)
             ;; ---------- Firefox ----------
             ((koek-wm/classp "firefox")
              simulation-keys
              ,(let ((keys (append '(("M-o" . "C-n")
                                     ("M-p" . "C-S-p")
                                     ("M-k" . "C-w"))
-                                  koek-wm/base-simulation-keys)))
-                (mapcar (pcase-lambda (`(,from . ,to))
-                          (cons (kbd from) (kbd to)))
-                        keys))
-             ,@defaults)
-            ;; ---------- Nautilus/Files ----------
-            ((koek-wm/classp "nautilus")
-             simulation-keys
-             ,(let ((keys (append '(("M-k" . "C-w"))
                                   koek-wm/base-simulation-keys)))
                 (mapcar (pcase-lambda (`(,from . ,to))
                           (cons (kbd from) (kbd to)))
