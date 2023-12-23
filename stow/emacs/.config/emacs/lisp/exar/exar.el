@@ -45,7 +45,9 @@
 
 (defvar exar-manufacturers
   '(("AUO" . "AU Optronics Corp.")
-    ("MJI" . "Marantz Japan Inc.")))
+    ("GSM" . "LG Corp.")
+    ("MJI" . "Marantz Japan Inc.")
+    ("PHL" . "Koninklijke Philips N.V.")))
 
 (defconst exar--x:True 1)
 (defconst exar--x:False 0)
