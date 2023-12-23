@@ -1592,6 +1592,11 @@ are recognized:
   :bind
   ("C-&" . embark-act)
   :preface
+  (defun koek-mbrk/setup-email (&rest _args)
+    (let ((target (minibuffer-contents)))
+      (delete-minibuffer-contents)
+      (insert (koek-subr/strip-chevrons target))))
+
   (defun koek-mbrk/visit-with-app (uri id)
     (interactive
      (let* ((uri (read-string "URI: "))
@@ -1637,6 +1642,14 @@ are recognized:
    ("t" . koek-mu4e/display-messages-to)
    ("f" . koek-mu4e/display-messages-from)
    ("a" . koek-bbdb/display-email))
+  (push '(koek-mu4e/compose-message . (koek-mbrk/setup-email))
+        embark-target-injection-hooks)
+  (push '(koek-mu4e/display-messages-to . (koek-mbrk/setup-email))
+        embark-target-injection-hooks)
+  (push '(koek-mu4e/display-messages-from . (koek-mbrk/setup-email))
+        embark-target-injection-hooks)
+  (push '(koek-bbdb/display-email . (koek-mbrk/setup-email))
+        embark-target-injection-hooks)
 
   (bind-keys
    :map embark-bookmark-map
@@ -3209,7 +3222,7 @@ none return a URL, nil.  For rewrite functions, see
   :preface
   (defun koek-mu4e/compose-message (email)
     (interactive (list (koek-bbdb/read-email "To: ")))
-    (compose-mail (koek-subr/strip-chevrons email)))
+    (compose-mail email))
   :init
   (bind-key "C-c x C-m" #'compose-mail)
 
@@ -3238,14 +3251,13 @@ none return a URL, nil.  For rewrite functions, see
 
   (defun koek-mu4e/display-messages-to (email)
     (interactive (list (koek-bbdb/read-email "To: ")))
-    (let ((normalized (koek-subr/strip-chevrons email)))
-      (mu4e-search (mapconcat (lambda (field)
-                                (concat field ":" normalized))
-                              '("to" "cc" "bcc") " or "))))
+    (mu4e-search (mapconcat (lambda (field)
+                              (concat field ":" email))
+                            '("to" "cc" "bcc") " or ")))
 
   (defun koek-mu4e/display-messages-from (email)
     (interactive (list (koek-bbdb/read-email "From: ")))
-    (mu4e-search (concat "from:" (koek-subr/strip-chevrons email)))))
+    (mu4e-search (concat "from:" email))))
 
 (use-package mu4e-main
   :defer t
@@ -3414,8 +3426,7 @@ none return a URL, nil.  For rewrite functions, see
 
   (defun koek-bbdb/display-email (email)
     (interactive (list (koek-bbdb/read-email "E-mail: ")))
-    (bbdb-search-mail
-     (rx line-start (literal (koek-subr/strip-chevrons email)) line-end)))
+    (bbdb-search-mail (rx line-start (literal email) line-end)))
   :config
   (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
         bbdb-address-format-list)
