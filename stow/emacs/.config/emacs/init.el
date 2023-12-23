@@ -1653,7 +1653,8 @@ are recognized:
 
   (bind-keys
    :map embark-bookmark-map
-   ("e" . koek-eww/jump-bookmark))
+   ("e" . koek-eww/jump-bookmark)
+   ("w" . koek-bmrk/save-filename-kill-ring))
 
   (bind-keys
    :map embark-region-map
@@ -1790,6 +1791,27 @@ the builtin annotator except it aligns the annotation."
   (("C-x r m" . bookmark-set-no-overwrite)
    ("C-x r C-m" . bookmark-set))
   :preface
+  (defun koek-bmrk/read-bookmark
+      (prompt &optional predicate require-match initial-input def inherit-input-method)
+    (require 'bookmark)
+    (bookmark-maybe-load-default-file)
+    (let ((table (koek-subr/enrich bookmark-alist
+                   category 'bookmark
+                   group-function
+                   (lambda (candidate transform)
+                     (if transform
+                         candidate
+                       (let ((handler (or (bookmark-get-handler candidate)
+                                          'bookmark-default-handler)))
+                         (or (get handler 'bookmark-handler-type)
+                             (symbol-name handler))))))))
+      (completing-read prompt table predicate require-match initial-input
+                       'bookmark-history def inherit-input-method)))
+
+  (defun koek-bmrk/save-filename-kill-ring (bookmark-or-name)
+    (interactive (list (koek-bmrk/read-bookmark "Bookmark: " nil t)))
+    (kill-new (bookmark-get-filename bookmark-or-name)))
+
   ;; Violates handler contract, a handler must set but not select
   ;; current
   (defun koek-bmrk/handle-browse-url (bookmark)
