@@ -3091,13 +3091,13 @@ VC configuration is a stub.
     :defer t
     :config
     (setq magit-blame-styles
-          '((margin (margin-format    . ("%s%f" "%C %a" "%H" ""))
-                    (margin-width     . 40)
-                    (margin-face      . magit-blame-margin)
-                    (margin-body-face . (magit-blame-dimmed)))
-            (heading (heading-format . "%C %-20a %s\n"))
-            (line (show-message . t)
-                  (show-lines   . t))))
+          '((margin . ((margin-format    . ("%s%f" "%C %a" "%H" ""))
+                       (margin-width     . 40)
+                       (margin-face      . magit-blame-margin)
+                       (margin-body-face . (magit-blame-dimmed))))
+            (heading . ((heading-format . "%C %-20a %s\n")))
+            (line . ((show-message . t)
+                     (show-lines   . t)))))
     (setq magit-blame-echo-style 'line))
 
   (use-package transient
