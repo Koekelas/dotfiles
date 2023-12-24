@@ -3269,9 +3269,8 @@ none return a URL, nil.  For rewrite functions, see
 
 (use-package mu4e-search
   :defer t
+  :autoload mu4e-search
   :preface
-  (autoload #'mu4e-search "mu4e-search")
-
   (defun koek-mu4e/display-messages-to (email)
     (interactive (list (koek-bbdb/read-email "To: ")))
     (mu4e-search (mapconcat (lambda (field)
@@ -3469,10 +3468,8 @@ none return a URL, nil.  For rewrite functions, see
 (use-package bbdb-vcard
   :ensure t
   :after bbdb
+  :autoload (bbdb-vcard-import-vcard bbdb-vcard-iterate-vcards)
   :preface
-  (autoload #'bbdb-vcard-import-vcard "bbdb-vcard")
-  (autoload #'bbdb-vcard-iterate-vcards "bbdb-vcard")
-
   (defun koek-bbdb/import-dir (file-name &optional interactive)
     "Import vCards from directory FILE-NAME and its subdirectories.
 Treats every vCard as a distinct contact.  INTERACTIVE is used
