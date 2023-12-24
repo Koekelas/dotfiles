@@ -1848,7 +1848,7 @@ the builtin annotator except it aligns the annotation."
   ;; Disable bookmark indicator in fringe. When jumping to a bookmark
   ;; whose handler is `koek-bmrk/handle-browse-url', indicator is set
   ;; in calling buffer.
-  (setq bookmark-set-fringe-mark nil)
+  (setq bookmark-fringe-mark nil)
   (setq bookmark-menu-confirm-deletion t)
   (setq bookmark-bmenu-file-column 40)
   (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
@@ -4532,8 +4532,7 @@ nil, delete empty line at end of file."
               (expand-file-name (concat package-name "-autoloads.el")
                                 package-dir)))
         (when (string-equal (file-name-base file-name) package-name)
-          (make-directory-autoloads package-dir autoload-file)
-          (kill-buffer (find-buffer-visiting autoload-file))))))
+          (loaddefs-generate package-dir autoload-file)))))
 
   (defun koek-org/compile-emacs-lisp ()
     "Compile Emacs Lisp files."

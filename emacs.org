@@ -2798,7 +2798,7 @@ minibuffer.
     ;; Disable bookmark indicator in fringe. When jumping to a bookmark
     ;; whose handler is `koek-bmrk/handle-browse-url', indicator is set
     ;; in calling buffer.
-    (setq bookmark-set-fringe-mark nil)
+    (setq bookmark-fringe-mark nil)
     (setq bookmark-menu-confirm-deletion t)
     (setq bookmark-bmenu-file-column 40)
     (add-hook 'bookmark-bmenu-mode-hook #'koek-subr/reset-default-directory))
@@ -8371,8 +8371,7 @@ It's part of tangling [[*yasnippet - Snippets][embedded snippets]].
                 (expand-file-name (concat package-name "-autoloads.el")
                                   package-dir)))
           (when (string-equal (file-name-base file-name) package-name)
-            (make-directory-autoloads package-dir autoload-file)
-            (kill-buffer (find-buffer-visiting autoload-file))))))
+            (loaddefs-generate package-dir autoload-file)))))
 
     (defun koek-org/compile-emacs-lisp ()
       "Compile Emacs Lisp files."
@@ -9159,7 +9158,7 @@ can load moody.
   (defvar koek-ml/depth
     '(:eval
       (let ((depth (- (recursion-depth) (minibuffer-depth))))
-        (when (and (> depth 0) (moody-window-active-p))
+        (when (and (> depth 0) (mode-line-window-selected-p))
           `(,(moody-ribbon (format "[%d]" depth) nil 'up)
             koek-ml/separator))))
     "Mode line construct for recursive edit depth.")
@@ -9184,7 +9183,7 @@ can load moody.
 
   (defvar koek-ml/exwm-workspaces
     '(:eval
-      (when (and (featurep 'exwm-workspace) (moody-window-active-p))
+      (when (and (featurep 'exwm-workspace) (mode-line-window-selected-p))
         (let ((workspaces (koek-ml/get-exwm-workspaces)))
           (when (length> workspaces 1)
             `(,(moody-ribbon
@@ -9273,7 +9272,7 @@ can load moody.
   (defvar koek-ml/exwm-input
     '(:eval
       (when (and (featurep 'exwm-core) (eq exwm--input-mode 'char-mode)
-                 (moody-window-active-p))
+                 (mode-line-window-selected-p))
         `("" koek-ml/separator
           ,(moody-ribbon "Char" nil 'up))))
     "Mode line construct for exwm input.")
@@ -9283,7 +9282,7 @@ can load moody.
 
   (defvar koek-ml/input
     '(:eval
-      (when (and current-input-method (moody-window-active-p))
+      (when (and current-input-method (mode-line-window-selected-p))
         `("" koek-ml/separator
           ,(moody-ribbon current-input-method-title nil 'up))))
     "Mode line construct for input.")
@@ -9343,7 +9342,7 @@ can load moody.
 
   (defvar koek-ml/flymake
     '(:eval
-      (when (and (bound-and-true-p flymake-mode) (moody-window-active-p))
+      (when (and (bound-and-true-p flymake-mode) (mode-line-window-selected-p))
         `("" koek-ml/separator
           ,(when-let ((name
                        ;; First enabled checker
@@ -9370,7 +9369,7 @@ can load moody.
 
   (defvar koek-ml/vc
     '(:eval
-      (when (and (bound-and-true-p vc-mode) (moody-window-active-p))
+      (when (and (bound-and-true-p vc-mode) (mode-line-window-selected-p))
         (let ((state (string-trim (substring-no-properties vc-mode))))
           ;; For format, see `vc-default-mode-line-string'
           (string-match
@@ -9391,7 +9390,8 @@ can load moody.
 
   (defvar koek-ml/task
     '(:eval
-      (when (and (featurep 'org) (org-clocking-buffer) (moody-window-active-p))
+      (when (and (featurep 'org) (org-clocking-buffer)
+                 (mode-line-window-selected-p))
         `("" koek-ml/separator
           ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
     "Mode line construct for task.")

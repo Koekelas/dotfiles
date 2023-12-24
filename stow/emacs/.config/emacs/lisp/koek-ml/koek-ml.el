@@ -130,7 +130,7 @@ Intended as advice around `ace-window-display-mode'."
 (defvar koek-ml/depth
   '(:eval
     (let ((depth (- (recursion-depth) (minibuffer-depth))))
-      (when (and (> depth 0) (moody-window-active-p))
+      (when (and (> depth 0) (mode-line-window-selected-p))
         `(,(moody-ribbon (format "[%d]" depth) nil 'up)
           koek-ml/separator))))
   "Mode line construct for recursive edit depth.")
@@ -155,7 +155,7 @@ Intended as advice around `ace-window-display-mode'."
 
 (defvar koek-ml/exwm-workspaces
   '(:eval
-    (when (and (featurep 'exwm-workspace) (moody-window-active-p))
+    (when (and (featurep 'exwm-workspace) (mode-line-window-selected-p))
       (let ((workspaces (koek-ml/get-exwm-workspaces)))
         (when (length> workspaces 1)
           `(,(moody-ribbon
@@ -244,7 +244,7 @@ Intended as advice around `exwm-input--update-mode-line'."
 (defvar koek-ml/exwm-input
   '(:eval
     (when (and (featurep 'exwm-core) (eq exwm--input-mode 'char-mode)
-               (moody-window-active-p))
+               (mode-line-window-selected-p))
       `("" koek-ml/separator
         ,(moody-ribbon "Char" nil 'up))))
   "Mode line construct for exwm input.")
@@ -254,7 +254,7 @@ Intended as advice around `exwm-input--update-mode-line'."
 
 (defvar koek-ml/input
   '(:eval
-    (when (and current-input-method (moody-window-active-p))
+    (when (and current-input-method (mode-line-window-selected-p))
       `("" koek-ml/separator
         ,(moody-ribbon current-input-method-title nil 'up))))
   "Mode line construct for input.")
@@ -314,7 +314,7 @@ STATE is a symbol, a flymake state."
 
 (defvar koek-ml/flymake
   '(:eval
-    (when (and (bound-and-true-p flymake-mode) (moody-window-active-p))
+    (when (and (bound-and-true-p flymake-mode) (mode-line-window-selected-p))
       `("" koek-ml/separator
         ,(when-let ((name
                      ;; First enabled checker
@@ -341,7 +341,7 @@ STATE is a symbol, a flymake state."
 
 (defvar koek-ml/vc
   '(:eval
-    (when (and (bound-and-true-p vc-mode) (moody-window-active-p))
+    (when (and (bound-and-true-p vc-mode) (mode-line-window-selected-p))
       (let ((state (string-trim (substring-no-properties vc-mode))))
         ;; For format, see `vc-default-mode-line-string'
         (string-match
@@ -362,7 +362,8 @@ STATE is a symbol, a flymake state."
 
 (defvar koek-ml/task
   '(:eval
-    (when (and (featurep 'org) (org-clocking-buffer) (moody-window-active-p))
+    (when (and (featurep 'org) (org-clocking-buffer)
+               (mode-line-window-selected-p))
       `("" koek-ml/separator
         ,(org-duration-from-minutes (org-clock-get-clocked-time)))))
   "Mode line construct for task.")
