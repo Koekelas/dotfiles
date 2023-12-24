@@ -2153,26 +2153,6 @@ for one."
                    (show-lines   . t)))))
   (setq magit-blame-echo-style 'line))
 
-(use-package transient
-  :defer t
-  :preface
-  (defvar koek-ml/transient-format)
-
-  (defvar koek-tsnt/old-mode-line-format nil)
-
-  (defun koek-tsnt/setup-mode-line ()
-    (when (featurep 'koek-ml)
-      (if koek-ml-mode
-          (progn
-            (unless (eq transient-mode-line-format koek-ml/transient-format)
-              (setq koek-tsnt/old-mode-line-format transient-mode-line-format))
-            (setq transient-mode-line-format koek-ml/transient-format))
-        (setq transient-mode-line-format koek-tsnt/old-mode-line-format)
-        (setq koek-tsnt/old-mode-line-format nil))))
-  :config
-  (koek-tsnt/setup-mode-line)
-  (add-hook 'koek-ml-mode-hook #'koek-tsnt/setup-mode-line))
-
 (use-package git-commit
   :defer t
   :preface

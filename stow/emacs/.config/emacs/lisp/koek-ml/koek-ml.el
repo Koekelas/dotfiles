@@ -381,6 +381,9 @@ STATE is a symbol, a flymake state."
 
 ;;;; transient
 
+(defvar koek-ml-mode)
+(defvar transient-mode-line-format)
+
 (defvar koek-ml/transient-format
   '(" "
     (:eval
@@ -391,6 +394,24 @@ STATE is a symbol, a flymake state."
     koek-ml/large-separator
     koek-ml/modes))
 (put 'koek-ml/transient-format 'risky-local-variable t)
+
+(defvar koek-ml/old-transient-format nil)
+
+(defun koek-ml/setup-transient ()
+  (if koek-ml-mode
+      (progn
+        (unless (eq transient-mode-line-format koek-ml/transient-format)
+          (setq koek-ml/old-transient-format transient-mode-line-format))
+        (setq transient-mode-line-format koek-ml/transient-format))
+    (when koek-ml/old-transient-format
+      (setq transient-mode-line-format koek-ml/old-transient-format)
+      (setq koek-ml/old-transient-format nil))))
+
+(eval-after-load 'transient #'koek-ml/setup-transient)
+
+(defun koek-ml/maybe-setup-transient ()
+  (when (featurep 'transient)
+    (koek-ml/setup-transient)))
 
 ;;;; ediff
 
@@ -527,6 +548,7 @@ Intended as advice overriding `calendar-update-mode-line'."
     (remove-hook 'ediff-cleanup-hook #'koek-ml/cleanup-variants)
     (advice-remove 'calendar-set-mode-line #'koek-ml/setup-calendar)
     (advice-remove 'calendar-update-mode-line #'koek-ml/update-calendar))
+  (koek-ml/maybe-setup-transient)
   (force-mode-line-update 'all))
 
 (provide 'koek-ml)
