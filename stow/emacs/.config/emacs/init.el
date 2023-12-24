@@ -3417,6 +3417,37 @@ none return a URL, nil.  For rewrite functions, see
   :ensure t
   :after mu4e
   :preface
+  (defvar koek-bbdb/record-history nil
+    "History of records read.")
+
+  (defun koek-bbdb/read-record-multiple
+      (prompt &optional predicate require-match initial-input def inherit-input-method)
+    (let* ((deduplicate (koek-subr/make-labeler))
+           (candidates (mapcar
+                        (lambda (record)
+                          (cons (funcall deduplicate (bbdb-record-name record))
+                                record))
+                        (bbdb-records)))
+           (table
+            (koek-subr/enrich (koek-subr/attach-objects candidates)
+              category 'bbdb-record
+              group-function
+              (lambda (candidate transform)
+                (if transform
+                    candidate
+                  (if-let* ((record (koek-subr/detach-object candidate))
+                            (organization (car (bbdb-record-organization record))))
+                      (let ((separator (car (alist-get 'organization bbdb-separator-alist
+                                                       bbdb-default-separator))))
+                        (car (split-string organization separator)))
+                    "*No organization*")))))
+           (keys (completing-read-multiple
+                  prompt table predicate require-match initial-input
+                  'koek-bbdb/record-history def inherit-input-method)))
+      (mapcar (lambda (key)
+                (cdr (assoc key candidates)))
+              keys)))
+
   (defvar koek-bbdb/email-history nil
     "History of e-mail addresses read.")
 
@@ -3446,9 +3477,15 @@ none return a URL, nil.  For rewrite functions, see
           (plist-get value :email)
         key)))
 
+  (defun koek-bbdb/display-records (records)
+    (interactive (list (koek-bbdb/read-record-multiple "Record: " nil t)))
+    (bbdb-display-records records nil nil 'select))
+
   (defun koek-bbdb/display-email (email)
     (interactive (list (koek-bbdb/read-email "E-mail: ")))
     (bbdb-search-mail (rx line-start (literal email) line-end)))
+  :init
+  (bind-key "C-c x a" #'koek-bbdb/display-records)
   :config
   (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
         bbdb-address-format-list)
@@ -3463,7 +3500,7 @@ none return a URL, nil.  For rewrite functions, see
 
 (use-package bbdb-com
   :bind
-  ("C-c x a" . bbdb))
+  ("C-c x C-a" . bbdb))
 
 (use-package bbdb-vcard
   :ensure t
