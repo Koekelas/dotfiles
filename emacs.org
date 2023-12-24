@@ -6460,7 +6460,8 @@ For shell configuration, see [[file:dotfiles.org::*Bash][Bash]].
 #+END_SRC
 
 *** shr - HTML renderer
-Shr is used by other packages (e.g. [[*mu4e - E-mail client][mu4e]] and [[*elfeed - News reader][elfeed]]) besides eww.
+While listed under the /eww/ heading, shr is used by [[*mu4e - E-mail client][mu4e]], [[*elfeed - News reader][elfeed]] and
+others.
 
 #+BEGIN_SRC emacs-lisp
   (use-package shr
