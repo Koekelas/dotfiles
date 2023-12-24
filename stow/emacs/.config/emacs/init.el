@@ -3487,7 +3487,7 @@ none return a URL, nil.  For rewrite functions, see
   :init
   (bind-key "C-c x a" #'koek-bbdb/display-records)
   :config
-  (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
+  (push '(("Belgium" "België") "spcC" "@%s\n@%p @%c@\n%C@" "@%s@, %c@")
         bbdb-address-format-list)
   (setq bbdb-default-country nil)
   (setq bbdb-phone-style nil)

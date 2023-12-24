@@ -6752,7 +6752,7 @@ To show birthdays as agenda entries, see [[info:org#Weekly/daily agenda][Anniver
     :init
     (bind-key "C-c x a" #'koek-bbdb/display-records)
     :config
-    (push '(("Belgium" "België") "spcC" "@%s\n@@%p @%c@\n%C@" "%c")
+    (push '(("Belgium" "België") "spcC" "@%s\n@%p @%c@\n%C@" "@%s@, %c@")
           bbdb-address-format-list)
     (setq bbdb-default-country nil)
     (setq bbdb-phone-style nil)
