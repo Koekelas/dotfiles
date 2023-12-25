@@ -3496,6 +3496,17 @@ none return a URL, nil.  For rewrite functions, see
   (setq bbdb-pop-up-window-size t)
   (setq bbdb-mua-pop-up-window-size t)
 
+  (setq bbdb-layout-alist
+        '((one-line . ((toggle   . t)
+                       (order    . (phone mail))
+                       (name-end . 20)))
+          (multi-line . ((toggle      . t)
+                         (order       . (address phone mail birthday notes))
+                         (indentation . 20)))
+          (full-multi-line . ((toggle      . t)
+                              (order       . (address phone mail birthday notes t))
+                              (indentation . 20)))))
+
   (bbdb-initialize 'mu4e 'message))
 
 (use-package bbdb-com
