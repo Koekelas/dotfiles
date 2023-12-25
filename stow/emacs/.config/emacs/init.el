@@ -5353,9 +5353,6 @@ NAME is a string, the name of the user directory."
         '((:name "Personal INBOX"
            :query "maildir:/Personal/INBOX"
            :key ?p)
-          (:name "Applied Artificial Intelligence"
-           :query "maildir:/Personal/Opleidingen/AAI"
-           :key ?a)
           (:name "Verbouwing"
            :query "maildir:/Personal/Verbouwing"
            :key ?v)
