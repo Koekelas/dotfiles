@@ -4004,6 +4004,8 @@ INTERACTIVE is used internally."
   :koek t
   :defer t
   :config
+  (setq prepcast-prep-fs
+        '(prepcast-prep-default-face prepcast-prep-moody prepcast-prep-keycast))
   (setq prepcast-scale 1.5)
   :delight)
 

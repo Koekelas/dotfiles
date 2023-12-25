@@ -38,8 +38,7 @@
   "Prepare for screencasting."
   :group 'frames)
 
-(defcustom prepcast-prep-fs
-  '(prepcast-prep-default-face prepcast-prep-moody prepcast-prep-keycast)
+(defcustom prepcast-prep-fs '(prepcast-prep-default-face)
   "List of prepare functions.
 A prepare function prepares an element for screencasting and must
 return a function to revert the preparation or, to not revert the
@@ -62,22 +61,20 @@ preparation, nil."
 
 (defun prepcast-prep-moody ()
   "Prepare moody for screencasting."
-  (when (featurep 'moody)
-    (let ((height moody-mode-line-height))
-      (setq moody-mode-line-height (round (* height prepcast-scale)))
-      (lambda ()
-        (setq moody-mode-line-height height)))))
+  (let ((height moody-mode-line-height))
+    (setq moody-mode-line-height (round (* height prepcast-scale)))
+    (lambda ()
+      (setq moody-mode-line-height height))))
 
 (declare-function keycast-mode "ext:keycast")
 (defvar keycast-mode)
 
 (defun prepcast-prep-keycast ()
   "Prepare keycast for screencasting."
-  (when (featurep'keycast)
-    (unless keycast-mode
-      (keycast-mode 1)
-      (lambda ()
-        (keycast-mode 0)))))
+  (unless keycast-mode
+    (keycast-mode 1)
+    (lambda ()
+      (keycast-mode 0))))
 
 ;;;###autoload
 (define-minor-mode prepcast-mode
