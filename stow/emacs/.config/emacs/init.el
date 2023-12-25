@@ -3518,6 +3518,12 @@ none return a URL, nil.  For rewrite functions, see
   :after bbdb
   :autoload (bbdb-vcard-import-vcard bbdb-vcard-iterate-vcards)
   :preface
+  (define-advice bbdb-vcard-unvcardize-org
+      (:around (f vcard-org) koek-bbdb/format-vcard-organization)
+    (if (consp vcard-org)
+        (string-join (remq nil vcard-org) ";") ; bbdb-separator-alist
+      (funcall f vcard-org)))
+
   (defun koek-bbdb/import-dir (file-name &optional interactive)
     "Import vCards from directory FILE-NAME and its subdirectories.
 Treats every vCard as a distinct contact.  INTERACTIVE is used
