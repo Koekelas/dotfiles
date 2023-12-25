@@ -38,10 +38,6 @@
   "Prepare for screencasting."
   :group 'frames)
 
-(defcustom prepcast-scale 1.25
-  "Scale of elements."
-  :type 'float)
-
 (defcustom prepcast-prep-fs
   '(prepcast-prep-default-face prepcast-prep-moody prepcast-prep-keycast)
   "List of prepare functions.
@@ -49,6 +45,10 @@ A prepare function prepares an element for screencasting and must
 return a function to revert the preparation or, to not revert the
 preparation, nil."
   :type 'function)
+
+(defcustom prepcast-scale 1.25
+  "Scale of elements."
+  :type 'float)
 
 (defvar prepcast--unprep-fs nil
   "List of unprepare functions.")
