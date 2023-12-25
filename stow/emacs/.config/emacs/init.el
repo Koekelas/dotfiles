@@ -5231,7 +5231,7 @@ NAME is a string, the name of the user directory."
     (setq exar-monitors
           `(:laptop (:edid "0x06af3d13000000002617" :name "Laptop"
                      :color ,(expand-file-name "laptop.icc" icc-dir))
-            :desk   (:edid "0x35491800000000000013" :name "Desk"
+            :desk   (:edid "0x1e6d2b775eed05000421" :name "Desk"
                      :color ,(expand-file-name "desk.icc" icc-dir))))
     (setq exar-layouts
           '((:name "Desk (primary) and laptop (left)"
