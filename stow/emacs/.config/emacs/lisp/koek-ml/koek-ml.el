@@ -518,8 +518,9 @@ Intended as advice overriding `calendar-update-mode-line'."
         (add-hook 'ediff-cleanup-hook #'koek-ml/cleanup-variants)
         (advice-add 'calendar-set-mode-line :override #'koek-ml/setup-calendar)
         (advice-add 'calendar-update-mode-line :override #'koek-ml/update-calendar))
-    (setq-default mode-line-format koek-ml/old-mode-line-format)
-    (setq koek-ml/old-mode-line-format nil)
+    (when koek-ml/old-mode-line-format
+      (setq-default mode-line-format koek-ml/old-mode-line-format)
+      (setq koek-ml/old-mode-line-format nil))
     (advice-remove 'ace-window-display-mode #'koek-ml/prevent-setup-ace)
     (advice-remove 'exwm-input--update-mode-line #'koek-ml/prevent-update-exwm-input)
     (advice-remove 'ediff-refresh-mode-lines #'koek-ml/update-ediff)
