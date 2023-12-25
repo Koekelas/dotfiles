@@ -8700,18 +8700,17 @@ current theme.
         (enable-theme variant)
         (modus-themes-with-colors
           (custom-set-faces
-           `(mode-line           ((,c
-                                   :box unspecified
-                                   :overline ,border-mode-line-active
-                                   :underline ,border-mode-line-active)))
-           `(mode-line-inactive  ((,c
-                                   :box unspecified
-                                   :overline ,border-mode-line-inactive
-                                   :underline ,border-mode-line-inactive)))
-           `(dired-directory     ((,c :inherit bold)))
-           `(pdf-links-read-link ((,c
-                                   :foreground ,fg-main
-                                   :background ,bg-char-0))))))
+           `(mode-line                ((,c . (:box unspecified
+                                              :overline ,border-mode-line-active
+                                              :underline ,border-mode-line-active))))
+           `(mode-line-inactive       ((,c . (:box unspecified
+                                              :overline ,border-mode-line-inactive
+                                              :underline ,border-mode-line-inactive))))
+           `(completions-annotations  ((,c . (:slant normal))))
+           `(marginalia-documentation ((,c . (:slant normal))))
+           `(dired-directory          ((,c . (:inherit bold))))
+           `(pdf-links-read-link      ((,c . (:foreground ,fg-main
+                                              :background ,bg-char-0)))))))
       ;; After user theme
       (run-hooks 'koek-thm/enable-hook))
 
