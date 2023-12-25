@@ -4005,7 +4005,9 @@ INTERACTIVE is used internally."
   :defer t
   :config
   (setq prepcast-prep-fs
-        '(prepcast-prep-default-face prepcast-prep-moody prepcast-prep-keycast))
+        '(prepcast-prep-default-face
+          prepcast-prep-moody
+          prepcast-prep-keycast-tb))
   (setq prepcast-scale 1.5)
   :delight)
 
@@ -4013,10 +4015,8 @@ INTERACTIVE is used internally."
   :ensure t
   :defer t
   :config
-  (setq keycast-mode-line-window-predicate #'moody-window-active-p)
-  (setq keycast-mode-line-insert-after 'keycast-marker)
-  (setq keycast-separator-width 3)
-  (setq keycast-mode-line-remove-tail-elements nil))
+  (setq keycast-tab-bar-location #'tab-bar-format-add-tab)
+  (setq keycast-tab-bar-format "%3s%k%c%r"))
 
 (use-package cus-edit
   :defer t

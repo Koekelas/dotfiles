@@ -7418,7 +7418,9 @@ Stavrou)]].
     :defer t
     :config
     (setq prepcast-prep-fs
-          '(prepcast-prep-default-face prepcast-prep-moody prepcast-prep-keycast))
+          '(prepcast-prep-default-face
+            prepcast-prep-moody
+            prepcast-prep-keycast-tb))
     (setq prepcast-scale 1.5)
     :delight)
 #+END_SRC
@@ -7492,15 +7494,15 @@ Stavrou)]].
       (lambda ()
         (setq moody-mode-line-height height))))
 
-  (declare-function keycast-mode "ext:keycast")
-  (defvar keycast-mode)
+  (declare-function keycast-tab-bar-mode "ext:keycast")
+  (defvar keycast-tab-bar-mode)
 
-  (defun prepcast-prep-keycast ()
+  (defun prepcast-prep-keycast-tb ()
     "Prepare keycast for screencasting."
-    (unless keycast-mode
-      (keycast-mode 1)
+    (unless keycast-tab-bar-mode
+      (keycast-tab-bar-mode 1)
       (lambda ()
-        (keycast-mode 0))))
+        (keycast-tab-bar-mode 0))))
 
   ;;;###autoload
   (define-minor-mode prepcast-mode
@@ -7529,10 +7531,8 @@ Stavrou)]].
     :ensure t
     :defer t
     :config
-    (setq keycast-mode-line-window-predicate #'moody-window-active-p)
-    (setq keycast-mode-line-insert-after 'keycast-marker)
-    (setq keycast-separator-width 3)
-    (setq keycast-mode-line-remove-tail-elements nil))
+    (setq keycast-tab-bar-location #'tab-bar-format-add-tab)
+    (setq keycast-tab-bar-format "%3s%k%c%r"))
 #+END_SRC
 
 ** cus-edit - Customizations
@@ -9088,17 +9088,6 @@ can load moody.
   (defvar koek-ml/state '(" " "%*%+")
     "Mode line construct for state.")
 
-  ;;;; keycast
-
-  (defvar keycast-mode-line)
-
-  (defvar koek-ml/keycast
-    '(:eval
-      (when (bound-and-true-p keycast-mode)
-        keycast-mode-line))
-    "Mode line construct for keycast.")
-  (put 'koek-ml/keycast 'risky-local-variable t)
-
   ;;;; Position
 
   (defvar koek-ml/position
@@ -9278,7 +9267,7 @@ can load moody.
     `(,@koek-ml/dummies " "
       koek-ml/eldoc koek-ml/ace koek-ml/ediff
       koek-ml/depth koek-ml/exwm-workspaces
-      koek-ml/id koek-ml/state keycast-marker
+      koek-ml/id koek-ml/state
       koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
       koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes))
 
@@ -9351,7 +9340,7 @@ can load moody.
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace
             koek-ml/depth koek-ml/exwm-workspaces
-            koek-ml/id koek-ml/keycast
+            koek-ml/id
             koek-ml/diff koek-ml/task koek-ml/modes))
     (force-mode-line-update)
     (dolist (type koek-ml/variant-types)
@@ -9386,7 +9375,7 @@ can load moody.
             `(,@koek-ml/dummies " "
               koek-ml/eldoc koek-ml/ace
               koek-ml/depth koek-ml/exwm-workspaces
-              koek-ml/id koek-ml/keycast
+              koek-ml/id
               ("" koek-ml/large-separator ,normalized)
               koek-ml/task koek-ml/modes)))
     (force-mode-line-update))

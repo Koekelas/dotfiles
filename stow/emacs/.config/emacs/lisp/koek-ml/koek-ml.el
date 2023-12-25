@@ -194,17 +194,6 @@ Intended as advice around `ace-window-display-mode'."
 (defvar koek-ml/state '(" " "%*%+")
   "Mode line construct for state.")
 
-;;;; keycast
-
-(defvar keycast-mode-line)
-
-(defvar koek-ml/keycast
-  '(:eval
-    (when (bound-and-true-p keycast-mode)
-      keycast-mode-line))
-  "Mode line construct for keycast.")
-(put 'koek-ml/keycast 'risky-local-variable t)
-
 ;;;; Position
 
 (defvar koek-ml/position
@@ -384,7 +373,7 @@ STATE is a symbol, a flymake state."
   `(,@koek-ml/dummies " "
     koek-ml/eldoc koek-ml/ace koek-ml/ediff
     koek-ml/depth koek-ml/exwm-workspaces
-    koek-ml/id koek-ml/state keycast-marker
+    koek-ml/id koek-ml/state
     koek-ml/position koek-ml/pdf koek-ml/exwm-input koek-ml/input
     koek-ml/flymake koek-ml/vc koek-ml/task koek-ml/modes))
 
@@ -457,7 +446,7 @@ Intended as advice overriding `ediff-refresh-mode-lines'."
         `(,@koek-ml/dummies " "
           koek-ml/eldoc koek-ml/ace
           koek-ml/depth koek-ml/exwm-workspaces
-          koek-ml/id koek-ml/keycast
+          koek-ml/id
           koek-ml/diff koek-ml/task koek-ml/modes))
   (force-mode-line-update)
   (dolist (type koek-ml/variant-types)
@@ -492,7 +481,7 @@ Intended as advice overriding `calendar-set-mode-line'."
           `(,@koek-ml/dummies " "
             koek-ml/eldoc koek-ml/ace
             koek-ml/depth koek-ml/exwm-workspaces
-            koek-ml/id koek-ml/keycast
+            koek-ml/id
             ("" koek-ml/large-separator ,normalized)
             koek-ml/task koek-ml/modes)))
   (force-mode-line-update))

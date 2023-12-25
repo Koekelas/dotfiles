@@ -66,15 +66,15 @@ preparation, nil."
     (lambda ()
       (setq moody-mode-line-height height))))
 
-(declare-function keycast-mode "ext:keycast")
-(defvar keycast-mode)
+(declare-function keycast-tab-bar-mode "ext:keycast")
+(defvar keycast-tab-bar-mode)
 
-(defun prepcast-prep-keycast ()
+(defun prepcast-prep-keycast-tb ()
   "Prepare keycast for screencasting."
-  (unless keycast-mode
-    (keycast-mode 1)
+  (unless keycast-tab-bar-mode
+    (keycast-tab-bar-mode 1)
     (lambda ()
-      (keycast-mode 0))))
+      (keycast-tab-bar-mode 0))))
 
 ;;;###autoload
 (define-minor-mode prepcast-mode
