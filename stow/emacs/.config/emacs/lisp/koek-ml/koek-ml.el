@@ -175,10 +175,12 @@ Intended as advice around `ace-window-display-mode'."
 
 ;;;; Identification
 
+(defvar koek-ml/project-modes '(prog-mode sgml-mode conf-mode))
+
 (defvar koek-ml/id
   '(:eval
     (let ((prefix (when (and (featurep 'project)
-                             (derived-mode-p 'prog-mode 'conf-mode))
+                             (apply #'derived-mode-p koek-ml/project-modes))
                     (koek-proj/get-name))))
       (moody-tab
        (concat
