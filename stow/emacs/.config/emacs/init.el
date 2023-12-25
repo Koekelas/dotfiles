@@ -3863,7 +3863,7 @@ INTERACTIVE is used internally."
     "Stain document."
     (pdf-info-setoptions :render/foreground (car pdf-view-midnight-colors)
                          :render/background (cdr pdf-view-midnight-colors)
-                         :render/usecolors t)
+                         :render/usecolors 1)
     (koek-pdf/redraw-hard))
 
   ;; `pdf-view-midnight-minor-mode' is difficult to extend
