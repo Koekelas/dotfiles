@@ -59,6 +59,8 @@ preparation, nil."
     (lambda ()
       (set-face-attribute 'default nil :height height))))
 
+(defvar moody-mode-line-height)
+
 (defun prepcast-prep-moody ()
   "Prepare moody for screencasting."
   (let ((height moody-mode-line-height))
