@@ -5015,6 +5015,8 @@ to the last enabled theme."
          `(koek-mgnl/telephone-number ((,c . (:foreground ,constant))))
          `(koek-mgnl/email            ((,c . (:foreground ,accent-2))))
          `(dired-directory            ((,c . (:inherit bold))))
+         `(magit-blame-margin         ((,c . (:inherit (fixed-pitch modus-themes-reset-soft)))))
+         `(magit-blame-dimmed         ((,c . (:inherit (shadow fixed-pitch modus-themes-reset-soft)))))
          `(pdf-links-read-link        ((,c . (:foreground ,fg-main
                                               :background ,bg-char-0)))))))
     ;; After user theme
