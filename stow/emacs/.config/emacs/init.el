@@ -2383,8 +2383,8 @@ When FORCE is truthy, unconditionally continue commit."
   :ensure t
   :hook
   ((tabulated-list-mode ibuffer-mode dired-mode archive-mode tar-mode
-    git-rebase-mode occur-mode grep-mode proced-mode mu4e-headers-mode
-    elfeed-search-mode bongo-playlist-mode)
+    magit-log-mode git-rebase-mode occur-mode grep-mode proced-mode
+    mu4e-headers-mode elfeed-search-mode bongo-playlist-mode)
    . lin-mode)
   :preface
   (defun koek-lin/reconfigure-for-wdired ()
