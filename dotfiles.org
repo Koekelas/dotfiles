@@ -342,7 +342,7 @@ To apply configuration, run:
 
 ** Creative
 #+BEGIN_SRC fundamental :tangle stow/catgen/.local/share/applications-categories/Creative.category
-  ardour7.desktop
+  ardour8.desktop
   blender.desktop
   calf.desktop
   gimp.desktop
