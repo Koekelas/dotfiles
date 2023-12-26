@@ -374,7 +374,7 @@ To apply configuration, run:
   chromium.desktop
   firefox.desktop
   io.github.qtox.qTox.desktop
-  jami-qt.desktop
+  jami.desktop
   org.gnome.Epiphany.desktop
 #+END_SRC
 
