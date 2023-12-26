@@ -126,14 +126,9 @@ Hide superfluous applications.
   Name=ipython
 #+END_SRC
 
-#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/jupyter-nbclassic.desktop :noweb yes
+#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/jupyterlab.desktop :noweb yes
   <<desktop-nodisplay>>
-  Name=Jupyter Notebook
-#+END_SRC
-
-#+BEGIN_SRC conf :tangle stow/jupyter/.local/share/applications/jupyter-notebook.desktop :noweb yes
-  <<desktop-nodisplay>>
-  Name=Jupyter Notebook
+  Name=JupyterLab
 #+END_SRC
 
 #+BEGIN_SRC conf :tangle stow/picom/.local/share/applications/compton.desktop :noweb yes
